@@ -1,9 +1,8 @@
----
-title: MagI³C FeatherWing
-author: Würth Elektronik eiSos GmbH & Co. KG
+![WE Logo](/assets/Würth_Elektronik_Logo.svg.png")
 
----
-# Introduction
+# MagI³C Power FeatherWing
+
+## Introduction
 
 The MagI³C Power Featherwing board functions as a plug compatible 5V and 3.3V power supply for the whole WE featherwing ecosystem. It operates at industrial input voltage rails of 9V, 12V, 15V, 18V and 24V with maximum nominal input voltage of 36V<sup>[*](#myfootnote1)</sup>. 
 
@@ -12,12 +11,12 @@ Additionally, the board can be powered with 5V USB connection, which can be sele
 For further information of the MagI³C Power Modules please visit the linked datasheets [173010335](https://www.we-online.de/katalog/datasheet/173010335.pdf) and [171010550](https://www.we-online.de/katalog/datasheet/171010550.pdf) or directly contact our power module support hotline at [powermodules@we-online.com](mailto:%22Power%20Modules%22%3cpowermodules@we-online.com?subject=MagI³C%20FeatherWing%20board).
 
 
-# Structure
+## Structure
 
-![Front view](figures/magic/front_view.png){width=90%}
+![Front view](assets/magic/front_view.png){width=90%}
 
 
-![Rear view](figures/magic/back_view.png){width=90%}
+![Rear view](assets/magic/back_view.png){width=90%}
 
 
 | No | Designator| Component Description     | Purpose             |
