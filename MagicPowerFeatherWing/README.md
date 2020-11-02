@@ -1,4 +1,4 @@
-<img src="../assets/Würth_Elektronik_Logo.svg.png" width="90%">
+<img src="../assets/Würth_Elektronik_Logo.svg.png" width="100%">
 
 # MagI³C Power FeatherWing
 
@@ -13,10 +13,13 @@ For further information of the MagI³C Power Modules please visit the linked dat
 
 ## Structure
 
-![Front view](assets/front_view.png)
+<img src="assets/front_view.png" width="80%">
 
+<img src="assets/back_view.png" width="80%">
 
-![Rear view](assets/back_view.png)
+<!-- ![Front view](assets/front_view.png)
+
+![Rear view](assets/back_view.png) -->
 
 
 | No | Designator| Component Description     | Purpose             |
