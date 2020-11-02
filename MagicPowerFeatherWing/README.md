@@ -13,10 +13,10 @@ For further information of the MagI³C Power Modules please visit the linked dat
 
 ## Structure
 
-![Front view](assets/magic/front_view.png)
+![Front view](assets/front_view.png)
 
 
-![Rear view](assets/magic/back_view.png)
+![Rear view](assets/back_view.png)
 
 
 | No | Designator| Component Description     | Purpose             |
