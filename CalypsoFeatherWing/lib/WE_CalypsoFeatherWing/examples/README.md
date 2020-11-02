@@ -1,3 +1,5 @@
+![WE Logo](../assets/Würth_Elektronik_Logo.svg.png)
+
 # Calypso FeatherWing Examples
 
 ## PaHo MQTT client

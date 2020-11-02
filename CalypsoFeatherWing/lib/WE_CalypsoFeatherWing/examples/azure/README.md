@@ -1,3 +1,5 @@
+![WE Logo](../assets/Würth_Elektronik_Logo.svg.png)
+
 # Calypso FeatherWing Microsoft Azure example
 
 ## Introduction
