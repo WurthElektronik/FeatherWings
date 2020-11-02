@@ -21,4 +21,4 @@ A user can use this FeatherWing to collect sensor data, store it in a database a
 * Send data with Calypso FeatherWing on 2.4 GHz WiFi out
 * Receive data even on smart devices or on server structures
 
-![WE Logo](assets/calipso-initial-connection.png)
+![Inital connection example](assets/calypso-initial-connection.png)
