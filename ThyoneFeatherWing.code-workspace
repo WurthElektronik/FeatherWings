@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "ThyoneFeatherWing"
+		},
+		{
+			"path": "Common"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cctype": "c",
+			"type_traits": "c",
+			"typeinfo": "cpp"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}
