@@ -1,4 +1,4 @@
-![WE Logo](../assets/Würth_Elektronik_Logo.svg.png")
+![WE Logo](../assets/Würth_Elektronik_Logo.svg.png){width=90%}
 
 # MagI³C Power FeatherWing
 
