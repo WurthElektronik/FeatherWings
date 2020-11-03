@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The MagI³C Power Featherwing board functions as a plug compatible 5V and 3.3V power supply for the whole WE featherwing ecosystem. It operates at industrial input voltage rails of 9V, 12V, 15V, 18V and 24V with maximum nominal input voltage of 36V<sup>[*](#myfootnote1)</sup>. 
+The MagI³C Power Featherwing board functions as a plug compatible 5V and 3.3V power supply for the whole Würth Elektronik eiSos FeatherWing ecosystem. It operates at industrial input voltage rails of 9V, 12V, 15V, 18V and 24V with a maximum nominal input voltage of 36V<sup>[*](#myfootnote1)</sup>. 
 
 Additionally, the board can be powered with 5V USB connection, which can be selected by switch. The including MagI³C Power Modules transform the given industrial input voltage rail into 5V which is further transformed into 3.3V. These two voltage rails can be used to power other Feather-compatible boards. To control and also tune the performance of the MagI³C MicroModule the Enable functionality as well as the Mode selection can be used.
 
