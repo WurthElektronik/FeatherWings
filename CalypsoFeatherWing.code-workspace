@@ -11,7 +11,8 @@
 		"files.associations": {
 			"cctype": "c",
 			"type_traits": "c",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"unordered_map": "cpp"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true
