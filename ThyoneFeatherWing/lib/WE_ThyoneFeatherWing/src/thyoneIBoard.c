@@ -589,7 +589,7 @@ void THYONEI_receiveBytes(THYONEI *self) {
         readBuffer = (uint8_t)HSerial_read(self->serialThyoneI);
 
 #if SERIAL_DEBUG
-        SSerial_printf(self->serialDebug, "%02X ", readBuffer);
+        SSerial_printf(self->serialDebug, "0x%02X ", readBuffer);
 #endif
         /* interpret received byte */
         pRxBuffer[RxByteCounter] = readBuffer;
@@ -781,6 +781,8 @@ void HandleRxPacket(THYONEI *self, uint8_t *pRxBuffer) {
             src = (src << 8) + (uint32_t)pRxBuffer[CMD_POSITION_DATA + 1];
             src = (src << 8) + (uint32_t)pRxBuffer[CMD_POSITION_DATA];
             self->bufferThyone.sourceAddress = src;
+            self->bufferThyone.RSSI =
+                (int)(pRxBuffer[CMD_POSITION_DATA + 4] - 255);
             self->bufferThyone.length = payload_length - 5;
 
             /*Copy payload to the thyone buffer*/

@@ -69,7 +69,7 @@ void setup() {
     calSettings.wifiSettings.securityParams.securityType =
         ATWLAN_SECURITY_TYPE_WPA_WPA2;
 
-    // MQTT Settings
+    // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags = ATMQTT_CREATE_FLAGS_IP4;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);

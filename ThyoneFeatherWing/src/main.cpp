@@ -26,11 +26,11 @@
 #include "thyoneIBoard.h"
 #include "atecc608a.h"
 
-#define configThyone 0
+#define THYONE_DEFAULT_RF_CHANNEL 21
+#define THYONE_DEFAULT_RF_PROFILE 0
 
 /*Configure the FeatherWing either as a transmitter or a receiver*/
 #define Transmitter 1
-#define Receiver 0
 
 // USB-Serial debug Interface
 TypeSerial *SerialDebug;
@@ -78,28 +78,47 @@ void setup() {
                        serialNrThy[3], serialNrThy[2], serialNrThy[1],
                        serialNrThy[0]);
     }
-#if configThyone
+
     /*The following code shows how to set the parameters of the Thyone radio
     module. In this case, the values are set to factory default. The settings
     are non-volatile. Each write operation performs a write to the flash memory
-    and hence has to be limited to one time configuration only.*/
-
-    // Set the transmit power to 8 dBm
-    if (!ThyoneI_SetTXPower(thyoneI, ThyoneI_TXPower_8)) {
-        SSerial_printf(SerialDebug, "Thyone set power failed \r\n");
+    and resets the module. Hence, this operation has to be limited to one time
+    configuration only.*/
+    ThyoneI_TXPower_t txPower;
+    if (ThyoneI_GetTXPower(thyoneI, &txPower)) {
+        if (txPower != ThyoneI_TXPower_8) {
+            // Set the transmit power to 8 dBm
+            if (!ThyoneI_SetTXPower(thyoneI, ThyoneI_TXPower_8)) {
+                SSerial_printf(SerialDebug, "Thyone set power failed \r\n");
+            }
+        }
+    } else {
+        SSerial_printf(SerialDebug, "Thyone get power failed \r\n");
     }
 
-    // Set the RF channel channel 21
-    if (!ThyoneI_SetRFChannel(thyoneI, 21)) {
-        SSerial_printf(SerialDebug, "Thyone set channel failed \r\n");
+    uint8_t rfChannel;
+    if (ThyoneI_GetRFChannel(thyoneI, &rfChannel)) {
+        if (rfChannel != THYONE_DEFAULT_RF_CHANNEL) {
+            // Set the RF channel channel 21
+            if (!ThyoneI_SetRFChannel(thyoneI, THYONE_DEFAULT_RF_CHANNEL)) {
+                SSerial_printf(SerialDebug, "Thyone set channel failed \r\n");
+            }
+        }
+    } else {
+        SSerial_printf(SerialDebug, "Thyone get power failed \r\n");
     }
-
-    // Set the RF profile to long range 125 kbit/s mode
-    if (!ThyoneI_SetRFProfile(thyoneI, 0)) {
-        SSerial_printf(SerialDebug, "Thyone set RF profile failed \r\n");
+    uint8_t rfProfile;
+    if (ThyoneI_GetRFProfile(thyoneI, &rfProfile)) {
+        if (rfProfile != THYONE_DEFAULT_RF_PROFILE) {
+            // Set the RF profile to long range 125 kbit/s mode
+            if (!ThyoneI_SetRFProfile(thyoneI, THYONE_DEFAULT_RF_PROFILE)) {
+                SSerial_printf(SerialDebug,
+                               "Thyone set RF profile failed \r\n");
+            }
+        }
+    } else {
+        SSerial_printf(SerialDebug, "Thyone get power failed \r\n");
     }
-
-#endif
 }
 void loop() {
 #if Transmitter
@@ -111,17 +130,17 @@ void loop() {
         SSerial_printf(SerialDebug, "Broadcast send failed \r\n");
     }
     delay(1000);
-#endif
-#if Receiver
+#else
     PacketThyoneI dataReceived;
     dataReceived = THYONEI_receiveData(thyoneI);
     // Print the received packet
     if (dataReceived.length != 0) {
-        SSerial_printf(SerialDebug, "Received Data from %02X%02X%02X%02X\r\n",
+        SSerial_printf(SerialDebug,
+                       "Received Data from %02X%02X%02X%02X RSSI : %i dBm\r\n",
                        dataReceived.sourceAddress >> 24 & 0xFF,
                        dataReceived.sourceAddress >> 16 & 0xFF,
                        dataReceived.sourceAddress >> 8 & 0xFF,
-                       dataReceived.sourceAddress & 0xFF);
+                       dataReceived.sourceAddress & 0xFF, dataReceived.RSSI);
         SSerial_printf(SerialDebug, "Payload[%u byte]: %s\r\n",
                        dataReceived.length, dataReceived.data);
     }

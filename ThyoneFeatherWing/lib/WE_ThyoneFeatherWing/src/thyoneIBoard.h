@@ -229,6 +229,7 @@ typedef struct {
     uint32_t sourceAddress;
     char data[1024];
     int length;
+    int RSSI;
 } PacketThyoneI;
 
 enum settingsThyoneITags { source_id, dest_id, numOfThyoneISettings };
