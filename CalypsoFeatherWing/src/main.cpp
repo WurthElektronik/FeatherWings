@@ -60,9 +60,8 @@ void setup() {
 
     SerialCalypso = HSerial_create(&Serial1);
 
-    // Create serial port for Calypso FeatherWing
-    HSerial_beginP(SerialCalypso, 921600,
-                   (uint8_t)((0x10ul) | (0x1ul) | (0x400ul)));
+    // Create serial port for Calypso FeatherWing baud 921600, 8E1
+    HSerial_beginP(SerialCalypso, 921600, (uint8_t)SERIAL_8E1);
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);

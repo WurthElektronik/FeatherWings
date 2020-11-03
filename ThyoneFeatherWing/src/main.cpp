@@ -60,9 +60,8 @@ void setup() {
 
     SerialThyoneI = HSerial_create(&ThyoneIUART);
 
-    // Create serial port for Thyone FeatherWing
-    HSerial_beginP(SerialThyoneI, 115200,
-                   (uint8_t)((0x10ul) | (0x3ul) | (0x400ul)));
+    // Create serial port for Thyone FeatherWing with baud 115200 and 8N1
+    HSerial_beginP(SerialThyoneI, 115200, (uint8_t)SERIAL_8N1);
     pinPeripheral(10, PIO_SERCOM);
     pinPeripheral(11, PIO_SERCOM);
 
