@@ -50,3 +50,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+CalypsoFeatherWing/lib/WE_CalypsoFeatherWing/examples/azure/Create WEioTTestDataTable.sql
