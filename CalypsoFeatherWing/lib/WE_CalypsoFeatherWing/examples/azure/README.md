@@ -69,7 +69,7 @@ In this section, you create a device identity in the identity registry in your I
 To send data to the IoTHub, the easiest way is to use our examaple code together with Calypso FeatherWing, if you have M0 and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
 
 
-## Visualize real-time sensor data from Azure IoT Hub using Power BI
+## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
 
 ### Necessary steps
 
@@ -77,7 +77,7 @@ To send data to the IoTHub, the easiest way is to use our examaple code together
 * Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your Power BI account.
 * Create and publish a Power BI report to visualize the data.
 
-Note: If you prefer using **Excel** for the data visualization, please skip to the next section.
+Note: If you prefer using **Excel** for the data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, Therefore SQL database will be necessary
 
 ### What you need
 
@@ -186,12 +186,68 @@ In the Stream Analytics job, select Overview, then select Start > Now > Start. O
 ![Run strean analytics job](assets/run-stream-analytics-job.png)
 
 
+## Visualize real-time sensor data from Azure IoT Hub using PowerBI
+
+Note: If you prefer using **Excel** for the data visualization, please skip this section,
+
+
 ## Visualize real-time sensor data from Azure IoT Hub using Excel
 
 ### Necessary steps
 
 * Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
 * Create SQL database to Stream data from the IoTHub
-* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database.
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. ()
 * Connect Excel data source with Azure SQL datanase to visualize the data.
 
+
+### Create a single database
+
+To create a single database in the Azure portal this quickstart starts at the Azure SQL page.
+
+1. Browse to the Select [SQL Deployment option page](https://portal.azure.com/#create/Microsoft.AzureSQL).
+2. Under **SQL databases**, leave **Resource** type set to **Single database**, and select **Create**.
+
+![Add to Azure SQL](assets/select-deployment.png)
+
+3. On the **Basics** tab of the **Create SQL Database** form, under **Project details**, select the desired Azure Subscription.
+4. For Resource group, select Create new or use exiting one from your IoTHub, and select OK.
+5. For **Database name** enter *someDatabaseName*.
+
+6. For Server, select **Create new**, and fill out the **New server** form with the following values:
+* **Server name**: Enter mysqlserver, and add some characters for uniqueness. We can't provide an exact server name to use because server names must be globally unique for all 
+
+* **servers in Azure**, not just unique within a subscription. So enter something like mysqlserver12345, and the portal lets you know if it is available or not.
+
+* **Server admin login**: Enter azureuser.
+* **Password**: Enter a password that meets requirements, and enter it again in the Confirm password field.
+* **Location**: Select a location from the dropdown list.
+
+**Select OK**.
+
+7. Leave **Want to use SQL elastic pool** set to **No**.
+8. Under ((Compute + storage)), select ((Configure database)).
+
+    This quickstart uses a serverless database, so select Serverless, and then select Apply.
+
+    configure serverless database
+
+    Select Next: Networking at the bottom of the page.
+
+    New SQL database - Basic tab
+
+    On the Networking tab, for Connectivity method, select Public endpoint.
+
+    For Firewall rules, set Add current client IP address to Yes. Leave Allow Azure services and resources to access this server set to No.
+
+    Select Next: Additional settings at the bottom of the page.
+
+    Networking tab
+
+    On the Additional settings tab, in the Data source section, for Use existing data, select Sample. This creates an AdventureWorksLT sample database so there's some tables and data to query and experiment with, as opposed to an empty blank database.
+
+    Select Review + create at the bottom of the page:
+
+    Additional settings tab
+
+    On the Review + create page, after reviewing, select Create.
