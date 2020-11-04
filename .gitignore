@@ -50,5 +50,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-CalypsoSensorCombo/.clang-format
-CalypsoSensorCombo/.gitlab-ci.yml
+
+CalypsoFeatherWing/lib/WE_CalypsoFeatherWing/examples/azure/Create WEioTTestDataTable.sql
