@@ -26,16 +26,34 @@
 #include "calypsoBoard.h"
 #include "json-builder.h"
 
+#define MOSQUITTO_CONNECTION 0
+#define AZURE_CONNECTION 1
+
 // WiFi access point parameters
 #define WI_FI_SSID "AP"
 #define WI_FI_PASSWORD "pw"
 
+#if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
 #define MQTT_CLIENT_ID "calypso"
 #define MQTT_SERVER_ADDRESS "127.0.0.1"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "timeStamp"
+#endif
 
+#if AZURE_CONNECTION
+/*MQTT settings - Azure server*/
+#define MQTT_CLIENT_ID "weiot_testdevice1"
+#define MQTT_SERVER_ADDRESS "we-test-iothub1.azure-devices.net"
+#define MQTT_PORT 8883
+#define MQTT_TOPIC "devices/weiot_testdevice1/messages/events/"
+#define MQTT_USER_NAME "we-test-iothub1.azure-devices.net/weiot_testdevice1"
+#define MQTT_PASSWORD                                                         \
+    "SharedAccessSignature "                                                  \
+    "sr=we-test-iothub1.azure-devices.net%2Fdevices%2Fweiot_testdevice1&sig=" \
+    "BbdCBSucFMS15NAN6wLfCMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500740"
+
+#endif
 // SNTP settings
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"
@@ -51,6 +69,8 @@ CALYPSO *calypso;
 
 // Serial communication port for Calypso
 TypeHardwareSerial *SerialCalypso;
+
+int msgID;
 
 void setup() {
     delay(5000);
@@ -68,6 +88,7 @@ void setup() {
     calSettings.wifiSettings.securityParams.securityType =
         ATWLAN_SECURITY_TYPE_WPA_WPA2;
 
+#if MOSQUITTO_CONNECTION
     // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags = ATMQTT_CREATE_FLAGS_IP4;
@@ -75,8 +96,33 @@ void setup() {
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
     calSettings.mqttSettings.connParams.protocolVersion = ATMQTT_PROTOCOL_v3_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
-    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Binary;
+    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
     strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_CLIENT_ID);
+    strcpy(calSettings.mqttSettings.userOptions.password, MQTT_CLIENT_ID);
+#endif
+
+#if AZURE_CONNECTION
+    // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
+    strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
+    calSettings.mqttSettings.flags =
+        ATMQTT_CREATE_FLAGS_URL | ATMQTT_CREATE_FLAGS_SEC;
+    strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
+    calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
+
+    calSettings.mqttSettings.secParams.securityMethod =
+        ATMQTT_SECURITY_METHOD_TLSV1_2;
+    calSettings.mqttSettings.secParams.cipher =
+        ATMQTT_CIPHER_TLS_RSA_WITH_AES_256_CBC_SHA;
+
+    calSettings.mqttSettings.connParams.protocolVersion =
+        ATMQTT_PROTOCOL_v3_1_1;
+    calSettings.mqttSettings.connParams.blockingSend = 0;
+    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
+    strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_USER_NAME);
+
+    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_PASSWORD);
+
+#endif
 
     // SNTP settings
     strcpy(calSettings.sntpSettings.timezone, SNTP_TIMEZONE);
@@ -102,15 +148,21 @@ void setup() {
         SSerial_printf(SerialDebug, "SNTP config fail\r\n");
     }
 
-    // Connect to Mosquitto MQTT server
+    // Connect to MQTT server
     if (!Calypso_MQTTconnect(calypso)) {
         SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
     }
+    msgID = 0;
 }
 
 void loop() {
     Timestamp timestamp;
     Timer_initTime(&timestamp);
+
+    msgID++;
+    if (msgID == INT_MAX) {
+        msgID = 0;
+    }
 
     // Get the current time from calypso
     if (!Calypso_getTimestamp(calypso, &timestamp)) {
@@ -120,20 +172,23 @@ void loop() {
     /* convert to unix timestamp */
     unsigned long long unixTime_ms = Time_ConvertToUnix(&timestamp);
 
-    /*Create a JSON object with the time stamp*/
-    json_value *timeStamp = json_object_new(1);
-    json_object_push(timeStamp, "ts", json_integer_new(unixTime_ms));
-    char *buf = (char *)malloc(json_measure(timeStamp));
-    json_serialize(buf, timeStamp);
+    /*Create a JSON object with the device ID, message ID, and time stamp*/
+    json_value *payload = json_object_new(1);
+    json_object_push(payload, "deviceId", json_string_new(calypso->MAC_ADDR));
+    json_object_push(payload, "messageId", json_integer_new(msgID));
+    json_object_push(payload, "ts", json_integer_new(unixTime_ms));
+
+    char *buf = (char *)malloc(json_measure(payload));
+    json_serialize(buf, payload);
 
     /*Publish to MQTT topic*/
     if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, buf, strlen(buf),
-                                 false)) {
+                                 true)) {
         SSerial_printf(SerialDebug, "Publish failed\n\r");
     }
 
     /*Clean-up*/
-    json_builder_free(timeStamp);
+    json_builder_free(payload);
     free(buf);
 
     delay(5000);
