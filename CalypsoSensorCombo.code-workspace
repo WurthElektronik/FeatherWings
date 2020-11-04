@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "CalypsoSensorCombo"
+		},
+		{
+			"path": "Common"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cctype": "c",
+			"type_traits": "c",
+			"typeinfo": "cpp",
+			"unordered_map": "cpp"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}
