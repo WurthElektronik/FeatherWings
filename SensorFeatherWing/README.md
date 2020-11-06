@@ -53,7 +53,8 @@ The SDK can be accessed on Github at [eismart FeatherWing GitHub](github.com/WE-
 ![Running quick start example](assets/VSCode.png)
 
 
-``
+```
+
 /**
  * \file
  * \brief Main file for the WE-SensorFeatherWing.
@@ -152,4 +153,5 @@ void loop() {
     SSerial_printf(SerialDebug, "\r\n");
     delay(1000);
 }
-``
+
+```
