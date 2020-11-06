@@ -24,10 +24,11 @@ The Sensor FeatherWing was designed with rapid prototyping in mind. Being fully 
 preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
 Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples to support all the WE FeatherWings. Here are the salient features of the WE FeatherWing SDK. 
+* The SDK is **open-source** and well documented.
 * It uses popular open-source tool chain including an IDE.
 * The examples are written in Arduino styled C/C++ for easy understanding.
-*  The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
-*  Modular structure of the software stack makes it easy to integrate into any project.
+* The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
+* Modular structure of the software stack makes it easy to integrate into any project.
 The SDK can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 
 ### Necessary Steps
