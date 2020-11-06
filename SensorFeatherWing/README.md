@@ -17,6 +17,7 @@ available makes it easy to build a prototype to kick-start the application devel
 
 For more information about the Hardware, please go to the Hardware repository or download [Sensor FeatherWing user manual](link.to.com\document).
 
+
 ## Software
 
 The Sensor FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing allows the user the flexibility to choose the
@@ -27,7 +28,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * The examples are written in Arduino styled C/C++ for easy understanding.
 *  The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
 *  Modular structure of the software stack makes it easy to integrate into any project.
-The SDK can be accessed on Github at [eismart FeatherWing GitHub](../).
+The SDK can be accessed on Github at [eismart FeatherWing GitHub](/).
 
 ### Necessary Steps
 
@@ -42,17 +43,18 @@ The SDK can be accessed on Github at [eismart FeatherWing GitHub](../).
 * Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
 * Follow the instructions under to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
 
+
 ## Example
 
-* Clone or download the WE FeatherWing SDK from [Github](github.com/WE-eiSmart/FeatherWings)
-* Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-* Build and upload the code from the PlatformIO tab as shown in the Figure below
-* After successful upload, click on Monitor to view the debug logs in the serial terminal.(See Figure)
+1. Clone or download the [WE FeatherWing SDK](/)
+2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
+3. Build and upload the code from the PlatformIO tab as shown in the Figure below
+4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.(See Figure)
 
 ![Running quick start example](assets/VSCode.png)
 
 
-### Example C code
+### Source Code
 
 ```
 
