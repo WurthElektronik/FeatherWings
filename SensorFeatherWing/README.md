@@ -1,6 +1,6 @@
 # Sensor FeatherWing
 
-## Introducion
+## Introduction
 
 The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board fully compatible to the popular Adafruit’s Feather line of development boards. It consists of the following four sensors,
 
