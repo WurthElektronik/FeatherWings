@@ -28,7 +28,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * The examples are written in Arduino styled C/C++ for easy understanding.
 *  The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
 *  Modular structure of the software stack makes it easy to integrate into any project.
-The SDK can be accessed on Github at [eismart FeatherWing GitHub](/).
+The SDK can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 
 ### Necessary Steps
 
