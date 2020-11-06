@@ -11,7 +11,7 @@ The Würth Elektronik eiSos Thyone FeatherWing is a development board that offer
 
 The Thyone-I module has an UART interface and the secure element an I 2 C interface and hence can be connected to any of the Feather microcontroller boards. The Arduino(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
-![WE Thyone FeatherWing](assets/ThyoneFeatheWing.png)
+![WE Thyone FeatherWing](assets/ThyoneFeatherWing.png)
 
 The Thyone FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing allows the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 For more information about the Hardware, please go to the Hardware repository or download [Thyone FeatherWing user manual](link.to.com\document).
