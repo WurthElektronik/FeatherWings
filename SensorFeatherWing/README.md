@@ -2,9 +2,8 @@
 
 ## Introducion
 
-The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board fully com-
-patible to the popular Adafruit’s Feather line of development boards. It consists of the follow-
-ing four sensors,
+The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board fully compatible to the popular Adafruit’s Feather line of development boards. It consists of the following four sensors,
+
 * **WSEN-PADS** - Absolute pressure sensor (2511020213301)
 * **WSEN-ITDS** - 3-axis acceleration sensor (2533020201601)
 * **WSEN-TIDS** - Temperature sensor (2521020222501)
@@ -16,9 +15,9 @@ available makes it easy to build a prototype to kick-start the application devel
 
 ![Sensor FeatherWing](assets/SensorFeatherWing.png)
 
-For more information about the Hardware, please to do Hardware repository or download [Sensor FeatherWing user manual](link.to.com\document).
+For more information about the Hardware, please go to the Hardware repository or download [Sensor FeatherWing user manual](link.to.com\document).
 
-## Softwarre
+## Software
 
 The Sensor FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing allows the user the flexibility to choose the
 preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
@@ -28,7 +27,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * The examples are written in Arduino styled C/C++ for easy understanding.
 *  The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
 *  Modular structure of the software stack makes it easy to integrate into any project.
-The SDK can be accessed on Github at [eismart FeatherWing GitHub](github.com/WE-eiSmart/FeatherWings).
+The SDK can be accessed on Github at [eismart FeatherWing GitHub](../).
 
 ### Necessary Steps
 
@@ -52,6 +51,8 @@ The SDK can be accessed on Github at [eismart FeatherWing GitHub](github.com/WE-
 
 ![Running quick start example](assets/VSCode.png)
 
+
+### Example C code
 
 ```
 
