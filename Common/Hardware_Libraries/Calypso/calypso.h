@@ -278,8 +278,8 @@ extern "C"
 
     typedef struct ATMQTT_userOptions_t
     {
-        char userName[128];
-        char passWord[128];
+        char userName[256];
+        char passWord[256];
     } ATMQTT_userOptions_t;
 
     typedef enum ATSocket_Family_t

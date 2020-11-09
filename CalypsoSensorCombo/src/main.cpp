@@ -25,6 +25,7 @@
  */
 #include "calypsoBoard.h"
 #include "json-builder.h"
+#include "sensorBoard.h"
 
 #define MOSQUITTO_CONNECTION 0
 #define AZURE_CONNECTION 1
@@ -43,15 +44,15 @@
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "weiot_testdevice1"
+#define MQTT_CLIENT_ID "weiot-calsen1"
 #define MQTT_SERVER_ADDRESS "we-test-iothub1.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/weiot_testdevice1/messages/events/"
-#define MQTT_USER_NAME "we-test-iothub1.azure-devices.net/weiot_testdevice1"
-#define MQTT_PASSWORD                                                         \
-    "SharedAccessSignature "                                                  \
-    "sr=we-test-iothub1.azure-devices.net%2Fdevices%2Fweiot_testdevice1&sig=" \
-    "BbdCBSucFMS15NAN6wLfCMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500740"
+#define MQTT_TOPIC "devices/weiot-calsen1/messages/events/"
+#define MQTT_USER_NAME "we-test-iothub1.azure-devices.net/weiot-calsen1"
+#define MQTT_PASSWORD                                                     \
+    "SharedAccessSignature "                                              \
+    "sr=we-test-iothub1.azure-devices.net%2Fdevices%2Fweiot-calsen1&sig=" \
+    "K3MRHNPz4PqbigWqMTcw2PzpIaMGs9kngJx7rpVry7g%3D&se=1640506405"
 
 #endif
 // SNTP settings
@@ -70,8 +71,19 @@ CALYPSO *calypso;
 // Serial communication port for Calypso
 TypeHardwareSerial *SerialCalypso;
 
+// Sensors
+// WE absolute pressure sensor object
+PADS *sensorPADS;
+// WE 3-axis acceleration sensor object
+ITDS *sensorITDS;
+// WE Temperature sensor object
+TIDS *sensorTIDS;
+// WE humidity sensor object
+HIDS *sensorHIDS;
+
 int msgID;
 
+char *serializeData();
 void setup() {
     delay(5000);
     // Using the USB serial port for debug messages
@@ -128,6 +140,27 @@ void setup() {
     strcpy(calSettings.sntpSettings.timezone, SNTP_TIMEZONE);
     strcpy(calSettings.sntpSettings.server, SNTP_SERVER);
 
+    // Create sensor objects
+    sensorPADS = PADSCreate(SerialDebug);
+    sensorITDS = ITDSCreate(SerialDebug);
+    sensorTIDS = TIDSCreate(SerialDebug);
+    sensorHIDS = HIDSCreate(SerialDebug);
+
+    // Initialize the sensors in default mode
+    if (!PADS_simpleInit(sensorPADS)) {
+        SSerial_printf(SerialDebug, "PADS init failed \r\n");
+    }
+
+    if (!ITDS_simpleInit(sensorITDS)) {
+        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
+    }
+    if (!TIDS_simpleInit(sensorTIDS)) {
+        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
+    }
+    if (!HIDS_simpleInit(sensorHIDS)) {
+        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
+    }
+
     calypso = Calypso_Create(SerialDebug, SerialCalypso, &calSettings);
 
     // Initialize Calypso
@@ -156,6 +189,52 @@ void setup() {
 }
 
 void loop() {
+    if (PADS_readSensorData(sensorPADS)) {
+        SSerial_printf(
+            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
+    }
+    if (ITDS_readSensorData(sensorITDS)) {
+        SSerial_printf(SerialDebug,
+                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
+                       sensorITDS->data[itdsXAcceleration],
+                       sensorITDS->data[itdsYAcceleration],
+                       sensorITDS->data[itdsZAcceleration]);
+    }
+    if (TIDS_readSensorData(sensorTIDS)) {
+        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
+                       sensorTIDS->data[tidsTemperature]);
+    }
+    if (HIDS_readSensorData(sensorHIDS)) {
+        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
+                       sensorHIDS->data[hidsRelHumidity],
+                       sensorHIDS->data[hidsTemperature]);
+    }
+    SSerial_printf(SerialDebug,
+                   "----------------------------------------------------\r\n");
+    SSerial_printf(SerialDebug, "\r\n");
+
+    char *payload = serializeData();
+
+    SSerial_printf(SerialDebug, payload);
+
+    /*Publish to MQTT topic*/
+    if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, payload,
+                                 strlen(payload), true)) {
+        SSerial_printf(SerialDebug, "Publish failed\n\r");
+    }
+
+    /*Clean-up*/
+    free(payload);
+
+    delay(5000);
+}
+
+/**
+ * @brief  Serialize data to send
+ * @retval Pointer to serialized data
+ */
+char *serializeData() {
     Timestamp timestamp;
     Timer_initTime(&timestamp);
 
@@ -178,18 +257,29 @@ void loop() {
     json_object_push(payload, "messageId", json_integer_new(msgID));
     json_object_push(payload, "ts", json_integer_new(unixTime_ms));
 
+    int i;
+    for (i = 0; i < padsProperties; i++) {
+        json_object_push(payload, sensorPADS->dataNames[i],
+                         json_double_new(sensorPADS->data[i]));
+    }
+    for (i = 0; i < itdsProperties; i++) {
+        json_object_push(payload, sensorITDS->dataNames[i],
+                         json_double_new(sensorITDS->data[i]));
+    }
+    for (i = 0; i < tidsProperties; i++) {
+        json_object_push(payload, sensorTIDS->dataNames[i],
+                         json_double_new(sensorTIDS->data[i]));
+    }
+
+    for (i = 0; i < hidsProperties; i++) {
+        json_object_push(payload, sensorHIDS->dataNames[i],
+                         json_double_new(sensorHIDS->data[i]));
+    }
+
     char *buf = (char *)malloc(json_measure(payload));
     json_serialize(buf, payload);
 
-    /*Publish to MQTT topic*/
-    if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, buf, strlen(buf),
-                                 true)) {
-        SSerial_printf(SerialDebug, "Publish failed\n\r");
-    }
-
-    /*Clean-up*/
     json_builder_free(payload);
-    free(buf);
 
-    delay(5000);
+    return buf;
 }
