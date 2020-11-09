@@ -6,7 +6,7 @@
 
 The Würth Elektronik eiSos Thyone FeatherWing is a development board that offers a secure 2.4 GHz proprietary wireless connectivity solution. It is fully compatible to the popular Adafruit’s Feather line of development boards. The Thone FeatherWing consists of two important components,
 
-* **Thyone-I** (2611011021000) - A 2.4 GHz proprietary radio module
+* [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - A 2.4 GHz proprietary radio module
 * **ATECC608A-TNGTLS** - Secure element from Microchip Technologies
 
 The Thyone-I module has an UART interface and the secure element an I 2 C interface and hence can be connected to any of the Feather microcontroller boards. The Arduino(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
@@ -15,7 +15,7 @@ The Thyone-I module has an UART interface and the secure element an I 2 C interf
 
 The Thyone FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing allows the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 For more information about the Hardware, please go to the Hardware repository or download [Thyone FeatherWing user manual](link.to.com\document).
-Feel free to check our [youtube channel](www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Secure Element
 

@@ -4,10 +4,10 @@
 
 The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board fully compatible to the popular Adafruit’s Feather line of development boards. It consists of the following four sensors,
 
-* **WSEN-PADS** - Absolute pressure sensor (2511020213301)
-* **WSEN-ITDS** - 3-axis acceleration sensor (2533020201601)
-* **WSEN-TIDS** - Temperature sensor (2521020222501)
-* **WSEN-HIDS** - Humidity sensor (2523020210001)
+* [**WSEN-PADS**](https://www.we-online.de/katalog/de/WSEN-PADS) - Absolute pressure sensor [(2511020213301)](https://www.we-online.de/katalog/de/WSEN-PADS)
+* [**WSEN-ITDS**](https://www.we-online.de/katalog/de/WSEN-ITDS) - 3-axis acceleration sensor [(2533020201601)](https://www.we-online.de/katalog/de/WSEN-ITDS)
+* [**WSEN-TIDS**](https://www.we-online.de/katalog/de/WSEN-TIDS) - Temperature sensor [(2521020222501)](https://www.we-online.de/katalog/de/WSEN-TIDS)
+* [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity sensor [(2523020210001)](https://www.we-online.de/katalog/de/WSEN-HIDS)
 
 All the four sensors are connected over the shared I<sup>2</sup>C bus and hence can be connected to
 any of the Feather microcontroller boards. The Arduino(C/C++) drivers and examples made
@@ -16,7 +16,7 @@ available makes it easy to build a prototype to kick-start the application devel
 ![Sensor FeatherWing](assets/SensorFeatherWing.png)
 
 For more information about the Hardware, please go to the Hardware repository or download [Sensor FeatherWing user manual](link.to.com\document).
-
+Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ## Software
 
@@ -42,7 +42,7 @@ The SDK can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 ### Installing the tools
 
 * Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
-* Follow the instructions under to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
+* Follow the instructions under to install [PlatformIO IDE](https://platformio.org/install/ide?install=vscode) extension.
 
 
 ## Example
