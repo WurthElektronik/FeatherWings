@@ -226,28 +226,27 @@ To create a single database in the Azure portal this quickstart starts at the Az
 **Select OK**.
 
 7. Leave **Want to use SQL elastic pool** set to **No**.
-8. Under ((Compute + storage)), select ((Configure database)).
+8. Under **Compute + storage**, select **Configure database**.
+9. This quickstart uses a serverless database, so select **Serverless**, and then select **Apply**.
 
-    This quickstart uses a serverless database, so select Serverless, and then select Apply.
+![configure serverless database](assets/configure-database.png)
 
-    configure serverless database
+10. Select Next: Networking at the bottom of the page.
 
-    Select Next: Networking at the bottom of the page.
+![New SQL database - Basic tab](assets/new-sql-database-basics.png)
 
-    New SQL database - Basic tab
+11. On the **Networking** tab, for **Connectivity method**, select **Public endpoint**.This is necessary for the excel connection from the local computer.
 
-    On the Networking tab, for Connectivity method, select Public endpoint.
+12. For **Firewall rules**, set **Add current client IP address** to **Yes**. Leave **Allow Azure services and resources to access this server** set to **No**.
 
-    For Firewall rules, set Add current client IP address to Yes. Leave Allow Azure services and resources to access this server set to No.
+13. Select **Next: Additional settings** at the bottom of the page.
 
-    Select Next: Additional settings at the bottom of the page.
+![Networking tab](assets/networking.png)
 
-    Networking tab
+14. On the **Additional settings tab**, in the **Data source** section, for **Use existing data**, select **Sample**. This creates an AdventureWorksLT sample database so there's some tables and data to query and experiment with, as opposed to an empty blank database.
 
-    On the Additional settings tab, in the Data source section, for Use existing data, select Sample. This creates an AdventureWorksLT sample database so there's some tables and data to query and experiment with, as opposed to an empty blank database.
-
-    Select Review + create at the bottom of the page:
+15. Select **Review + create** at the bottom of the page:
 
     Additional settings tab
 
-    On the Review + create page, after reviewing, select Create.
+16. On the **Review + create** page, after reviewing, select **Create**.
