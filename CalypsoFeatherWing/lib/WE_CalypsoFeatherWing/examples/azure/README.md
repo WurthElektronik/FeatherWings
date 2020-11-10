@@ -1,4 +1,4 @@
-![WE Logo](../../../../assets/Würth_Elektronik_Logo.svg.png)
+![WE Logo](../../../../../assets/WE_Logo_small_t.png)
 
 # Calypso FeatherWing Microsoft Azure example
 
@@ -379,5 +379,3 @@ If you want to connect other Excel workbooks and worksheets to the database, sel
 ![Recent Sources dialog box](recent-connections.png)
 
 For more infomation, please check [Connect Excel to a database in Azure SQL Database or Azure SQL Managed Instance, and create a report](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-excel) article from microsoft documentation.
-
-
