@@ -77,7 +77,11 @@ To send data to the IoTHub, the easiest way is to use our examaple code together
 * Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your Power BI account.
 * Create and publish a Power BI report to visualize the data.
 
-Note: If you prefer using **Excel** for the data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, Therefore SQL database will be necessary
+{{box op="start" cssClass="boxed noteBox"}}
+**Note!**
+
+If you prefer using **Excel** for the data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore SQL database will be necessary.
+{{box op="end"}}
 
 ### What you need
 
@@ -185,11 +189,50 @@ In the Stream Analytics job, select Overview, then select Start > Now > Start. O
 
 ![Run strean analytics job](assets/run-stream-analytics-job.png)
 
+## Visualize real-time sensor data from Azure IoT Hub in Visual Studio Code
+
+Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
+Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. Let’s see the key features in this release!
+
+
+### Necessary Steps
+
+1. In Explorer of VS Code, click "Azure IoT Hub" in the bottom left corner.
+
+![Click Device Explorer](assets/device-explorer-click.png)
+
+### Sign in to Azure
+
+Sign in to Azure to select IoT Hub from your Azure Subscription.
+
+1. Click "Select IoT Hub" in context menu.
+
+![Select IoT Hub](assets/select-iot-hub.png)
+
+2. If you have not signed in to Azure, a pop-up will show to let you sign in to Azure.
+3. After you sign in, your Azure Subscription list will be shown, then select an Azure Subscription.
+4. Your IoT Hub list will be shown, then select an IoT Hub.
+5. The devices and endpoints list will be shown.
+
+![IoT Hub Explorer](iot-hub-explorer.png)
+
+6. Select Start Monitoring Built-in Event Enpoint
 
 ## Visualize real-time sensor data from Azure IoT Hub using PowerBI
 
-Note: If you prefer using **Excel** for the data visualization, please skip this section,
 
+{{box op="start" cssClass="boxed noteBox"}}
+**Note!**
+
+If you prefer using **Excel** for the data visualization, please skip this section,
+{{box op="end"}}
+
+### Necessary steps
+
+* Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
+* Create SQL database to Stream data from the IoTHub
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. ()
+* Connect Excel data source with Azure SQL datanase to visualize the data.
 
 ## Visualize real-time sensor data from Azure IoT Hub using Excel
 
