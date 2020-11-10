@@ -305,18 +305,18 @@ Once your database is created, you can use the **Query editor (preview)** in the
 2. On the page for your database, select **Query editor (preview)** in the left menu.
 3. Enter your **server admin** login information, and select **OK**.
 
-![Sign in to Query editor](query-editor-login.png)
+![Sign in to Query editor](assets/query-editor-login.png)
 
 4. Enter the following query in the Query editor pane.
 
-``
+```
 
 SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName
 FROM SalesLT.ProductCategory pc
 JOIN SalesLT.Product p
 ON pc.productcategoryid = p.productcategoryid;
 
-``
+```
 
 5. Select **Run**, and then review the query results in the **Results** pane.
 6. Close the **Query editor** page.
@@ -351,7 +351,7 @@ Depending on your network environment, you may not be able to connect or you may
 
 ---
 
-5. In the **Navigator**, select the database you want to work with from the list, select the tables or views you want to work with (we chose **vGetAllCategories**), and then select **Load** to move the data from your database to your Excel spreadsheet.
+5. In the **Navigator**, select the database you want to work with from the list, select the tables or views you want to work with (chose the one you created in the Azure SQL), and then select **Load** to move the data from your database to your Excel spreadsheet.
 
     Select a database and table.
 
