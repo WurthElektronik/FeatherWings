@@ -77,11 +77,11 @@ To send data to the IoTHub, the easiest way is to use our examaple code together
 * Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your Power BI account.
 * Create and publish a Power BI report to visualize the data.
 
-{{box op="start" cssClass="boxed noteBox"}}
-**Note!**
+---
+**Note**
 
 If you prefer using **Excel** for the data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore SQL database will be necessary.
-{{box op="end"}}
+---
 
 ### What you need
 
@@ -221,11 +221,11 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 ## Visualize real-time sensor data from Azure IoT Hub using PowerBI
 
 
-{{box op="start" cssClass="boxed noteBox"}}
-**Note!**
+---
+**Note**
 
 If you prefer using **Excel** for the data visualization, please skip this section,
-{{box op="end"}}
+---
 
 ### Necessary steps
 
@@ -342,11 +342,11 @@ In this article, you'll import your own data IoTHuB data into Excel by following
 
     Type the server name and login credentials
 
-{{box op="start" cssClass="boxed noteBox"}}
-**Tip!**
+---
+**Tip**
 
 Depending on your network environment, you may not be able to connect or you may lose the connection if the server doesn't allow traffic from your client IP address. Go to the Azure portal, click SQL servers, click your server, click firewall under settings and add your client IP address. See [How to configure firewall settings](https://docs.microsoft.com/en-us/azure/azure-sql/database/firewall-configure) for details.
-{{box op="end"}}
+---
 
 5. In the **Navigator**, select the database you want to work with from the list, select the tables or views you want to work with (we chose **vGetAllCategories**), and then select **Load** to move the data from your database to your Excel spreadsheet.
 
