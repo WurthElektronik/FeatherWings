@@ -359,53 +359,25 @@ Depending on your network environment, you may not be able to connect or you may
 
 Now that you've established the connection, you have several different options with how to load the data. For example, the following steps create a pivot chart based on the data found in your database in SQL Database.
 
-    Follow the steps in the previous section, but this time, instead of selecting Load, select Load to from the Load drop-down.
+1. Follow the steps in the previous section, but this time, instead of selecting Load, select Load to from the Load drop-down.
 
-    Next, select how you want to view this data in your workbook. We chose PivotChart. You can also choose to create a New worksheet or to Add this data to a Data Model. For more information on Data Models, see Create a data model in Excel.
+2. Next, select how you want to view this data in your workbook. We chose **PivotChart**. You can also choose to 
+- create a **New worksheet** or to 
+- **Add this data to a Data Model**. 
+For more information on Data Models, see [Create a data model in Excel](https://support.office.com/article/Create-a-Data-Model-in-Excel-87E7A54C-87DC-488E-9410-5C75DBCB0F7B).
 
-    Choosing the format for data in Excel
+![Choosing the format for data in Excel](assets/import-data.png)
 
-    The worksheet now has an empty pivot table and chart.
+The worksheet now has an empty pivot table and chart.
 
-    Under PivotTable Fields, select all the check-boxes for the fields you want to view.
+3. Under **PivotTable Fields**, select all the check-boxes for the fields you want to view.
 
-    Configure database report.
+#### Create Excel workbpook
 
-Tip
+If you want to connect other Excel workbooks and worksheets to the database, select the **Data** tab, and select **Recent Sources** to launch the **Recent Sources** dialog box. From there, choose the connection you created from the list, and then click **Open**. 
 
-If you want to connect other Excel workbooks and worksheets to the database, select the Data tab, and select Recent Sources to launch the Recent Sources dialog box. From there, choose the connection you created from the list, and then click Open. Recent Sources dialog box
-Create a permanent connection using .odc file
+![Recent Sources dialog box](recent-connections.png)
 
-To save the connection details permanently, you can create an .odc file and make this connection a selectable option within the Existing Connections dialog box.
-
-    In the menu bar at the top of the page, select the Data tab, and then select Existing Connections to launch the Existing Connections dialog box.
-
-        Select Browse for more to open the Select Data Source dialog box.
-
-        Select the +NewSqlServerConnection.odc file and then select Open to open the Data Connection Wizard.
-
-        New Connection dialog box
-
-    In the Data Connection Wizard, type in your server name and your SQL Database credentials. Select Next.
-
-        Select the database that contains your data from the drop-down.
-
-        Select the table or view you're interested in. We chose vGetAllCategories.
-
-        Select Next.
-
-        Data Connection Wizard
-
-    Select the location of your file, the File Name, and the Friendly Name in the next screen of the Data Connection Wizard. You can also choose to save the password in the file, though this can potentially expose your data to unwanted access. Select Finish when ready.
-
-    Save Data Connection
-
-    Select how you want to import your data. We chose to do a PivotTable. You can also modify the properties of the connection by select Properties. Select OK when ready. If you did not choose to save the password with the file, then you will be prompted to enter your credentials.
-
-    Import Data
-
-    Verify that your new connection has been saved by expanding the Data tab, and selecting Existing Connections.
-
-    Existing Connection
+For more infomation, please check [Connect Excel to a database in Azure SQL Database or Azure SQL Managed Instance, and create a report](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-excel) article from microsoft documentation.
 
 
