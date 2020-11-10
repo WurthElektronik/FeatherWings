@@ -227,7 +227,7 @@ To create a single database in the Azure portal this quickstart starts at the Az
 
 7. Leave **Want to use SQL elastic pool** set to **No**.
 8. Under **Compute + storage**, select **Configure database**.
-9. This quickstart uses a serverless database, so select **Serverless**, and then select **Apply**.
+9. If asked use a serverless database, so select **Serverless**, and then select **Apply**.
 
 ![configure serverless database](assets/configure-database.png)
 
@@ -250,3 +250,116 @@ To create a single database in the Azure portal this quickstart starts at the Az
     Additional settings tab
 
 16. On the **Review + create** page, after reviewing, select **Create**.
+
+
+### Query the database
+
+Once your database is created, you can use the **Query editor (preview)** in the Azure portal to connect to the database and query data.
+
+1. In the portal, search for and select **SQL databases**, and then select your database from the list.
+2. On the page for your database, select **Query editor (preview)** in the left menu.
+3. Enter your **server admin** login information, and select **OK**.
+
+![Sign in to Query editor](query-editor-login.png)
+
+4. Enter the following query in the Query editor pane.
+
+``
+
+SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName
+FROM SalesLT.ProductCategory pc
+JOIN SalesLT.Product p
+ON pc.productcategoryid = p.productcategoryid;
+
+``
+
+5. Select **Run**, and then review the query results in the **Results** pane.
+6. Close the **Query editor** page.
+
+### Excel visualisation
+
+You can connect Excel to a database and then import data and create tables and charts based on values in the database. In this tutorial you will set up the connection between Excel and a database table, save the file that stores data and the connection information for Excel, and then create a pivot chart from the database values.
+
+You'll need to create a database before you get started. If you don't have one, see previous chapter Create a database in Azure SQL Database and connect SQL database to IoTHub to get a database with IoTHub data up and running in a few minutes.
+
+In this article, you'll import your own data IoTHuB data into Excel by following the steps described here.
+
+#### Connect Excel and load data
+
+1. To connect Excel to a database in SQL Database, open Excel and then create a new workbook or open an existing Excel workbook.
+2. In the menu bar at the top of the page, select the **Data** tab, select **Get Data**, select **From Azure**, and then select **From Azure SQL Database**.
+
+![Select data source: Connect Excel to SQL Database](assets/excel_data_source.png)
+
+3. In the **SQL Server database** dialog box, type the **Server name** you want to connect to in the form **<*servername*>.database.windows.net**. For example, *weiotsqlserver.database.windows.net*. Optionally, enter in the name of your database. Select **OK** to open the credentials window.
+
+![Connect to Database Server Dialog box](assets/server-name.png)
+
+4. In the SQL Server database dialog box, select Database on the left side, and then enter in your User Name and Password for the server you want to connect to. Select Connect to open the Navigator.
+
+    Type the server name and login credentials
+
+{{box op="start" cssClass="boxed noteBox"}}
+**Tip!**
+
+Depending on your network environment, you may not be able to connect or you may lose the connection if the server doesn't allow traffic from your client IP address. Go to the Azure portal, click SQL servers, click your server, click firewall under settings and add your client IP address. See [How to configure firewall settings](https://docs.microsoft.com/en-us/azure/azure-sql/database/firewall-configure) for details.
+{{box op="end"}}
+
+5. In the **Navigator**, select the database you want to work with from the list, select the tables or views you want to work with (we chose **vGetAllCategories**), and then select **Load** to move the data from your database to your Excel spreadsheet.
+
+    Select a database and table.
+
+#### Import the data into Excel and create a pivot chart
+
+Now that you've established the connection, you have several different options with how to load the data. For example, the following steps create a pivot chart based on the data found in your database in SQL Database.
+
+    Follow the steps in the previous section, but this time, instead of selecting Load, select Load to from the Load drop-down.
+
+    Next, select how you want to view this data in your workbook. We chose PivotChart. You can also choose to create a New worksheet or to Add this data to a Data Model. For more information on Data Models, see Create a data model in Excel.
+
+    Choosing the format for data in Excel
+
+    The worksheet now has an empty pivot table and chart.
+
+    Under PivotTable Fields, select all the check-boxes for the fields you want to view.
+
+    Configure database report.
+
+Tip
+
+If you want to connect other Excel workbooks and worksheets to the database, select the Data tab, and select Recent Sources to launch the Recent Sources dialog box. From there, choose the connection you created from the list, and then click Open. Recent Sources dialog box
+Create a permanent connection using .odc file
+
+To save the connection details permanently, you can create an .odc file and make this connection a selectable option within the Existing Connections dialog box.
+
+    In the menu bar at the top of the page, select the Data tab, and then select Existing Connections to launch the Existing Connections dialog box.
+
+        Select Browse for more to open the Select Data Source dialog box.
+
+        Select the +NewSqlServerConnection.odc file and then select Open to open the Data Connection Wizard.
+
+        New Connection dialog box
+
+    In the Data Connection Wizard, type in your server name and your SQL Database credentials. Select Next.
+
+        Select the database that contains your data from the drop-down.
+
+        Select the table or view you're interested in. We chose vGetAllCategories.
+
+        Select Next.
+
+        Data Connection Wizard
+
+    Select the location of your file, the File Name, and the Friendly Name in the next screen of the Data Connection Wizard. You can also choose to save the password in the file, though this can potentially expose your data to unwanted access. Select Finish when ready.
+
+    Save Data Connection
+
+    Select how you want to import your data. We chose to do a PivotTable. You can also modify the properties of the connection by select Properties. Select OK when ready. If you did not choose to save the password with the file, then you will be prompted to enter your credentials.
+
+    Import Data
+
+    Verify that your new connection has been saved by expanding the Data tab, and selecting Existing Connections.
+
+    Existing Connection
+
+

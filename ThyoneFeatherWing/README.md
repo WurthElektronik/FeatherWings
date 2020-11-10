@@ -7,9 +7,9 @@
 The Würth Elektronik eiSos Thyone FeatherWing is a development board that offers a secure 2.4 GHz proprietary wireless connectivity solution. It is fully compatible to the popular Adafruit’s Feather line of development boards. The Thone FeatherWing consists of two important components,
 
 * [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - A 2.4 GHz proprietary radio module
-* **ATECC608A-TNGTLS** - Secure element from Microchip Technologies
+* [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
 
-The Thyone-I module has an UART interface and the secure element an I 2 C interface and hence can be connected to any of the Feather microcontroller boards. The Arduino(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
+The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/)(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
 ![WE Thyone FeatherWing](assets/ThyoneFeatherWing.png)
 
@@ -19,7 +19,7 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
 
 ### Secure Element
 
-Thyone FeatherWing contains [ATECC608A-TNGTLS](www.microchip.com/wwwproducts/en/ATECC608A) Microship secure element. The ATECC608A-TNGTLS is a pre-prvisioned variant of the ATECC608A secure element from Microchip Technologies. The device is configured to make the secure element suitable to some of the most common use cases for IoT applications. It offers a rich set of cryptographic features like key agreement using ECDH, sign-verify mechanism, and encryption/decryption over easily accessible I<sup>2</sup>C interface. Its tiny form factor and low power consumption make it suitable for a wide variety of battery-driven applications.
+Thyone FeatherWing contains [ATECC608A-TNGTLS](www.microchip.com/wwwproducts/en/ATECC608A) Microship secure element. The ATECC608A-TNGTLS is a pre-provisioned variant of the ATECC608A secure element from Microchip Technologies. The device is configured to make the secure element suitable to some of the most common use cases for IoT applications. It offers a rich set of cryptographic features like key agreement using ECDH, sign-verify mechanism, and encryption/decryption over easily accessible I<sup>2</sup>C interface. Its tiny form factor and low power consumption make it suitable for a wide variety of battery-driven applications.
 
 
 ## Software 
@@ -31,7 +31,7 @@ Würth Elektronik eiSos provides a software development kit (SDK) with examples 
 * The examples are written in Arduino-styled C/C++ for quick prototyping.
 * The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
 * Development platform independent (Windows, Linux or MAC)
-*  Modular structure of the software stack makes it easy to integrate into any project.
+* Modular structure of the software stack makes it easy to integrate into any project.
 
 The SDK can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 
