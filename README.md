@@ -11,8 +11,8 @@ Hypercharge your prototyping for easy and fast solution testing.
 
 | Image    | Description |
 | -------- | ----------- |
-|![WE FeatherWings](assets/Stacked-FeatherWings-sigle-board.png) | Sensor FeatherWing (2501000201291)<br>* Acceleration (WSEN-ITDS)<br>* Absolute Pressure (WSEN-PADS)<br>* Temperature (WSEN-TIDS)<br>* Humidity (WSEN-HIDS)<br>* Using additionaly Sparkfun QWIIC Connect System |
-|![WE FeatherWings](assets/Stacked-FeatherWings-sigle-board.png) | Thyone-I Wireless FeatherWing (2611059021001)<br>■ Proprietary 2.4 GHz RF-Module<br>■ Connecting wirelessly up to 50m<br>■ Easy build up network<br>■ Connect to Thyone modules or USB-Stick |
-|![WE FeatherWings](assets/Stacked-FeatherWings-sigle-board.png) | Calypso WiFi FeatherWing (2610039025001)<br>■ WiFi-Connection 2.4 GHz<br>■ Easy connection to Smart Devices<br>■ Sending data to the server<br>■ Handling multiple nodes |
-|![WE FeatherWings](assets/Stacked-FeatherWings-sigle-board.png) | MagI3C Power FeatherWing (2601157100001)<br>■ Transform every input voltage (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails) |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](link.to/something)<br>* Acceleration (WSEN-ITDS)<br>* Absolute Pressure (WSEN-PADS)<br>* Temperature (WSEN-TIDS)<br>* Humidity (WSEN-HIDS)<br>* Using additionaly Sparkfun QWIIC Connect System |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | Thyone-I Wireless FeatherWing (2611059021001)<br>■ Proprietary 2.4 GHz RF-Module<br>■ Connecting wirelessly up to 50m<br>■ Easy build up network<br>■ Connect to Thyone modules or USB-Stick |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | Calypso WiFi FeatherWing (2610039025001)<br>■ WiFi-Connection 2.4 GHz<br>■ Easy connection to Smart Devices<br>■ Sending data to the server<br>■ Handling multiple nodes |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | MagI3C Power FeatherWing (2601157100001)<br>■ Transform every input voltage (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails) |
 |![Adafruit Feather](assets/Stacked-FeatherWings-single-board-Mx.png) | Connect any Adafruit FeatherWing Microcontroller<br>■ Request sensor data<br>■ Transfer data to RF-Module<br>■ Examples available on github<br>■ Sourcecode available on github |
