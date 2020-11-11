@@ -9,12 +9,6 @@ FeatherWings are stacking boards and add functionality and room for prototyping.
 Würth Elektronik eiSos FeatherWings are open source and use this form factor to maximize compatibility with dozens of pre-existing boards.
 Hypercharge your prototyping for easy and fast solution testing.
 
-![WE FeatherWings](assets/Stacked-FeatherWings-boards.png) | Sensor FeatherWing (2501000201291)
-* Acceleration (WSEN-ITDS)
-* Absolute Pressure (WSEN-PADS)
-* Temperature (WSEN-TIDS)
-* Humidity (WSEN-HIDS)
-* Using additionaly Sparkfun QWIIC Connect Systemn
-and more explanation
-
-
+| Image    | Description |
+| -------- | ----------- |
+|![WE FeatherWings](assets/Stacked-FeatherWings-boards.png) | Sensor FeatherWing (2501000201291)<br>* Acceleration (WSEN-ITDS)<br>* Absolute Pressure (WSEN-PADS)<br>* Temperature (WSEN-TIDS)<br>* Humidity (WSEN-HIDS)<br>* Using additionaly Sparkfun QWIIC Connect System |
