@@ -9,6 +9,7 @@ FeatherWings are stacking boards and add functionality and room for prototyping.
 Würth Elektronik eiSos FeatherWings are open source and use this form factor to maximize compatibility with dozens of pre-existing boards.
 Hypercharge your prototyping for easy and fast solution testing.
 
+| Image    | Description |
 | -------- | ----------- |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](link.to/something) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>Using additionaly Sparkfun QWIIC Connect System </ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | **Thyone-I Wireless FeatherWing** (2611059021001)<ul><li>Proprietary 2.4 GHz RF-Module<li>Connecting wirelessly up to 50m<li>Easy build up network<li>Connect to Thyone modules or USB-Stick</ul> |
