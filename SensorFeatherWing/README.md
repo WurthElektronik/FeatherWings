@@ -1,3 +1,5 @@
+![WE Logo](../assets/WE_Logo_small_t.png)
+
 # Sensor FeatherWing
 
 ## Introduction
