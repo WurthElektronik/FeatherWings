@@ -1,4 +1,4 @@
-![WE Logo](assets/WE_Logo_small_t.png) | ![Feather Logo](assets/feather-logo.png)
+![WE Logo](assets/WE_Logo_small_t.png) ![Feather Logo](assets/feather-logo.png)
 
 # WE Adafruit FeatherWings
 
