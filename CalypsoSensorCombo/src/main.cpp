@@ -32,7 +32,7 @@
 
 // WiFi access point parameters
 #define WI_FI_SSID "AP"
-#define WI_FI_PASSWORD "pw"
+#define WI_FI_PASSWORD "PW"
 
 #if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
@@ -84,7 +84,8 @@ HIDS *sensorHIDS;
 int msgID;
 
 char *serializeData();
-void setup() {
+void setup()
+{
     delay(5000);
     // Using the USB serial port for debug messages
     SerialDebug = SSerial_create(&Serial);
@@ -147,29 +148,35 @@ void setup() {
     sensorHIDS = HIDSCreate(SerialDebug);
 
     // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS)) {
+    if (!PADS_simpleInit(sensorPADS))
+    {
         SSerial_printf(SerialDebug, "PADS init failed \r\n");
     }
 
-    if (!ITDS_simpleInit(sensorITDS)) {
+    if (!ITDS_simpleInit(sensorITDS))
+    {
         SSerial_printf(SerialDebug, "ITDS init failed \r\n");
     }
-    if (!TIDS_simpleInit(sensorTIDS)) {
+    if (!TIDS_simpleInit(sensorTIDS))
+    {
         SSerial_printf(SerialDebug, "TIDS init failed \r\n");
     }
-    if (!HIDS_simpleInit(sensorHIDS)) {
+    if (!HIDS_simpleInit(sensorHIDS))
+    {
         SSerial_printf(SerialDebug, "HIDS init failed \r\n");
     }
 
     calypso = Calypso_Create(SerialDebug, SerialCalypso, &calSettings);
 
     // Initialize Calypso
-    if (!Calypso_simpleInit(calypso)) {
+    if (!Calypso_simpleInit(calypso))
+    {
         SSerial_printf(SerialDebug, "Calypso init failed \r\n");
     }
 
     // Connect Calypso FeatherWing to the Wi-Fi access point
-    if (!Calypso_WLANconnect(calypso)) {
+    if (!Calypso_WLANconnect(calypso))
+    {
         SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
         return;
     }
@@ -177,35 +184,42 @@ void setup() {
     delay(3000);
 
     // Set up SNTP client on Calypso
-    if (!Calypso_setUpSNTP(calypso)) {
+    if (!Calypso_setUpSNTP(calypso))
+    {
         SSerial_printf(SerialDebug, "SNTP config fail\r\n");
     }
 
     // Connect to MQTT server
-    if (!Calypso_MQTTconnect(calypso)) {
+    if (!Calypso_MQTTconnect(calypso))
+    {
         SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
     }
     msgID = 0;
 }
 
-void loop() {
-    if (PADS_readSensorData(sensorPADS)) {
+void loop()
+{
+    if (PADS_readSensorData(sensorPADS))
+    {
         SSerial_printf(
             SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
             sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
     }
-    if (ITDS_readSensorData(sensorITDS)) {
+    if (ITDS_readSensorData(sensorITDS))
+    {
         SSerial_printf(SerialDebug,
                        "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
                        sensorITDS->data[itdsXAcceleration],
                        sensorITDS->data[itdsYAcceleration],
                        sensorITDS->data[itdsZAcceleration]);
     }
-    if (TIDS_readSensorData(sensorTIDS)) {
+    if (TIDS_readSensorData(sensorTIDS))
+    {
         SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
                        sensorTIDS->data[tidsTemperature]);
     }
-    if (HIDS_readSensorData(sensorHIDS)) {
+    if (HIDS_readSensorData(sensorHIDS))
+    {
         SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
                        sensorHIDS->data[hidsRelHumidity],
                        sensorHIDS->data[hidsTemperature]);
@@ -220,7 +234,8 @@ void loop() {
 
     /*Publish to MQTT topic*/
     if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, payload,
-                                 strlen(payload), true)) {
+                                 strlen(payload), true))
+    {
         SSerial_printf(SerialDebug, "Publish failed\n\r");
     }
 
@@ -234,17 +249,20 @@ void loop() {
  * @brief  Serialize data to send
  * @retval Pointer to serialized data
  */
-char *serializeData() {
+char *serializeData()
+{
     Timestamp timestamp;
     Timer_initTime(&timestamp);
 
     msgID++;
-    if (msgID == INT_MAX) {
+    if (msgID == INT_MAX)
+    {
         msgID = 0;
     }
 
     // Get the current time from calypso
-    if (!Calypso_getTimestamp(calypso, &timestamp)) {
+    if (!Calypso_getTimestamp(calypso, &timestamp))
+    {
         SSerial_printf(SerialDebug, "Get time fail\r\n");
     }
 
@@ -258,20 +276,24 @@ char *serializeData() {
     json_object_push(payload, "ts", json_integer_new(unixTime_ms));
 
     int i;
-    for (i = 0; i < padsProperties; i++) {
+    for (i = 0; i < padsProperties; i++)
+    {
         json_object_push(payload, sensorPADS->dataNames[i],
                          json_double_new(sensorPADS->data[i]));
     }
-    for (i = 0; i < itdsProperties; i++) {
+    for (i = 0; i < itdsProperties; i++)
+    {
         json_object_push(payload, sensorITDS->dataNames[i],
                          json_double_new(sensorITDS->data[i]));
     }
-    for (i = 0; i < tidsProperties; i++) {
+    for (i = 0; i < tidsProperties; i++)
+    {
         json_object_push(payload, sensorTIDS->dataNames[i],
                          json_double_new(sensorTIDS->data[i]));
     }
 
-    for (i = 0; i < hidsProperties; i++) {
+    for (i = 0; i < hidsProperties; i++)
+    {
         json_object_push(payload, sensorHIDS->dataNames[i],
                          json_double_new(sensorHIDS->data[i]));
     }

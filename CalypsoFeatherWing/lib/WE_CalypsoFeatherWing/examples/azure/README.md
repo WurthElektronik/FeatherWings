@@ -1,4 +1,4 @@
-![WE Logo](../../../../assets/Würth_Elektronik_Logo.svg.png)
+![WE Logo](../../../../../assets/WE_Logo_small_t.png)
 
 # Calypso FeatherWing Microsoft Azure example
 
@@ -69,7 +69,7 @@ In this section, you create a device identity in the identity registry in your I
 To send data to the IoTHub, the easiest way is to use our examaple code together with Calypso FeatherWing, if you have M0 and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
 
 
-## Visualize real-time sensor data from Azure IoT Hub using Power BI
+## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
 
 ### Necessary steps
 
@@ -77,7 +77,12 @@ To send data to the IoTHub, the easiest way is to use our examaple code together
 * Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your Power BI account.
 * Create and publish a Power BI report to visualize the data.
 
-Note: If you prefer using **Excel** for the data visualization, please skip to the next section.
+---
+**Note**
+
+If you prefer using **Excel** for the data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore SQL database will be necessary.
+
+---
 
 ### What you need
 
@@ -185,6 +190,51 @@ In the Stream Analytics job, select Overview, then select Start > Now > Start. O
 
 ![Run strean analytics job](assets/run-stream-analytics-job.png)
 
+## Visualize real-time sensor data from Azure IoT Hub in Visual Studio Code
+
+Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
+Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. Let’s see the key features in this release!
+
+
+### Necessary Steps
+
+1. In Explorer of VS Code, click "Azure IoT Hub" in the bottom left corner.
+
+![Click Device Explorer](assets/device-explorer-click.png)
+
+### Sign in to Azure
+
+Sign in to Azure to select IoT Hub from your Azure Subscription.
+
+1. Click "Select IoT Hub" in context menu.
+
+![Select IoT Hub](assets/select-iot-hub.png)
+
+2. If you have not signed in to Azure, a pop-up will show to let you sign in to Azure.
+3. After you sign in, your Azure Subscription list will be shown, then select an Azure Subscription.
+4. Your IoT Hub list will be shown, then select an IoT Hub.
+5. The devices and endpoints list will be shown.
+
+![IoT Hub Explorer](iot-hub-explorer.png)
+
+6. Select Start Monitoring Built-in Event Enpoint
+
+## Visualize real-time sensor data from Azure IoT Hub using PowerBI
+
+
+---
+**Note**
+
+If you prefer using **Excel** for the data visualization, please skip this section,
+
+---
+
+### Necessary steps
+
+* Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
+* Create SQL database to Stream data from the IoTHub
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. ()
+* Connect Excel data source with Azure SQL datanase to visualize the data.
 
 ## Visualize real-time sensor data from Azure IoT Hub using Excel
 
@@ -192,6 +242,140 @@ In the Stream Analytics job, select Overview, then select Start > Now > Start. O
 
 * Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
 * Create SQL database to Stream data from the IoTHub
-* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database.
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. ()
 * Connect Excel data source with Azure SQL datanase to visualize the data.
 
+
+### Create a single database
+
+To create a single database in the Azure portal this quickstart starts at the Azure SQL page.
+
+1. Browse to the Select [SQL Deployment option page](https://portal.azure.com/#create/Microsoft.AzureSQL).
+2. Under **SQL databases**, leave **Resource** type set to **Single database**, and select **Create**.
+
+![Add to Azure SQL](assets/select-deployment.png)
+
+3. On the **Basics** tab of the **Create SQL Database** form, under **Project details**, select the desired Azure Subscription.
+4. For Resource group, select Create new or use exiting one from your IoTHub, and select OK.
+5. For **Database name** enter *someDatabaseName*.
+
+6. For Server, select **Create new**, and fill out the **New server** form with the following values:
+* **Server name**: Enter mysqlserver, and add some characters for uniqueness. We can't provide an exact server name to use because server names must be globally unique for all 
+
+* **servers in Azure**, not just unique within a subscription. So enter something like mysqlserver12345, and the portal lets you know if it is available or not.
+
+* **Server admin login**: Enter azureuser.
+* **Password**: Enter a password that meets requirements, and enter it again in the Confirm password field.
+* **Location**: Select a location from the dropdown list.
+
+**Select OK**.
+
+7. Leave **Want to use SQL elastic pool** set to **No**.
+8. Under **Compute + storage**, select **Configure database**.
+9. If asked use a serverless database, so select **Serverless**, and then select **Apply**.
+
+![configure serverless database](assets/configure-database.png)
+
+10. Select Next: Networking at the bottom of the page.
+
+![New SQL database - Basic tab](assets/new-sql-database-basics.png)
+
+11. On the **Networking** tab, for **Connectivity method**, select **Public endpoint**.This is necessary for the excel connection from the local computer.
+
+12. For **Firewall rules**, set **Add current client IP address** to **Yes**. Leave **Allow Azure services and resources to access this server** set to **No**.
+
+13. Select **Next: Additional settings** at the bottom of the page.
+
+![Networking tab](assets/networking.png)
+
+14. On the **Additional settings tab**, in the **Data source** section, for **Use existing data**, select **Sample**. This creates an AdventureWorksLT sample database so there's some tables and data to query and experiment with, as opposed to an empty blank database.
+
+15. Select **Review + create** at the bottom of the page:
+
+    Additional settings tab
+
+16. On the **Review + create** page, after reviewing, select **Create**.
+
+
+### Query the database
+
+Once your database is created, you can use the **Query editor (preview)** in the Azure portal to connect to the database and query data.
+
+1. In the portal, search for and select **SQL databases**, and then select your database from the list.
+2. On the page for your database, select **Query editor (preview)** in the left menu.
+3. Enter your **server admin** login information, and select **OK**.
+
+![Sign in to Query editor](assets/query-editor-login.png)
+
+4. Enter the following query in the Query editor pane.
+
+```
+
+SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName
+FROM SalesLT.ProductCategory pc
+JOIN SalesLT.Product p
+ON pc.productcategoryid = p.productcategoryid;
+
+```
+
+5. Select **Run**, and then review the query results in the **Results** pane.
+6. Close the **Query editor** page.
+
+### Excel visualisation
+
+You can connect Excel to a database and then import data and create tables and charts based on values in the database. In this tutorial you will set up the connection between Excel and a database table, save the file that stores data and the connection information for Excel, and then create a pivot chart from the database values.
+
+You'll need to create a database before you get started. If you don't have one, see previous chapter Create a database in Azure SQL Database and connect SQL database to IoTHub to get a database with IoTHub data up and running in a few minutes.
+
+In this article, you'll import your own data IoTHuB data into Excel by following the steps described here.
+
+#### Connect Excel and load data
+
+1. To connect Excel to a database in SQL Database, open Excel and then create a new workbook or open an existing Excel workbook.
+2. In the menu bar at the top of the page, select the **Data** tab, select **Get Data**, select **From Azure**, and then select **From Azure SQL Database**.
+
+![Select data source: Connect Excel to SQL Database](assets/excel_data_source.png)
+
+3. In the **SQL Server database** dialog box, type the **Server name** you want to connect to in the form **<*servername*>.database.windows.net**. For example, *weiotsqlserver.database.windows.net*. Optionally, enter in the name of your database. Select **OK** to open the credentials window.
+
+![Connect to Database Server Dialog box](assets/server-name.png)
+
+4. In the SQL Server database dialog box, select Database on the left side, and then enter in your User Name and Password for the server you want to connect to. Select Connect to open the Navigator.
+
+    Type the server name and login credentials
+
+---
+**Tip**
+
+Depending on your network environment, you may not be able to connect or you may lose the connection if the server doesn't allow traffic from your client IP address. Go to the Azure portal, click SQL servers, click your server, click firewall under settings and add your client IP address. See [How to configure firewall settings](https://docs.microsoft.com/en-us/azure/azure-sql/database/firewall-configure) for details.
+
+---
+
+5. In the **Navigator**, select the database you want to work with from the list, select the tables or views you want to work with (chose the one you created in the Azure SQL), and then select **Load** to move the data from your database to your Excel spreadsheet.
+
+    Select a database and table.
+
+#### Import the data into Excel and create a pivot chart
+
+Now that you've established the connection, you have several different options with how to load the data. For example, the following steps create a pivot chart based on the data found in your database in SQL Database.
+
+1. Follow the steps in the previous section, but this time, instead of selecting Load, select Load to from the Load drop-down.
+
+2. Next, select how you want to view this data in your workbook. We chose **PivotChart**. You can also choose to 
+- create a **New worksheet** or to 
+- **Add this data to a Data Model**. 
+For more information on Data Models, see [Create a data model in Excel](https://support.office.com/article/Create-a-Data-Model-in-Excel-87E7A54C-87DC-488E-9410-5C75DBCB0F7B).
+
+![Choosing the format for data in Excel](assets/import-data.png)
+
+The worksheet now has an empty pivot table and chart.
+
+3. Under **PivotTable Fields**, select all the check-boxes for the fields you want to view.
+
+#### Create Excel workbpook
+
+If you want to connect other Excel workbooks and worksheets to the database, select the **Data** tab, and select **Recent Sources** to launch the **Recent Sources** dialog box. From there, choose the connection you created from the list, and then click **Open**. 
+
+![Recent Sources dialog box](recent-connections.png)
+
+For more infomation, please check [Connect Excel to a database in Azure SQL Database or Azure SQL Managed Instance, and create a report](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-excel) article from microsoft documentation.

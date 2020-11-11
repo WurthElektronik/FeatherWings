@@ -1,11 +1,12 @@
-![WE Logo](../../../assets/Würth_Elektronik_Logo.svg.png)
+![WE Logo](../../../../assets/WE_Logo_small_t.png)
 
 # Calypso FeatherWing Examples
 
 ## PaHo MQTT client
 
-## Cloud
+## Cloud connectivity
 
 For more information of cloud connection please check
-[Microsoft Azure Example](azure/)
-[Amazon AWS example](aws/)
+
+* [**Microsoft Azure example**](azure/)
+* [**Amazon AWS example**](aws/)
