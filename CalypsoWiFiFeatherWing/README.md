@@ -54,6 +54,9 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
 **Second option**
 
 * **Azure IoT Hub Extension** is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code.
+After installing and connecting to the cloud, the results IoTHub messages can be tracked in the Visual Studio Code directly in the Lower left corner of the IDE in Azure IoT Hub extension:
+![IoT Device section](assets/device-explorer-click.png)
+
 
 
 ## Example
@@ -63,12 +66,13 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 1. Clone or download the [WE FeatherWing SDK](/)
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. Build and upload the code from the PlatformIO tab as shown in the Figure below
-4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.(See Figure)
-   
-**Optional**
-5. Clour results can be seen in the 
+4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
+   ![Running quick start example](assets/VSCode.png)
+5. In order to be able to connect wo the cloud device, SAS is needed as password. It can be generated using the **Azure IoT Hub Extension** ![IoTHub Explorer](assets/iot-hub-explorer.png) 
+6. Cloud results can be seen in the **Azure IoT Hub Extension**
 
-![Running quick start example](assets/VSCode.png)
+
+For more information about the cloud connectivity and explanation of the steps 5 and 6 please refer to [Calypso WiFi FeatherWing cloud example](/lib/WE_CalypsoFeatherWing/examples/azure)
 
 
 ### Source Code
@@ -130,15 +134,15 @@ Depending on the approach: Mosquito MQTT Broker or Azure IoT Hub, following code
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "weiot_testdevice1"
-#define MQTT_SERVER_ADDRESS "we-test-iothub1.azure-devices.net"
+#define MQTT_CLIENT_ID "we-iot-device"
+#define MQTT_SERVER_ADDRESS "we-iothub.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/weiot_testdevice1/messages/events/"
-#define MQTT_USER_NAME "we-test-iothub1.azure-devices.net/weiot_testdevice1"
+#define MQTT_TOPIC "devices/we-iot-device/messages/events/"
+#define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
 #define MQTT_PASSWORD                                                         \
     "SharedAccessSignature "                                                  \
-    "sr=we-test-iothub1.azure-devices.net%2Fdevices%2Fweiot_testdevice1&sig=" \
-    "BbdCBSucFMS15NAN6wLfCMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500740"
+    "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
+    "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
 
 #endif
 // SNTP settings
