@@ -18,12 +18,12 @@ With out-of-the-box support to commonly used network applications like SNTP, HTT
 It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
 
-The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/azure) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examaples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
+The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
 
-The [**SDK**](we-online.com/wcs-software) can be accessed on Github at [eismart FeatherWing GitHub](/../../).
+The [**SDK**](we-online.com/wcs-software) can be accessed on Github at [eiSmart FeatherWing GitHub](/../../).
 
 For more information about the Hardware, please go to the Hardware repository or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
-Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Necessary Steps
 
@@ -39,7 +39,7 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
 
 > Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
 
-* **Cloud**: If you want to use cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoWiFiFeatherWing/examples) and detailed instruction for [Microsoft Azure usage](lib/WE_CalypsoWiFiFeatherWing/examples/azure).
+* **Cloud**: If you want to use cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoWiFiFeatherWing/examples) and detailed instruction for [Microsoft Azure usage](lib/WE_CalypsoWiFiFeatherWing/examples).
 
 
 ### Installing the tools
@@ -49,7 +49,7 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
   
 **First option**
 
-* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instrucitons for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoWiFiFeatherWing/examples/azure) (see above).
+* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instrucitons for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoWiFiFeatherWing/examples) (see above).
 
 **Second option**
 
@@ -72,7 +72,7 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 6. Cloud results can be seen in the **Azure IoT Hub Extension**
 
 
-For more information about the cloud connectivity and explanation of the steps 5 and 6 please refer to [Calypso WiFi FeatherWing cloud example](/lib/WE_CalypsoFeatherWing/examples/azure)
+For more information about the cloud connectivity and explanation of the steps 5 and 6 please refer to [Calypso WiFi FeatherWing cloud example](/lib/WE_CalypsoFeatherWing/examples)
 
 
 ### Source Code
