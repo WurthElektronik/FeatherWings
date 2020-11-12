@@ -6,7 +6,7 @@
 
 <!--Goals-->
 
-The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the [Adafruit's](https://www.adafruit.com/) popular [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity..
+The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the [Adafruit](https://www.adafruit.com/) popular [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity..
 
 The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
 
@@ -75,7 +75,7 @@ For more information about the cloud connectivity and explanation of the steps 5
 
 Depending on the approach: Mosquito MQTT Broker or Azure IoT Hub, following code has two parameters which need to be set to make one or the other example work
 
-```
+```C
 #define MOSQUITTO_CONNECTION 1
 #define AZURE_CONNECTION 0
 ```
@@ -83,7 +83,7 @@ Depending on the approach: Mosquito MQTT Broker or Azure IoT Hub, following code
 * **AZURE_CONNECTION**: Set to 1 - Azure IoTHub, set to 0 - not used
 
 
-```
+```C
 
 /**
  * \file
@@ -141,6 +141,7 @@ Depending on the approach: Mosquito MQTT Broker or Azure IoT Hub, following code
     "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
 
 #endif
+
 // SNTP settings
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"

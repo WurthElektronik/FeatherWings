@@ -58,7 +58,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 ### Source Code
 
-```
+```C
 
 /**
  * \file

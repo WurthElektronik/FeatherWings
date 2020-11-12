@@ -64,7 +64,7 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 
 ### Source Code
 
-```
+```C
 
 /**
  * \file
