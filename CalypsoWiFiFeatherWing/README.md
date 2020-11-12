@@ -10,7 +10,7 @@ The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board tha
 
 The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
 
-![Calypso WiFi FeatherWing](assets/CalypsoFeatherWing.png)
+![Calypso WiFi FeatherWing](assets/CalypsoWiFiFeatherWing.png)
 
 
 With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
@@ -18,7 +18,7 @@ With out-of-the-box support to commonly used network applications like SNTP, HTT
 It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
 
-The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoFeatherWing/examples/azure) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examaples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
+The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/azure) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examaples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
 
 The [**SDK**](we-online.com/wcs-software) can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 
@@ -37,9 +37,9 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
 
 * **MQTT Broker**: It is recomended to install Mosquito MQTT broker if you: do not have a cloud access, do not want to create cloud account, or do not want to use cloud.
 
-> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoFeatherWing/examples).
+> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
 
-* **Cloud**: If you want to use cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoFeatherWing/examples) and detailed instruction for [Microsoft Azure usage](lib/WE_CalypsoFeatherWing/examples/azure).
+* **Cloud**: If you want to use cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoWiFiFeatherWing/examples) and detailed instruction for [Microsoft Azure usage](lib/WE_CalypsoWiFiFeatherWing/examples/azure).
 
 
 ### Installing the tools
@@ -49,7 +49,7 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
   
 **First option**
 
-* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instrucitons for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoFeatherWing/examples/azure) (see above).
+* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instrucitons for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoWiFiFeatherWing/examples/azure) (see above).
 
 **Second option**
 
@@ -87,7 +87,7 @@ Depending on the approach: Mosquito MQTT Broker or Azure IoT Hub, following code
 
 /**
  * \file
- * \brief Main file for the WE-CalypsoFeatherWing.
+ * \brief Main file for the WE-CalypsoWiFiFeatherWing.
  *
  * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
  *

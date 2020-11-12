@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Main file for the WE-CalypsoFeatherWing.
+ * \brief Main file for the WE-CalypsoWiFiFeatherWing.
  *
  * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
  *

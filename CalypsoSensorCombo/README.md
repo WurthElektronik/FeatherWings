@@ -2,9 +2,9 @@
 
 # Calypso WiFi FeatherWing
 
-The Calypso-Sensor-Combo is an example with two WE FeatherWings: [Calypso Wi-Fi FeatherWing](../CalypsoFeatherWing) and [Sensor FeatherWing](../SensorFeatherWing) and [cloud connection](../CalypsoFeatherWing/lib/WE_CalypsoFeatherWing/examples/aws/README.md).
+The Calypso-Sensor-Combo is an example with two WE FeatherWings: [Calypso Wi-Fi FeatherWing](../CalypsoWiFiFeatherWing) and [Sensor FeatherWing](../SensorFeatherWing) and [cloud connection](../CalypsoWiFiFeatherWing/lib/WE_CalypsoWiFiFeatherWing/examples/aws/README.md).
 
-For more information on how to create and send information to any MQTT broker or Cloud IoT-Hub please read the [Calyspo FeatherWing documentation](../CalypsoFeatherWing/lib/examples).
+For more information on how to create and send information to any MQTT broker or Cloud IoT-Hub please read the [Calyspo FeatherWing documentation](../CalypsoWiFiFeatherWing/lib/examples).
 
 
 
