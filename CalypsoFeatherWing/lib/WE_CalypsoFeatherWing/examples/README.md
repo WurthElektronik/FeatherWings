@@ -1,6 +1,6 @@
 ![WE Logo](../../../../assets/WE_Logo_small_t.png)
 
-# Calypso FeatherWing Examples
+# Calypso WiFi FeatherWing Examples
 
 ## PaHo MQTT client
 

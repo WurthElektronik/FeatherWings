@@ -1,6 +1,6 @@
 ![WE Logo](../assets/WE_Logo_small_t.png)
 
-# Calypso FeatherWing
+# Calypso WiFi FeatherWing
 
 The Calypso-Sensor-Combo is an exmaple with two WE FeatherWings: [Calypso Wi-Fi FeatherWing](../CalypsoFeatherWing) and [Sensor FeatherWing](../SensorFeatherWing) and [cloud connection](../CalypsoFeatherWing/lib/WE_CalypsoFeatherWing/examples/aws/README.md).
 

@@ -1,6 +1,6 @@
 ![WE Logo](../assets/WE_Logo_small_t.png)
 
-# Calypso FeatherWing
+# Calypso WiFi FeatherWing
 
 ## Introduction
 
@@ -10,7 +10,7 @@ The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board tha
 
 The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
 
-![Calypso FeatherWing](assets/CalypsoFeatherWing.png)
+![Calypso WiFi FeatherWing](assets/CalypsoFeatherWing.png)
 
 
 With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
@@ -18,11 +18,11 @@ With out-of-the-box support to commonly used network applications like SNTP, HTT
 It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
 
-The Calypso FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoFeatherWing/examples/azure) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examaples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
+The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoFeatherWing/examples/azure) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examaples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
 
 The [**SDK**](we-online.com/wcs-software) can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 
-For more information about the Hardware, please go to the Hardware repository or download [Calypso FeatherWing user manual](link.to.com\document).
+For more information about the Hardware, please go to the Hardware repository or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
 Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Necessary Steps
@@ -46,7 +46,14 @@ Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElek
 
 * Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
 * Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
+  
+**First option**
+
 * Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instrucitons for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoFeatherWing/examples/azure) (see above).
+
+**Second option**
+
+* **Azure IoT Hub Extension** is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code.
 
 
 ## Example
@@ -57,7 +64,9 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. Build and upload the code from the PlatformIO tab as shown in the Figure below
 4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.(See Figure)
-
+   
+**Optional**
+5. Clour results can be seen in the 
 
 ![Running quick start example](assets/VSCode.png)
 
@@ -158,7 +167,7 @@ void setup() {
 
     SerialCalypso = HSerial_create(&Serial1);
 
-    // Create serial port for Calypso FeatherWing baud 921600, 8E1
+    // Create serial port for Calypso WiFi FeatherWing baud 921600, 8E1
     HSerial_beginP(SerialCalypso, 921600, (uint8_t)SERIAL_8E1);
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
@@ -213,7 +222,7 @@ void setup() {
         SSerial_printf(SerialDebug, "Calypso init failed \r\n");
     }
 
-    // Connect Calypso FeatherWing to the Wi-Fi access point
+    // Connect Calypso WiFi FeatherWing to the Wi-Fi access point
     if (!Calypso_WLANconnect(calypso)) {
         SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
         return;

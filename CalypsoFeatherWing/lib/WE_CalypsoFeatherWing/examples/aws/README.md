@@ -1,2 +1,2 @@
-# Calypso FeatherWing Amazon AWS example
+# Calypso WiFi FeatherWing Amazon AWS example
 
