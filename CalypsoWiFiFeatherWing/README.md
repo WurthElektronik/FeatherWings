@@ -10,19 +10,16 @@ The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board tha
 
 The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
 
-![Calypso WiFi FeatherWing](assets/CalypsoWiFiFeatherWing.png)
+![Calypso WiFi FeatherWing](assets/CalypsoFeatherWing_s.png)
 
 
 With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
 
 It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather micro-controller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
-
 The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectivity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
 
-The [**SDK**](we-online.com/wcs-software) can be accessed on Github at [eiSmart FeatherWing GitHub](/../../).
-
-For more information about the Hardware, please go to the Hardware repository or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
+For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Necessary Steps
@@ -39,7 +36,7 @@ Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElek
 
 > Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
 
-* **Cloud**: If you want to use cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoWiFiFeatherWing/examples) and detailed instruction for [Microsoft Azure usage](lib/WE_CalypsoWiFiFeatherWing/examples).
+* **Cloud**: If you want to use the cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoWiFiFeatherWing/examples).
 
 
 ### Installing the tools
@@ -53,10 +50,9 @@ Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElek
 
 **Second option**
 
-* **Azure IoT Hub Extension** is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code.
+* Download and install **Azure IoT Hub Extension**. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code.
 After installing and connecting to the cloud, the results IoTHub messages can be tracked in the Visual Studio Code directly in the Lower left corner of the IDE in Azure IoT Hub extension:
 ![IoT Device section](assets/device-explorer-click.png)
-
 
 
 ## Example
