@@ -1,8 +1,10 @@
 ![WE Logo](../../../../assets/WE_Logo_small_t.png)
 
-# Calypso FeatherWing Examples
+# Calypso WiFi FeatherWing Examples
 
-## PaHo MQTT client
+## Mosquito MQTT broker
+
+For more information about the usege of Mosquito MQTT broker please read [Calypso WiFi FeatherWing main page](../../../).
 
 ## Cloud connectivity
 

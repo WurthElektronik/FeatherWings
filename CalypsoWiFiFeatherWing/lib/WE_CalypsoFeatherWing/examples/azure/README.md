@@ -1,6 +1,6 @@
 ![WE Logo](../../../../../assets/WE_Logo_small_t.png)
 
-# Calypso FeatherWing Microsoft Azure example
+# Calypso WiFi FeatherWing Microsoft Azure example
 
 ## Introduction
 
@@ -66,7 +66,7 @@ In this section, you create a device identity in the identity registry in your I
 
 ## Send data to the IoTHub
 
-To send data to the IoTHub, the easiest way is to use our examaple code together with Calypso FeatherWing, if you have M0 and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
+To send data to the IoTHub, the easiest way is to use our examaple code together with Calypso WiFi FeatherWing, if you have M0 and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
 
 
 ## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
@@ -86,7 +86,7 @@ If you prefer using **Excel** for the data visualization, you will have one extr
 
 ### What you need
 
-* Complete the Calypso FeatherWing Evaluation board tutorial for the Adafruit M0 Express Feather. These articles cover the following requirements:
+* Complete the Calypso WiFi FeatherWing Evaluation board tutorial for the Adafruit M0 Express Feather. These articles cover the following requirements:
     * An active Azure subscription.
     * An Azure IoT hub under your subscription.
     * A client application that sends messages to your Azure IoT hub.
@@ -193,7 +193,7 @@ In the Stream Analytics job, select Overview, then select Start > Now > Start. O
 ## Visualize real-time sensor data from Azure IoT Hub in Visual Studio Code
 
 Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
-Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. Let’s see the key features in this release!
+Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. 
 
 
 ### Necessary Steps

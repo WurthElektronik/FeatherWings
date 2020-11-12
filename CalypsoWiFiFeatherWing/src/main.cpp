@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Main file for the WE-CalypsoFeatherWing.
+ * \brief Main file for the WE-CalypsoWiFiFeatherWing.
  *
  * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
  *
@@ -80,7 +80,7 @@ void setup() {
 
     SerialCalypso = HSerial_create(&Serial1);
 
-    // Create serial port for Calypso FeatherWing baud 921600, 8E1
+    // Create serial port for Calypso WiFi FeatherWing baud 921600, 8E1
     HSerial_beginP(SerialCalypso, 921600, (uint8_t)SERIAL_8E1);
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
@@ -135,7 +135,7 @@ void setup() {
         SSerial_printf(SerialDebug, "Calypso init failed \r\n");
     }
 
-    // Connect Calypso FeatherWing to the Wi-Fi access point
+    // Connect Calypso WiFi FeatherWing to the Wi-Fi access point
     if (!Calypso_WLANconnect(calypso)) {
         SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
         return;

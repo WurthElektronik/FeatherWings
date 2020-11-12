@@ -17,7 +17,7 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 
 /**
  * \file
- * \brief Main file for the WE-ThyoneFeatherWing.
+ * \brief Main file for the WE-ThyoneWirelessFeatherWing.
  *
  * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
  *
