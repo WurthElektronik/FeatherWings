@@ -6,7 +6,7 @@
 
 <!--Goals-->
 
-The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the [Adafruit’s](https://www.adafruit.com/) popular [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity..
+The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the [Adafruit's](https://www.adafruit.com/) popular [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity..
 
 The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
 
@@ -15,10 +15,10 @@ The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www
 
 With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
 
-It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
+It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather micro-controller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
 
-The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectibity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
+The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectivity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
 
 The [**SDK**](we-online.com/wcs-software) can be accessed on Github at [eiSmart FeatherWing GitHub](/../../).
 
@@ -29,13 +29,13 @@ Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElek
 
 * **Install IDE**: your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [Platform IO](https://platformio.org/) extension.
 * **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](we-online.com/wcs-software)
+* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and downloads under [WCS Software](we-online.com/wcs-software)
 * **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
 * **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
 
 ### Optional steps
 
-* **MQTT Broker**: It is recomended to install Mosquito MQTT broker if you: do not have a cloud access, do not want to create cloud account, or do not want to use cloud.
+* **MQTT Broker**: It is recommended to install Mosquito MQTT broker if you: do not have a cloud access, do not want to create cloud account, or do not want to use cloud.
 
 > Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
 
@@ -49,7 +49,7 @@ Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElek
   
 **First option**
 
-* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instrucitons for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoWiFiFeatherWing/examples) (see above).
+* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoWiFiFeatherWing/examples) (see above).
 
 **Second option**
 
@@ -61,7 +61,7 @@ After installing and connecting to the cloud, the results IoTHub messages can be
 
 ## Example
 
-The quick start examples in the SDK are written to be run on Adafruit’s Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
+The quick start examples in the SDK are written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
 
 1. Clone or download the [WE FeatherWing SDK](/)
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
