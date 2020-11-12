@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Main file for the WE-ThyoneFeatherWing.
+ * \brief Main file for the WE-ThyoneWirelessFeatherWing.
  *
  * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
  *
