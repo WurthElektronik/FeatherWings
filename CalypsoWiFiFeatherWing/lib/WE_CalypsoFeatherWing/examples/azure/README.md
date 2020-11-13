@@ -353,8 +353,6 @@ CREATE TABLE <tablename> (
 	IoTHub nvarchar(4000) NULL,
 	ts bigint NULL,
 ) GO;
-
-
 ```
 
 5. Select **Run**, and then review the query results in the **Results** pane.
