@@ -33,12 +33,17 @@ In the visualization chapters use device with the sensor data and export the dat
 
 For the data visualization, please read Azure [Calypso FeatherWing documentation](../CalypsoWiFiFeatherWing/lib/examples/azure) 
 
-## Create SQL Database Table
+## Visualize data
 
 For the information how to create SQL database, please read appropriate chapter in the [Calypso FeatherWing documentation](../CalypsoWiFiFeatherWing/lib/examples)
 
 ### Necessary Steps
-1. Create SQL database for the sensor values to be filled with the streal amalytics job created in the [Calypso FeatherWing cloud example](../CalypsoWiFiFeatherWing/lib/examples)
+1. Follow the steps from the [Calypso FeatherWing cloud example](../CalypsoWiFiFeatherWing/lib/examples)
+2. Differences from the [Calypso FeatherWing cloud example](../CalypsoWiFiFeatherWing/lib/examples) are
+   * Create SQL database for the sensor values to be filled with the streal amalytics job created in the [Calypso FeatherWing cloud example](../CalypsoWiFiFeatherWing/lib/examples)
+   * Go to already created database on already created server and create new table in the **Query window (preview)** to save the stream analytics job data of the real-time sensor values from the IoTHub.
+
+#### Create SQL Database Table
 
 ```SQL
 
@@ -63,5 +68,5 @@ CREATE TABLE <tablename> (
 
 ```
 
-
+3. Visualize the same way as in the [basic cloud example](../CalypsoWiFiFeatherWing/lib/examples).
 
