@@ -43,15 +43,15 @@
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "weiot_testdevice1"
-#define MQTT_SERVER_ADDRESS "we-test-iothub1.azure-devices.net"
+#define MQTT_CLIENT_ID "we-iot-device"
+#define MQTT_SERVER_ADDRESS "we-iothub.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/weiot_testdevice1/messages/events/"
-#define MQTT_USER_NAME "we-test-iothub1.azure-devices.net/weiot_testdevice1"
+#define MQTT_TOPIC "devices/we-iot-device/messages/events/"
+#define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
 #define MQTT_PASSWORD                                                         \
     "SharedAccessSignature "                                                  \
-    "sr=we-test-iothub1.azure-devices.net%2Fdevices%2Fweiot_testdevice1&sig=" \
-    "BbdCBSucFMS15NAN6wLfCMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500740"
+    "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
+    "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
 
 #endif
 // SNTP settings
