@@ -50,7 +50,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 1. Clone or download the [WE FeatherWing SDK](/).
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below.
+3. **Build** and **Upload** the code from the PlatformIO tab as shown in the Figure below.
 4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
 
 ![Running quick start example](assets/VSCode.png)
