@@ -4,18 +4,18 @@
 
 ## Introduction
 
-This article describes how to create and manage IoT hubs using the [Azure portal](https://portal.azure.com), hot to connect with the Stream Analytics and visualize your data in PowerBI or Excel.
+This article describes how to create and manage IoT hubs using the [Azure portal](https://portal.azure.com), how to connect with the Stream Analytics and visualize your data in PowerBI or Excel.
 
-To use the steps in this tutorial, you need an [Azure subscription](https://azure.microsoft.com/en-us/free/). If you don't have an Azure subscription, create a free account before you begin.
+To use the steps in this tutorial, you need an [Azure subscription](https://azure.microsoft.com/en-us/free/). If you don't have an Azure subscription, please create a free account before you begin.
 
 
 ## IoTHub
 
-1. Sign in to the Azure portal.
+1. Sign in to the [Azure portal](https://portal.azure.com).
 2. From the Azure homepage, select the **+ Create a resource** button, and then enter IoT Hub in the **Search the Marketplace** field.
 3. Select **IoT Hub** from the search results, and then select **Create**.
 
-![IoTHub](assets/create_IoTHub.png){width=50%}
+![IoTHub](assets/create_IoTHub.png)
 
 4. On the Basics tab, complete the fields as follows:
 
@@ -39,7 +39,7 @@ If you are working through a Quickstart for IoT Hub device streams, select the f
 
 * **Azure Security Center**: Turn this on to add an extra layer of threat protection to IoT and your devices. This option is not available for hubs in the free tier. For more information about this feature, see Azure Security Center for IoT.
 
-* **Advanced Settings** > Device-to-cloud partitions: This property relates the device-to-cloud messages to the number of simultaneous readers of the messages. Most hubs need only four partitions.
+* **Advanced Settings > Device-to-cloud partitions**: This property relates the device-to-cloud messages to the number of simultaneous readers of the messages. Most hubs need only four partitions.
 
 6. Select **Next: Tags** to continue to the next screen.
 
