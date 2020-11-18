@@ -205,6 +205,13 @@ bool Calypso_StartProvisioning(CALYPSO *self) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_setUpSNTP(CALYPSO *self) {
+    /* Enable*/
+    pRequestCommand = &requestBuffer[0];
+    memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
+    strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
+    strcat(pRequestCommand, "enable, 1");
+    Calypso_SendRequest(self, pRequestCommand);
+
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
 
@@ -233,13 +240,6 @@ bool Calypso_setUpSNTP(CALYPSO *self) {
 #endif
         return false;
     }
-
-    /* Enable*/
-    pRequestCommand = &requestBuffer[0];
-    memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
-    strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
-    strcat(pRequestCommand, "enable, 1");
-    Calypso_SendRequest(self, pRequestCommand);
 
     /* Synchronize calypso time with sntp server */
     pRequestCommand = &requestBuffer[0];
