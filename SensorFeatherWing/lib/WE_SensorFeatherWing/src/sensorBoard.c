@@ -173,6 +173,8 @@ bool PADS_readSensorData(PADS *self) {
         return false;
     }
 
+    delay(15);
+
     status = PADS_getPressure(&self->data[padsPressure]);
     if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
@@ -515,7 +517,7 @@ HIDS *HIDSCreate(TypeSerial *serialDebug) {
     allocateInit->data[hidsTemperature] = 0;
     allocateInit->dataNames[hidsTemperature] = "HIDS_T[°C]";
     allocateInit->data[hidsRelHumidity] = 0;
-    allocateInit->dataNames[hidsRelHumidity] = "HIDS_RH[%%]";
+    allocateInit->dataNames[hidsRelHumidity] = "HIDS_RH[%]";
     return allocateInit;
 }
 
