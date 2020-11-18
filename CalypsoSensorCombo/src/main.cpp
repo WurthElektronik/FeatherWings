@@ -31,8 +31,8 @@
 #define AZURE_CONNECTION 1
 
 // WiFi access point parameters
-#define WI_FI_SSID "AP"
-#define WI_FI_PASSWORD "PW"
+#define WI_FI_SSID "WE_backup"
+#define WI_FI_PASSWORD "079429455001"
 
 #if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
@@ -44,15 +44,13 @@
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "weiot-calsen1"
-#define MQTT_SERVER_ADDRESS "we-test-iothub1.azure-devices.net"
+#define MQTT_CLIENT_ID "we-iot-device-theva-1"
+#define MQTT_SERVER_ADDRESS "we-iot-hub-t1.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/weiot-calsen1/messages/events/"
-#define MQTT_USER_NAME "we-test-iothub1.azure-devices.net/weiot-calsen1"
-#define MQTT_PASSWORD                                                     \
-    "SharedAccessSignature "                                              \
-    "sr=we-test-iothub1.azure-devices.net%2Fdevices%2Fweiot-calsen1&sig=" \
-    "K3MRHNPz4PqbigWqMTcw2PzpIaMGs9kngJx7rpVry7g%3D&se=1640506405"
+#define MQTT_TOPIC "devices/we-iot-device-theva-1/messages/events/"
+#define MQTT_USER_NAME "we-iot-hub-t1.azure-devices.net/we-iot-device-theva-1"
+#define MQTT_PASSWORD \
+    "SharedAccessSignature sr=we-iot-hub-t1.azure-devices.net%2Fdevices%2Fwe-iot-device-theva-1&sig=P8lFu2FffIT8zde5BUG8RoSOJiNRDTkJZM3CVKEEqo0%3D&se=1641541944"
 
 #endif
 // SNTP settings
@@ -201,42 +199,61 @@ void loop()
 {
     if (PADS_readSensorData(sensorPADS))
     {
-        SSerial_printf(
-            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
+        // SSerial_printf(
+        //     SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+        //     sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
     }
     if (ITDS_readSensorData(sensorITDS))
     {
-        SSerial_printf(SerialDebug,
-                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
-                       sensorITDS->data[itdsXAcceleration],
-                       sensorITDS->data[itdsYAcceleration],
-                       sensorITDS->data[itdsZAcceleration]);
+        // SSerial_printf(SerialDebug,
+        //                "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
+        //                sensorITDS->data[itdsXAcceleration],
+        //                sensorITDS->data[itdsYAcceleration],
+        //                sensorITDS->data[itdsZAcceleration]);
     }
     if (TIDS_readSensorData(sensorTIDS))
     {
-        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-                       sensorTIDS->data[tidsTemperature]);
+        // SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
+        //                sensorTIDS->data[tidsTemperature]);
     }
     if (HIDS_readSensorData(sensorHIDS))
     {
-        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-                       sensorHIDS->data[hidsRelHumidity],
-                       sensorHIDS->data[hidsTemperature]);
+        // SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
+        //                sensorHIDS->data[hidsRelHumidity],
+        //                sensorHIDS->data[hidsTemperature]);
     }
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
-    SSerial_printf(SerialDebug, "\r\n");
+    // SSerial_printf(SerialDebug,
+    //                "----------------------------------------------------\r\n");
+    // SSerial_printf(SerialDebug, "\r\n");
+    /*In case of internet connection failure- reconnect*/
+    if (calypso->status == calypso_error)
+    {
+        if (Calypso_reboot(calypso))
+        {
+            delay(RESPONSE_WAIT_TIME);
+        }
+        if (!Calypso_WLANconnect(calypso))
+        {
+            SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
+            return;
+        }
+        if (!Calypso_MQTTconnect(calypso))
+        {
+            SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
+        }
+    }
 
     char *payload = serializeData();
 
     SSerial_printf(SerialDebug, payload);
+    SSerial_printf(SerialDebug, "\r\n");
 
     /*Publish to MQTT topic*/
     if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, payload,
                                  strlen(payload), true))
     {
         SSerial_printf(SerialDebug, "Publish failed\n\r");
+        calypso->status = calypso_error;
     }
 
     /*Clean-up*/
