@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This article describes how to create and manage IoT hubs using the [Azure portal](https://portal.azure.com), how to connect with the Stream Analytics and visualize your data in PowerBI or Excel. SMe
+This article describes how to create and manage IoT hubs using the [Azure portal](https://portal.azure.com), how to connect with the Stream Analytics and visualize your data in PowerBI or Excel.
 
 To use the steps in this tutorial, you need an [Azure subscription](https://azure.microsoft.com/en-us/free/). If you don't have an Azure subscription, please create a free account before you begin.
 
@@ -35,28 +35,32 @@ To use the steps in this tutorial, you need an [Azure subscription](https://azur
 
 If you are working through a Quickstart for IoT Hub device streams, select the free tier.
 
-* **IoT Hub units**: The number of messages allowed per unit per day depends on your hub's pricing tier. For example, if you want the hub to support ingress of 700,000 messages, you choose two S1 tier units. For details about the other tier options, see Choosing the right IoT Hub tier. SME: link missing
+* **IoT Hub units**: The number of messages allowed per unit per day depends on your hub's pricing tier. For example, if you want the hub to support ingress of 700,000 messages, you choose two S1 tier units. For details about the other tier options, see [Choosing the right IoT Hub tier](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-scaling).
 
-* **Azure Security Center**: Turn this on to add an extra layer of threat protection to IoT and your devices. This option is not available for hubs in the free tier. For more information about this feature, see Azure Security Center for IoT. SME: link missing
+* **Azure Security Center**: Turn this on to add an extra layer of threat protection to IoT and your devices. This option is not available for hubs in the free tier. For more information about this feature, see [Azure Security Center for IoT](https://docs.microsoft.com/en-us/azure/asc-for-iot/).
 
 * **Advanced Settings > Device-to-cloud partitions**: This property relates the device-to-cloud messages to the number of simultaneous readers of the messages. Most hubs need only four partitions.
 
-6. Select **Next: Tags** to continue to the next screen.SME: example picture missing
+6. Select **Next: Tags** to continue to the next screen.
 
-Tags are name/value pairs. You can assign the same tag to multiple resources and resource groups to categorize resources and consolidate billing. For more information, see Use tags to organize your Azure resources. SME: link missing
+Tags are name/value pairs. You can assign the same tag to multiple resources and resource groups to categorize resources and consolidate billing. For more information, see [Use tags to organize your Azure resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources).
+
+![IoT Hub Tags](assets/iot-hub-create-tabs.png)
 
 7. Select **Next: Review + create** to review your choices. You see something similar to this screen, but with the values you selected when creating the hub.
+
+![IoT Hub Review and Create](assets/iot-hub-create-review.png)
 
 8. Select **Create** to create your new hub. Creating the hub takes a few minutes.
 
 
 ## Register a new device in the IoT hub
 
-In this section, you create a device identity in the identity registry in your IoT hub. A device cannot connect to a hub unless it has an entry in the identity registry. For more information, see the IoT Hub developer guide. SME: link to guide missing
+In this section, you create a device identity in the identity registry in your IoT hub. A device cannot connect to a hub unless it has an entry in the identity registry. For more information, see the [IoT Hub developer guide](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-identity-registry#identity-registry-operations).
 
 1. In your IoT hub navigation menu, open IoT Devices, then select New to add a device in your IoT hub.
 
-![Create Device](assets/create-identity-portal-vs2019.png)
+![Create device identity in portal](assets/create-identity-portal-vs2019.png)
 
 2. In **Create a device**, provide a name for your new device, such as **myWEDeviceId**, and select **Save**. This action creates a device identity for your IoT hub. The device ID may be visible in the logs collected for customer support and troubleshooting, so make sure to avoid any sensitive information while naming it.
 
@@ -140,7 +144,7 @@ Let's start by creating a Stream Analytics job. After you create the job, you de
     
     **Endpoint**: Select Messaging.
 
-    **Shared access policy name**: Select the name of the shared access policy you want the Stream Analytics job to use for your IoT hub. For this tutorial, you can select service. The service policy is created by default on new IoT hubs and grants permission to send and receive on cloud-side endpoints exposed by the IoT hub. To learn more, see Access control and permissions. SME: link missing
+    **Shared access policy name**: Select the name of the shared access policy you want the Stream Analytics job to use for your IoT hub. For this tutorial, you can select service. The service policy is created by default on new IoT hubs and grants permission to send and receive on cloud-side endpoints exposed by the IoT hub. To learn more, see [Access control and permissions](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-security#access-control-and-permissions).
 
     **Shared access policy key**: This field is auto-filled based on your selection for the shared access policy name.
 
@@ -215,7 +219,7 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 4. Your IoT Hub list will be shown, then select an IoT Hub.
 5. The devices and endpoints list will be shown.
 
-![IoT Hub Explorer](iot-hub-explorer.png) SME: fehler hier, foto fehlt
+![IoT Hub Explorer](assets/iot-hub-explorer.png)
 
 6. Select Start Monitoring Built-in Event Endpoint
 
@@ -225,7 +229,7 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 ---
 **Note**
 
-If you prefer using **Excel** for the data visualization, please skip this section. SME: link to excel section
+If you prefer using **Excel** for the data visualization, please skip this section. [Create SQL database](#create-a-single-database) and then follow [Excel visualization section](#excel-visualization).
 
 ---
 
@@ -239,7 +243,7 @@ If you prefer using **Excel** for the data visualization, please skip this secti
 
 The following steps show you how to create and publish a report using the Power BI service. You can follow these steps with some modification, if you want to use the "new look" in Power BI. To understand the differences and how to navigate in the "new look", [see The 'new look' of the Power BI service](https://docs.microsoft.com/en-us/power-bi/consumer/service-new-look).
 
-1. Ensure the sample application is running on your device. If not, you can refer to the tutorials under Setup your device. SME: jumper-link zur section möglich?
+1. Ensure the sample application is running on your device. If not, you can refer to the tutorials under [Setup your device](#register-a-new-device-in-the-iot-hub).
 2. Sign in to your Power BI account.
 3. Select the workspace you used, **My Workspace**.
 4. Select **Datasets**.
@@ -250,7 +254,7 @@ The following steps show you how to create and publish a report using the Power 
 
 7. Create a line chart to show real-time values over time.
     > **Note** 
-    ts if you use this example or sensor values if you are using [CalypsoSensorCombo](../../../../../CalypsoSensorCombo/) SME: was willst du damit sagen? Was ist "ts"?
+    ts (time stamp from the WiFi module without Sensors FeatherWing) if you use this example or sensor values if you are using [CalypsoSensorCombo](../../../../../CalypsoSensorCombo/)
 
      * On the **Visualizations** pane of the report creation page, select the line chart icon to add a line chart. 
      * On the **Fields** pane, expand the table that you specified when you created the output for the Stream Analytics job.
@@ -276,7 +280,7 @@ The following steps show you how to create and publish a report using the Power 
 
 * Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
 * Create SQL database to Stream data from the IoTHub
-* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. () SME. Klammern?
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database.
 * Connect the Excel data source with Azure SQL database to visualize the data.
 
 
@@ -326,7 +330,7 @@ To create a single database in the Azure portal this quick start begins at the A
 
 15. Select **Review + create** at the bottom of the page:
 
-    Additional settings tab SME: die Zeile sieht verloren aus, was willst du damit sagen?
+![Additional settings tab](assets/additional-settings.png)
 
 16. On the **Review + create** page, after reviewing, select **Create**.
 
