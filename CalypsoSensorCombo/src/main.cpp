@@ -31,8 +31,8 @@
 #define AZURE_CONNECTION 1
 
 // WiFi access point parameters
-#define WI_FI_SSID "WE_backup"
-#define WI_FI_PASSWORD "079429455001"
+#define WI_FI_SSID "AP"
+#define WI_FI_PASSWORD "PW"
 
 #if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
@@ -44,13 +44,15 @@
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "we-iot-device-theva-1"
-#define MQTT_SERVER_ADDRESS "we-iot-hub-t1.azure-devices.net"
+#define MQTT_CLIENT_ID "we-iot-device"
+#define MQTT_SERVER_ADDRESS "we-iothub.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/we-iot-device-theva-1/messages/events/"
-#define MQTT_USER_NAME "we-iot-hub-t1.azure-devices.net/we-iot-device-theva-1"
-#define MQTT_PASSWORD \
-    "SharedAccessSignature sr=we-iot-hub-t1.azure-devices.net%2Fdevices%2Fwe-iot-device-theva-1&sig=P8lFu2FffIT8zde5BUG8RoSOJiNRDTkJZM3CVKEEqo0%3D&se=1641541944"
+#define MQTT_TOPIC "devices/we-iot-device/messages/events/"
+#define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
+#define MQTT_PASSWORD                                               \
+    "SharedAccessSignature "                                        \
+    "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
+    "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
 
 #endif
 // SNTP settings
@@ -199,32 +201,33 @@ void loop()
 {
     if (PADS_readSensorData(sensorPADS))
     {
-        // SSerial_printf(
-        //     SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-        //     sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
+        SSerial_printf(
+            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
     }
     if (ITDS_readSensorData(sensorITDS))
     {
-        // SSerial_printf(SerialDebug,
-        //                "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
-        //                sensorITDS->data[itdsXAcceleration],
-        //                sensorITDS->data[itdsYAcceleration],
-        //                sensorITDS->data[itdsZAcceleration]);
+        SSerial_printf(SerialDebug,
+                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
+                       sensorITDS->data[itdsXAcceleration],
+                       sensorITDS->data[itdsYAcceleration],
+                       sensorITDS->data[itdsZAcceleration]);
     }
     if (TIDS_readSensorData(sensorTIDS))
     {
-        // SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-        //                sensorTIDS->data[tidsTemperature]);
+        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
+                       sensorTIDS->data[tidsTemperature]);
     }
     if (HIDS_readSensorData(sensorHIDS))
     {
-        // SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-        //                sensorHIDS->data[hidsRelHumidity],
-        //                sensorHIDS->data[hidsTemperature]);
+        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
+                       sensorHIDS->data[hidsRelHumidity],
+                       sensorHIDS->data[hidsTemperature]);
     }
-    // SSerial_printf(SerialDebug,
-    //                "----------------------------------------------------\r\n");
-    // SSerial_printf(SerialDebug, "\r\n");
+    SSerial_printf(SerialDebug,
+                   "----------------------------------------------------\r\n");
+    SSerial_printf(SerialDebug, "\r\n");
+
     /*In case of internet connection failure- reconnect*/
     if (calypso->status == calypso_error)
     {
