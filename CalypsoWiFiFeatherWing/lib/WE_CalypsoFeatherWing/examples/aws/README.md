@@ -10,10 +10,24 @@ To use the steps in this tutorial, you need an [AWS subscription](https://azure.
 
 ![Free AWS support plan](assets/select-support-plan.png)
 
+> **Note**: 
+> If you have [Visual Studio Code](https://code.visualstudio.com/) you can use [AWS Toolkit Extension](https://aws.amazon.com/visualstudiocode/) to work with your AWS account. To make this possible, you will need to create AWS user and get its [access keys](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/obtain-credentials.html). More details in [Setting up your AWS credentials](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/setup-credentials.html).
+
 
 ## IoT-Core
 
 In this tutorial, you'll install the software and create the AWS IoT resources necessary to connect a device to AWS IoT so that it can send and receive MQTT messages with AWS IoT Core. You'll see the messages in the MQTT client in the AWS IoT console. 
+
+### Necessary steps
+
+* Sign up for an AWS account
+* Create a user and grant permissions
+* Open the AWS IoT console
+
+If you already have an AWS account and an IAM user for yourself, you can use them and skip ahead to the next steps. For more information about AWS user account setup, please read [Set up your AWS account](https://docs.aws.amazon.com/iot/latest/developerguide/setting-up.html)
+
+
+### Sign up to IoT-Core
 
 1. Sign in to the [AWS Management Console](https://aws.amazon.com).
 2. Select **IoT Core** from the Menu.
@@ -26,30 +40,25 @@ If you do not have type, please create one with the **Create a type** button. Fi
 ![Create AWS IoT Thing Type](assets/create-thing-type.png)
 5. When offered to use certificates please use **One-click certificate creation (recommended)** option and press the **Create certificate** button.
 ![Create certificate](assets/create-certificate.png)
-6. If the certificates are created correctly, the success page will appear with the links to the certificates. 
+6. If the certificates are created correctly, the success page will appear with the links to the certificates.
 ![Certificate created successfully](assets/create-certificated-successfully.png)
 **Download**: 
 * **A certificate for this thing** and 
-* **A private key**. 
-Neither Public key nor root CA for AWS are needed since the root certificate is already integrated in Calypso module.
+* **A private key**.
+Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the root certificate is already integrated in Calypso module.
 7. **Activate**
 
 
-AWS-IoT
-1. in Manage -> Thing*s - Click *Create button to create a new Thing
-2. Create a single thing
-3. In Add your device to the thing registry, give Name to the thing and chose Thing Type if any exists.
-It there is no type, create one using Create a type button and then click Next
-4. One-click certificate creation (recommended) Create certificate button
-5. Download a certificate for this thing and download private key. Public key is not needed since the root certificate is already integrated in Calypso module.
-6. Press button **Activate** and then **Attach a policy**
-7. Click on **Create new policy**
+### Certificate and Policy
+
+1. Press button **Activate** and then **Attach a policy**
+2. If policy does not exist click on **Create new policy** to create new one.
 ![Add authorization to certificate](assets/add-authorization-to-certificate.png)
 8. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose appropriate statements:
    * *iot:Connect*, 
    * *iot:Publish* 
    * *iot:Receive* 
-  from the drop down menu. Chose **Effect** **Allow** and press **Create** or use advanced and copy the following code.
+  from the drop down menu. Chose **Effect** **Allow** and press **Create** or use **Advanced** modus and copy the following code.
 
 ![Create policy](assets/create-policy.png)
 
@@ -84,5 +93,109 @@ It there is no type, create one using Create a type button and then click Next
 This way, a thing with the policy and private key is created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
 
 
-## Calypso WiFi FeatherWing code
+## Visualizing Sensor Data in Amazon QuickSight
+
+Using AWS Serverless Application Model (AWS SAM), you can reduce the cost and time to market of an IoT solution. This chapter demonstrates how to collect and visualize data from a [Calypso WiFi FeatherWing](../../../../../CalypsoWiFiFeatherWing) using a variety of AWS services. Much of this can be accomplished within the AWS Free Usage Tier, which is necessary for the following instructions.
+
+### Services used
+
+The following services are used in this example:
+
+* AWS Lambda
+* Amazon Kinesis Data Firehose
+* Amazon QuickSight
+* Amazon S3
+
+### Necessary Steps
+
+* Forwarding messages from an AWS IoT Core topic stream to a Lambda function.
+* Using a Kinesis Data Firehose delivery stream to store data in S3.
+* Analyzing and visualizing data stored in S3 using Amazon QuickSight.
+
+### Create a Kinesis Firehose delivery stream
+
+[Amazon Kinesis Data Firehose](https://aws.amazon.com/kinesis/data-firehose/) is a service that reliably loads streaming data into data stores, data lakes, and analytics tools. Amazon QuickSight requires a data store to create visualizations of the sensor data. This simple Kinesis Data Firehose delivery stream continuously uploads data to an S3 storage bucket. The next sections cover how to add records to this stream using a Lambda function.
+
+1. In the [Kinesis Data Firehose console](https://console.aws.amazon.com/firehose/), create a new delivery stream, called SensorDataStream.
+2. Leave the default source as a **Direct PUT or other sources** and choose **Next**.
+3. On the next screen, leave all the default values and choose **Next**.
+4. Select **Amazon S3** as the destination and create a new bucket with a unique name. This is where records are continuously uploaded so that they can be used by Amazon QuickSight.
+5. On the next screen, choose **Create New IAM Role, Allow**. This gives the Firehose delivery stream permission to upload to S3.
+6. Review and then choose **Create Delivery Stream**.
+
+It can take some time to fully create the stream. In the meantime, continue on to the next section.
+
+### Invoking Lambda using AWS IoT Core rules
+
+Using [AWS IoT Core rules](https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html), you can forward messages from devices to a [Lambda function](https://aws.amazon.com/lambda/), which can perform actions such as uploading to an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table or an [S3 bucket](https://aws.amazon.com/s3/), or running data against various [Amazon Machine Learning services](https://aws.amazon.com/machine-learning/?nc2=h_m1). In this case, the function transforms and adds a message to the Kinesis Data Firehose delivery stream, which then adds that data to S3.
+
+AWS IoT Core rules use the MQTT topic stream to trigger interactions with other AWS services. An AWS IoT Core rule is created by using an SQL statement, a topic filter, and a [rule action](https://docs.aws.amazon.com/iot/latest/developerguide/iot-rule-actions.html). The Calypso example publishes messages every five seconds on the topic test. The following instructions show how to consume those messages with a Lambda function.
+
+### Create a Lambda function
+
+Before creating an AWS IoT Core rule, you need a Lambda function to consume forwarded messages.
+
+1. In the [AWS Lambda console](https://console.aws.amazon.com/lambda/home), choose Create function.
+2. Name the function ``CalypsoConsumeMessage``.
+3. For **Runtime**, choose **Author From Scratch, Node.js10.x**. For **Execution role**, choose **Create a new role with basic Lambda permissions**. Choose **Create**.
+4. On the **Execution role** card, choose **View the CalypsoConsumeMessage-role-***xxxx on the **IAM console**.
+5. Choose **Attach Policies**. Then, search for and select **AmazonKinesisFirehoseFullAccess**.
+6. Choose **Attach Policy**. This applies the necessary permissions to add records to the Firehose delivery stream.
+7. In the **Lambda console**, in the **Designer** card, select the function name.
+8. Paste the following in the code editor, replacing SensorDataStream with the name of your own Firehose delivery stream. Choose **Save**.
+
+```JavaScript
+
+const AWS = require('aws-sdk')
+
+const firehose = new AWS.Firehose()
+const StreamName = "SensorDataStream"
+
+exports.handler = async (event) => {
+    
+    console.log('Received IoT event:', JSON.stringify(event, null, 2))
+    
+    let payload = {
+        time: new Date(event.time),
+        sensor_value: event.sensor_a0
+    }
+    
+    let params = {
+            DeliveryStreamName: StreamName,
+            Record: { 
+                Data: JSON.stringify(payload)
+            }
+```
+
+### Create an AWS IoT Core rule
+
+To create an AWS IoT Core rule, follow these steps.
+
+1. In the [AWS IoT console](https://console.aws.amazon.com/iot/home), choose **Act**.
+2. Choose **Create**.
+3. For **Rule query statement**, copy and paste ``SELECT * FROM 'test’``. This subscribes to the outgoing message topic used in the Calypso AWS example.
+4. Choose **Add action, Send a message to a Lambda function, Configure action**.
+5. Select the function created in the last set of instructions.
+6. Choose **Create rule**.
+
+At this stage, any message published to the ``test`` topic forwards to the ``CalypsoConsumeMessage`` Lambda function, which transforms and puts the payload on the Kinesis Data Firehose stream and also logs the message to [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/). If you’ve connected an Calypso device to AWS IoT Core, it publishes to that topic every five seconds.
+
+The following steps show how to test functionality using the AWS IoT console.
+
+    In the AWS IoT console, choose Test.
+    For Publish, enter the topic arduino/outgoing .
+    Enter the following test payload:
+
+    {
+      “time”: 1567023375013,  
+      “sensor_a0”: 456
+    }
+
+    JSON
+    Choose Publish to topic.
+    Navigate back to your Lambda function.
+    Choose Monitoring, View logs in CloudWatch.
+    Select a log item to view the message contents, as shown in the following screenshot.
+
+
 
