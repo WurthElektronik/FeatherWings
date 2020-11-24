@@ -31,8 +31,8 @@
 #define AZURE_CONNECTION 1
 
 // WiFi access point parameters
-#define WI_FI_SSID "AP"
-#define WI_FI_PASSWORD "PW"
+#define WI_FI_SSID "AWN"
+#define WI_FI_PASSWORD "Patujak007013"
 
 #if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
