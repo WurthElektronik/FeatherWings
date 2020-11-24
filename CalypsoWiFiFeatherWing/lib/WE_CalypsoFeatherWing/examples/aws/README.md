@@ -182,20 +182,53 @@ At this stage, any message published to the ``test`` topic forwards to the ``Cal
 
 The following steps show how to test functionality using the AWS IoT console.
 
-    In the AWS IoT console, choose Test.
-    For Publish, enter the topic arduino/outgoing .
-    Enter the following test payload:
+1. In the [AWS IoT console](https://console.aws.amazon.com/iot/home), choose **Test**.
+2. For **Publish**, enter the topic *test*.
+3. Enter the following test payload:
 
-    {
-      “time”: 1567023375013,  
-      “sensor_a0”: 456
+```json
+{
+  “time”: 1567023375013,  
+  “sensor_a0”: 456
+}
+```
+
+4. Choose **Publish to topic**.
+5. Navigate back to your Lambda function.
+6. Choose **Monitoring, View logs in CloudWatch**.
+7. Select a log item to view the message contents, as shown in the following screenshot.
+
+### Visualizing data with Amazon QuickSight
+
+To visualize data with Amazon QuickSight, follow these steps.
+
+1. In the Amazon QuickSight console, [sign up](https://quicksight.aws.amazon.com/sn/console/signup).
+2. Choose **Manage Data, New Data Set**. Select **S3** as the data source.
+3. A manifest file is necessary for Amazon QuickSight to be able to fetch data from your S3 bucket. Copy the following into a file named ``manifest.json``. Replace *YOUR-BUCKET-NAME* with the name of the bucket created for the Firehose delivery stream.
+```json
+{
+    "fileLocations":[
+      {
+          "URIPrefixes":[
+            "s3://YOUR-BUCKET-NAME/"
+          ]
+      }
+    ],
+    "globalUploadSettings":{
+      "format":"JSON"
     }
+}
+```
 
-    JSON
-    Choose Publish to topic.
-    Navigate back to your Lambda function.
-    Choose Monitoring, View logs in CloudWatch.
-    Select a log item to view the message contents, as shown in the following screenshot.
+5. Upload the ``manifest.json`` file.
+6. Choose **Connect**, then **Visualize**. You may have to [give Amazon QuickSight explicit permissions](https://docs.aws.amazon.com/quicksight/latest/user/managing-permissions.html) to your S3 bucket.
+7. Finally, design the Amazon QuickSight visualizations in the drag and drop editor. Drag the two available fields into the center card to generate a Sum of Sensor_value by Time visual.
 
+![QuickSight visualisation](assets/visualizing-sensor-data.png)
 
+## Conclusion
+
+This post demonstrated visualizing data from a securely connected remote IoT device. This was achieved by connecting an Arduino to AWS IoT Core using MQTT, forwarding messages from the topic stream to Lambda using IoT Core rules, putting records on an Amazon Kinesis Data Firehose delivery stream, and using Amazon QuickSight to visualize the data stored within an S3 bucket.
+
+With these building blocks, it is possible to implement highly scalable and customizable IoT data collection, analysis, and visualization. With the use of other AWS services, you can build a full end-to-end platform for an IoT product that can reliably handle volume. To further explore how hardware and AWS Serverless can work together, visit the Amazon Web Services page on Hackster.
 
