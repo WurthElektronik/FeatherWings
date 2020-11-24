@@ -1,3 +1,3 @@
-# Calypso WiFi FeatherWing Amazon AWS example
+# Example: Amazon AWS with Calypso WiFi FeatherWing
 
 **Work in progress...**

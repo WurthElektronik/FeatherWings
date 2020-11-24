@@ -4,18 +4,19 @@
 
 ## Introduction
 
-The Würth Elektronik eiSos Thyone FeatherWing is a development board that offers a secure 2.4 GHz proprietary wireless connectivity solution. It is fully compatible to the popular Adafruit’s Feather line of development boards. The Thyone FeatherWing consists of two important components,
+The Würth Elektronik eiSos Thyone FeatherWing is a development board that offers a secure **2.4 GHz proprietary** wireless connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. The Thyone Wireless FeatherWing consists of two important components:
 
 * [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - A 2.4 GHz proprietary radio module
 * [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
 
 The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/)(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
-![WE Thyone FeatherWing](assets/ThyoneWirelessFeatherWing.png)
+![WE Thyone FeatherWing](assets/ThyoneFeatherWing_s.png)
 
-The Thyone FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing allows the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
-For more information about the Hardware, please go to the Hardware repository or download [Thyone FeatherWing user manual](link.to.com\document).
-Feel free to check our [youtube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+The Thyone FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) allows the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
+
+For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Thyone FeatherWing user manual](link.to.com\document).
+Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Secure Element
 
@@ -33,7 +34,6 @@ Würth Elektronik eiSos provides a software development kit (SDK) with examples 
 * Development platform independent (Windows, Linux or MAC)
 * Modular structure of the software stack makes it easy to integrate into any project.
 
-The SDK can be accessed on Github at [eismart FeatherWing GitHub](/../../).
 
 ### Necessary Steps
 
@@ -64,7 +64,7 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 
 ### Source Code
 
-```
+```C
 
 /**
  * \file

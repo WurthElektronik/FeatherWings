@@ -4,7 +4,7 @@
 
 ## Mosquito MQTT broker
 
-For more information about the usege of Mosquito MQTT broker please read [Calypso WiFi FeatherWing main page](../../../).
+For more information about the usage of Mosquito MQTT broker please read [Calypso WiFi FeatherWing main page](../../../).
 
 ## Cloud connectivity
 

@@ -1,21 +1,21 @@
 ![WE Logo](../../../../../assets/WE_Logo_small_t.png)
 
-# Calypso WiFi FeatherWing Microsoft Azure example
+# Example: Microsoft Azure with Calypso WiFi FeatherWing
 
 ## Introduction
 
-This article describes how to create and manage IoT hubs using the [Azure portal](https://portal.azure.com), hot to connect with the Stream Analytics and visualize your data in PowerBI or Excel.
+This article describes how to create and manage IoT hubs using the [Azure portal](https://portal.azure.com), how to connect with the Stream Analytics and visualize your data in PowerBI or Excel.
 
-To use the steps in this tutorial, you need an [Azure subscription](https://azure.microsoft.com/en-us/free/). If you don't have an Azure subscription, create a free account before you begin.
+To use the steps in this tutorial, you need an [Azure subscription](https://azure.microsoft.com/en-us/free/). If you don't have an Azure subscription, please create a free account before you begin.
 
 
 ## IoTHub
 
-1. Sign in to the Azure portal.
+1. Sign in to the [Azure portal](https://portal.azure.com).
 2. From the Azure homepage, select the **+ Create a resource** button, and then enter IoT Hub in the **Search the Marketplace** field.
 3. Select **IoT Hub** from the search results, and then select **Create**.
 
-![IoTHub](assets/create_IoTHub.png){width=50%}
+![IoTHub](assets/create_IoTHub.png)
 
 4. On the Basics tab, complete the fields as follows:
 
@@ -35,30 +35,34 @@ To use the steps in this tutorial, you need an [Azure subscription](https://azur
 
 If you are working through a Quickstart for IoT Hub device streams, select the free tier.
 
-* **IoT Hub units**: The number of messages allowed per unit per day depends on your hub's pricing tier. For example, if you want the hub to support ingress of 700,000 messages, you choose two S1 tier units. For details about the other tier options, see Choosing the right IoT Hub tier.
+* **IoT Hub units**: The number of messages allowed per unit per day depends on your hub's pricing tier. For example, if you want the hub to support ingress of 700,000 messages, you choose two S1 tier units. For details about the other tier options, see [Choosing the right IoT Hub tier](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-scaling).
 
-* **Azure Security Center**: Turn this on to add an extra layer of threat protection to IoT and your devices. This option is not available for hubs in the free tier. For more information about this feature, see Azure Security Center for IoT.
+* **Azure Security Center**: Turn this on to add an extra layer of threat protection to IoT and your devices. This option is not available for hubs in the free tier. For more information about this feature, see [Azure Security Center for IoT](https://docs.microsoft.com/en-us/azure/asc-for-iot/).
 
-* **Advanced Settings** > Device-to-cloud partitions: This property relates the device-to-cloud messages to the number of simultaneous readers of the messages. Most hubs need only four partitions.
+* **Advanced Settings > Device-to-cloud partitions**: This property relates the device-to-cloud messages to the number of simultaneous readers of the messages. Most hubs need only four partitions.
 
 6. Select **Next: Tags** to continue to the next screen.
 
-Tags are name/value pairs. You can assign the same tag to multiple resources and resource groups to categorize resources and consolidate billing. For more information, see Use tags to organize your Azure resources.
+Tags are name/value pairs. You can assign the same tag to multiple resources and resource groups to categorize resources and consolidate billing. For more information, see [Use tags to organize your Azure resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources).
+
+![IoT Hub Tags](assets/iot-hub-create-tabs.png)
 
 7. Select **Next: Review + create** to review your choices. You see something similar to this screen, but with the values you selected when creating the hub.
+
+![IoT Hub Review and Create](assets/iot-hub-create-review.png)
 
 8. Select **Create** to create your new hub. Creating the hub takes a few minutes.
 
 
 ## Register a new device in the IoT hub
 
-In this section, you create a device identity in the identity registry in your IoT hub. A device cannot connect to a hub unless it has an entry in the identity registry. For more information, see the IoT Hub developer guide.
+In this section, you create a device identity in the identity registry in your IoT hub. A device cannot connect to a hub unless it has an entry in the identity registry. For more information, see the [IoT Hub developer guide](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-identity-registry#identity-registry-operations).
 
 1. In your IoT hub navigation menu, open IoT Devices, then select New to add a device in your IoT hub.
 
-![Create Device](assets/create-identity-portal-vs2019.png)
+![Create device identity in portal](assets/create-identity-portal-vs2019.png)
 
-2. In Create a device, provide a name for your new device, such as **myWEDeviceId**, and select **Save**. This action creates a device identity for your IoT hub. The device ID may be visible in the logs collected for customer support and troubleshooting, so make sure to avoid any sensitive information while naming it.
+2. In **Create a device**, provide a name for your new device, such as **myWEDeviceId**, and select **Save**. This action creates a device identity for your IoT hub. The device ID may be visible in the logs collected for customer support and troubleshooting, so make sure to avoid any sensitive information while naming it.
 
 
 ![Create Device](assets/create_iot_device.png)
@@ -66,7 +70,7 @@ In this section, you create a device identity in the identity registry in your I
 
 ## Send data to the IoTHub
 
-To send data to the IoTHub, the easiest way is to use our examaple code together with Calypso WiFi FeatherWing, if you have M0 and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
+To send data to the IoTHub, the easiest way is to use our example code together with the Calypso WiFi FeatherWing, if you have a M0 microprocessor Feather and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
 
 
 ## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
@@ -80,7 +84,7 @@ To send data to the IoTHub, the easiest way is to use our examaple code together
 ---
 **Note**
 
-If you prefer using **Excel** for the data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore SQL database will be necessary.
+If you prefer using **Excel** for data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore a SQL database will be necessary.
 
 ---
 
@@ -140,7 +144,7 @@ Let's start by creating a Stream Analytics job. After you create the job, you de
     
     **Endpoint**: Select Messaging.
 
-    **Shared access policy name**: Select the name of the shared access policy you want the Stream Analytics job to use for your IoT hub. For this tutorial, you can select service. The service policy is created by default on new IoT hubs and grants permission to send and receive on cloud-side endpoints exposed by the IoT hub. To learn more, see Access control and permissions.
+    **Shared access policy name**: Select the name of the shared access policy you want the Stream Analytics job to use for your IoT hub. For this tutorial, you can select service. The service policy is created by default on new IoT hubs and grants permission to send and receive on cloud-side endpoints exposed by the IoT hub. To learn more, see [Access control and permissions](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-security#access-control-and-permissions).
 
     **Shared access policy key**: This field is auto-filled based on your selection for the shared access policy name.
 
@@ -180,7 +184,7 @@ Let's start by creating a Stream Analytics job. After you create the job, you de
 2. Replace [YourInputAlias] with the input alias of the job.
 3. Replace [YourOutputAlias] with the output alias of the job.
 
-![Add query to strean analytics job](assets/add-query-to-stream-analytics-job.png)
+![Add query to stream analytics job](assets/add-query-to-stream-analytics-job.png)
 
 4. Select **Save query**.
 
@@ -188,7 +192,7 @@ Let's start by creating a Stream Analytics job. After you create the job, you de
 
 In the Stream Analytics job, select Overview, then select Start > Now > Start. Once the job successfully starts, the job status changes from Stopped to Running.
 
-![Run strean analytics job](assets/run-stream-analytics-job.png)
+![Run stream analytics job](assets/run-stream-analytics-job.png)
 
 ## Visualize real-time sensor data from Azure IoT Hub in Visual Studio Code
 
@@ -215,9 +219,9 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 4. Your IoT Hub list will be shown, then select an IoT Hub.
 5. The devices and endpoints list will be shown.
 
-![IoT Hub Explorer](iot-hub-explorer.png)
+![IoT Hub Explorer](assets/iot-hub-explorer.png)
 
-6. Select Start Monitoring Built-in Event Enpoint
+6. Select Start Monitoring Built-in Event Endpoint
 
 ## Visualize real-time sensor data from Azure IoT Hub using PowerBI
 
@@ -225,16 +229,50 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 ---
 **Note**
 
-If you prefer using **Excel** for the data visualization, please skip this section,
+If you prefer using **Excel** for the data visualization, please skip this section. [Create SQL database](#create-a-single-database) and then follow [Excel visualization section](#excel-visualization).
 
 ---
 
 ### Necessary steps
 
-* Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
-* Create SQL database to Stream data from the IoTHub
-* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. ()
-* Connect Excel data source with Azure SQL datanase to visualize the data.
+* Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step.
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your Power BI account.
+* Create and publish a Power BI report to visualize the data.
+
+### Create and publish a Power BI report
+
+The following steps show you how to create and publish a report using the Power BI service. You can follow these steps with some modification, if you want to use the "new look" in Power BI. To understand the differences and how to navigate in the "new look", [see The 'new look' of the Power BI service](https://docs.microsoft.com/en-us/power-bi/consumer/service-new-look).
+
+1. Ensure the sample application is running on your device. If not, you can refer to the tutorials under [Setup your device](#register-a-new-device-in-the-iot-hub).
+2. Sign in to your Power BI account.
+3. Select the workspace you used, **My Workspace**.
+4. Select **Datasets**.
+5. You should see the dataset that you specified when you created the output for the Stream Analytics job.
+6. For the dataset you created, select **Add Report** (the first icon to the right of the dataset name).
+
+![Create a Microsoft Power BI report](assets/power-bi-create-report.png)
+
+7. Create a line chart to show real-time values over time.
+    > **Note** 
+    ts (time stamp from the WiFi module without Sensors FeatherWing) if you use this example or sensor values if you are using [CalypsoSensorCombo](../../../../../CalypsoSensorCombo/)
+
+     * On the **Visualizations** pane of the report creation page, select the line chart icon to add a line chart. 
+     * On the **Fields** pane, expand the table that you specified when you created the output for the Stream Analytics job.
+     * Drag **EventEnqueuedUtcTime** to **Axis** on the **Visualizations** pane.
+     * Drag **real-time values** to **Values**.
+  
+    A line chart is created. The x-axis displays date and time in the UTC time zone. The y-axis displays real-time values from the Calypso WiFi FeatherWing.
+
+    ![Add a line chart for temperature to a Microsoft Power BI report](assets/power-bi-add-temperature.png)
+
+8. Select **Save** to save the report.
+9. Select **Reports** on the left pane, and then select the report that you just created.
+10. Select **File > Publish** to web.
+
+    ![Power BI publish to web](assets/power-bi-select-publish-to-web.png)
+
+> **Note**
+    If you get a notification to contact your administrator to enable embed code creation, you may need to contact them. Embed code creation must be enabled before you can complete this step.
 
 ## Visualize real-time sensor data from Azure IoT Hub using Excel
 
@@ -242,29 +280,29 @@ If you prefer using **Excel** for the data visualization, please skip this secti
 
 * Get your IoT hub ready for data access by adding a consumer group. Note: You can use the same one you used for the PowerBI, if you created previous step
 * Create SQL database to Stream data from the IoTHub
-* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database. ()
-* Connect Excel data source with Azure SQL datanase to visualize the data.
+* Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your SQL Database.
+* Connect the Excel data source with Azure SQL database to visualize the data.
 
 
 ### Create a single database
 
-To create a single database in the Azure portal this quickstart starts at the Azure SQL page.
+To create a single database in the Azure portal this quick start begins at the Azure SQL page.
 
-1. Browse to the Select [SQL Deployment option page](https://portal.azure.com/#create/Microsoft.AzureSQL).
-2. Under **SQL databases**, leave **Resource** type set to **Single database**, and select **Create**.
+1. Browse to the [Select SQL Deployment option page](https://portal.azure.com/#create/Microsoft.AzureSQL).
+2. Under **SQL databases**, leave **Resource type** set to **Single database**, and select **Create**.
 
 ![Add to Azure SQL](assets/select-deployment.png)
 
 3. On the **Basics** tab of the **Create SQL Database** form, under **Project details**, select the desired Azure Subscription.
-4. For Resource group, select Create new or use exiting one from your IoTHub, and select OK.
+4. For **Resource group**, select **Create new** or use exiting one from your IoTHub, and select OK.
 5. For **Database name** enter *someDatabaseName*.
 
-6. For Server, select **Create new**, and fill out the **New server** form with the following values:
-* **Server name**: Enter mysqlserver, and add some characters for uniqueness. We can't provide an exact server name to use because server names must be globally unique for all 
+6. For **Server**, select **Create new**, and fill out the **New server** form with the following values:
+* **Server name**: Enter mysqlserver, and add some characters for uniqueness. We can't provide an exact server name to use because server names must be globally unique for all.
 
-* **servers in Azure**, not just unique within a subscription. So enter something like mysqlserver12345, and the portal lets you know if it is available or not.
+* **Servers in Azure**, not just unique within a subscription. So enter something like mysqlserver12345, and the portal lets you know if it is available or not.
 
-* **Server admin login**: Enter azureuser.
+* **Server admin login**: Enter azure user.
 * **Password**: Enter a password that meets requirements, and enter it again in the Confirm password field.
 * **Location**: Select a location from the dropdown list.
 
@@ -276,7 +314,7 @@ To create a single database in the Azure portal this quickstart starts at the Az
 
 ![configure serverless database](assets/configure-database.png)
 
-10. Select Next: Networking at the bottom of the page.
+10. Select **Next: Networking** at the bottom of the page.
 
 ![New SQL database - Basic tab](assets/new-sql-database-basics.png)
 
@@ -292,12 +330,12 @@ To create a single database in the Azure portal this quickstart starts at the Az
 
 15. Select **Review + create** at the bottom of the page:
 
-    Additional settings tab
+![Additional settings tab](assets/additional-settings.png)
 
 16. On the **Review + create** page, after reviewing, select **Create**.
 
 
-### Query the database
+### Create data table and query the database
 
 Once your database is created, you can use the **Query editor (preview)** in the Azure portal to connect to the database and query data.
 
@@ -307,27 +345,32 @@ Once your database is created, you can use the **Query editor (preview)** in the
 
 ![Sign in to Query editor](assets/query-editor-login.png)
 
-4. Enter the following query in the Query editor pane.
+4. Enter the following query in the Query editor pane to create default database structure visualization Sensor FeatherWing.
 
-```
+```SQL
 
-SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName
-FROM SalesLT.ProductCategory pc
-JOIN SalesLT.Product p
-ON pc.productcategoryid = p.productcategoryid;
-
+CREATE TABLE <tablename> (
+	EventID bigint IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	deviceId varchar(18) NULL,
+	messageId int NULL,
+	EventProcessedUtcTime datetime2(7) NULL,
+	PartitionId int NOT NULL,
+	EventEnqueuedUtcTime datetime2(7) NULL,
+	IoTHub nvarchar(4000) NULL,
+	ts bigint NULL,
+) GO;
 ```
 
 5. Select **Run**, and then review the query results in the **Results** pane.
 6. Close the **Query editor** page.
 
-### Excel visualisation
+### Excel visualization
 
 You can connect Excel to a database and then import data and create tables and charts based on values in the database. In this tutorial you will set up the connection between Excel and a database table, save the file that stores data and the connection information for Excel, and then create a pivot chart from the database values.
 
 You'll need to create a database before you get started. If you don't have one, see previous chapter Create a database in Azure SQL Database and connect SQL database to IoTHub to get a database with IoTHub data up and running in a few minutes.
 
-In this article, you'll import your own data IoTHuB data into Excel by following the steps described here.
+In this article, you'll import your own data IoTHub data into Excel by following the steps described here.
 
 #### Connect Excel and load data
 
@@ -336,13 +379,13 @@ In this article, you'll import your own data IoTHuB data into Excel by following
 
 ![Select data source: Connect Excel to SQL Database](assets/excel_data_source.png)
 
-3. In the **SQL Server database** dialog box, type the **Server name** you want to connect to in the form **<*servername*>.database.windows.net**. For example, *weiotsqlserver.database.windows.net*. Optionally, enter in the name of your database. Select **OK** to open the credentials window.
+3. In the **SQL Server database** dialog box, type the **Server name** you want to connect to in the form **<*server-name*>.database.windows.net**. For example, *weiotsqlserver.database.windows.net*. Optionally, enter in the name of your database. Select **OK** to open the credentials window.
 
 ![Connect to Database Server Dialog box](assets/server-name.png)
 
-4. In the SQL Server database dialog box, select Database on the left side, and then enter in your User Name and Password for the server you want to connect to. Select Connect to open the Navigator.
+4. In the SQL Server database dialog box, select **Database** on the left side, and then enter in your **User Name** and **Password** for the server you want to connect to. Select **Connect** to open the Navigator.
 
-    Type the server name and login credentials
+    Type the server name and login credentials.
 
 ---
 **Tip**
@@ -359,7 +402,7 @@ Depending on your network environment, you may not be able to connect or you may
 
 Now that you've established the connection, you have several different options with how to load the data. For example, the following steps create a pivot chart based on the data found in your database in SQL Database.
 
-1. Follow the steps in the previous section, but this time, instead of selecting Load, select Load to from the Load drop-down.
+1. Follow the steps in the previous section, but this time, instead of selecting Load, select **Load To** from the **Load** drop-down.
 
 2. Next, select how you want to view this data in your workbook. We chose **PivotChart**. You can also choose to 
 - create a **New worksheet** or to 
@@ -372,10 +415,14 @@ The worksheet now has an empty pivot table and chart.
 
 3. Under **PivotTable Fields**, select all the check-boxes for the fields you want to view.
 
-#### Create Excel workbpook
+#### Create Excel workbook
 
 If you want to connect other Excel workbooks and worksheets to the database, select the **Data** tab, and select **Recent Sources** to launch the **Recent Sources** dialog box. From there, choose the connection you created from the list, and then click **Open**. 
 
-![Recent Sources dialog box](recent-connections.png)
+![Recent Sources dialog box](assets/recent-connections.png)
 
-For more infomation, please check [Connect Excel to a database in Azure SQL Database or Azure SQL Managed Instance, and create a report](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-excel) article from microsoft documentation.
+Then simply select the database.
+
+![Excel database worksheet](assets/excel-chose-database.png)
+
+For more information, please check [Connect Excel to a database in Azure SQL Database or Azure SQL Managed Instance, and create a report](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-excel) article from Microsoft Documentation.
