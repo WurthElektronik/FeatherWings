@@ -139,20 +139,24 @@ AWS IoT Core rules use the MQTT topic stream to trigger interactions with other 
 Before creating an AWS IoT Core rule, you need a Lambda function to consume forwarded messages.
 
 1. In the [AWS Lambda console](https://console.aws.amazon.com/lambda/home), choose Create function.
+   ![Lambda create function](assets/lambda-create-function.png)
 2. Name the function ``CalypsoConsumeMessage``.
-3. For **Runtime**, choose **Author From Scratch, Node.js10.x**. For **Execution role**, choose **Create a new role with basic Lambda permissions**. Choose **Create**.
-4. On the **Execution role** card, choose **View the CalypsoConsumeMessage-role-***xxxx on the **IAM console**.
+3. For **Runtime**, choose 
+   * **Author From Scratch, Node.js12.x**. 
+   * For **Execution role**, choose **Create a new role with basic Lambda permissions**.
+   * Choose **Create**.
+4. On the **Execution role** card, choose **View the CalypsoConsumeMessage-role**-xxxx on the **IAM console**.
 5. Choose **Attach Policies**. Then, search for and select **AmazonKinesisFirehoseFullAccess**.
 6. Choose **Attach Policy**. This applies the necessary permissions to add records to the Firehose delivery stream.
 7. In the **Lambda console**, in the **Designer** card, select the function name.
-8. Paste the following in the code editor, replacing SensorDataStream with the name of your own Firehose delivery stream. Choose **Save**.
+8. Paste the following in the code editor, replacing *CalypsoDataStream* with the name of your own Firehose delivery stream. Choose **Save**.
 
 ```JavaScript
 
 const AWS = require('aws-sdk')
 
 const firehose = new AWS.Firehose()
-const StreamName = "SensorDataStream"
+const StreamName = "CalypsoDataStream"
 
 exports.handler = async (event) => {
     
@@ -168,6 +172,10 @@ exports.handler = async (event) => {
             Record: { 
                 Data: JSON.stringify(payload)
             }
+        }
+        
+    return await firehose.putRecord(params).promise()
+}
 ```
 
 ### Create an AWS IoT Core rule
@@ -175,11 +183,11 @@ exports.handler = async (event) => {
 To create an AWS IoT Core rule, follow these steps.
 
 1. In the [AWS IoT console](https://console.aws.amazon.com/iot/home), choose **Act**.
-2. Choose **Create**.
-3. For **Rule query statement**, copy and paste ``SELECT * FROM 'test’``. This subscribes to the outgoing message topic used in the Calypso AWS example.
-4. Choose **Add action, Send a message to a Lambda function, Configure action**.
-5. Select the function created in the last set of instructions.
-6. Choose **Create rule**.
+2. Choose **Rules**, and in the configuration action select *CalypsoDataStream* and **Add action**
+4. Give a **Name** to the query and for **Rule query statement**, copy and paste ``SELECT * FROM 'test’``. This subscribes to the outgoing message topic used in the Calypso AWS example.
+5. Choose **Add action, Send a message to a Lambda function, Configure action** and add **Create rule**.
+6. Select the function created in the last set of instructions.
+7. Choose **Create rule**.
 
 At this stage, any message published to the ``test`` topic forwards to the ``CalypsoConsumeMessage`` Lambda function, which transforms and puts the payload on the Kinesis Data Firehose stream and also logs the message to [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/). If you’ve connected an Calypso device to AWS IoT Core, it publishes to that topic every five seconds.
 
