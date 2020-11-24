@@ -49,13 +49,12 @@
 #define MQTT_PORT 8883
 #define MQTT_TOPIC "devices/we-iot-device/messages/events/"
 #define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
-#define MQTT_PASSWORD                                                         \
-    "SharedAccessSignature "                                                  \
+#define MQTT_PASSWORD                                               \
+    "SharedAccessSignature "                                        \
     "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
     "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
 
 #endif
-
 // SNTP settings
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"
@@ -229,15 +228,35 @@ void loop()
                    "----------------------------------------------------\r\n");
     SSerial_printf(SerialDebug, "\r\n");
 
+    /*In case of internet connection failure- reconnect*/
+    if (calypso->status == calypso_error)
+    {
+        if (Calypso_reboot(calypso))
+        {
+            delay(RESPONSE_WAIT_TIME);
+        }
+        if (!Calypso_WLANconnect(calypso))
+        {
+            SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
+            return;
+        }
+        if (!Calypso_MQTTconnect(calypso))
+        {
+            SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
+        }
+    }
+
     char *payload = serializeData();
 
     SSerial_printf(SerialDebug, payload);
+    SSerial_printf(SerialDebug, "\r\n");
 
     /*Publish to MQTT topic*/
     if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, payload,
                                  strlen(payload), true))
     {
         SSerial_printf(SerialDebug, "Publish failed\n\r");
+        calypso->status = calypso_error;
     }
 
     /*Clean-up*/
