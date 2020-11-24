@@ -28,7 +28,9 @@ If you do not have type, please create one with the **Create a type** button. Fi
 ![Create certificate](assets/create-certificate.png)
 6. If the certificates are created correctly, the success page will appear with the links to the certificates. 
 ![Certificate created successfully](assets/create-certificated-successfully.png)
-Download **A certificate for this thing** and download also **A private key**. 
+**Download**: 
+* **A certificate for this thing** and 
+* **A private key**. 
 Neither Public key nor root CA for AWS are needed since the root certificate is already integrated in Calypso module.
 7. **Activate**
 
@@ -43,7 +45,12 @@ It there is no type, create one using Create a type button and then click Next
 6. Press button **Activate** and then **Attach a policy**
 7. Click on **Create new policy**
 ![Add authorization to certificate](assets/add-authorization-to-certificate.png)
-8. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose *iot:** from the drop down menu. Chose **Effect** **Allow** and press **Create**. You will get something like:
+8. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose appropriate statements:
+   * *iot:Connect*, 
+   * *iot:Publish* 
+   * *iot:Receive* 
+  from the drop down menu. Chose **Effect** **Allow** and press **Create** or use advanced and copy the following code.
+
 ![Create policy](assets/create-policy.png)
 
 ```json
@@ -53,14 +60,29 @@ It there is no type, create one using Create a type button and then click Next
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "iot:*",
-      "Resource": "arn:aws:iot:eu-central-1:760177938491:topic/replaceWithATopic"
+      "Action": "iot:Connect",
+      "Resource": "arn:aws:iot:eu-central-1:123456789012:client/we-iot-device-t1"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iot:Publish",
+      "Resource": "arn:aws:iot:eu-central-1:123456789012:topic/test"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iot:Receive",
+      "Resource": "arn:aws:iot:eu-central-1:123456789012:topic/test"
     }
   ]
 }
 ```
+9. Chose **Attach policy** from the **Actions** drop down menu and chose policy
+    ![Attach Policy](assets/attach-policy.png)
+10. Chose policy and press **Add**
+![Add policy](assets/attach-policy-add.png)
 
-This way, a thing with the policy and private key created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
+This way, a thing with the policy and private key is created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
+
 
 ## Calypso WiFi FeatherWing code
 
