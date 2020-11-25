@@ -36,19 +36,19 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 * **Install IDE**: Use your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [PlatformIO](https://platformio.org/) extension).
 * **PlatformIO**: This is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for software development including building, debugging, code-upload and many more. PlatformIO works well on all modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all necessary functions to utilize a full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](we-online.com/wcs-software)
+* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all necessary functions to utilize a full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](https://we-online.com/wcs-software)
 * **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from Würth Elektronik eiSos.
 * **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
 
 ### Installing the tools
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs).
+* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs).
 * Follow the instructions under [platformio.org](https://platformio.org/install/ide?install=vscode) to install the IDE extension.
 
 
 ## Example
 
-1. Clone or download the [WE FeatherWing SDK](/).
+1. Clone or download the [WE FeatherWing SDK](https://github.com/WurthElektronik/WEFeatherWingSDK).
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. **Build** and **Upload** the code from the PlatformIO tab as shown in the Figure below.
 4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
@@ -56,50 +56,15 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 ![Running quick start example](assets/VSCode.png)
 
 
-### Source Code
+### Quick start example
+
+The quick start example for the Sensor FeatherWing demonstrates configuring the sensors on-board and reading out the sensor data.
+
+1. In the quick start application, all the sensors are configured to operate in simplest possible mode, the single conversion mode. In this mode the sensors are triggered to perform a single measurement and the measured value is read out. 
+
+2. Setup - The sensors are initialized after setting up the I<sup>2</sup>C interface. The debug UART interface is initialized. A communication check is performed by reading out the ID of each of the sensors.
 
 ```C
-
-/**
- * \file
- * \brief Main file for the WE-SensorFeatherWing.
- *
- * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
- *
- * \page License
- *
- * THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE
- * THAT WÜRTH ELEKTRONIK EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY
- * KIND RELATED TO, BUT NOT LIMITED TO THE NON-INFRINGEMENT OF THIRD PARTIES’
- * INTELLECTUAL PROPERTY RIGHTS OR THE MERCHANTABILITY OR FITNESS FOR YOUR
- * INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT WARRANT OR
- * REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY
- * PATENT RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY
- * RIGHT RELATING TO ANY COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT
- * IS USED. INFORMATION PUBLISHED BY WÜRTH ELEKTRONIK EISOS REGARDING
- * THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE FROM WÜRTH
- * ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR
- * ENDORSEMENT THEREOF
- *
- * THIS SOURCE CODE IS PROTECTED BY A LICENSE.
- * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
- * IN THE ROOT DIRECTORY OF THIS PACKAGE
- */
-#include "sensorBoard.h"
-
-// USB-Serial debug Interface
-TypeSerial *SerialDebug;
-
-// Sensors
-// WE absolute pressure sensor object
-PADS *sensorPADS;
-// WE 3-axis acceleration sensor object
-ITDS *sensorITDS;
-// WE Temperature sensor object
-TIDS *sensorTIDS;
-// WE humidity sensor object
-HIDS *sensorHIDS;
-
 void setup() {
     delay(2000);
     // Using the USB serial port for debug messages
@@ -127,7 +92,9 @@ void setup() {
         SSerial_printf(SerialDebug, "HIDS init failed \r\n");
     }
 }
-
+```
+3. In the main application, a single sensor data measurement is triggered, data read, processed and displayed on the debug interface periodically.
+```C
 void loop() {
     SSerial_printf(SerialDebug,
                    "----------------------------------------------------\r\n");
@@ -158,5 +125,4 @@ void loop() {
     SSerial_printf(SerialDebug, "\r\n");
     delay(1000);
 }
-
 ```
