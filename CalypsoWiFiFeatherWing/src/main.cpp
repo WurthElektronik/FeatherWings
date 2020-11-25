@@ -26,34 +26,16 @@
 #include "calypsoBoard.h"
 #include "json-builder.h"
 
-#define MOSQUITTO_CONNECTION 0
-#define AZURE_CONNECTION 1
-
 // WiFi access point parameters
 #define WI_FI_SSID "AP"
 #define WI_FI_PASSWORD "pw"
 
-#if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
 #define MQTT_CLIENT_ID "calypso"
 #define MQTT_SERVER_ADDRESS "127.0.0.1"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "timeStamp"
-#endif
 
-#if AZURE_CONNECTION
-/*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "we-iot-device"
-#define MQTT_SERVER_ADDRESS "we-iothub.azure-devices.net"
-#define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/we-iot-device/messages/events/"
-#define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
-#define MQTT_PASSWORD                                                         \
-    "SharedAccessSignature "                                                  \
-    "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
-    "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
-
-#endif
 // SNTP settings
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"
@@ -88,7 +70,6 @@ void setup() {
     calSettings.wifiSettings.securityParams.securityType =
         ATWLAN_SECURITY_TYPE_WPA_WPA2;
 
-#if MOSQUITTO_CONNECTION
     // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags = ATMQTT_CREATE_FLAGS_IP4;
@@ -98,31 +79,7 @@ void setup() {
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
     strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_CLIENT_ID);
-    strcpy(calSettings.mqttSettings.userOptions.password, MQTT_CLIENT_ID);
-#endif
-
-#if AZURE_CONNECTION
-    // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
-    strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
-    calSettings.mqttSettings.flags =
-        ATMQTT_CREATE_FLAGS_URL | ATMQTT_CREATE_FLAGS_SEC;
-    strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
-    calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
-
-    calSettings.mqttSettings.secParams.securityMethod =
-        ATMQTT_SECURITY_METHOD_TLSV1_2;
-    calSettings.mqttSettings.secParams.cipher =
-        ATMQTT_CIPHER_TLS_RSA_WITH_AES_256_CBC_SHA;
-
-    calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_PROTOCOL_v3_1_1;
-    calSettings.mqttSettings.connParams.blockingSend = 0;
-    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
-    strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_USER_NAME);
-
-    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_PASSWORD);
-
-#endif
+    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_CLIENT_ID);
 
     // SNTP settings
     strcpy(calSettings.sntpSettings.timezone, SNTP_TIMEZONE);

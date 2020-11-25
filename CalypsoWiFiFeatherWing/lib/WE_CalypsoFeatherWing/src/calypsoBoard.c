@@ -58,6 +58,7 @@ bool ATFile_read(CALYPSO *self, uint32_t fileID, uint16_t offset,
                  Calypso_DataFormat_t format, uint16_t bytesToRead,
                  Calypso_DataFormat_t *pOutFormat, uint16_t *byteRead,
                  char *data);
+bool ATFile_getInfo(CALYPSO *self, const char *fileName, uint32_t secureToken);
 
 static Calypso_CNFStatus_t cmdConfirmation;
 static char RxBuffer[CALYPSO_LINE_MAX_SIZE]; /* data buffer for RX */
@@ -205,6 +206,13 @@ bool Calypso_StartProvisioning(CALYPSO *self) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_setUpSNTP(CALYPSO *self) {
+    /* Enable*/
+    pRequestCommand = &requestBuffer[0];
+    memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
+    strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
+    strcat(pRequestCommand, "enable, 1");
+    Calypso_SendRequest(self, pRequestCommand);
+
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
 
@@ -233,13 +241,6 @@ bool Calypso_setUpSNTP(CALYPSO *self) {
 #endif
         return false;
     }
-
-    /* Enable*/
-    pRequestCommand = &requestBuffer[0];
-    memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
-    strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
-    strcat(pRequestCommand, "enable, 1");
-    Calypso_SendRequest(self, pRequestCommand);
 
     /* Synchronize calypso time with sntp server */
     pRequestCommand = &requestBuffer[0];
@@ -482,6 +483,15 @@ bool Calypso_fileList(CALYPSO *self) {
 }
 
 /**
+ * @brief  Get the list of files in the file system
+ * @param  self Pointer to the calypso object.
+ * @retval true if successful false in case of failure
+ */
+bool Calypso_fileExists(CALYPSO *self, const char *fileName) {
+    return (ATFile_getInfo(self, fileName, 0));
+}
+
+/**
  * @brief Create/open and write data to a file
  * @param  self Pointer to the calypso object.
  * @param  path Pointer to the file path including the filename
@@ -679,6 +689,29 @@ bool ATFile_del(CALYPSO *self, const char *fileName, uint32_t secureToken) {
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+fileDel=");
+
+    ret = ATFile_AddArgumentsFileDel(pRequestCommand, fileName, secureToken);
+
+    if (ret) {
+        ret = Calypso_SendRequest(self, pRequestCommand);
+    }
+
+    return ret;
+}
+
+/**
+ * @brief  Get file info
+ * @param  self Pointer to the calypso object.
+ * @param  fileName Pointer to filename
+ * @param  secureToken Secure token
+ * @retval true if successful false in case of failure
+ */
+bool ATFile_getInfo(CALYPSO *self, const char *fileName, uint32_t secureToken) {
+    bool ret = false;
+
+    pRequestCommand = &requestBuffer[0];
+    memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
+    strcpy(pRequestCommand, "AT+fileGetInfo=");
 
     ret = ATFile_AddArgumentsFileDel(pRequestCommand, fileName, secureToken);
 
