@@ -1,6 +1,6 @@
 ![WE Logo](../assets/WE_Logo_small_t.png)
 
-# Calypso WiFi FeatherWing
+# Calypso Wi-Fi FeatherWing
 
 ## Introduction
 
@@ -10,17 +10,28 @@ The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board tha
 
 The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
 
-![Calypso WiFi FeatherWing](assets/CalypsoFeatherWing_s.png)
+![Calypso Wi-FI FeatherWing](assets/CalypsoFeatherWing_s.png)
 
 
 With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
 
 It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather micro-controller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
-The Calypso WiFi FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectivity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
+The Calypso Wi-FI FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectivity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
 
 For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+
+## Software
+
+The Calypso Wi-Fi FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
+
+Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples to support all WE FeatherWings. Here are the salient features of the WE FeatherWing SDK. 
+* The SDK is **open-source** and well documented.
+* It uses popular open-source tool chain including an IDE.
+* The examples are written in Arduino styled C/C++ for easy understanding.
+* The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
+* Modular structure of the software stack makes it easy to integrate into any project.
 
 ### Necessary Steps
 
@@ -30,30 +41,13 @@ Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElek
 * **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
 * **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
 
-### Optional steps
-
-* **MQTT Broker**: It is recommended to install Mosquito MQTT broker if you: do not have a cloud access, do not want to create cloud account, or do not want to use cloud.
-
-> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
-
-* **Cloud**: If you want to use the cloud, please find detailed instructions in the [cloud example section](lib/WE_CalypsoWiFiFeatherWing/examples).
-
-
 ### Installing the tools
 
 * Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
 * Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
-  
-**First option**
+* Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html).
 
-* Download and install [Mosquito MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquito MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html). This step is optional and can be replaced with the [cloud approach](/lib/WE_CalypsoWiFiFeatherWing/examples) (see above).
-
-**Second option**
-
-* Download and install **Azure IoT Hub Extension**. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code.
-After installing and connecting to the cloud, the results IoTHub messages can be tracked in the Visual Studio Code directly in the Lower left corner of the IDE in Azure IoT Hub extension:
-![IoT Device section](assets/device-explorer-click.png)
-
+> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
 
 ## Example
 
@@ -64,102 +58,38 @@ The quick start examples in the SDK are written to be run on Adafruit Feather M0
 3. Build and upload the code from the PlatformIO tab as shown in the Figure below
 4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
    ![Running quick start example](assets/VSCode.png)
-5. In order to be able to connect wo the cloud device, SAS is needed as password. It can be generated using the **Azure IoT Hub Extension** ![IoTHub Explorer](assets/iot-hub-explorer.png) 
-6. Cloud results can be seen in the **Azure IoT Hub Extension**
 
 
-For more information about the cloud connectivity and explanation of the steps 5 and 6 please refer to [Calypso WiFi FeatherWing cloud example](/lib/WE_CalypsoFeatherWing/examples)
+### Quick start example
 
+The quick start example for the Calypso Wi-Fi FeatherWing demonstrates connection to the Moquitto MQTT sever and data transmission.
 
-### Source Code
+1. Prerequisites for running this example:
+    * A Wi-Fi access point with WPA2 personal security and a known password
+    * Mosquitto MQTT broker running in the same network. Make sure to note the IP address and port of the Mosquitto server. 
 
-Depending on the approach: Mosquito MQTT Broker or Azure IoT Hub, following code has two parameters which need to be set to make one or the other example work
-
+2. Configuration: The following parameters needs to be set-up before building the code.
+    * Wi-Fi access point credentials.
+    * MQTT server parameters
+    * SNTP server parameters.
 ```C
-#define MOSQUITTO_CONNECTION 1
-#define AZURE_CONNECTION 0
-```
-* **MOSQUITTO_CONNECTION**: Set to 1 - local Mosquito MQTT broker, set to 0 - not used
-* **AZURE_CONNECTION**: Set to 1 - Azure IoTHub, set to 0 - not used
-
-
-```C
-
-/**
- * \file
- * \brief Main file for the WE-CalypsoWiFiFeatherWing.
- *
- * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
- *
- * \page License
- *
- * THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE
- * THAT WÜRTH ELEKTRONIK EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY
- * KIND RELATED TO, BUT NOT LIMITED TO THE NON-INFRINGEMENT OF THIRD PARTIES’
- * INTELLECTUAL PROPERTY RIGHTS OR THE MERCHANTABILITY OR FITNESS FOR YOUR
- * INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT WARRANT OR
- * REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY
- * PATENT RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY
- * RIGHT RELATING TO ANY COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT
- * IS USED. INFORMATION PUBLISHED BY WÜRTH ELEKTRONIK EISOS REGARDING
- * THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE FROM WÜRTH
- * ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR
- * ENDORSEMENT THEREOF
- *
- * THIS SOURCE CODE IS PROTECTED BY A LICENSE.
- * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
- * IN THE ROOT DIRECTORY OF THIS PACKAGE
- */
-#include "calypsoBoard.h"
-#include "json-builder.h"
-
-#define MOSQUITTO_CONNECTION 1
-#define AZURE_CONNECTION 0
-
 // WiFi access point parameters
 #define WI_FI_SSID "AP"
 #define WI_FI_PASSWORD "pw"
 
-#if MOSQUITTO_CONNECTION
 /*MQTT settings - Mosquitto server*/
 #define MQTT_CLIENT_ID "calypso"
 #define MQTT_SERVER_ADDRESS "127.0.0.1"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "timeStamp"
-#endif
-
-#if AZURE_CONNECTION
-/*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "we-iot-device"
-#define MQTT_SERVER_ADDRESS "we-iothub.azure-devices.net"
-#define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/we-iot-device/messages/events/"
-#define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
-#define MQTT_PASSWORD                                                         \
-    "SharedAccessSignature "                                                  \
-    "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
-    "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
-
-#endif
 
 // SNTP settings
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"
+```
+3. Setup - The debug as well as the Calypso UART interfaces are initialized. The calypso is configured with the given parameters. Further, the module connects to the give Wi-Fi, SNTP server and the Mosquitto MQTT server.
 
-// USB-Serial debug Interface
-TypeSerial *SerialDebug;
-
-// Calypso settings
-CalypsoSettings calSettings;
-
-// Calypso object
-CALYPSO *calypso;
-
-// Serial communication port for Calypso
-TypeHardwareSerial *SerialCalypso;
-
-int msgID;
-
+```C
 void setup() {
     delay(5000);
     // Using the USB serial port for debug messages
@@ -176,7 +106,6 @@ void setup() {
     calSettings.wifiSettings.securityParams.securityType =
         ATWLAN_SECURITY_TYPE_WPA_WPA2;
 
-#if MOSQUITTO_CONNECTION
     // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags = ATMQTT_CREATE_FLAGS_IP4;
@@ -186,31 +115,7 @@ void setup() {
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
     strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_CLIENT_ID);
-    strcpy(calSettings.mqttSettings.userOptions.password, MQTT_CLIENT_ID);
-#endif
-
-#if AZURE_CONNECTION
-    // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
-    strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
-    calSettings.mqttSettings.flags =
-        ATMQTT_CREATE_FLAGS_URL | ATMQTT_CREATE_FLAGS_SEC;
-    strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
-    calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
-
-    calSettings.mqttSettings.secParams.securityMethod =
-        ATMQTT_SECURITY_METHOD_TLSV1_2;
-    calSettings.mqttSettings.secParams.cipher =
-        ATMQTT_CIPHER_TLS_RSA_WITH_AES_256_CBC_SHA;
-
-    calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_PROTOCOL_v3_1_1;
-    calSettings.mqttSettings.connParams.blockingSend = 0;
-    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
-    strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_USER_NAME);
-
-    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_PASSWORD);
-
-#endif
+    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_CLIENT_ID);
 
     // SNTP settings
     strcpy(calSettings.sntpSettings.timezone, SNTP_TIMEZONE);
@@ -242,7 +147,9 @@ void setup() {
     }
     msgID = 0;
 }
-
+```
+4. In the main application, the module gets the current time from the SNTP server, converts it to UNIX timestamp format and publishes this timestamp along with device ID and a packet number to the MQTT server periodically.
+```C
 void loop() {
     Timestamp timestamp;
     Timer_initTime(&timestamp);
@@ -281,6 +188,5 @@ void loop() {
 
     delay(5000);
 }
-
-
 ```
+5. It is possible to view the messages on another MQTT client in the same network by subscribing to the same topic.
