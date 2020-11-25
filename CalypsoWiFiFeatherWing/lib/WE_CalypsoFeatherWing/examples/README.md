@@ -8,7 +8,7 @@ For more information about the usage of Mosquito MQTT broker please read [Calyps
 
 ## Cloud connectivity
 
-For more information of cloud connection please check
+For more information on how to easily get your data into different clouds please check
 
 * [**Microsoft Azure example**](azure/)
 * [**Amazon AWS example**](aws/)
