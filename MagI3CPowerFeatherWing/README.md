@@ -7,15 +7,15 @@
 The Würth Elektronik eiSos MagI³C Power FeatherWing is a development board that offers **5 V** and **3.3 V** power supply. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards and can be used as plug-and-play solution for a range of industrial input voltages (**5 V, 9 V, 12 V, 15 V, 18 V and 24 V**).
 
 The MagI³C Power FeatherWing consists of two important components,
-* [**MagI³C FDSM** (173010535)](https://www.we-online.de/katalog/datasheet/173010335.pdf) - A power module with Input 6 V - 36 V, 1 A current and a 5 V output.
-* [**MagI³C VDMM** (171010550)](https://www.we-online.de/katalog/datasheet/171010550.pdf) - A power module with Input 2.5 V - 5.5 V, 1.2 A current and a variable output range set to 3.3 V.
+* [**MagI³C FDSM**](https://www.we-online.de/katalog/de/MAGIC_FDSM_FIXED_OUTPUT_VOLTAGE) [(173010535)](https://www.we-online.de/katalog/datasheet/173010335.pdf) - A power module with 6 V - 36 V input, 1 A current and a 5 V output.
+* [**MagI³C VDMM**](https://www.we-online.de/katalog/de/MAGIC-VDMM) [(171010550)](https://www.we-online.de/katalog/datasheet/171010550.pdf) - A power module with 2.5 V - 5.5 V input, 1.2 A current and a variable output range set to 3.3 V.
 
 ![MagI³C Power FeatherWing](docs/assets/MagI3CPowerFeatherWing_s.png)
 
-It offers a **stable output voltage** for a **wide range of input voltages** making it an ideal power supply add-on to any Feather project.
+The FeatherWing offers a **stable output voltage** for a **wide range of input voltages** making it an ideal power supply add-on to any Feather project.
 
 This repository contains the [Altium](https://www.altium.com/) design files for the MagI³C Power FeatherWing [PCB](hardware).
-For more information download [MagI³C Power FeatherWing user manual](docs/MagI3CPowerFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+For more information download the [MagI³C Power FeatherWing user manual](docs/MagI3CPowerFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ## Hardware
 
@@ -23,7 +23,7 @@ For more information download [MagI³C Power FeatherWing user manual](docs/MagI3
 
 The MagI³C Power FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) offers the user the flexibility to choose from a range of input voltages to power the system. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
-### [**MagI³C FDSM** (173010535)](https://www.we-online.de/katalog/datasheet/173010335.pdf)
+### [**MagI³C FDSM**](https://www.we-online.de/katalog/de/MAGIC_FDSM_FIXED_OUTPUT_VOLTAGE) [(173010535)](https://www.we-online.de/katalog/datasheet/173010335.pdf)
 
 The FDSM series of the MagI³C Power Module family is a fixed output voltage, **fully integrated DC-DC power supply** including the **switching regulator**, **inductor** and **capacitors** all in one package.
 
@@ -55,11 +55,11 @@ The FDSM ensures fast time to market and low development costs. It is pin compat
 * Case and potting material UL 94 Class V0 (flammability testing) certified
 * Complies with **EN55032 class B** conducted and radiated emissions standard
 
-Further details about MagI³C FDSM can be found under [we-online.de/katalog/en/MAGIC_FDSM_FIXED_OUTPUT_VOLTAGE](https://www.we-online.de/katalog/en/MAGIC_FDSM_FIXED_OUTPUT_VOLTAGE).
+Further details about MagI³C FDSM can be found [here](https://www.we-online.de/katalog/en/MAGIC_FDSM_FIXED_OUTPUT_VOLTAGE).
 
-### [**MagI³C VDMM** (171010550)](https://www.we-online.de/katalog/datasheet/171010550.pdf)
+### [**MagI³C VDMM**](https://www.we-online.de/katalog/de/MAGIC-VDMM) [(171010550)](https://www.we-online.de/katalog/datasheet/171010550.pdf)
 
-The VDMM 171010550 MagI³C MicroModule provides a **fully integrated DC-DC power supply** including the **switching regulator** with **integrated MOSFETs**, **compensation**, and **shielded inductor** in one package.
+This VDMM MagI³C MicroModule provides a **fully integrated DC-DC power supply** including the **switching regulator** with **integrated MOSFETs**, **compensation**, and **shielded inductor** in one package.
 
 The 171010550 offers high efficiency and delivers up to **1.2 A** of output current. It operates with an input voltage from **2.5 V to 5.5 V** and is designed for a small solution size. The selectable forced PWM or PFM/PWM mode allows for the choice between high efficiency and low output voltage ripple at light load. 
 
@@ -89,7 +89,7 @@ It is available in an **LGA-6EP** package (2.5 x 2.5 x 1.2 mm). This module has 
 * Operating junction temp. range: -40° C to 125° C
 * Complies with EN55032 class B radiated emissions standard
 
-Further details about the MagI³C FDSM can be found under [we-online.de/katalog/en/MAGIC-VDMM](https://www.we-online.de/katalog/en/MAGIC-VDMM).
+Further details about the MagI³C FDSM can be found [here](https://www.we-online.de/katalog/en/MAGIC-VDMM).
 
 ### Pinouts
 
@@ -99,7 +99,7 @@ This is the standard set of connectors that is used across the Feather ecosystem
 | Pin number | Pin name | Function |
 | ------- | ------- |----------------|
 |   1          |<span style="text-decoration:overline">RST</span> | Not connected|
-|    2          | 3V3| 3.3V power supply|
+|    2          | 3V3| 3.3 V power supply|
 |    3          | AREF| Not connected|
 |    4          | GND| Ground|
 |    5          | A0| Not connected|
@@ -133,12 +133,12 @@ This is the standard set of connectors that is used across the Feather ecosystem
 <img src="docs/assets/connectors.png" width="80%">
 
 #### Connector CON1
-This is a 2-pole WR-TBL series horizontal entry screwless connector to connect input DC voltage from 6V to 36V.
+This is a 2-pole WR-TBL series horizontal entry screwless connector to connect input DC voltage from 6 V to 36 V.
 
 | Pin number | Pin name | Description |
 | ------- | ------- |----------------|
 |   1 | -VE| Connect to GND |
-|    2|  +VE| Connect to positive supply voltage (6V - 36V)|
+|    2|  +VE| Connect to positive supply voltage (6 V - 36 V)|
 
 #### Connector CON2
 This is a standard micro-USB connector to connect 5V input.
@@ -154,11 +154,11 @@ This sliding switch can be used to select between the two input power sources.
 
 | Position | Source | 
 | ------- | ------- |
-| Left (towards CON2) | Power supply ON |
-| Right (towards CON1)|  Power supply OFF|
+| Left (towards CON2) | CON1 (6 V - 36 V) as input source |
+| Right (towards CON1)| CON2 (5 V USB) as input |
 
 #### Switch S2
-This sliding switch can be used to enable/disable the 3.3V output.
+This sliding switch can be used to enable/disable the 3.3 V output.
 
 | Position | Source | 
 | ------- | ------- |

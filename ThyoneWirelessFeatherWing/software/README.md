@@ -1,31 +1,31 @@
 ![WE Logo](../../assets/WE_Logo_small_t.png)
 
-# Thyone FeatherWing
+# Thyone Wireless FeatherWing
 
 ## Introduction
 
-Würth Elektronik eiSos provides a software development kit (SDK) with examples to support all the WE FeatherWings. Here are the salient features of the WE FeatherWing SDK.
+Würth Elektronik eiSos provides a software development kit (SDK) with examples to support all WE FeatherWings. Here are the salient features of the WE FeatherWing SDK.
 
 * The SDK is open-source and well documented.
 * It uses popular open-source tool chain including an IDE.
 * The examples are written in Arduino-styled C/C++ for quick prototyping.
 * The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
-* Development platform independent (Windows, Linux or MAC)
+* Development platform independent (Windows, Linux or MAC).
 * Modular structure of the software stack makes it easy to integrate into any project.
 
 
 ### Software components
 
 * **Install IDE**: your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [Platform IO](https://platformio.org/) extension).
-* **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](https://we-online.com/wcs-software)
+* **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/).
+* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](https://we-online.com/wcs-software).
 * **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
 * **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
 
 ### Installing the tools
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs)
-* Follow the instructions under to install [PlatformIO IDE](https://platformio.org/install/ide?install=vscode) extension.
+* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs).
+* Follow the instructions to install the [PlatformIO IDE](https://platformio.org/install/ide?install=vscode) extension.
 
 ### Quick start example
 
@@ -37,7 +37,7 @@ The quick start example for the Thyone FeatherWing demonstrates the very basic f
 #define Transmitter 1
 ```
 
-2. Setup - The debug as well as the Thyone-I UART interfaces are initialized. Additionally, the basic configuration of the Thyone-I (Radio channel, radio profile and transmit power) is done.
+2. Setup - The debug as well as the Thyone-I UART interfaces are initialized. Additionally, the basic configuration of the Thyone-I (radio channel, radio profile and transmit power) is done.
 
 ```C
 
@@ -112,7 +112,7 @@ void setup() {
     }
 }
 ```
-3. In the main application, based on the mode chosen the module either transmits a hello message periodically or displays the received message over the debug interface.
+3. In the main application, based on the mode chosen, the module either transmits a hello message periodically or displays the received message over the debug interface.
 ```C
 void loop() {
 #if Transmitter
@@ -148,8 +148,8 @@ The quick start examples in the SDK are written to be run on Adafruit’s Feathe
 
 1. Clone or download the code.
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below
-4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.(See Figure)
+3. Build and upload the code from the PlatformIO tab as shown in the Figure below.
+4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
 
 
 ![Running quick start example](../../assets/VSCode.png)

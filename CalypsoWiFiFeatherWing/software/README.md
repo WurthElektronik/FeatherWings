@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The Calypso Wi-Fi FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
+The [Calypso Wi-Fi FeatherWing](https://www.we-online.de/katalog/en/CALYPSO_FeatherWing) was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
 Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples to support all WE FeatherWings. Here are the salient features of the WE FeatherWing SDK. 
 * The SDK is **open-source** and well documented.
@@ -16,28 +16,29 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 ### Software components
 
 * **Install IDE**: your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [Platform IO](https://platformio.org/) extension.
-* **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and downloads under [WCS Software](https://we-online.com/wcs-software)
+* **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/).
+* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and downloads under [WCS Software](https://we-online.com/wcs-software).
 * **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
 * **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
 
 ### Installing the tools
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
-* Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
-* Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html).
+* Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs).
+* Follow the instructions to install the [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
+* Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker main page](https://mosquitto.org/man/mosquitto-8.html).
 
-> Note: For more information about usage with the cloud check [Calypso cloud examples](../../Sensor2CloudConnectiviy).
+> Note: For more information about usage with the cloud check our [Calypso cloud examples](../../Sensor2CloudConnectiviy).
+
 
 ### Quick start example
 
-The quick start example for the Calypso Wi-Fi FeatherWing demonstrates connection to the Moquitto MQTT sever and data transmission.
+The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connection to the Mosquitto MQTT server and data transmission.
 
 1. Prerequisites for running this example:
-    * A Wi-Fi access point with WPA2 personal security and a known password
+    * A Wi-Fi access point with WPA2 personal security and a known password.
     * Mosquitto MQTT broker running in the same network. Make sure to note the IP address and port of the Mosquitto server. 
 
-2. Configuration: The following parameters needs to be set-up before building the code.
+2. Configuration: The following parameters need to be set-up before building the code.
     * Wi-Fi access point credentials.
     * MQTT server parameters
     * SNTP server parameters.
@@ -56,7 +57,7 @@ The quick start example for the Calypso Wi-Fi FeatherWing demonstrates connectio
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"
 ```
-3. Setup - The debug as well as the Calypso UART interfaces are initialized. The calypso is configured with the given parameters. Further, the module connects to the give Wi-Fi, SNTP server and the Mosquitto MQTT server.
+3. Setup: The debug as well as the Calypso UART interfaces are initialized. The calypso is configured with the given parameters. Further, the module connects to the given Wi-Fi, SNTP server and the Mosquitto MQTT server.
 
 ```C
 void setup() {
