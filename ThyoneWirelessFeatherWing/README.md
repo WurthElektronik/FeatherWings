@@ -1,4 +1,4 @@
-![WE Logo](../docs/assets/WE_Logo_small_t.png)
+![WE Logo](../assets/WE_Logo_small_t.png)
 
 # Thyone Wireless FeatherWing
 
@@ -9,17 +9,16 @@ The Würth Elektronik eiSos Thyone Wireless FeatherWing is a development board t
 * [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - 2.4 GHz proprietary radio module
 * [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
 
-The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software repository](https://github.com/WE-eiSmart/private__FeatherWings)) make it easy to build a prototype to kick-start the application development.
+The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) make it easy to build a prototype to kick-start the application development.
 
 
 ![WE Thyone FeatherWing](docs/assets/ThyoneFeatherWing_s.png)
 
 The Thyone Wireless FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
-This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Thyone Wireless FeatherWing PCB.
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Thyone Wireless FeatherWing [PCB](hardware) as well as the [software](software) with quick start example. 
 
-For more information about the software, please go to the [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Thyone FeatherWing user manual](link.to.com\document).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+For more information, please download [Thyone wireless FeatherWing user manual](docs/ThyoneFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Secure Element
 
@@ -130,4 +129,4 @@ S2 is a general purpose push button which is connected to GPIO 13 when a jumper 
 
 ## Software
 
-Thyone-I Wireless FeatherWing [**software examples**](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/ThyoneWirelessFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
+Thyone-I Wireless FeatherWing **software examples**can be found in the [software folder](software).

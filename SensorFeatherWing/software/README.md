@@ -1,27 +1,8 @@
-![WE Logo](../assets/WE_Logo_small_t.png)
+![WE Logo](../../assets/WE_Logo_small_t.png)
 
 # Sensor FeatherWing
 
 ## Introduction
-
-The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. It consists of the following four sensors:
-
-* [**WSEN-PADS**](https://www.we-online.de/katalog/de/WSEN-PADS) - Absolute pressure sensor [(2511020213301)](https://www.we-online.de/katalog/de/WSEN-PADS)
-* [**WSEN-ITDS**](https://www.we-online.de/katalog/de/WSEN-ITDS) - 3-axis acceleration sensor [(2533020201601)](https://www.we-online.de/katalog/de/WSEN-ITDS)
-* [**WSEN-TIDS**](https://www.we-online.de/katalog/de/WSEN-TIDS) - Temperature sensor [(2521020222501)](https://www.we-online.de/katalog/de/WSEN-TIDS)
-* [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity sensor [(2523020210001)](https://www.we-online.de/katalog/de/WSEN-HIDS)
-
-All four sensors are connected over the shared I<sup>2</sup>C bus and hence compatible to any of the Feather microcontroller boards. The existing [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see
-[software repository](https://github.com/WE-eiSmart/private__FeatherWings)) make it easy to build a prototype to kick-start the application development.
-
-The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to the [QWIIC® ecosystem](https://www.sparkfun.com/) of development boards. Additionally, a **6 pin connector** enables extension of the FeatherWing with a host of **evaluation boards from Würth Elektronik eiSos**.
-
-![Sensor FeatherWing](assets/SensorFeatherWing_s.png)
-
-For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Sensor FeatherWing user manual](link.to.com\document).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
-
-## Software
 
 The Sensor FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
@@ -48,12 +29,12 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 ## Example
 
-1. Clone or download the [WE FeatherWing SDK](https://github.com/WurthElektronik/WEFeatherWingSDK).
+1. Clone or download the code.
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. **Build** and **Upload** the code from the PlatformIO tab as shown in the Figure below.
 4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
 
-![Running quick start example](assets/VSCode.png)
+![Running quick start example](../../assets/VSCode.png)
 
 
 ### Quick start example

@@ -1,35 +1,8 @@
-![WE Logo](../assets/WE_Logo_small_t.png)
+![WE Logo](../../assets/WE_Logo_small_t.png)
 
 # Thyone FeatherWing
 
 ## Introduction
-
-The Würth Elektronik eiSos Thyone FeatherWing is a development board that offers a secure **2.4 GHz proprietary** wireless connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. The Thyone Wireless FeatherWing consists of two important components:
-
-* [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - A 2.4 GHz proprietary radio module
-* [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
-
-The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/)(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
-
-![WE Thyone FeatherWing](assets/ThyoneFeatherWing_s.png)
-
-The Thyone FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) allows the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
-
-For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Thyone FeatherWing user manual](link.to.com\document).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
-
-### Thyone-I 
-
-The Thyone-I module is a radio sub-module for wireless communication between devices such as control systems, remote controls, sensor nodes etc. Operating in the globally available 2.4 GHz license free band, Thyone-I offers a robust and secure data transmission in point-to-point as well as mesh configurations.
-
-It is pre-loaded with the WE-ProWare radio stack which ensures high flexibility without compromising the reliability. Interfacing with the host system via serial UART, the module allows easy configuration and control of the radio using a simple command interface. To ensure ease-of-use for cable replacement applications, the module also offers a transparent mode to function as a serial-to-radio adapter. Small dimensions comparable a nano-SIM card (8 x 12 mm) including an on-board PCB antenna makes Thyone-I ideal for small form factor design.
-
-### Secure Element
-
-Thyone FeatherWing contains [ATECC608A-TNGTLS](www.microchip.com/wwwproducts/en/ATECC608A) Microship secure element. The ATECC608A-TNGTLS is a pre-provisioned variant of the ATECC608A secure element from Microchip Technologies. The device is configured to make the secure element suitable to some of the most common use cases for IoT applications. It offers a rich set of cryptographic features like key agreement using ECDH, sign-verify mechanism, and encryption/decryption over easily accessible I<sup>2</sup>C interface. Its tiny form factor and low power consumption make it suitable for a wide variety of battery-driven applications.
-
-
-## Software 
 
 Würth Elektronik eiSos provides a software development kit (SDK) with examples to support all the WE FeatherWings. Here are the salient features of the WE FeatherWing SDK.
 
@@ -59,13 +32,13 @@ Würth Elektronik eiSos provides a software development kit (SDK) with examples 
 
 The quick start examples in the SDK are written to be run on Adafruit’s Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
 
-1. Clone or download the [WE FeatherWing SDK](https://github.com/WurthElektronik/WEFeatherWingSDK)
+1. Clone or download the code.
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. Build and upload the code from the PlatformIO tab as shown in the Figure below
 4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.(See Figure)
 
 
-![Running quick start example](assets/VSCode.png)
+![Running quick start example](../../assets/VSCode.png)
 
 
 ### Quick start example
