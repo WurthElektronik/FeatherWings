@@ -129,9 +129,9 @@ This is the standard set of connectors that is used across the Feather ecosystem
 |    28         | VBAT| Not connected|
 
 
-![Connectors Top](docs/assets/Connectors_front.png)
+![Connectors Top](docs/assets/connectors_front.png)
 
-![Connectors Top](docs/assets/Connectors_back.png)
+![Connectors Top](docs/assets/connectors_back.png)
 
 #### Connector CON1
 Connector CON1 is a 1x5 2.54 mm pin header and provides all the interrupt lines that can be optionally connected to the host. This connector is not mounted.
