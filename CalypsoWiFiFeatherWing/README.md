@@ -1,4 +1,4 @@
-![WE Logo](../docs/assets/WE_Logo_small_t.png)
+![WE Logo](../assets/WE_Logo_small_t.png)
 
 # Calypso WiFi FeatherWing
 
@@ -20,7 +20,7 @@ This repository contains the [Eagle](https://www.autodesk.com/products/eagle/ove
 
 The Calypso Wi-Fi FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
-For more information about the software, please go to [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Calypso FeatherWing user manual](link.to.com\document).
+For more information, please download [Calypso FeatherWing user manual](/docs/CalypsoFeatherWing.pdf). For details about the software please go to the [software folder](/software). 
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### [Calypso Wi-Fi module (2610011025000)](https://www.we-online.com/catalog/en/CALYPSO)
@@ -135,4 +135,4 @@ S2 is a general purpose push button which is connected to GPIO 6 when a jumper i
 
 ## Software
 
-Calypso FeatherWing [software examples](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/CalypsoWiFiFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
+Calypso FeatherWing quick start example can be found in the [software folder](/software). Please check the [cloud connectivity](./Sensor2CloudConnectivity) for more examples for sensor to cloud solution.
