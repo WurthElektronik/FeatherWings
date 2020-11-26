@@ -13,11 +13,11 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
 * Modular structure of the software stack makes it easy to integrate into any project.
 
-### Necessary Steps
+### Software components
 
 * **Install IDE**: your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [Platform IO](https://platformio.org/) extension.
 * **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and downloads under [WCS Software](we-online.com/wcs-software)
+* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and downloads under [WCS Software](https://we-online.com/wcs-software)
 * **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
 * **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
 
@@ -27,19 +27,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
 * Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html).
 
-> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
-
-## Example
-
-The quick start examples in the SDK are written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
-
-1. Clone or download the [WE FeatherWing SDK](/)
-2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below
-4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
-
-   ![Running quick start example](../docs/assets/VSCode.png)
-
+> Note: For more information about usage with the cloud check [Calypso cloud examples](../../Sensor2CloudConnectiviy).
 
 ### Quick start example
 
@@ -171,3 +159,14 @@ void loop() {
 }
 ```
 5. It is possible to view the messages on another MQTT client in the same network by subscribing to the same topic.
+
+### Running the Example
+
+The quick start examples in the SDK are written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
+
+1. Clone or download the code.
+2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
+3. Build and upload the code from the PlatformIO tab as shown in the Figure below
+4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
+
+   ![Running quick start example](../../assets/VSCode.png)

@@ -1,4 +1,4 @@
-![WE Logo](../docs/assets/WE_Logo_small_t.png)
+![WE Logo](../assets/WE_Logo_small_t.png)
 
 # Sensor FeatherWing
 
@@ -11,16 +11,15 @@ The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board ful
 * [**WSEN-TIDS**](https://www.we-online.de/katalog/de/WSEN-TIDS) - Temperature sensor [(2521020222501)](https://www.we-online.de/katalog/de/WSEN-TIDS)
 * [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity sensor [(2523020210001)](https://www.we-online.de/katalog/de/WSEN-HIDS)
 
-All four sensors are connected over the shared I<sup>2</sup>C bus and hence connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software repository](https://github.com/WE-eiSmart/private__FeatherWings)) made available, make it easy to build a prototype to kick-start the application development.
+All four sensors are connected over the shared I<sup>2</sup>C bus and hence connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) made available, make it easy to build a prototype to kick-start the application development.
 
 The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to the [QWIIC® ecosystem](https://www.sparkfun.com/) of development boards. Additionally, a **6 pin connector** enables extension of the FeatherWing with a host of **evaluation boards from Würth Elektronik eiSos**.
 
 ![Sensor FeatherWing](docs/assets/SensorFeatherWing_s.png)
 
-This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing FeatherWing PCB.
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing [PCB](hardware) as well as the [software](software) with quick start example.
 
-For more information about the software, please go to the [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Sensor FeatherWing user manual](link.to.com\document).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+For more information, please download [Sensor FeatherWing user manual](docs/SensorFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 
 
@@ -130,9 +129,9 @@ This is the standard set of connectors that is used across the Feather ecosystem
 |    28         | VBAT| Not connected|
 
 
-![Connectors Top](docs/assets/Connectors_front.png)
+![Connectors Top](docs/assets/connectors_front.png)
 
-![Connectors Top](docs/assets/Connectors_back.png)
+![Connectors Top](docs/assets/connectors_back.png)
 
 #### Connector CON1
 Connector CON1 is a 1x5 2.54 mm pin header and provides all the interrupt lines that can be optionally connected to the host. This connector is not mounted.
@@ -190,4 +189,4 @@ The standard I<sup>2</sup>C interface requires the SCL and SDA lines to be pulle
 
 ## Software
 
-Sensor FeatherWing [**software examples**](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/SoftwareFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
+Sensor FeatherWing **software examples** can be found in the [software folder](software).

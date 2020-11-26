@@ -12,16 +12,16 @@ The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www
 
 It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
-This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Calypso WiFi FeatherWing PCB.
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Calypso WiFi FeatherWing [PCB](hardware) as well as the [software](software) with quick start example.
+
+For more information, please download [Calypso FeatherWing user manual](docs/CalypsoFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+
 
 ## Hardware
 
 ### Description
 
 The Calypso Wi-Fi FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
-
-For more information, please download [Calypso FeatherWing user manual](/docs/CalypsoFeatherWing.pdf). For details about the software please go to the [software folder](/software). 
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### [Calypso Wi-Fi module (2610011025000)](https://www.we-online.com/catalog/en/CALYPSO)
 
@@ -135,4 +135,4 @@ S2 is a general purpose push button which is connected to GPIO 6 when a jumper i
 
 ## Software
 
-Calypso FeatherWing quick start example can be found in the [software folder](/software). Please check the [cloud connectivity](./Sensor2CloudConnectivity) for more examples for sensor to cloud solution.
+Calypso FeatherWing quick start example can be found in the [software folder](software). Please check the [cloud connectivity folder](../Sensor2CloudConnectivity) for more examples for sensor to cloud solution.
