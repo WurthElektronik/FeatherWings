@@ -1,18 +1,19 @@
 {
 	"folders": [
 		{
-			"path": "CalypsoWiFiFeatherWing"
+			"name": "software",
+			"path": "."
 		},
 		{
-			"path": "Common"
+			"name": "Common",
+			"path": "..\\..\\Common"
 		}
 	],
-	"settings": {
+		"settings": {
 		"files.associations": {
 			"cctype": "c",
 			"type_traits": "c",
-			"typeinfo": "cpp",
-			"unordered_map": "cpp"
+			"typeinfo": "cpp"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

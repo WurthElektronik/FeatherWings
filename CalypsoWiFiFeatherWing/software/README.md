@@ -1,28 +1,8 @@
-![WE Logo](../assets/WE_Logo_small_t.png)
+![WE Logo](../../assets/WE_Logo_small_t.png)
 
 # Calypso Wi-Fi FeatherWing
 
 ## Introduction
-
-<!--Goals-->
-
-The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the [Adafruit](https://www.adafruit.com/) popular [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity..
-
-The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
-
-![Calypso Wi-FI FeatherWing](assets/CalypsoFeatherWing_s.png)
-
-
-With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
-
-It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather micro-controller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
-
-The Calypso Wi-FI FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectivity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
-
-For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
-
-## Software
 
 The Calypso Wi-Fi FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
@@ -57,7 +37,8 @@ The quick start examples in the SDK are written to be run on Adafruit Feather M0
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. Build and upload the code from the PlatformIO tab as shown in the Figure below
 4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
-   ![Running quick start example](assets/VSCode.png)
+
+   ![Running quick start example](../docs/assets/VSCode.png)
 
 
 ### Quick start example

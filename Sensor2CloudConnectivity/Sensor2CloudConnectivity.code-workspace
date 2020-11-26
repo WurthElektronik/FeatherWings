@@ -1,10 +1,12 @@
 {
 	"folders": [
 		{
-			"path": "CalypsoSensorCombo"
+			"name": "software",
+			"path": "."
 		},
 		{
-			"path": "Common"
+			"name": "Common",
+			"path": "..\\..\\Common"
 		}
 	],
 	"settings": {

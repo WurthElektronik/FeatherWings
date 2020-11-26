@@ -27,23 +27,12 @@
 #include "json-builder.h"
 #include "sensorBoard.h"
 
-#define MOSQUITTO_CONNECTION 1
-#define AZURE_CONNECTION 0
+#define AZURE_CONNECTION 1
 #define AWS_CONNECTION 0
 
 // WiFi access point parameters
 #define WI_FI_SSID "AP"
 #define WI_FI_PASSWORD "pw"
-
-#if MOSQUITTO_CONNECTION
-/*MQTT settings - Mosquitto server*/
-#define MQTT_CLIENT_ID "calypso"
-#define MQTT_SERVER_ADDRESS "127.0.0.1"
-#define MQTT_PORT 1883
-#define MQTT_TOPIC "sensorData"
-#define MQTT_USER_NAME "calypso"
-#define MQTT_PASSWORD "calypso"
-#endif
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
@@ -165,19 +154,6 @@ void setup()
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
     calSettings.wifiSettings.securityParams.securityType =
         ATWLAN_SECURITY_TYPE_WPA_WPA2;
-
-#if MOSQUITTO_CONNECTION
-    // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
-    strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
-    calSettings.mqttSettings.flags = ATMQTT_CREATE_FLAGS_IP4;
-    strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
-    calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
-    calSettings.mqttSettings.connParams.protocolVersion = ATMQTT_PROTOCOL_v3_1;
-    calSettings.mqttSettings.connParams.blockingSend = 0;
-    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
-    strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_CLIENT_ID);
-    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_CLIENT_ID);
-#endif
 
 #if AZURE_CONNECTION
     // MQTT Settings - AZURE
