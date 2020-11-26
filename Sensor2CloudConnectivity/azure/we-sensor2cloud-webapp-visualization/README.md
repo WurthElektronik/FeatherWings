@@ -244,7 +244,7 @@ The approach here is to create a website in Azure, configure it to deploy using 
     1. Select **Application settings** and add key/value pairs for:
         - Add **IotHubConnectionString** and the corresponding value.
         - Add **EventHubConsumerGroup** and the corresponding value.
-    1. Select **General settings** and turn **Web socksets** to **On**.
+    1. Select **General settings** and turn **Web sockets** to **On**.
 
 1. Select **Deployment Options**, and configure for a **Local Git** to deploy your web app.
 
