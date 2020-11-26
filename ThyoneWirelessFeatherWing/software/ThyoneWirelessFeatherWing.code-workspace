@@ -1,10 +1,12 @@
 {
 	"folders": [
 		{
-			"path": "ThyoneWirelessFeatherWing"
+			"name": "software",
+			"path": "."
 		},
 		{
-			"path": "Common"
+			"name": "Common",
+			"path": "..\\..\\Common"
 		}
 	],
 	"settings": {
