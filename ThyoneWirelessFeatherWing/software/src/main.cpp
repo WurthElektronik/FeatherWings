@@ -30,7 +30,7 @@
 #define THYONE_DEFAULT_RF_PROFILE 0
 
 /*Configure the FeatherWing either as a transmitter or a receiver*/
-#define Transmitter 1
+#define Transmitter 0
 
 // USB-Serial debug Interface
 TypeSerial *SerialDebug;
