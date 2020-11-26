@@ -135,4 +135,4 @@ S2 is a general purpose push button which is connected to GPIO 6 when a jumper i
 
 ## Software
 
-Calypso FeatherWing quick start example can be found in the [software folder](software). Please check the [cloud connectivity](./Sensor2CloudConnectivity) for more examples for sensor to cloud solution.
+Calypso FeatherWing quick start example can be found in the [software folder](software). Please check the [cloud connectivity folder](../Sensor2CloudConnectivity) for more examples for sensor to cloud solution.

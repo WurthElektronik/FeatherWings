@@ -27,18 +27,18 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
 * Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html).
 
-> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
+> Note: For more information about usage with the cloud check [Calypso cloud examples](../../Sensor2CloudConnectiviy).
 
 ## Example
 
 The quick start examples in the SDK are written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
 
-1. Clone or download the [WE FeatherWing SDK](/)
+1. Clone or download the [WE FeatherWing SDK](../../)
 2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
 3. Build and upload the code from the PlatformIO tab as shown in the Figure below
 4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
 
-   ![Running quick start example](../docs/assets/VSCode.png)
+   ![Running quick start example](../../assets/VSCode.png)
 
 
 ### Quick start example
