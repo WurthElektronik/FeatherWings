@@ -1,4 +1,4 @@
-![WE Logo](../assets/WE_Logo_small_t.png)
+![WE Logo](../docs/assets/WE_Logo_small_t.png)
 
 # Sensor FeatherWing
 
@@ -11,118 +11,183 @@ The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board ful
 * [**WSEN-TIDS**](https://www.we-online.de/katalog/de/WSEN-TIDS) - Temperature sensor [(2521020222501)](https://www.we-online.de/katalog/de/WSEN-TIDS)
 * [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity sensor [(2523020210001)](https://www.we-online.de/katalog/de/WSEN-HIDS)
 
-All four sensors are connected over the shared I<sup>2</sup>C bus and hence compatible to any of the Feather microcontroller boards. The existing [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see
-[software repository](https://github.com/WE-eiSmart/private__FeatherWings)) make it easy to build a prototype to kick-start the application development.
+All four sensors are connected over the shared I<sup>2</sup>C bus and hence connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software repository](https://github.com/WE-eiSmart/private__FeatherWings)) made available, make it easy to build a prototype to kick-start the application development.
 
 The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to the [QWIIC® ecosystem](https://www.sparkfun.com/) of development boards. Additionally, a **6 pin connector** enables extension of the FeatherWing with a host of **evaluation boards from Würth Elektronik eiSos**.
 
-![Sensor FeatherWing](assets/SensorFeatherWing_s.png)
+![Sensor FeatherWing](docs/assets/SensorFeatherWing_s.png)
 
-For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Sensor FeatherWing user manual](link.to.com\document).
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing FeatherWing PCB.
+
+For more information about the software, please go to the [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Sensor FeatherWing user manual](link.to.com\document).
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+
+
+
+## Hardware
+
+### Description
+
+The Sensor FeatherWing consists of four sensors. This section provides details regarding the key features of these sensors.
+
+### [WSEN-PADS (2511020213301)](https://www.we-online.de/katalog/de/WSEN-PADS)
+
+The WSEN-PADS is a MEMS based piezo-resistive absolute pressure sensor with an integrated ASIC and an embedded temperature sensor. The fully molded holed LGA package and low current consumption makes this sensor suitable for a range of applications including weather stations, barometers, altimeters and indoor navigation.
+
+
+#### Key features
+
+* Absolute pressure range : 26 to 126 kPa
+* Output data rate : 1 to 200 Hz
+* Pressure data resolution : 24-bits
+* Current consumption : 4 μA
+* Programmable pressure threshold and data-ready interrupt
+
+Further details about this sensor can be found under [we-online.de/katalog/en/WSEN-PADS](https://www.we-online.de/katalog/en/WSEN-PADS).
+
+
+### [WSEN-ITDS (2533020201601)](https://www.we-online.de/katalog/de/WSEN-ITDS)
+
+The WSEN-ITDS sensor is a 14-bit digital ultra-low-power and high-performance three-axis accelerometer with a digital output interface. Capability of detecting events like free fall, tap recognition, wake up, stationary/motion, activity/inactivity and 6D orientation make the sensor suitable for applications like vibration monitoring, tilt measurement, impact detection and many more.
+
+#### Key features
+
+* Selectable full scale : ±2g, ±4g, ±8g, ±16g,
+* Bandwidth : 400 Hz
+* Output data rate : Up to 1600 Hz
+* Noise density : 90 μg / ![\sqrt{Hz}](https://latex.codecogs.com/svg.latex?%5Csqrt%7BHz%7D)
+* Operating modes : High-performance, Low-power, Normal
+* Current consumption : 16 μA (Low-power mode)
+
+Further details about this sensor can be found under [we-online.de/katalog/en/WSEN-ITDS](https://www.we-online.de/katalog/en/WSEN-ITDS).
+
+
+### [WSEN-TIDS (2521020222501)](https://www.we-online.de/katalog/de/WSEN-TIDS)
+
+The WSEN-TIDS is a high precision silicon-based digital temperature sensor with an integrated ASIC and a digital I<sup>2</sup>C interface. A compact UDFN package and fast thermal response make this sensor ideal for a range of applications like environmental monitoring, HVAC, PCB thermal monitoring, industrial control and many more.
+
+#### Key features
+
+* Temperature range : -40 to 125 °C
+* Output data rate : 25 to 200 Hz
+* Temperature data resolution : 16-bits
+* Current consumption : 1.75 μA
+* Programmable temperature threshold interrupt
+
+Further details about this sensor can be found under [we-online.de/katalog/en/WSEN-TIDS](https://www.we-online.de/katalog/en/WSEN-TIDS).
+
+### [WSEN-HIDS (2523020210001)](https://www.we-online.de/katalog/de/WSEN-HIDS)
+
+The WSEN-HIDS is a 16-bit ultra-low power and high-performance humidity sensor with a digital interface. The pre-calibrated sensor in a compact LGA package is suitable for a variety of applications including HVAC systems, white goods, building automation and air conditioning.
+
+#### Key features
+
+* Humidity range : 0 to 100 %rH
+* Humidity noise : 0.35 %rH RMS
+* Output data rate : 1 Hz, 7 Hz and 12.5 Hz
+* Current consumption : 8.9 μA
+* Integrated temperature sensor
+  
+Further details about this sensor can be found under [we-online.de/katalog/en/WSEN-HIDS](https://www.we-online.de/katalog/en/WSEN-HIDS).
+
+### Pinouts
+
+#### Feather Connector
+This is the standard set of connectors that is used across the Feather ecosystem. The table below describes the functions of each of the 28 pins as applicable to this FeatherWing.
+
+| Pin number | Pin name | Function |
+| ------- | ------- |----------------|
+|   1          | <span style="text-decoration:overline">RST</span> | Not connected|
+|    2          | 3V3| 3.3V power supply|
+|    3          | AREF| Not connected|
+|    4          | GND| Ground|
+|    5          | A0| Not connected|
+|    6          | A1| Not connected|
+|    7          | A2| Not connected|
+|    8          | A3| Not connected|
+|    9          | A4| Not connected|
+|    10         | A5| (Optional) SPI_CE via JP1|
+|    11         | SCK| SPI clock|
+|    12         | MOSI| SPI MOSI|
+|    13         | MISO| SPI MOSI|
+|    14         | U0RX| Not connected|
+|    15         | U0TX| Not connected|
+|    16         | NC| Not connected|
+
+| Pin number | Pin name | Function |
+| ------- | ------- |----------------|
+|    17         | SDA| I<sup>2</sup>C SDA|
+|    18         | SCL|  I<sup>2</sup>C SCL|
+|    19         | 5| Not connected|
+|    20         | 6| Not connected|
+|    21         | 9| Not connected|
+|    22         | U1TX| Not connected|
+|    23         | U1RX| Not connected|
+|    24         | 12| Not connected|
+|    25         | 13| Not connected|
+|    26         | 5V| 5V Power supply|
+|    27         | EN| Not connected|
+|    28         | VBAT| Not connected|
+
+
+![Connectors Top](docs/assets/Connectors_front.png)
+
+![Connectors Top](docs/assets/Connectors_back.png)
+
+#### Connector CON1
+Connector CON1 is a 1x5 2.54 mm pin header and provides all the interrupt lines that can be optionally connected to the host. This connector is not mounted.
+
+| Pin number  | Function |
+| ------- | ------- |
+|     1 |  Interrupt of the WSEN-HIDS sensor|
+|     2|  Interrupt 1 of the WSEN-ITDS sensor|
+|     3 | Interrupt 0 of the WSEN-ITDS sensor |
+|     4 | Interrupt of the WSEN-PADS sensor|
+|    5 | Interrupt of the WSEN-TIDS sensor| 
+
+#### Connectors CON2 and CON3
+CON2 (mounted) and CON3 (not mounted) are 4-pin JST connectors that allow interfacing with [SparkFun's QWIIC®](https://www.sparkfun.com/qwiic) development board ecosystem.
+CON3 is not mounted and needs to be soldered on in order to be daisy chain-able. The QWIIC® ecosystem offers a wide range of development boards and accessories for quick prototyping.
+
+| Pin number  | Function |
+| ------- | ------- |
+|    1 | I<sup>2</sup>C SCL |
+|    2|  I<sup>2</sup>C SDA|
+|    3 | VCC |
+|    4 | GND|
+
+#### Connector CON4
+The connector 4 (not mounted) is a 2x3 2.54 mm pitch plug that is compatible with the EV-boards of sensors from Würth Elektronik using the SPI interface.
+
+| Pin number  | Function |
+| ------- | ------- |
+|    1 | GND|
+|    2 | SPI_SCK (Clock) |
+|    3|  SPI_MOSI (Master Out Slave In) |
+|    4 | SPI_CE (Chip Enable) |
+|    5|  SPI_MISO (Master In Slave Out)|
+|   6|  VCC|
+
+#### Connector CON5
+The connector 5 is a 2x3 2.54 mm pitch plug that is compatible with the EV-boards of sensors from Würth Elektronik using the I<sup>2</sup>C interface.
+
+![Default jumper positions](docs/assets/jumpers_defaults.png)
+#### Jumper JP1
+This jumper has to be mounted and set when the CON4 is used to connect to a sensor using the SPI interface.
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,2	| SPI_CE(CON4) to GPIOA5 |	No (Not mounted)|
+
+#### Jumper JP2
+The standard I<sup>2</sup>C interface requires the SCL and SDA lines to be pulled up with resistors. These jumpers can be removed in cases where the pull-ups already exist on the I<sup>2</sup>C bus.
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,2|	Connect  I<sup>2</sup>C SCL line to a 4.7 k<span>&#8486;</span> Pull up resistor|	Yes|
+|    3,4|	Connect  I<sup>2</sup>C SDA line to a 4.7 k<span>&#8486;</span> Pull up resistor|	Yes|
+### Schematics
+
+![Sensor FeatherFing schematics](docs/assets/sensor-schema.png)
 
 ## Software
 
-The Sensor FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
-
-Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples to support all WE FeatherWings. Here are the salient features of the WE FeatherWing SDK. 
-* The SDK is **open-source** and well documented.
-* It uses popular open-source tool chain including an IDE.
-* The examples are written in Arduino styled C/C++ for easy understanding.
-* The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
-* Modular structure of the software stack makes it easy to integrate into any project.
-
-### Necessary Steps
-
-* **Install IDE**: Use your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [PlatformIO](https://platformio.org/) extension).
-* **PlatformIO**: This is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for software development including building, debugging, code-upload and many more. PlatformIO works well on all modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all necessary functions to utilize a full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](https://we-online.com/wcs-software)
-* **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from Würth Elektronik eiSos.
-* **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
-
-### Installing the tools
-
-* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs).
-* Follow the instructions under [platformio.org](https://platformio.org/install/ide?install=vscode) to install the IDE extension.
-
-
-## Example
-
-1. Clone or download the [WE FeatherWing SDK](https://github.com/WurthElektronik/WEFeatherWingSDK).
-2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. **Build** and **Upload** the code from the PlatformIO tab as shown in the Figure below.
-4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
-
-![Running quick start example](assets/VSCode.png)
-
-
-### Quick start example
-
-The quick start example for the Sensor FeatherWing demonstrates configuring the sensors on-board and reading out the sensor data.
-
-1. In the quick start application, all the sensors are configured to operate in simplest possible mode, the single conversion mode. In this mode the sensors are triggered to perform a single measurement and the measured value is read out. 
-
-2. Setup - The sensors are initialized after setting up the I<sup>2</sup>C interface. The debug UART interface is initialized. A communication check is performed by reading out the ID of each of the sensors.
-
-```C
-void setup() {
-    delay(2000);
-    // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
-
-    // Create sensor objects
-    sensorPADS = PADSCreate(SerialDebug);
-    sensorITDS = ITDSCreate(SerialDebug);
-    sensorTIDS = TIDSCreate(SerialDebug);
-    sensorHIDS = HIDSCreate(SerialDebug);
-
-    // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS)) {
-        SSerial_printf(SerialDebug, "PADS init failed \r\n");
-    }
-
-    if (!ITDS_simpleInit(sensorITDS)) {
-        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
-    }
-    if (!TIDS_simpleInit(sensorTIDS)) {
-        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
-    }
-    if (!HIDS_simpleInit(sensorHIDS)) {
-        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
-    }
-}
-```
-3. In the main application, a single sensor data measurement is triggered, data read, processed and displayed on the debug interface periodically.
-```C
-void loop() {
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
-    // Read and print sensor values
-    if (PADS_readSensorData(sensorPADS)) {
-        SSerial_printf(
-            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
-    }
-    if (ITDS_readSensorData(sensorITDS)) {
-        SSerial_printf(SerialDebug,
-                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
-                       sensorITDS->data[itdsXAcceleration],
-                       sensorITDS->data[itdsYAcceleration],
-                       sensorITDS->data[itdsZAcceleration]);
-    }
-    if (TIDS_readSensorData(sensorTIDS)) {
-        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-                       sensorTIDS->data[tidsTemperature]);
-    }
-    if (HIDS_readSensorData(sensorHIDS)) {
-        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-                       sensorHIDS->data[hidsRelHumidity],
-                       sensorHIDS->data[hidsTemperature]);
-    }
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
-    SSerial_printf(SerialDebug, "\r\n");
-    delay(1000);
-}
-```
+Sensor FeatherWing [**software examples**](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/SoftwareFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
