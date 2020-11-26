@@ -1,192 +1,138 @@
-![WE Logo](../assets/WE_Logo_small_t.png)
+![WE Logo](../docs/assets/WE_Logo_small_t.png)
 
-# Calypso Wi-Fi FeatherWing
+# Calypso WiFi FeatherWing
 
 ## Introduction
 
-<!--Goals-->
+The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity.
 
-The Würth Elektronik eiSos Calypso Wi-Fi FeatherWing is a development board that offers a secure 2.4 GHz Wi-Fi connectivity solution. It is fully compatible to the [Adafruit](https://www.adafruit.com/) popular [Feather line](https://www.adafruit.com/feather) of development boards and extends the Feathers with Wi-Fi connectivity..
+The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on **IEEE 802.11 b/g/n** with a fully featured TCP/IP stack. With out-of-the-box support to commonly used network applications like **SNTP**, **HTTP(S)**, **MQTT(S)**, Calypso offers easy and secure solutions to any **IoT application**.
 
-The Calypso Wi-Fi FeatherWing consists of the [Calypso radio module](https://www.we-online.com/catalog/en/CALYPSO) that offers Wi-Fi connectivity based on IEEE 802.11 b/g/n with a fully featured TCP/IP (IPv4 and IPv6) stack.
+![Calypso FeatherWing](docs/assets/CalypsoFeatherWing_s.png)
 
-![Calypso Wi-FI FeatherWing](assets/CalypsoFeatherWing_s.png)
+It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
 
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Calypso WiFi FeatherWing PCB.
 
-With out-of-the-box support to commonly used network applications like SNTP, HTTP(S), MQTT(S) Calypso offers an easy and secure solution to any IoT application.
+## Hardware
 
-It has an AT-style command interface on the standard UART and hence can be connected to any of the Feather micro-controller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
-
-The Calypso Wi-FI FeatherWing board provides an easy to use platform for learning, experimenting and prototyping [cloud connectivity](lib/examples/../WE_CalypsoWiFiFeatherWing/examples/) applications. It offers easy access to the multiple cloud platforms which then provide the data storage, visualization and other advanced data analyses available in your chosen cloud. For more examples, please see [CalypsoSensorCombo](../CalypsoSensorCombo) 
-
-For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Calypso WiFi FeatherWing user manual](link.to.com\document).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
-
-## Software
+### Description
 
 The Calypso Wi-Fi FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the Adafruit ecosystem, this FeatherWing gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
-Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples to support all WE FeatherWings. Here are the salient features of the WE FeatherWing SDK. 
-* The SDK is **open-source** and well documented.
-* It uses popular open-source tool chain including an IDE.
-* The examples are written in Arduino styled C/C++ for easy understanding.
-* The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
-* Modular structure of the software stack makes it easy to integrate into any project.
+For more information about the software, please go to [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Calypso FeatherWing user manual](link.to.com\document).
+Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
-### Necessary Steps
+### [Calypso Wi-Fi module (2610011025000)](https://www.we-online.com/catalog/en/CALYPSO)
 
-* **Install IDE**: your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [Platform IO](https://platformio.org/) extension.
-* **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and downloads under [WCS Software](we-online.com/wcs-software)
-* **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
-* **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
+The Calypso Wi-Fi module is a compact Wi-Fi radio module based on IEEE 802.11 b/g/n with a fully featured TCP/IP stack. The edge castellated connections, smart antenna configuration and an easy-to-use AT-style command interface enable easy integration of the Calypso into any embedded application.
 
-### Installing the tools
+The module supports IPv4 as well as IPv6 and implements several commonly used network applications like SNTP, DHPv4, DHCPv6, mDNS, HTTP(S), MQTT(Secure) out-of the box. Advanced security features like up to 6 simultaneous secure sockets, secure boot, secure storage and secure OTA update provide a good basis for a secure end product.
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
-* Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
-* Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker man page](https://mosquitto.org/man/mosquitto-8.html).
+Whether a serial cable replacement or low power IoT application with cloud connectivity, the Calypso WLAN modules offers a robust and standard compliant wireless connectivity solution for low-power and low-medium throughput applications.
 
-> Note: For more information about usage with the cloud check [Calypso cloud examples](lib/WE_CalypsoWiFiFeatherWing/examples).
+#### Key features
 
-## Example
+Calypso offers the user to configure and exploit its rich features through an easy-to-use command interface over UART.
 
-The quick start examples in the SDK are written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
+| Feature | Description |
+| ------- | ----------- |
+| Radio standards | IEEE 802.11 b/g/n station <br>IEEE 802.11 b/g Access point (for provisioning only)<br> Wi-Fi Direct client and group owner |
+| Channels | 1-13 |
+| Security | WEP, WPA/WPA2PSK, WPA2 Enterprise (802.1x) |
+| Provisioning | In AP mode using the on-board HTTPS server |
+| Network layer | IPv4, IPv6 |
+| IP addresssing | Static, LLA, DHCPv4, DHCPv6 with DAD 
+| Transport layer | TCP, UDP<br>SSLv3.0/TLSv1.0/TLSv1.1/TLSv1.2<br>Up to 15 simultaneous sockets of which 6 can be secure. |
+| Network applications | MQTT(Secure) client<br>HTTP(S) client<br>SNTP client<br>HTTP(S) server<br>mDNS, DNS-SD<br>DHCP server<br> Ping |
+| Update | Secure OTA update with fall back mechanism |
+| Security | Secure key storage<br>Trusted root-certificate catalog<br>Encrypted file system<br>Secure OTA<br>Software tamper detection<br>Cloning protection |
+| Power management | 802.11 power save power modes <br>Lower power sleep mode with timed or pin wake-up |
 
-1. Clone or download the [WE FeatherWing SDK](/)
-2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below
-4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
-   ![Running quick start example](assets/VSCode.png)
+### Pinouts 
+
+#### Feather Connector
+This is the standard set of connectors that is used across the Feather ecosystem. The table below describes the functions of each of the 28 pins as applicable to this FeatherWing.
+
+| Pin number | Pin name | Function |
+| ------- | ------- |----------------|
+|    1          | <span style="text-decoration:overline">RST</span> | Not connected|
+|    2          | 3V3| 3.3V power supply|
+|    3          | AREF| Not connected|
+|   4          | GND| Ground|
+|    5          | A0| Not connected|
+|    6          | A1| (Optional) Calypso APP_MODE_0 pin via JP3|
+|    7          | A2| (Optional) Calypso APP_MODE_1 pin via JP3|
+|    8          | A3| Not connected|
+|    9          | A4| Not connected|
+|    10         | A5| Not connected|
+|    11         | SCK| Not connected|
+|    12         | MOSI| Not connected|
+|    13         | MISO| Not connected|
+|    14         | U0RX| Calypso UTXD pin|
+|    15         | U0TX| Calypso URXD Pin|
+|    16         | NC| Not connected|
 
 
-### Quick start example
+| Pin number | Pin name | Function |
+| ------- | ------- |----------------|
+|    17         | SDA| Not connected|
+|    18         | SCL| Not connected|
+|    19         | 5| Not connected|
+|    20         | 6| (Optional) Calypso WAKE_UP pin via JP3|
+|    21         | 9| Not connected|
+|    22         | U1TX| Not connected|
+|    23         | U1RX| Not connected|
+|    24         | 12| (Optional) Switch S2 via JP3|
+|    25         | 13| Not connected|
+|    26         | 5V| Not connected|
+|    27         | EN| Not connected|
+|    28         | VBAT| Not connected|   
 
-The quick start example for the Calypso Wi-Fi FeatherWing demonstrates connection to the Moquitto MQTT sever and data transmission.
 
-1. Prerequisites for running this example:
-    * A Wi-Fi access point with WPA2 personal security and a known password
-    * Mosquitto MQTT broker running in the same network. Make sure to note the IP address and port of the Mosquitto server. 
+![Default jumper positions](docs/assets/jumpers_defaults.png)
+    
+#### Jumper JP2
+This jumper enables the user to start Calypso Wi-Fi module in different modes through the APP_MODE_0 and APP_MODE_1 pins. 
 
-2. Configuration: The following parameters needs to be set-up before building the code.
-    * Wi-Fi access point credentials.
-    * MQTT server parameters
-    * SNTP server parameters.
-```C
-// WiFi access point parameters
-#define WI_FI_SSID "AP"
-#define WI_FI_PASSWORD "pw"
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,3	| APP_MODE_0 to HIGH |	No |
+|    3,5	|APP_MODE_0 to LOW |	No |
+|    2,4	| APP_MODE_1 to HIGH |	No |
+|    4,6	|APP_MODE_1 to LOW |	No |
 
-/*MQTT settings - Mosquitto server*/
-#define MQTT_CLIENT_ID "calypso"
-#define MQTT_SERVER_ADDRESS "127.0.0.1"
-#define MQTT_PORT 1883
-#define MQTT_TOPIC "timeStamp"
 
-// SNTP settings
-#define SNTP_TIMEZONE "+60"
-#define SNTP_SERVER "0.de.pool.ntp.org"
-```
-3. Setup - The debug as well as the Calypso UART interfaces are initialized. The calypso is configured with the given parameters. Further, the module connects to the give Wi-Fi, SNTP server and the Mosquitto MQTT server.
+Table below briefly describes the different application modes of Calypso. Please refer to Section 5.2 of the Calypso [user manual](https://www.we-online.com/catalog/manual/2610011025000_Calypso%20261001102500x%20Manual_rev1.pdf) for further details. For normal operation in the standard AT-command mode, these jumpers do not need as the lines are pulled down internally.
 
-```C
-void setup() {
-    delay(5000);
-    // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
+| APP_MODE_0 | APP_MODE_1  | Mode |
+| ------- | ------- |----------------|
+|    0	| 0  |	AT command normal mode |
+|    0	|1 |	FOTA update mode |
+|    1	| 0 |	Provisioning mode |
+|    1	|1 |	AT command terminal mode |
 
-    SerialCalypso = HSerial_create(&Serial1);
+#### Jumper JP2
+This jumper allows the connection of Calypso's pins APP_MODE_0, APP_MODE_1, WAKE_UP pins to the host microcontroller. Additionally, it allows the general purpose switch S2 to be connected to GPIO 6.
 
-    // Create serial port for Calypso WiFi FeatherWing baud 921600, 8E1
-    HSerial_beginP(SerialCalypso, 921600, (uint8_t)SERIAL_8E1);
-    // Wi-Fi settings
-    strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
-    strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
-    calSettings.wifiSettings.securityParams.securityType =
-        ATWLAN_SECURITY_TYPE_WPA_WPA2;
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,2|	S2 to GPIO12|	Yes|
+|    3,4|	APP_MODE_0 to GPIOA1|	No|
+|    5,6|	APP_MODE_1 to GPIOA2|	No|
+|    7,8|	WAKE_UP to GPIO6|	No|
 
-    // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
-    strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
-    calSettings.mqttSettings.flags = ATMQTT_CREATE_FLAGS_IP4;
-    strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
-    calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
-    calSettings.mqttSettings.connParams.protocolVersion = ATMQTT_PROTOCOL_v3_1;
-    calSettings.mqttSettings.connParams.blockingSend = 0;
-    calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
-    strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_CLIENT_ID);
-    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_CLIENT_ID);
+![Push buttons](docs/assets/switches.png)
+#### Push button S1
+This push button is connected to the /RESET pin of the Calypso Wi-Fi module. Pressing this button resets the module.
 
-    // SNTP settings
-    strcpy(calSettings.sntpSettings.timezone, SNTP_TIMEZONE);
-    strcpy(calSettings.sntpSettings.server, SNTP_SERVER);
+#### Push button S2
+S2 is a general purpose push button which is connected to GPIO 6 when a jumper is set between pins 1 and 2 of JP3. This switch can be used to trigger a specific action like switching the Calypso into provisioning mode.
 
-    calypso = Calypso_Create(SerialDebug, SerialCalypso, &calSettings);
+### Schematics
 
-    // Initialize Calypso
-    if (!Calypso_simpleInit(calypso)) {
-        SSerial_printf(SerialDebug, "Calypso init failed \r\n");
-    }
+![Thyone schema](docs/assets/calypso-schema.png)
 
-    // Connect Calypso WiFi FeatherWing to the Wi-Fi access point
-    if (!Calypso_WLANconnect(calypso)) {
-        SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
-        return;
-    }
+## Software
 
-    delay(3000);
-
-    // Set up SNTP client on Calypso
-    if (!Calypso_setUpSNTP(calypso)) {
-        SSerial_printf(SerialDebug, "SNTP config fail\r\n");
-    }
-
-    // Connect to MQTT server
-    if (!Calypso_MQTTconnect(calypso)) {
-        SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
-    }
-    msgID = 0;
-}
-```
-4. In the main application, the module gets the current time from the SNTP server, converts it to UNIX timestamp format and publishes this timestamp along with device ID and a packet number to the MQTT server periodically.
-```C
-void loop() {
-    Timestamp timestamp;
-    Timer_initTime(&timestamp);
-
-    msgID++;
-    if (msgID == INT_MAX) {
-        msgID = 0;
-    }
-
-    // Get the current time from calypso
-    if (!Calypso_getTimestamp(calypso, &timestamp)) {
-        SSerial_printf(SerialDebug, "Get time fail\r\n");
-    }
-
-    /* convert to unix timestamp */
-    unsigned long long unixTime_ms = Time_ConvertToUnix(&timestamp);
-
-    /*Create a JSON object with the device ID, message ID, and time stamp*/
-    json_value *payload = json_object_new(1);
-    json_object_push(payload, "deviceId", json_string_new(calypso->MAC_ADDR));
-    json_object_push(payload, "messageId", json_integer_new(msgID));
-    json_object_push(payload, "ts", json_integer_new(unixTime_ms));
-
-    char *buf = (char *)malloc(json_measure(payload));
-    json_serialize(buf, payload);
-
-    /*Publish to MQTT topic*/
-    if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, buf, strlen(buf),
-                                 true)) {
-        SSerial_printf(SerialDebug, "Publish failed\n\r");
-    }
-
-    /*Clean-up*/
-    json_builder_free(payload);
-    free(buf);
-
-    delay(5000);
-}
-```
-5. It is possible to view the messages on another MQTT client in the same network by subscribing to the same topic.
+Calypso FeatherWing [software examples](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/CalypsoWiFiFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
