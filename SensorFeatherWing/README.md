@@ -1,4 +1,4 @@
-![WE Logo](../docs/assets/WE_Logo_small_t.png)
+![WE Logo](../assets/WE_Logo_small_t.png)
 
 # Sensor FeatherWing
 
@@ -19,7 +19,7 @@ The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/p
 
 This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing FeatherWing PCB.
 
-For more information about the software, please go to the [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Sensor FeatherWing user manual](link.to.com\document).
+For more information about the software, please go to the [software folder](software) or download [Sensor FeatherWing user manual](docs/SensorFeatherWing.pdf).
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 
@@ -190,4 +190,4 @@ The standard I<sup>2</sup>C interface requires the SCL and SDA lines to be pulle
 
 ## Software
 
-Sensor FeatherWing [**software examples**](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/SoftwareFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
+Sensor FeatherWing **software examples** can be found in the [software folder](software).
