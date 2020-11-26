@@ -14,17 +14,14 @@ The MagI³C Power FeatherWing consists of two important components,
 
 It offers a **stable output voltage** for a **wide range of input voltages** making it an ideal power supply add-on to any Feather project.
 
-This repository contains the [Altium](https://www.altium.com/) design files for the MagI³C Power FeatherWing PCB.
+This repository contains the [Altium](https://www.altium.com/) design files for the MagI³C Power FeatherWing [PCB](hardware).
+For more information download [MagI³C Power FeatherWing user manual](docs/MagI3CPowerFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ## Hardware
 
 ### Description
 
 The MagI³C Power FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) offers the user the flexibility to choose from a range of input voltages to power the system. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
-
-For more information download [MagI³C Power FeatherWing user manual](docs/MagI3CPowerFeatherWing.pdf).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
-
 
 ### [**MagI³C FDSM** (173010535)](https://www.we-online.de/katalog/datasheet/173010335.pdf)
 

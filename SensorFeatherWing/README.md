@@ -17,10 +17,9 @@ The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/p
 
 ![Sensor FeatherWing](docs/assets/SensorFeatherWing_s.png)
 
-This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing FeatherWing PCB.
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing [PCB](hardware) as well as the [software](software) with quick start example.
 
-For more information about the software, please go to the [software folder](software) or download [Sensor FeatherWing user manual](docs/SensorFeatherWing.pdf).
-Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+For more information, please download [Sensor FeatherWing user manual](docs/SensorFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 
 
