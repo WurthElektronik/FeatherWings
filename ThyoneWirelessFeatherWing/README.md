@@ -129,4 +129,4 @@ S2 is a general purpose push button which is connected to GPIO 13 when a jumper 
 
 ## Software
 
-Thyone-I Wireless FeatherWing **software examples**can be found in the [software folder](software).
+Thyone-I Wireless FeatherWing **software examples** can be found in the [software folder](software).
