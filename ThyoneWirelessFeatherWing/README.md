@@ -1,184 +1,133 @@
-![WE Logo](../assets/WE_Logo_small_t.png)
+![WE Logo](../docs/assets/WE_Logo_small_t.png)
 
-# Thyone FeatherWing
+# Thyone Wireless FeatherWing
 
 ## Introduction
 
-The Würth Elektronik eiSos Thyone FeatherWing is a development board that offers a secure **2.4 GHz proprietary** wireless connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. The Thyone Wireless FeatherWing consists of two important components:
+The Würth Elektronik eiSos Thyone Wireless FeatherWing is a development board that offers a secure **2.4 GHz proprietary** wireless connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. The FeatherWing consists of two important components:
 
-* [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - A 2.4 GHz proprietary radio module
+* [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - 2.4 GHz proprietary radio module
 * [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
 
-The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/)(C/C++) drivers and examples made available makes it easy to build a prototype to kick-start the application development.
+The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software repository](https://github.com/WE-eiSmart/private__FeatherWings)) make it easy to build a prototype to kick-start the application development.
 
-![WE Thyone FeatherWing](assets/ThyoneFeatherWing_s.png)
 
-The Thyone FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) allows the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
+![WE Thyone FeatherWing](docs/assets/ThyoneFeatherWing_s.png)
 
-For more information about the hardware, please go to the [hardware repository](https://github.com/WE-eiSmart/FeatherWings-Hardware) or download [Thyone FeatherWing user manual](link.to.com\document).
+The Thyone Wireless FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) gives the user the flexibility to choose the preferred host microcontroller. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
+
+This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Thyone Wireless FeatherWing PCB.
+
+For more information about the software, please go to the [software repository](https://github.com/WE-eiSmart/private__FeatherWings) or download [Thyone FeatherWing user manual](link.to.com\document).
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
-
-### Thyone-I 
-
-The Thyone-I module is a radio sub-module for wireless communication between devices such as control systems, remote controls, sensor nodes etc. Operating in the globally available 2.4 GHz license free band, Thyone-I offers a robust and secure data transmission in point-to-point as well as mesh configurations.
-
-It is pre-loaded with the WE-ProWare radio stack which ensures high flexibility without compromising the reliability. Interfacing with the host system via serial UART, the module allows easy configuration and control of the radio using a simple command interface. To ensure ease-of-use for cable replacement applications, the module also offers a transparent mode to function as a serial-to-radio adapter. Small dimensions comparable a nano-SIM card (8 x 12 mm) including an on-board PCB antenna makes Thyone-I ideal for small form factor design.
 
 ### Secure Element
 
-Thyone FeatherWing contains [ATECC608A-TNGTLS](www.microchip.com/wwwproducts/en/ATECC608A) Microship secure element. The ATECC608A-TNGTLS is a pre-provisioned variant of the ATECC608A secure element from Microchip Technologies. The device is configured to make the secure element suitable to some of the most common use cases for IoT applications. It offers a rich set of cryptographic features like key agreement using ECDH, sign-verify mechanism, and encryption/decryption over easily accessible I<sup>2</sup>C interface. Its tiny form factor and low power consumption make it suitable for a wide variety of battery-driven applications.
+The Thyone Wireless FeatherWing contains a [ATECC608A-TNGTLS](https://www.microchip.com/wwwproducts/en/ATECC608A) Microchip secure element. The ATECC608A-TNGTLS is a pre-provisioned variant of the ATECC608A secure element from Microchip Technologies. The device is configured to make the secure element suitable to some of the most common use cases for IoT applications. It offers a rich set of cryptographic features like key agreement using **ECDH**, **sign-verify mechanism**, and **encryption/decryption** over easily accessible I<sup>2</sup>C interface. Its tiny form factor and low power consumption makes it suitable for a wide variety of battery-driven applications.
+
+## Hardware
+
+### Description
+
+The Thyone-I module is a radio sub-module for wireless communication between devices such as control systems, remote controls, sensor nodes etc. Operating in the globally available 2.4 GHz license free band, Thyone-I offers a robust and secure data transmission in point-to-point as well as mesh configurations.
+
+The module is pre-loaded with the [WE-ProWare](https://www.we-online.de/web/de/electronic_components/produkte_pb/service_pbs/wco/service_eismart.php?formblock=section_id_weprowaretext_1#section_id_weprowaretext_1) radio stack which ensures high flexibility without compromising reliability. Interfacing with the host system via serial Universal Asynchronous Receiver/Transmitter (**UART**), the module allows easy configuration and control of the radio using a simple command interface. To ensure ease-of-use for cable replacement applications, the module also offers a transparent mode to function as a serial-to-radio adapter. Small dimensions comparable to a nano SIM card (8 x 12 mm) including an on-board PCB antenna make Thyone-I ideal for small form factor design.
+
+### Key features
+
+The Thyone-I offers a wide range of configurable features to suit even the most sophisticated application design. From low power long range to line-powered high throughput, the Thyone-I can be configured to cover a wide range of applications.
+
+* **Extremely small dimensions**: Owing to its small size (8 x 12 mm) the module can be easily designed-in to compact end devices.
+* **Energy efficient**: The Thyone-I has extremely low current consumption especially in sleep mode(< 0.4 μ A) making it suitable for battery driven applications.
+* **Globally available 2.4 GHz band**: The Thyone-I operates in the 2.4 GHz license free band that allows global deployment of the end-device.
+* **Smart antenna selection**: The Thyone-I offers a choice of using the on-board PCB antenna for compact designs or connecting an external antenna for application that require long range.
+* **Long range mode**: A radio profile with channel coding allows a radio link of up to 500 m with a data rate of 125 kbit/s. As per two way ground reflection model with transmit power of 8 dBm, antenna height 2 m and a reserve of 6 dB
+* **High throughput mode**: The Thyone-I offers a radio profile with 2 Mbit/s data transmission over the air leading to an effective end-to-end throughput of around 400 kbit/s.
+* **Fast serial interface**: The Thyone-I offers a UART-interface to communicate with a host using a user-defined baud rate of up to 1 Mbit/s.
+* **Embedded security on-module**: The secure bootloader on the module verifies the image signature on boot-up offering tamper protection. The module also supports hardware accelerated end-to-end encryption.
+* **Additional Local/Remote GPIOs**: The Thyone-I firmware allows configuration and control of free digital I/O pins on the module via serial or radio interface.
+* **Transparent mode**: A transparent mode is available out-of-the-box enabling easy serial cable replacement.
+* **Network addressing**: The Thyone-I implements network addressing to enable unicast, multi-cast as well as broadcast data transmission. Additionally, packet ACK is available with automatic retry mechanism to ensure reliable data transmission.
+* **Mesh network**: The Thyone-I offers repeater functionality to enable the creation of a simple flooding mesh network. The repeater mode can also be used for range extension.
+
+Further details about the Thyone-I radio module can be found under [we-online.de/katalog/en/THYONE-I](https://www.we-online.de/katalog/en/THYONE-I).
 
 
-## Software 
+### Pinouts
 
-Würth Elektronik eiSos provides a software development kit (SDK) with examples to support all the WE FeatherWings. Here are the salient features of the WE FeatherWing SDK.
+#### Feather Connector
+This is the standard set of connectors that is used across the Feather ecosystem. The table below describes the functions of each of the 28 pins as applicable to this FeatherWing.
 
-* The SDK is open-source and well documented.
-* It uses popular open-source tool chain including an IDE.
-* The examples are written in Arduino-styled C/C++ for quick prototyping.
-* The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
-* Development platform independent (Windows, Linux or MAC)
-* Modular structure of the software stack makes it easy to integrate into any project.
+| Pin number | Pin name | Function |
+| ------- | ------- |----------------|
+|   1          | <span style="text-decoration:overline">RST</span> | Not connected|
+|    2          | 3V3| 3.3V power supply|
+|    3          | AREF| Not connected|
+|    4          | GND| Ground|
+|    5          | A0| Not connected|
+|    6          | A1| Not connected|
+|    7          | A2| Not connected|
+|    8          | A3| (Optional) Thyone-I MODE pin via Jumper JP1|
+|    9          | A4| Not connected|
+|    10         | A5| Not connected|
+|    11         | SCK| Not connected|
+|    12         | MOSI| Not connected|
+|    13         | MISO| Not connected|
+|    14         | U0RX|  (Optional) Thyone-I UTXD pin via R18|
+|    15         | U0TX| (Optional) Thyone-I URXD pin via R17|
+|    16         | NC| Not connected|
 
+| Pin number | Pin name | Function |
+| ------- | ------- |----------------|
+|    17         | SDA|I<sup>2</sup>C SDA to secure element|
+|    18         | SCL|I<sup>2</sup>C SCL to secure element|
+|    19         | 5| Not connected|
+|    20         | 6| Not connected|
+|    21         | 9|  (Optional) Thyone-I WAKE_UP pin via Jumper JP1|
+|    22         | U1TX| Thyone-I URXD pin via R13|
+|    23         | U1RX| Thyone-I UTXD pin via R14|
+|    24         | 12| Not connected|
+|    25         | 13| (Optinal) Push button S2 via JP1|
+|    26         | 5V| 5V Power supply|
+|    27         | EN| Not connected|
+|    28         | VBAT| Not connected| 
 
-### Necessary Steps
+![Default jumper positions](docs/assets/jumpers_defaults.png)
+#### Jumper JP1
+This jumper enables the use of WAKE_UP and MODE pins of the Thyone-I module as well as the Switch S2 from the host microcontroller. 
 
-* **Install IDE**: your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [Platform IO](https://platformio.org/) extension.
-* **PlatformIO**: is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for the software development including building, debugging, code-upload and many more. PlatformIO works well on all the modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
-* **WE SDK**: This is a layer of platform-independent pure C drivers for sensors and wireless connectivity modules from Würth Elektronik eiSos. These drivers implement all the necessary functions to utilize full feature set of the sensors and wireless connectivity modules. More details on the SDK and dowloads under [WCS Software](https://we-online.com/wcs-software)
-* **Board files**: This layer provides abstraction at a board level and provides functions to configure and control individual FeatherWings from WE.
-* **User application**: The SDK currently implements a quick start example for each of the FeatherWings.
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,2	| WAKE_UP to GPIO9 |	No |
+|    3,4	| MODE to GPIOA3 |	No |
+|    5,6	| Switch S2 to GPIO13 |	Yes |
 
-### Installing the tools
+#### Jumper JP2
+The standard I<sup>2</sup>C interface requires the SCL and SDA lines to be pulled up with resistors. These jumpers can be removed in cases where the pull-ups already exist on the I<sup>2</sup>C bus. 
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs)
-* Follow the instructions under to install [PlatformIO IDE](https://platformio.org/install/ide?install=vscode) extension.
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,2|	Connect  I<sup>2</sup>C SCL line to a 4.7 k<span>&#8486;</span> Pull up resistor|	Yes|
+|    3,4|	Connect  I<sup>2</sup>C SDA line to a 4.7 k<span>&#8486;</span> Pull up resistor|	Yes|
 
+#### Jumper JP3
+This jumper, when set, connects the external power supply coming from CON1 to V_USB.
 
-## Example
+| Pin connection | Function  | Jumper set (Default) |
+| ------- | ------- |----------------|
+|    1,2|	Connect  external supply connected to CON1 to V_USB|	No|
 
-The quick start examples in the SDK are written to be run on Adafruit’s Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
+![Push buttons](docs/assets/switches.png)
+#### Push button S1
+This push button is connected to the /RESET pin of the Thyone-I module. Pressing this button resets the module.
 
-1. Clone or download the [WE FeatherWing SDK](https://github.com/WurthElektronik/WEFeatherWingSDK)
-2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below
-4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.(See Figure)
+#### Push button S2
+S2 is a general purpose push button which is connected to GPIO 13 when a jumper is set between pins 5 and 6 of JP1.
 
+### Schematics
 
-![Running quick start example](assets/VSCode.png)
+![Thyone schema](docs/assets/thyone-schema.png)
 
+## Software
 
-### Quick start example
-
-The quick start example for the Thyone FeatherWing demonstrates the very basic functionality of the Thyone-I radio module, that is to transmit and receive data.
-
-1. In the quick start application, the Thyone-I can be configured either as a transmitter or a receiver.
-```C
-/*Configure the FeatherWing either as a transmitter or a receiver*/
-#define Transmitter 1
-```
-
-2. Setup - The debug as well as the Thyone-I UART interfaces are initialized. Additionally, the basic configuration of the Thyone-I (Radio channel, radio profile and transmit power) is done.
-
-```C
-
-void setup() {
-    delay(5000);
-    uint8_t serialNrThy[4] = {0};
-
-    // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
-
-    SerialThyoneI = HSerial_create(&ThyoneIUART);
-
-    // Create serial port for Thyone FeatherWing with baud 115200 and 8N1
-    HSerial_beginP(SerialThyoneI, 115200, (uint8_t)SERIAL_8N1);
-    pinPeripheral(10, PIO_SERCOM);
-    pinPeripheral(11, PIO_SERCOM);
-
-    thyoneI = THYONEI_Create(SerialDebug, SerialThyoneI, &thysettings);
-
-    if (!THYONEI_simpleInit(thyoneI)) {
-        SSerial_printf(SerialDebug, "Thyone init failed \r\n");
-    }
-
-    //Read and display the serial number - This is also the default source address
-    if (ThyoneI_GetSerialNumber(thyoneI, serialNrThy)) {
-        SSerial_printf(SerialDebug,
-                       "Thyone-I default source address %02X%02X%02X%02X \r\n",
-                       serialNrThy[3], serialNrThy[2], serialNrThy[1],
-                       serialNrThy[0]);
-    }
-
-    /*The following code shows how to set the parameters of the Thyone radio
-    module. In this case, the values are set to factory default. The settings
-    are non-volatile. Each write operation performs a write to the flash memory
-    and resets the module. Hence, this operation has to be limited to one time
-    configuration only.*/
-    ThyoneI_TXPower_t txPower;
-    if (ThyoneI_GetTXPower(thyoneI, &txPower)) {
-        if (txPower != ThyoneI_TXPower_8) {
-            // Set the transmit power to 8 dBm
-            if (!ThyoneI_SetTXPower(thyoneI, ThyoneI_TXPower_8)) {
-                SSerial_printf(SerialDebug, "Thyone set power failed \r\n");
-            }
-        }
-    } else {
-        SSerial_printf(SerialDebug, "Thyone get power failed \r\n");
-    }
-
-    uint8_t rfChannel;
-    if (ThyoneI_GetRFChannel(thyoneI, &rfChannel)) {
-        if (rfChannel != THYONE_DEFAULT_RF_CHANNEL) {
-            // Set the RF channel channel 21
-            if (!ThyoneI_SetRFChannel(thyoneI, THYONE_DEFAULT_RF_CHANNEL)) {
-                SSerial_printf(SerialDebug, "Thyone set channel failed \r\n");
-            }
-        }
-    } else {
-        SSerial_printf(SerialDebug, "Thyone get power failed \r\n");
-    }
-    uint8_t rfProfile;
-    if (ThyoneI_GetRFProfile(thyoneI, &rfProfile)) {
-        if (rfProfile != THYONE_DEFAULT_RF_PROFILE) {
-            // Set the RF profile to long range 125 kbit/s mode
-            if (!ThyoneI_SetRFProfile(thyoneI, THYONE_DEFAULT_RF_PROFILE)) {
-                SSerial_printf(SerialDebug,
-                               "Thyone set RF profile failed \r\n");
-            }
-        }
-    } else {
-        SSerial_printf(SerialDebug, "Thyone get power failed \r\n");
-    }
-}
-```
-3. In the main application, based on the mode chosen the module either transmits a hello message periodically or displays the received message over the debug interface.
-```C
-void loop() {
-#if Transmitter
-    unsigned char sendBuffer[32] = "Hello from Thyone-I FeatherWing";
-    /*Broadcast Hello message to all the peers in the network*/
-    if (ThyoneI_TransmitBroadcast(thyoneI, sendBuffer, 32)) {
-        SSerial_printf(SerialDebug, "Broadcast sent! \r\n");
-    } else {
-        SSerial_printf(SerialDebug, "Broadcast send failed \r\n");
-    }
-    delay(1000);
-#else
-    PacketThyoneI dataReceived;
-    dataReceived = THYONEI_receiveData(thyoneI);
-    // Print the received packet
-    if (dataReceived.length != 0) {
-        SSerial_printf(SerialDebug,
-                       "Received Data from %02X%02X%02X%02X RSSI : %i dBm\r\n",
-                       dataReceived.sourceAddress >> 24 & 0xFF,
-                       dataReceived.sourceAddress >> 16 & 0xFF,
-                       dataReceived.sourceAddress >> 8 & 0xFF,
-                       dataReceived.sourceAddress & 0xFF, dataReceived.RSSI);
-        SSerial_printf(SerialDebug, "Payload[%u byte]: %s\r\n",
-                       dataReceived.length, dataReceived.data);
-    }
-#endif
-}
-```
+Thyone-I Wireless FeatherWing [**software examples**](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/ThyoneWirelessFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
