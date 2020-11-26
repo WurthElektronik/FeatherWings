@@ -34,7 +34,7 @@ If you already have an AWS account and an IAM user for yourself, you can use the
 ![New IoT Core](assets/aws-iot-core-new.png)
 3. Create new **Thing** (device) from the AWS IoT **Manage** menu and click **Register a thing** to start the process
 ![Iot Core new thing](assets/aws-iot-core-new-thing.png)
-4. In **Add your device to the thing registry**  give Name to your thing and chose **Thing Type** if any exists.
+4. In **Add your device to the thing registry**  give a **Name** to your thing and chose **Thing Type** if any exists.
 ![IoT Core new thing with type](assets/new-thing-registry.png)
 If you do not have type, please create one with the **Create a type** button. Fill the form and press **Create thing type** button
 ![Create AWS IoT Thing Type](assets/create-thing-type.png)
@@ -85,10 +85,10 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
   ]
 }
 ```
-9. Chose **Attach policy** from the **Actions** drop down menu and chose policy
+9.  Now that the policy has been created, navigate to the **Certificates** page using the link on the left. You'll see a certificate entry for the certificate we created earlier.Chose **Attach policy** from the **Actions** drop down menu and chose policy
     ![Attach Policy](assets/attach-policy.png)
-10. Chose policy and press **Add**
-![Add policy](assets/attach-policy-add.png)
+11. Chose policy and press **Add** 
+    ![Add policy](assets/attach-policy-add.png)
 
 This way, a thing with the policy and private key is created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
 
