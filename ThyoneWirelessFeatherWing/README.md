@@ -1,4 +1,4 @@
-![WE Logo](../docs/assets/WE_Logo_small_t.png)
+![WE Logo](../assets/WE_Logo_small_t.png)
 
 # Thyone Wireless FeatherWing
 
@@ -9,7 +9,7 @@ The Würth Elektronik eiSos Thyone Wireless FeatherWing is a development board t
 * [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - 2.4 GHz proprietary radio module
 * [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
 
-The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software repository](https://github.com/WE-eiSmart/private__FeatherWings)) make it easy to build a prototype to kick-start the application development.
+The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) make it easy to build a prototype to kick-start the application development.
 
 
 ![WE Thyone FeatherWing](docs/assets/ThyoneFeatherWing_s.png)
@@ -130,4 +130,4 @@ S2 is a general purpose push button which is connected to GPIO 13 when a jumper 
 
 ## Software
 
-Thyone-I Wireless FeatherWing [**software examples**](https://github.com/WE-eiSmart/private__FeatherWings/tree/main/ThyoneWirelessFeatherWing) can be found in the [WE FeatherWings software repository](https://github.com/WE-eiSmart/private__FeatherWings).
+Thyone-I Wireless FeatherWing **software examples**can be found in the [software folder](software).

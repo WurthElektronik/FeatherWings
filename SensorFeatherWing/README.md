@@ -11,7 +11,7 @@ The Würth Elektronik eiSos Sensor FeatherWing is a sensor development board ful
 * [**WSEN-TIDS**](https://www.we-online.de/katalog/de/WSEN-TIDS) - Temperature sensor [(2521020222501)](https://www.we-online.de/katalog/de/WSEN-TIDS)
 * [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity sensor [(2523020210001)](https://www.we-online.de/katalog/de/WSEN-HIDS)
 
-All four sensors are connected over the shared I<sup>2</sup>C bus and hence connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software repository](https://github.com/WE-eiSmart/private__FeatherWings)) made available, make it easy to build a prototype to kick-start the application development.
+All four sensors are connected over the shared I<sup>2</sup>C bus and hence connected to any of the Feather microcontroller boards. The [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) made available, make it easy to build a prototype to kick-start the application development.
 
 The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to the [QWIIC® ecosystem](https://www.sparkfun.com/) of development boards. Additionally, a **6 pin connector** enables extension of the FeatherWing with a host of **evaluation boards from Würth Elektronik eiSos**.
 
