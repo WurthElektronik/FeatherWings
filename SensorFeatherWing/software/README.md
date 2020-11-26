@@ -13,7 +13,7 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 * The core components of the SDK are written in pure C to enable easy porting to any microcontroller platform.
 * Modular structure of the software stack makes it easy to integrate into any project.
 
-### Necessary Steps
+### Software components
 
 * **Install IDE**: Use your favourite development IDE (we recommend [Visual Studio Code](https://code.visualstudio.com/) with [PlatformIO](https://platformio.org/) extension).
 * **PlatformIO**: This is a cross-platform, cross-architecture, multiple framework professional tool for embedded software development. It provides the tool chain necessary for software development including building, debugging, code-upload and many more. PlatformIO works well on all modern operating systems and supports a host of development boards including the Feathers from Adafruit. Further details about PlatformIO can be found under [platformio.org](https://platformio.org/)
@@ -25,16 +25,6 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 * Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs).
 * Follow the instructions under [platformio.org](https://platformio.org/install/ide?install=vscode) to install the IDE extension.
-
-
-## Example
-
-1. Clone or download the code.
-2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. **Build** and **Upload** the code from the PlatformIO tab as shown in the Figure below.
-4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
-
-![Running quick start example](../../assets/VSCode.png)
 
 
 ### Quick start example
@@ -107,3 +97,11 @@ void loop() {
     delay(1000);
 }
 ```
+### Running the example
+
+1. Clone or download the code.
+2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
+3. **Build** and **Upload** the code from the PlatformIO tab as shown in the Figure below.
+4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
+
+![Running quick start example](../../assets/VSCode.png)

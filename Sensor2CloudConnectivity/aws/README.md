@@ -1,4 +1,4 @@
-![WE Logo](../../../../../assets/WE_Logo_small_t.png)
+![WE Logo](../../assets/WE_Logo_small_t.png)
 
 # Example: Amazon AWS with Calypso WiFi FeatherWing
 
