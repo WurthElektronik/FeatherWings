@@ -1,4 +1,4 @@
-![WE Logo](../docs/assets/WE_Logo_small_t.png)
+![WE Logo](../assets/WE_Logo_small_t.png)
 
 # MagI³C Power FeatherWing
 
@@ -22,7 +22,7 @@ This repository contains the [Altium](https://www.altium.com/) design files for 
 
 The MagI³C Power FeatherWing was designed with rapid prototyping in mind. Being fully compatible with the [Adafruit ecosystem](https://www.adafruit.com/), this [FeatherWing](https://www.adafruit.com/feather) offers the user the flexibility to choose from a range of input voltages to power the system. The inherent modularity of the ecosystem allows the FeatherWing to be easily integrated into any project.
 
-For more information download [MagI³C Power FeatherWing user manual](link.to.com\document).
+For more information download [MagI³C Power FeatherWing user manual](docs/MagI3CPowerFeatherWing.pdf).
 Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 
