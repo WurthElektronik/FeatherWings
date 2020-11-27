@@ -4,14 +4,15 @@ const WebSocket = require('ws');
 const path = require('path');
 const EventHubReader = require('./scripts/event-hub-reader.js');
 
-const iotHubConnectionString = "HostName=we-iot-hub-t1.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=rcgNlx+YMjnR/D2dljc51//j85lC3ANWWLFt4A08/Dg="; // process.env.IotHubConnectionString; //
+const iotHubConnectionString = "HostName=we-iot-hub-1.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=GoBMgbn+dOq/C9R1Fs6SQS7aL2AfiKh7KXAWLHWS0Xo="; // process.env.IotHubConnectionString; //
+
 if (!iotHubConnectionString) {
   console.error(`Environment variable IotHubConnectionString must be specified.`);
   return;
 }
 console.log(`Using IoT Hub connection string [${iotHubConnectionString}]`);
 
-const eventHubConsumerGroup = "theva-cg"; // process.env.EventHubConsumerGroup; //
+const eventHubConsumerGroup = "we-tester-cg"; // process.env.EventHubConsumerGroup; //
 console.log(eventHubConsumerGroup);
 if (!eventHubConsumerGroup) {
   console.error(`Environment variable EventHubConsumerGroup must be specified.`);
