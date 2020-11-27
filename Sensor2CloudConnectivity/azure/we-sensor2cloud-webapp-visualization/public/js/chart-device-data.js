@@ -20,7 +20,8 @@ $(document).ready(() => {
       this.accelerationZData = new Array(this.maxLen);
     }
 
-    addData(time, temperature, pressure, humidity, accelerationX, accelerationY, accelerationZ) {
+    addData(time, temperature, pressure, temperature_p, humidity, temperature_h, accelerationX, accelerationY, accelerationZ) {
+      //Temperature form the humidity and pressure sensor not used, since the Sensor FeatherFind contains separate temperature sensor
       this.timeData.push(time);
       this.temperatureData.push(temperature);
       this.pressureData.push(pressure || null);
@@ -78,18 +79,6 @@ $(document).ready(() => {
         backgroundColor: 'rgba(227, 0, 11, 0.4)',
         pointHoverBackgroundColor: 'rgba(227, 0, 11, 1)',
         pointHoverBorderColor: 'rgba(227, 0, 11, 1)',
-        spanGaps: true,
-      }
-      ,
-      {
-        fill: false,
-        label: 'Humidity',
-        yAxisID: 'Humidity',
-        borderColor: 'rgba(0, 79, 146, 1)',
-        pointBoarderColor: 'rgba(0, 79, 146, 1)',
-        backgroundColor: 'rgba(0, 79, 146, 0.4)',
-        pointHoverBackgroundColor: 'rgba(0, 79, 146, 1)',
-        pointHoverBorderColor: 'rgba(0, 79, 146, 1)',
         spanGaps: true,
       }
     ]
@@ -321,13 +310,13 @@ $(document).ready(() => {
       const existingDeviceData = trackedDevices.findDevice(messageData.DeviceId);
 
       if (existingDeviceData) {
-        existingDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["HIDS_RH[%]"], messageData.IotData["ITDS_X[mg]"], messageData.IotData["ITDS_Y[mg]"], messageData.IotData["ITDS_Z[mg]"]);
+        existingDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["PADS_T[°C]"], messageData.IotData["HIDS_RH[%]"], messageData.IotData["HIDS_T[°C]"], messageData.IotData["ITDS_X[mg]"], messageData.IotData["ITDS_Y[mg]"], messageData.IotData["ITDS_Z[mg]"]);
       } else {
         const newDeviceData = new DeviceData(messageData.DeviceId);
         trackedDevices.devices.push(newDeviceData);
         const numDevices = trackedDevices.getDevicesCount();
         deviceCount.innerText = numDevices === 1 ? `${numDevices} device` : `${numDevices} devices`;
-        newDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["HIDS_RH[%]"], messageData.IotData["ITDS_X[mg]"], messageData.IotData["ITDS_Y[mg]"], messageData.IotData["ITDS_Z[mg]"]);
+        newDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["PADS_T[°C]"], messageData.IotData["HIDS_RH[%]"], messageData.IotData["HIDS_T[°C]"], messageData.IotData["ITDS_X[mg]"], messageData.IotData["ITDS_Y[mg]"], messageData.IotData["ITDS_Z[mg]"]);
 
         // add device to the UI list
         const node = document.createElement('option');
