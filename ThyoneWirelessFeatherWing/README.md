@@ -4,9 +4,9 @@
 
 ## Introduction
 
-The Würth Elektronik eiSos Thyone Wireless FeatherWing is a development board that offers a secure **2.4 GHz proprietary** wireless connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. The FeatherWing consists of two important components:
+The Würth Elektronik eiSos [Thyone Wireless FeatherWing](https://www.we-online.de/katalog/en/THYONE-I_FeatherWing) is a development board that offers a secure **2.4 GHz proprietary** wireless connectivity solution. It is fully compatible to the popular [Adafruit](https://www.adafruit.com/) [Feather line](https://www.adafruit.com/feather) of development boards. The FeatherWing consists of two important components:
 
-* [**Thyone-I** (2611011021000)](https://www.we-online.de/katalog/de/THYONE-I) - 2.4 GHz proprietary radio module
+* [**Thyone-I**](https://www.we-online.de/katalog/de/THYONE-I) [(2611011021000)](https://www.we-online.de/katalog/datasheet/2611011021000.pdf) - 2.4 GHz proprietary radio module
 * [**ATECC608A-TNGTLS**](http://ww1.microchip.com/downloads/en/DeviceDoc/ATECC608A-TNGTLS-CryptoAuthentication-Data-Sheet-DS40002112B.pdf) - Secure element from Microchip Technologies
 
 The Thyone-I module has an UART interface and the secure element an I<sup>2</sup>C interface and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) make it easy to build a prototype to kick-start the application development.
@@ -18,7 +18,7 @@ The Thyone Wireless FeatherWing was designed with rapid prototyping in mind. Bei
 
 This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Thyone Wireless FeatherWing [PCB](hardware) as well as the [software](software) with quick start example. 
 
-For more information, please download [Thyone wireless FeatherWing user manual](docs/ThyoneFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+For more information, please download the [Thyone wireless FeatherWing user manual](docs/ThyoneFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Secure Element
 
@@ -60,7 +60,7 @@ This is the standard set of connectors that is used across the Feather ecosystem
 | Pin number | Pin name | Function |
 | ------- | ------- |----------------|
 |   1          | <span style="text-decoration:overline">RST</span> | Not connected|
-|    2          | 3V3| 3.3V power supply|
+|    2          | 3V3| 3.3 V power supply|
 |    3          | AREF| Not connected|
 |    4          | GND| Ground|
 |    5          | A0| Not connected|
@@ -87,7 +87,7 @@ This is the standard set of connectors that is used across the Feather ecosystem
 |    23         | U1RX| Thyone-I UTXD pin via R14|
 |    24         | 12| Not connected|
 |    25         | 13| (Optinal) Push button S2 via JP1|
-|    26         | 5V| 5V Power supply|
+|    26         | 5V| 5 V Power supply|
 |    27         | EN| Not connected|
 |    28         | VBAT| Not connected| 
 
