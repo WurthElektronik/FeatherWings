@@ -15,19 +15,28 @@ $(document).ready(() => {
       this.temperatureData = new Array(this.maxLen);
       this.pressureData = new Array(this.maxLen);
       this.humidityData = new Array(this.maxLen);
+      this.accelerationXData = new Array(this.maxLen);
+      this.accelerationYData = new Array(this.maxLen);
+      this.accelerationZData = new Array(this.maxLen);
     }
 
-    addData(time, temperature, pressure, humidity) {
+    addData(time, temperature, pressure, humidity, accelerationX, accelerationY, accelerationZ) {
       this.timeData.push(time);
       this.temperatureData.push(temperature);
       this.pressureData.push(pressure || null);
       this.humidityData.push(humidity || null);
+      this.accelerationXData.push(accelerationX || null);
+      this.accelerationYData.push(accelerationY || null);
+      this.accelerationZData.push(accelerationZ || null);
 
       if (this.timeData.length > this.maxLen) {
         this.timeData.shift();
         this.temperatureData.shift();
         this.pressureData.shift();
         this.humidityData.shift();
+        this.accelerationXData.shift();
+        this.accelerationYData.shift();
+        this.accelerationZData.shift();
       }
     }
   }
@@ -57,6 +66,7 @@ $(document).ready(() => {
   const trackedDevices = new TrackedDevices();
 
   // Define the chart axes
+  //Temperature and humidity chart
   const temperatureChartData = {
     datasets: [
       {
@@ -69,21 +79,23 @@ $(document).ready(() => {
         pointHoverBackgroundColor: 'rgba(227, 0, 11, 1)',
         pointHoverBorderColor: 'rgba(227, 0, 11, 1)',
         spanGaps: true,
-      },
+      }
+      ,
       {
         fill: false,
         label: 'Humidity',
         yAxisID: 'Humidity',
-        borderColor: 'rgba(24, 120, 240, 1)',
-        pointBoarderColor: 'rgba(24, 120, 240, 1)',
-        backgroundColor: 'rgba(24, 120, 240, 0.4)',
-        pointHoverBackgroundColor: 'rgba(24, 120, 240, 1)',
-        pointHoverBorderColor: 'rgba(24, 120, 240, 1)',
+        borderColor: 'rgba(0, 79, 146, 1)',
+        pointBoarderColor: 'rgba(0, 79, 146, 1)',
+        backgroundColor: 'rgba(0, 79, 146, 0.4)',
+        pointHoverBackgroundColor: 'rgba(0, 79, 146, 1)',
+        pointHoverBorderColor: 'rgba(0, 79, 146, 1)',
         spanGaps: true,
       }
     ]
   };
 
+  //Pressure chart
   const pressureChartData = {
     datasets: [
       {
@@ -100,7 +112,64 @@ $(document).ready(() => {
     ]
   };
 
-  const chartOptions = {
+  //Pressure chart
+  const humidityChartData = {
+    datasets: [
+      {
+        fill: false,
+        label: 'Humidity',
+        yAxisID: 'Humidity',
+        borderColor: 'rgba(0, 79, 146, 1)',
+        pointBoarderColor: 'rgba(0, 79, 146, 1)',
+        backgroundColor: 'rgba(0, 79, 146, 0.4)',
+        pointHoverBackgroundColor: 'rgba(0, 79, 146, 1)',
+        pointHoverBorderColor: 'rgba(0, 79, 146, 1)',
+        spanGaps: true,
+      }
+    ]
+  };
+
+  //Pressure chart
+  const accelerationChartData = {
+    datasets: [
+      {
+        fill: false,
+        label: 'X-Axis',
+        yAxisID: 'Acceleration',
+        borderColor: 'rgba(0, 79, 146, 1)',
+        pointBoarderColor: 'rgba(0, 79, 146, 1)',
+        backgroundColor: 'rgba(0, 79, 146, 0.4)',
+        pointHoverBackgroundColor: 'rgba(0, 79, 146, 1)',
+        pointHoverBorderColor: 'rgba(0, 79, 146, 1)',
+        spanGaps: true,
+      },
+      {
+        fill: false,
+        label: 'Y-Axis',
+        yAxisID: 'Acceleration',
+        borderColor: 'rgba(227, 0, 11, 1)',
+        pointBoarderColor: 'rgba(227, 0, 11, 1)',
+        backgroundColor: 'rgba(227, 0, 11, 0.4)',
+        pointHoverBackgroundColor: 'rgba(227, 0, 11, 1)',
+        pointHoverBorderColor: 'rgba(227, 0, 11, 1)',
+        spanGaps: true,
+      },
+      {
+        fill: false,
+        label: 'Z-axis',
+        yAxisID: 'Acceleration',
+        borderColor: 'rgba(0, 117, 53, 1)',
+        pointBoarderColor: 'rgba(0, 117, 53,, 1)',
+        backgroundColor: 'rgba(0, 117, 53,, 0.4)',
+        pointHoverBackgroundColor: 'rgba(0, 117, 53,, 1)',
+        pointHoverBorderColor: 'rgba(0, 117, 53,, 1)',
+        spanGaps: true,
+      }           
+    ]
+  };  
+
+
+  const temperatureChartOptions = {
     scales: {
       yAxes: [{
         id: 'Temperature',
@@ -123,7 +192,7 @@ $(document).ready(() => {
     }
   };  
 
-  const chartOptions2 = {
+  const pressureChartOptions = {
     scales: {
       yAxes: [
       {
@@ -138,24 +207,74 @@ $(document).ready(() => {
     }
   };
 
+  const humidityChartOptions = {
+    scales: {
+      yAxes: [
+      {
+        id: 'Humidity',
+        type: 'linear',
+        scaleLabel: {
+          labelString: 'Humidity [%]',
+          display: true,
+        },
+        position: 'left',
+      }]
+    }
+  };
+
+  const accelerationChartOptions = {
+    scales: {
+      yAxes: [
+      {
+        id: 'Acceleration',
+        type: 'linear',
+        scaleLabel: {
+          labelString: 'Acceleration [mg]',
+          display: true,
+        },
+        position: 'left',
+      }]
+    }
+  };
+
   // Get the context of the canvas element we want to select
-  const ctx = document.getElementById('iotChart').getContext('2d');
+  const ctx = document.getElementById('temperatureChart').getContext('2d');
   const temperatureChart = new Chart(
     ctx,
     {
       type: 'line',
       data: temperatureChartData,
-      options: chartOptions,
+      options: temperatureChartOptions,
     });
 
-  const ctx2 = document.getElementById('iotChart2').getContext('2d');
+  const ctx2 = document.getElementById('pressureChart').getContext('2d');
   const pressureChart = new Chart(
     ctx2,
     {
       type: 'line',
       data: pressureChartData,
-      options: chartOptions2,
+      options: pressureChartOptions,
     });
+
+  // Get the context of the canvas element we want to select
+  const ctx3 = document.getElementById('humidityChart').getContext('2d');
+  const humidityChart = new Chart(
+    ctx3,
+    {
+      type: 'line',
+      data: humidityChartData,
+      options: humidityChartOptions,
+    });
+
+  const ctx4 = document.getElementById('accelerationChart').getContext('2d');
+  const accelerationChart = new Chart(
+    ctx4,
+    {
+      type: 'line',
+      data: accelerationChartData,
+      options: accelerationChartOptions,
+    });
+
 
   // Manage a list of devices in the UI, and update which device data the chart is showing
   // based on selection
@@ -166,11 +285,19 @@ $(document).ready(() => {
     const device = trackedDevices.findDevice(listOfDevices[listOfDevices.selectedIndex].text);
     temperatureChartData.labels = device.timeData;
     temperatureChartData.datasets[0].data = device.temperatureData;
-    temperatureChartData.datasets[1].data = device.humidityData;
+    //temperatureChartData.datasets[1].data = device.humidityData;
     temperatureChart.update();
     pressureChartData.labels = device.timeData;
     pressureChartData.datasets[0].data = device.pressureData;
     pressureChart.update();    
+    humidityChartData.labels = device.timeData;
+    humidityChartData.datasets[0].data = device.humidityData;
+    humidityChart.update();  
+    accelerationChartData.labels = device.timeData;
+    accelerationChartData.datasets[0].data = device.accelerationXData;
+    accelerationChartData.datasets[1].data = device.accelerationYData;
+    accelerationChartData.datasets[2].data = device.accelerationZData;
+    accelerationChart.update();          
   }
   listOfDevices.addEventListener('change', OnSelectionChange, false);
 
@@ -186,7 +313,7 @@ $(document).ready(() => {
       console.log(messageData);
 
       // time and either temperature or pressure are required
-      if (!messageData.MessageDate || (!messageData.IotData["TIDS_T[°C]"] && !messageData.IotData["PADS_P[kPa]"] && !messageData.IotData["HIDS_RH[%]"])) {
+      if (!messageData.MessageDate || (!messageData.IotData["TIDS_T[°C]"] && !messageData.IotData["PADS_P[kPa]"] && !messageData.IotData["HIDS_RH[%]"] && !messageData.IotData["ITDS_X[mg]"] && !messageData.IotData["ITDS_Y[mg]"] && !messageData.IotData["ITDS_Z[mg]"])) {
         return;
       }
 
@@ -194,13 +321,13 @@ $(document).ready(() => {
       const existingDeviceData = trackedDevices.findDevice(messageData.DeviceId);
 
       if (existingDeviceData) {
-        existingDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["HIDS_RH[%]"]);
+        existingDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["HIDS_RH[%]"], messageData.IotData["ITDS_X[mg]"], messageData.IotData["ITDS_Y[mg]"], messageData.IotData["ITDS_Z[mg]"]);
       } else {
         const newDeviceData = new DeviceData(messageData.DeviceId);
         trackedDevices.devices.push(newDeviceData);
         const numDevices = trackedDevices.getDevicesCount();
         deviceCount.innerText = numDevices === 1 ? `${numDevices} device` : `${numDevices} devices`;
-        newDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["HIDS_RH[%]"]);
+        newDeviceData.addData(messageData.MessageDate, messageData.IotData["TIDS_T[°C]"], messageData.IotData["PADS_P[kPa]"], messageData.IotData["HIDS_RH[%]"], messageData.IotData["ITDS_X[mg]"], messageData.IotData["ITDS_Y[mg]"], messageData.IotData["ITDS_Z[mg]"]);
 
         // add device to the UI list
         const node = document.createElement('option');
@@ -218,6 +345,8 @@ $(document).ready(() => {
 
       temperatureChart.update();
       pressureChart.update();
+      humidityChart.update();
+      accelerationChart.update();
 
     } catch (err) {
       console.error(err);
