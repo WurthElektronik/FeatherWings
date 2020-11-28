@@ -70,7 +70,7 @@ In this section, you create a device identity in the identity registry in your I
 
 ## Send data to the IoTHub
 
-To send data to the IoTHub, the easiest way is to use our example code together with the Calypso WiFi FeatherWing, if you have a M0 microprocessor Feather and WE Sensor FeatherWing. Simulator for the raspberry pi can be found in Azure samples [Raspberry Pi Simulator](https://azure-samples.github.io/raspberry-pi-web-simulator/#Getstarted). In order to make it work properly iot IP address or DNS must be added to the source code.
+To send data to the IoTHub, the easiest way is to use our example code together with the Calypso WiFi FeatherWing, if you have a M0 microprocessor Feather and WE Sensor FeatherWing.
 
 
 ## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
