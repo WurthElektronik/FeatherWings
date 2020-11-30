@@ -54,12 +54,11 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
 1. Press button **Activate** and then **Attach a policy**
 2. If policy does not exist click on **Create new policy** to create new one.
 ![Add authorization to certificate](assets/add-authorization-to-certificate.png)
-8. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose appropriate statements:
+3. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose appropriate statements:
    * *iot:Connect*, 
    * *iot:Publish* 
    * *iot:Receive* 
   from the drop down menu. Chose **Effect** **Allow** and press **Create** or use **Advanced** modus and copy the following code.
-
 ![Create policy](assets/create-policy.png)
 
 ```json
@@ -234,7 +233,6 @@ To visualize data with Amazon QuickSight, follow these steps.
 5. Upload the ``manifest.json`` file.
 6. Choose **Connect**, then **Visualize**. You may have to [give Amazon QuickSight explicit permissions](https://docs.aws.amazon.com/quicksight/latest/user/managing-permissions.html) to your S3 bucket.
 7. Finally, design the Amazon QuickSight visualizations in the drag and drop editor. Drag the two available fields into the center card to generate a Sum of Sensor_value by Time visual.
-
 ![QuickSight visualisation](assets/visualizing-sensor-data-6.png)
 
 ## Conclusion
