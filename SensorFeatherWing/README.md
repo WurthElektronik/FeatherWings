@@ -13,7 +13,7 @@ The Würth Elektronik eiSos [Sensor FeatherWing](https://www.we-online.de/katalo
 
 All four sensors are connected over the shared I<sup>2</sup>C bus and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) make it easy to build a prototype to kick-start the application development.
 
-The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to the [QWIIC® ecosystem](https://www.sparkfun.com/) of development boards. Additionally, a **6 pin connector** enables the extension of the FeatherWing with a host of **evaluation boards from Würth Elektronik eiSos**.
+The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to SparkFun's [QWIIC® ecosystem](https://www.sparkfun.com/qwiic) of development boards. Additionally, a **6 pin connector** enables the extension of the FeatherWing with a host of [**evaluation boards from Würth Elektronik eiSos**](https://www.we-online.de/catalog/de/wco/wireless-connectivity_1/eval_boards).
 
 ![Sensor FeatherWing](docs/assets/SensorFeatherWing_s.png)
 

@@ -4,26 +4,26 @@
 
 ## Introduction
 
-Würth Elektronik eiSos offers different product development boards in the FeatherWing form factor. Access to the Feather eco-system offers unlimited possibilities. One such example is described here with the combination of [Adafruit Feather M0 Express](https://www.adafruit.com/product/3403) with the [Sensor FeatherWing](../SensorFeatherWing)  and the [Calypso FeatherWing](../CalypsoWiFiFeatherWing).
+Würth Elektronik eiSos offers different product development boards in the FeatherWing form factor. Access to the Feather eco-system offers unlimited possibilities. One such example is described here with the combination of an [Adafruit Feather M0 Express](https://www.adafruit.com/product/3403) with our [Sensor FeatherWing](../SensorFeatherWing)  and [Calypso Wi-Fi FeatherWing](../CalypsoWiFiFeatherWing).
 
-A typical IoT application involves sensing the environment through sensors, collecting the sensor data and passing it on to the cloud. The cloud platform then offers possibilities to further process and visualize data. In this example, the data from the sensors on the Sensor FeatherWing is read and forwarded to the cloud platform via Calypso FeatherWing. Currently, the data can be sent to one of the following cloud platforms.
+A typical IoT application involves sensing the environment through sensors, collecting the sensor data and passing it on to the cloud. The cloud platform then offers possibilities to further process and visualize data. In this example, the data from the sensors on the Sensor FeatherWing is read and forwarded to the cloud platform via Calypso Wi-Fi FeatherWing. Currently, the data can be sent to one of the following cloud platforms.
 
 * [Microsoft Azure](azure/)
 * [Amazon AWS](aws/)
 
 ### Installing the tools
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs)
-* Follow the instructions to install [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
+* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs).
+* Follow the instructions to install [PlatformIO IDE](https://platformio.org/platformio-ide) extension.
 * Please follow the steps described under [Azure](azure/) or [AWS](aws/) to set-up the device in the corresponding cloud platform.
 
 
 ### Code configuration
 
-The quick start example for the Calypso Wi-Fi FeatherWing demonstrates connection to the Moquitto MQTT sever and data transmission.
+The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connection to the Moquitto MQTT server and data transmission.
 
 1. Prerequisites for running this example:
-    * A Wi-Fi access point with WPA2 personal security and a known password
+    * A Wi-Fi access point with WPA2 personal security and a known password.
     * For Azure, the IoT-Hub has to be configured as described in the [Azure](azure/) section.
     * For AWS, the IoT Core has to be configured as described in the [AWS](aws/).
 
@@ -39,7 +39,7 @@ The quick start example for the Calypso Wi-Fi FeatherWing demonstrates connectio
 #define WI_FI_PASSWORD "pw"
 ```
 
-4. For Connection to Azure, the following parameters be configured
+4. For Connection to Azure, the following parameters can be configured
 
 * **MQTT_CLIENT_ID**: Azure IoT Hub **device name**
 * **MQTT_SERVER_ADDRESS**: Azure IoT Hub **hostname**. It can be found in the IoT Hub -> Overview
@@ -61,7 +61,7 @@ For example,
     "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
 ```
 
-4. For Connection to AWS, the following parameters be configured
+5. For Connection to AWS, the following parameters can be configured
 
 * **MQTT_CLIENT_ID**: AWS IoT core **thing name**
 * **MQTT_SERVER_ADDRESS**: AWS IoT core **hostname**. It can be found in the IoT core -> Interact -> HTTPS
@@ -133,7 +133,7 @@ n1LfYKu6miDABaOP1fB2Qc7eMYcpby6gPilZqale6Htthaz5+J1+\n\
 #endif
 ```
 
-5. SNTP server parameters.
+6. SNTP server parameters.
 ```C
 // SNTP settings
 #define SNTP_TIMEZONE "+60"

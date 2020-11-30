@@ -36,7 +36,8 @@ If you already have an AWS account and an IAM user for yourself, you can use the
 ![Iot Core new thing](assets/aws-iot-core-new-thing.png)
 4. In **Add your device to the thing registry**  give a **Name** to your thing and chose **Thing Type** if any exists.
 ![IoT Core new thing with type](assets/new-thing-registry.png)
-If you do not have type, please create one with the **Create a type** button. Fill the form and press **Create thing type** button
+
+If you do not have type, please create one with the **Create a type** button. Fill the form and press **Create thing type** button.
 ![Create AWS IoT Thing Type](assets/create-thing-type.png)
 5. When offered to use certificates please use **One-click certificate creation (recommended)** option and press the **Create certificate** button.
 ![Create certificate](assets/create-certificate.png)
@@ -239,7 +240,7 @@ To visualize data with Amazon QuickSight, follow these steps.
 
 ## Conclusion
 
-This post demonstrated visualizing data from a securely connected remote IoT device. This was achieved by connecting an [Calypso WiFi FeatherWing](../../../../../CalypsoFeatherWing) to AWS IoT Core using MQTT, forwarding messages from the topic stream to Lambda using IoT Core rules, putting records on an Amazon Kinesis Data Firehose delivery stream, and using Amazon QuickSight to visualize the data stored within an S3 bucket.
+This post demonstrated visualizing data from a securely connected remote IoT device. This was achieved by connecting an [Calypso Wi-Fi FeatherWing](/../../CalypsoWiFiFeatherWing) to AWS IoT Core using MQTT, forwarding messages from the topic stream to Lambda using IoT Core rules, putting records on an Amazon Kinesis Data Firehose delivery stream, and using Amazon QuickSight to visualize the data stored within an S3 bucket.
 
-With these building blocks, it is possible to implement highly scalable and customizable IoT data collection, analysis, and visualization. With the use of other AWS services, you can build a full end-to-end platform for an IoT product that can reliably handle volume. To further explore how hardware and AWS Serverless can work together, visit the Amazon Web Services page on Hackster.
+With these building blocks, it is possible to implement highly scalable and customizable IoT data collection, analysis, and visualization. With the use of other AWS services, you can build a full end-to-end platform for an IoT product that can reliably handle volume. To further explore how hardware and AWS Serverless can work together, visit the Amazon Web Services page on [Hackster](https://www.hackster.io/AmazonWebServices).
 

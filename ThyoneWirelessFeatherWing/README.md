@@ -18,7 +18,7 @@ The Thyone Wireless FeatherWing was designed with rapid prototyping in mind. Bei
 
 This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Thyone Wireless FeatherWing [PCB](hardware) as well as the [software](software) with quick start example. 
 
-For more information, please download the [Thyone wireless FeatherWing user manual](docs/ThyoneFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
+For more information, please download the [Thyone wireless FeatherWing user manual](docs/ThyoneWirelessFeatherWing.pdf). Feel free to check our [YouTube channel](https://www.youtube.com/user/WuerthElektronik/videos) for video tutorials, hands-ons and webinars relating to our products.
 
 ### Secure Element
 

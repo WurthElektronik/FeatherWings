@@ -89,7 +89,7 @@ It is available in an **LGA-6EP** package (2.5 x 2.5 x 1.2 mm). This module has 
 * Operating junction temp. range: -40° C to 125° C
 * Complies with EN55032 class B radiated emissions standard
 
-Further details about the MagI³C FDSM can be found [here](https://www.we-online.de/katalog/en/MAGIC-VDMM).
+Further details about the MagI³C VDMM can be found [here](https://www.we-online.de/katalog/en/MAGIC-VDMM).
 
 ### Pinouts
 
@@ -126,7 +126,7 @@ This is the standard set of connectors that is used across the Feather ecosystem
 |    23         | U1RX| Not connected|
 |    24         | 12| Not connected|
 |    25         | 13| Not connected|
-|    26         | 5V| 5V Power supply|
+|    26         | 5V| 5 V Power supply|
 |    27         | EN| Not connected|
 |    28         | VBAT| Not connected| 
 
