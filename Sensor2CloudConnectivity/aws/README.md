@@ -86,9 +86,10 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
 }
 ```
 4.  Now that the policy has been created, navigate to the **Certificates** page using the link on the left. You'll see a certificate entry for the certificate we created earlier.Chose **Attach policy** from the **Actions** drop down menu and chose policy
-    ![Attach Policy](assets/attach-policy.png)
-5. Chose policy and press **Add** 
-    ![Add policy](assets/attach-policy-add.png)
+  ![Attach Policy](assets/attach-policy.png)
+
+5. Chose policy and press **Add**.
+  ![Add policy](assets/attach-policy-add.png)
 
 This way, a thing with the policy and private key is created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
 
@@ -137,6 +138,8 @@ AWS IoT Core rules use the MQTT topic stream to trigger interactions with other 
 ### Create a Lambda function
 
 Before creating an AWS IoT Core rule, you need a Lambda function to consume forwarded messages.
+
+
 
 1. In the [AWS Lambda console](https://console.aws.amazon.com/lambda/home), choose Create function.
    ![Lambda create function](assets/lambda-create-function.png)

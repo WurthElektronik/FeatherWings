@@ -81,12 +81,8 @@ To send data to the IoTHub, the easiest way is to use our example code together 
 * Create, configure, and run a Stream Analytics job for data transfer from your IoT hub to your Power BI account.
 * Create and publish a Power BI report to visualize the data.
 
----
-**Note**
+>**Note**: If you prefer using **Excel** for data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore a SQL database will be necessary.
 
-If you prefer using **Excel** for data visualization, you will have one extra step. Excel cannot connect directly to the stream analytics, therefore a SQL database will be necessary.
-
----
 
 ### What you need
 
