@@ -235,7 +235,7 @@ To visualize data with Amazon QuickSight, follow these steps.
 6. Choose **Connect**, then **Visualize**. You may have to [give Amazon QuickSight explicit permissions](https://docs.aws.amazon.com/quicksight/latest/user/managing-permissions.html) to your S3 bucket.
 7. Finally, design the Amazon QuickSight visualizations in the drag and drop editor. Drag the two available fields into the center card to generate a Sum of Sensor_value by Time visual.
 
-![QuickSight visualisation](assets/visualizing-sensor-data.png)
+![QuickSight visualisation](assets/visualizing-sensor-data-6.png)
 
 ## Conclusion
 

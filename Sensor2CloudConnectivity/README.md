@@ -8,8 +8,8 @@ Würth Elektronik eiSos offers different product development boards in the Feath
 
 A typical IoT application involves sensing the environment through sensors, collecting the sensor data and passing it on to the cloud. The cloud platform then offers possibilities to further process and visualize data. In this example, the data from the sensors on the Sensor FeatherWing is read and forwarded to the cloud platform via Calypso FeatherWing. Currently, the data can be sent to one of the following cloud platforms.
 
-* [**Microsoft Azure**](azure/)
-* [**Amazon AWS**](aws/)
+* [Microsoft Azure](azure/)
+* [Amazon AWS](aws/)
 
 ### Installing the tools
 
