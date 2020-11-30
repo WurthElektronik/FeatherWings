@@ -23,11 +23,11 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 ### Installing the tools
 
-* Install Visual Studio Code on the platform of your choice following the [instructions](code.visualstudio.com/docs).
-* Follow the instructions to install the [PlatformIO IDE](platformio.org/install/ide?install=vscode) extension.
+* Install Visual Studio Code on the platform of your choice following the [instructions](https://code.visualstudio.com/docs).
+* Follow the instructions to install the [PlatformIO IDE](https://platformio.org/platformio-ide) extension.
 * Download and install [Mosquitto MQTT broker](https://mosquitto.org/download/). Follow the instructions for the installation and configuration on the [Mosquitto MQTT broker main page](https://mosquitto.org/man/mosquitto-8.html).
 
-> Note: For more information about usage with the cloud check our [Calypso cloud examples](../../Sensor2CloudConnectiviy).
+> Note: For more information about usage with the cloud check our [Calypso cloud examples](../../Sensor2CloudConnectivity).
 
 
 ### Quick start example
