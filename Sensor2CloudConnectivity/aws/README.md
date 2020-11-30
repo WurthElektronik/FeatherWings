@@ -88,7 +88,7 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
 4.  Now that the policy has been created, navigate to the **Certificates** page using the link on the left. You'll see a certificate entry for the certificate we created earlier.Chose **Attach policy** from the **Actions** drop down menu and chose policy
   ![Attach Policy](assets/attach-policy.png)
 
-5. Chose policy and press **Add**.
+5. Chose policy and press **Add**.                                                                                   
   ![Add policy](assets/attach-policy-add.png)
 
 This way, a thing with the policy and private key is created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
