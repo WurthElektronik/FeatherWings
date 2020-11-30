@@ -32,21 +32,25 @@ If you already have an AWS account and an IAM user for yourself, you can use the
 1. Sign in to the [AWS Management Console](https://aws.amazon.com).
 2. Select **IoT Core** from the Menu.
 ![New IoT Core](assets/aws-iot-core-new.png)
+
 3. Create new **Thing** (device) from the AWS IoT **Manage** menu and click **Register a thing** to start the process
 ![Iot Core new thing](assets/aws-iot-core-new-thing.png)
+
 4. In **Add your device to the thing registry**  give a **Name** to your thing and chose **Thing Type** if any exists.
 ![IoT Core new thing with type](assets/new-thing-registry.png)
 
 If you do not have type, please create one with the **Create a type** button. Fill the form and press **Create thing type** button.
 ![Create AWS IoT Thing Type](assets/create-thing-type.png)
+
 5. When offered to use certificates please use **One-click certificate creation (recommended)** option and press the **Create certificate** button.
 ![Create certificate](assets/create-certificate.png)
+
 6. If the certificates are created correctly, the success page will appear with the links to the certificates.
 ![Certificate created successfully](assets/create-certificated-successfully.png)
 **Download**: 
 * **A certificate for this thing** and 
 * **A private key**.
-Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the root certificate is already integrated in Calypso module.
+Neither Public Key nor Root CA Certificate for AWS are needed, since the root certificate is already integrated in Calypso module.
 7. **Activate**
 
 
@@ -55,6 +59,7 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
 1. Press button **Activate** and then **Attach a policy**
 2. If policy does not exist click on **Create new policy** to create new one.
 ![Add authorization to certificate](assets/add-authorization-to-certificate.png)
+
 3. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose appropriate statements:
    * *iot:Connect*, 
    * *iot:Publish* 
