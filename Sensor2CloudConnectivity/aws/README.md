@@ -32,21 +32,25 @@ If you already have an AWS account and an IAM user for yourself, you can use the
 1. Sign in to the [AWS Management Console](https://aws.amazon.com).
 2. Select **IoT Core** from the Menu.
 ![New IoT Core](assets/aws-iot-core-new.png)
+
 3. Create new **Thing** (device) from the AWS IoT **Manage** menu and click **Register a thing** to start the process
 ![Iot Core new thing](assets/aws-iot-core-new-thing.png)
+
 4. In **Add your device to the thing registry**  give a **Name** to your thing and chose **Thing Type** if any exists.
 ![IoT Core new thing with type](assets/new-thing-registry.png)
 
 If you do not have type, please create one with the **Create a type** button. Fill the form and press **Create thing type** button.
 ![Create AWS IoT Thing Type](assets/create-thing-type.png)
+
 5. When offered to use certificates please use **One-click certificate creation (recommended)** option and press the **Create certificate** button.
 ![Create certificate](assets/create-certificate.png)
+
 6. If the certificates are created correctly, the success page will appear with the links to the certificates.
 ![Certificate created successfully](assets/create-certificated-successfully.png)
 **Download**: 
 * **A certificate for this thing** and 
 * **A private key**.
-Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the root certificate is already integrated in Calypso module.
+Neither Public Key nor Root CA Certificate for AWS are needed, since the root certificate is already integrated in Calypso module.
 7. **Activate**
 
 
@@ -55,6 +59,7 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
 1. Press button **Activate** and then **Attach a policy**
 2. If policy does not exist click on **Create new policy** to create new one.
 ![Add authorization to certificate](assets/add-authorization-to-certificate.png)
+
 3. On the **Create a policy** page enter policy **Name** and **Add statement**.  In the **Action list** chose appropriate statements:
    * *iot:Connect*, 
    * *iot:Publish* 
@@ -88,7 +93,7 @@ Neither **Public Key** nor **Root CA Certificate** for AWS are needed since the 
 4.  Now that the policy has been created, navigate to the **Certificates** page using the link on the left. You'll see a certificate entry for the certificate we created earlier.Chose **Attach policy** from the **Actions** drop down menu and chose policy
   ![Attach Policy](assets/attach-policy.png)
 
-5. Chose policy and press **Add**.
+5. Chose policy and press **Add**.                                                                                   
   ![Add policy](assets/attach-policy-add.png)
 
 This way, a thing with the policy and private key is created, to connect with the [Calypso WiFi FeatherWing](https://github.com/WE-eiSmart/FeatherWings-Hardware/tree/main/CalypsoWiFiFeatherWing) directly.
@@ -119,12 +124,15 @@ The following services are used in this example:
 
 1. In the [Kinesis Data Firehose console](https://console.aws.amazon.com/firehose/), create a new delivery stream, called ***CalypsoDataStream***.
    ![New Kinesis Data Firehose](assets/aws-kinesis-data-firehose-create-delivery-stream.png)
+
 2. Leave the default source as a **Direct PUT or other sources** and choose **Next**.
 3. On the next screen, leave all the default values and choose **Next**.
 4. Select **Amazon S3** as the destination and create a new bucket with a unique name. This is where records are continuously uploaded so that they can be used by Amazon QuickSight.
   ![Create S3 Bucket](assets/kinesis-s3-data-source.png)
+
 5. On the next screen, in the **Permission** section, choose **Create or update IAM Role**. This gives the Firehose delivery stream permission to upload to S3.
    ![IAM permissions](assets/IAM-permissions.png)
+
 6. Review and then choose **Create Delivery Stream**.
 
 It can take some time to fully create the stream. In the meantime, continue on to the next section.
@@ -143,6 +151,7 @@ Before creating an AWS IoT Core rule, you need a Lambda function to consume forw
 
 1. In the [AWS Lambda console](https://console.aws.amazon.com/lambda/home), choose Create function.
    ![Lambda create function](assets/lambda-create-function.png)
+
 2. Name the function ``CalypsoConsumeMessage``.
 3. For **Runtime**, choose 
    * **Author From Scratch, Node.js12.x**. 
@@ -244,4 +253,3 @@ To visualize data with Amazon QuickSight, follow these steps.
 This post demonstrated visualizing data from a securely connected remote IoT device. This was achieved by connecting an [Calypso Wi-Fi FeatherWing](/../../CalypsoWiFiFeatherWing) to AWS IoT Core using MQTT, forwarding messages from the topic stream to Lambda using IoT Core rules, putting records on an Amazon Kinesis Data Firehose delivery stream, and using Amazon QuickSight to visualize the data stored within an S3 bucket.
 
 With these building blocks, it is possible to implement highly scalable and customizable IoT data collection, analysis, and visualization. With the use of other AWS services, you can build a full end-to-end platform for an IoT product that can reliably handle volume. To further explore how hardware and AWS Serverless can work together, visit the Amazon Web Services page on [Hackster](https://www.hackster.io/AmazonWebServices).
-

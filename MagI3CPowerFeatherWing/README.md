@@ -50,7 +50,7 @@ The FDSM ensures fast time to market and low development costs. It is pin compat
 * Short circuit protection
 * Cycle by cycle current limit
 * Pin compatible with the FDSM power modules series
-* Operating ambient temperature range: 40° C to 85° C
+* Operating ambient temperature range: 40 °C to 85 °C
 * [RoHS](https://www.rohsguide.com/) and [REACh](https://ec.europa.eu/environment/chemicals/reach/reach_en.htm) compliant
 * Case and potting material UL 94 Class V0 (flammability testing) certified
 * Complies with **EN55032 class B** conducted and radiated emissions standard
@@ -85,8 +85,8 @@ It is available in an **LGA-6EP** package (2.5 x 2.5 x 1.2 mm). This module has 
 * Short-circuit protection
 * Cycle-by-cycle current limit
 * [RoHS](https://www.rohsguide.com/) and [REACh](https://ec.europa.eu/environment/chemicals/reach/reach_en.htm) compliant
-* Operating ambient temperature up to 85° C
-* Operating junction temp. range: -40° C to 125° C
+* Operating ambient temperature up to 85 °C
+* Operating junction temp. range: -40 °C to 125 °C
 * Complies with EN55032 class B radiated emissions standard
 
 Further details about the MagI³C VDMM can be found [here](https://www.we-online.de/katalog/en/MAGIC-VDMM).
