@@ -130,8 +130,8 @@ The following services are used in this example:
 4. Select **Amazon S3** as the destination and create a new bucket with a unique name. This is where records are continuously uploaded so that they can be used by Amazon QuickSight.
   ![Create S3 Bucket](assets/kinesis-s3-data-source.png)
 
-5. On the next screen, in the **Permission** section, choose **Create or update IAM Role**. This gives the Firehose delivery stream permission to upload to S3.
-   ![IAM permissions](assets/IAM-permissions.png)
+5. On the next screen, in the **Permission** section, choose **Create or update IAM Role**. This gives the Firehose delivery stream permission to upload to S3.                                                                                              
+  ![IAM permissions](assets/IAM-permissions.png)
 
 6. Review and then choose **Create Delivery Stream**.
 
@@ -250,6 +250,6 @@ To visualize data with Amazon QuickSight, follow these steps.
 
 ## Conclusion
 
-This post demonstrated visualizing data from a securely connected remote IoT device. This was achieved by connecting an [Calypso Wi-Fi FeatherWing](/../../CalypsoWiFiFeatherWing) to AWS IoT Core using MQTT, forwarding messages from the topic stream to Lambda using IoT Core rules, putting records on an Amazon Kinesis Data Firehose delivery stream, and using Amazon QuickSight to visualize the data stored within an S3 bucket.
+This post demonstrated visualizing data from a securely connected remote IoT device. This was achieved by connecting an [Calypso Wi-Fi FeatherWing](../../CalypsoWiFiFeatherWing) to AWS IoT Core using MQTT, forwarding messages from the topic stream to Lambda using IoT Core rules, putting records on an Amazon Kinesis Data Firehose delivery stream, and using Amazon QuickSight to visualize the data stored within an S3 bucket.
 
 With these building blocks, it is possible to implement highly scalable and customizable IoT data collection, analysis, and visualization. With the use of other AWS services, you can build a full end-to-end platform for an IoT product that can reliably handle volume. To further explore how hardware and AWS Serverless can work together, visit the Amazon Web Services page on [Hackster](https://www.hackster.io/AmazonWebServices).
