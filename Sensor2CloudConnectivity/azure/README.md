@@ -222,12 +222,8 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 ## Visualize real-time sensor data from Azure IoT Hub using PowerBI
 
 
----
-**Note**
-
-If you prefer using **Excel** for the data visualization, please skip this section. [Create SQL database](#create-a-single-database) and then follow [Excel visualization section](#excel-visualization).
-
----
+> **Note**:
+> If you prefer using **Excel** for the data visualization, please skip this section. Go to [Create SQL database](#create-a-single-database) and then follow [Excel visualization section](#excel-visualization).
 
 ### Necessary steps
 

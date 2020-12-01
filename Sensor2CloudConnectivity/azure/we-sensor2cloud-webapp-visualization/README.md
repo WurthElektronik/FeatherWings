@@ -233,7 +233,7 @@ az webapp show -n <your web app name> -g <your resource group name> --query stat
 
 The approach here is to create a website in Azure, configure it to deploy using git where it hosts a remote repo, and push your local branch to that repo.
 
-> Note: Do not forget to delete these resources after you are done, to avoid unnecessary charges.
+> **Note**: Do not forget to delete these resources after you are done, to avoid unnecessary charges.
 
 1. Create a [Web App](https://ms.portal.azure.com/#create/Microsoft.WebSite).
     - OS: Windows
@@ -345,4 +345,4 @@ In this tutorial, you learned how to:
 - On a website, register for device telemetry and broadcast it over a web socket to attached clients
 - In a web page, display device data in a chart
 
-> Note: remember to delete any Azure resources created during this sample to avoid unnecessary charges.
+> **Note**: remember to delete any Azure resources created during this sample to avoid unnecessary charges.
