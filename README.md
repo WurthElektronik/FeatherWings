@@ -38,7 +38,7 @@ Hypercharge your prototyping for easy and fast solution testing.
    - Calypso WiFi FeatherWing example showing the WiFi capabilities
    - Sensor2Cloud connectivity example with 2 different cloud connections to Microsoft Azure and Amazon AWS
 
-6. **Open workspace file** for the case you want to test.
+6. **Open workspace file** for the case you want to test.                  
 ![OpenWorkspace](assets/OpenWorkspace.png)
 
 
