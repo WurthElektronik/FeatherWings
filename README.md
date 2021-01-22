@@ -10,6 +10,40 @@
 
 Hypercharge your prototyping for easy and fast solution testing.
 
+## Quick start guide
+
+### Necessary Steps:
+
+* **Read the documentation!**
+1. **Download and install** [Visual Studio Code](https://code.visualstudio.com/download).
+![Install VS Code](assets/InstallVSCode.png)
+
+2. **Install** [PlatformIO](https://platformio.org/) extension for the Visual Studio Code
+  - **Select extensions** in the lower left
+  - **Type** platformio in the *Search windows* and 
+  - when PlatformIO IDE extension appears, **press blue Install button**
+![Install PlatformIO](assets/InstallPlatformIO.png)
+> **Note**: Wait until the Platform IO is installed.
+> Instalation process can be slow, depending on the speed of you computer and network connection.
+
+3. After PlatformIO extension is installed follow on screen instructions and **restart Visual Studio Code**.
+![RestartVSCode](assets/PlatformIO_Install_finished.png)
+
+4. **Download documentation and example code** from the https://github.com/WurthElektronik/FeatherWings using git clone or simple zip file
+![DownloadGit](assets/DownloadGitCode.png)
+   
+5. There are **4 different** examples cases
+   - Sensor FeatherWing example showing the functionality of the Sensor FeatherWing (see below for the detailed description)
+   - Thyone-I Wireless FeatherWing example showing the transmit and receive functionality
+   - Calypso WiFi FeatherWing example showing the WiFi capabilities
+   - Sensor2Cloud connectivity example with 2 different cloud connections to Microsoft Azure and Amazon AWS
+
+6. **Open workspace file** for the case you want to test.
+![OpenWorkspace](assets/OpenWorkspace.png)
+
+
+
+
 | Image    | Description |
 | -------- | ----------- |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](/SensorFeatherWing) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>[Sparkfun QWIIC® Connect System](https://www.sparkfun.com/qwiic) to connect additional peripherals </ul> |
