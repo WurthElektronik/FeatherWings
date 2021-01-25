@@ -58,9 +58,9 @@ Chose the workspace you fould like to work with based on your preferences.
 
 ![OpeningWorkspace](assets/OpeningWorkspace.png)
                                                                                                   
-After selecting the workspace, in this quick start guide we will use the simples one, SensorFeatherWing workspace, the workspace will appear in your visual sdutio code and the Platform IO will recognize it as the Platform IO project.   
+After selecting the workspace, in this quick start guide we will use the simples one, SensorFeatherWing workspace, the workspace will appear in your visual sdutio code and the Platform IO will recognize it as the Platform IO project.                           
 
-![OpeneingWorkspace](assets/OpenedWorkspace.png)
+![OpenedWorkspace](assets/OpenedWorkspace.png)
 
 7. After loading the workspace, connect the set of boards you want to test to the USB port for programming.
 For that you will need the combination of at least one WE FeatherWing and one Micro Controller Feather board (for more details see table below)                                                             
