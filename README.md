@@ -20,62 +20,62 @@ Hypercharge your prototyping for easy and fast solution testing.
 
 ## Quick start guide
 
-* **Read the documentation!**
+* **Read this documentation! This will help to avoid the most common mistakes.**
 1. **Download and install** [Visual Studio Code](https://code.visualstudio.com/download).
 
 ![Install VS Code](assets/InstallVSCode.png)
 
-2. **Install** [PlatformIO](https://platformio.org/) extension for the Visual Studio Code
+2. **Install** the [PlatformIO](https://platformio.org/install/ide?install=vscode) extension for Visual Studio Code
   - **Select extensions** in the lower left
   - **Type** platformio in the *Search windows* and 
-  - when PlatformIO IDE extension appears, **press blue Install button**
+  - when PlatformIO IDE extension appears, **press the blue Install button**
 
 ![Install PlatformIO](assets/InstallPlatformIO.png)
 
-> **Note**: Wait until the Platform IO is installed.
-> Instalation process can be slow, depending on the speed of you computer and network connection.
+> **Note**: Wait until PlatformIO is installed.
+> Instalation process can be slow, depending on speed and network connection of your computer.
 
-3. After PlatformIO extension is installed follow on screen instructions and **restart Visual Studio Code**.
+3. After the PlatformIO extension has been installed follow the on screen instructions and **restart Visual Studio Code**.
 ![RestartVSCode](assets/PlatformIO_Install_finished.png)
 
-The Platform IO extension will be then loaded in the Visual Studio Code and its icon will appear in the Visual Studio Code left menu bar.
+The PlatformIO extension will then be loaded in Visual Studio Code and its icon will appear in the Visual Studio Code menu bar on the left side.
 
-4. **Download documentation and example code** from the https://github.com/WurthElektronik/FeatherWings using git clone or simple zip file.     
+4. **Download documentation and example code** from https://github.com/WurthElektronik/FeatherWings using git clone or a simple zip file.     
 ![DownloadGit](assets/DownloadGitCode.png)
    
-5. There are **4 different** examples cases
-   - Sensor FeatherWing example showing the functionality of the Sensor FeatherWing (see below for the detailed description)
+5. There are **4 different** example cases
+   - Sensor FeatherWing example showing the functionality of the Sensor FeatherWing (see below for a detailed description)
    - Thyone-I Wireless FeatherWing example showing the transmit and receive functionality
-   - Calypso WiFi FeatherWing example showing the WiFi capabilities
+   - Calypso Wi-Fi FeatherWing example showing the Wi-Fi capabilities
    - Sensor2Cloud connectivity example with 2 different cloud connections to Microsoft Azure and Amazon AWS
 
-> **Note**: For more details on each board and workspace, please look below table and check the board you are interested in.
+> **Note**: For more details on each board and workspace, please see above table and check the board you are interested in.
 
 6. **Open workspace file** for the case you want to test.                  
 ![OpenWorkspace](assets/OpenWorkspace.png)
 
-Chose the workspace you fould like to work with based on your preferences.
+Chose the workspace you would like to work with based on your preferences.
 
 ![OpeningWorkspace](assets/OpeningWorkspace.png)
                                                                                                   
-After selecting the workspace, in this quick start guide we will use the simples one, SensorFeatherWing workspace, the workspace will appear in your visual sdutio code and the Platform IO will recognize it as the Platform IO project.   
+After selecting the workspace, in this quick start guide we will use the simple SensorFeatherWing workspace, the workspace will appear in your visual studio code and PlatformIO will recognize it as the PlatformIO project.   
 
 ![OpeneingWorkspace](assets/OpenedWorkspace.png)
 
 7. After loading the workspace, connect the set of boards you want to test to the USB port for programming.
-For that you will need the combination of at least one WE FeatherWing and one Micro Controller Feather board (for more details see table below)                                                             
+For that you will need a combination of at least one WE FeatherWing and one Micro Controller Feather board (for more details see table below).                                                             
 ![FeatherWingMinSet](assets/FeatherWing_min.jpg) 
 ![FeatherWingMinSet](assets/FeatherWing_connect.jpg)
 
 8. Go into the PlatformIO extension and select the **PROJECT TASKS** dropdown list.
 
-9. **Build** the code using PlatformIO extension and the **Upload** it to the Micro controller. Upload command will also execute Build before it uploads, but doing it in two steps, first Build then Upload, you will be able to check if the code is correctly built and it prevents uploading the code with the errors to the micro controller. 
+9. **Build** the code using the PlatformIO extension and then **Upload** it to the micro controller. The Upload command will also execute Build before it uploads, but doing it in two steps, first Build then Upload, you will be able to check if the code is correctly built and it prevents uploading erroneous code to the micro controller. 
 ![UploadCode](assets/VSCode.png)
 
-> **Note**: Wait until the Platform IO rebuilds its indices.
-> Index rebuild process can be slow, depending on the speed of you computer and network connection.
+> **Note**: Wait until PlatformIO rebuilds its indices.
+> Index rebuild process can be slow, depending on speed and network connection of you computer.
 ![PlatformIO_index_rebuild](assets/PlatformIO_index_rebuild.png)
 
-10. Press **Monitor** and Check the Visual Studio Code **TERMINAL** window for the results.
+10. Press **Monitor** and check the Visual Studio Code **TERMINAL** window for results.
 ![SensorResults](assets/SensorWorkspaceResults.png)
 
