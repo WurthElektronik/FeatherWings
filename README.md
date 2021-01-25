@@ -60,7 +60,7 @@ Chose the workspace you would like to work with based on your preferences.
                                                                                                   
 After selecting the workspace, in this quick start guide we will use the simple SensorFeatherWing workspace, the workspace will appear in your visual studio code and PlatformIO will recognize it as the PlatformIO project.   
 
-![OpeneingWorkspace](assets/OpenedWorkspace.png)
+![OpenedWorkspace](assets/OpenedWorkspace.png)
 
 7. After loading the workspace, connect the set of boards you want to test to the USB port for programming.
 For that you will need a combination of at least one WE FeatherWing and one Micro Controller Feather board (for more details see table below).                                                             
