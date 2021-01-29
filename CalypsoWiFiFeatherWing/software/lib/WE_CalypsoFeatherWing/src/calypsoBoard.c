@@ -78,7 +78,8 @@ char *pEventBuffer;
  */
 CALYPSO *Calypso_Create(TypeSerial *serialDebug,
                         TypeHardwareSerial *serialCalypso,
-                        CalypsoSettings *settings) {
+                        CalypsoSettings *settings)
+{
     CALYPSO *allocateInit = (CALYPSO *)malloc(sizeof(CALYPSO));
     allocateInit->serialDebug = serialDebug;
     allocateInit->serialCalypso = serialCalypso;
@@ -99,8 +100,10 @@ CALYPSO *Calypso_Create(TypeSerial *serialDebug,
  * @param  calypso Pointer to the object.
  * @retval none
  */
-void Calypso_Destroy(CALYPSO *calypso) {
-    if (calypso) {
+void Calypso_Destroy(CALYPSO *calypso)
+{
+    if (calypso)
+    {
         free(calypso);
     }
 }
@@ -110,12 +113,14 @@ void Calypso_Destroy(CALYPSO *calypso) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_simpleInit(CALYPSO *self) {
+bool Calypso_simpleInit(CALYPSO *self)
+{
 #if SERIAL_DEBUG
     SSerial_printf(self->serialDebug, "Starting Calypso...\n\r");
     SSerial_printf(self->serialDebug, "Sending reboot\n\r");
 #endif
-    if (Calypso_reboot(self)) {
+    if (Calypso_reboot(self))
+    {
         delay(RESPONSE_WAIT_TIME);
         return true;
     }
@@ -127,9 +132,12 @@ bool Calypso_simpleInit(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_reboot(CALYPSO *self) {
-    if (Calypso_SendRequest(self, "AT+reboot\r\n")) {
-        if (Calypso_waitForEvent(self)) {
+bool Calypso_reboot(CALYPSO *self)
+{
+    if (Calypso_SendRequest(self, "AT+reboot\r\n"))
+    {
+        if (Calypso_waitForEvent(self))
+        {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "%s\r\n", self->bufferCalypso);
 #endif
@@ -140,11 +148,26 @@ bool Calypso_reboot(CALYPSO *self) {
 }
 
 /**
+ * @brief  Wait for events from calypso
+ * @param  self Pointer to the calypso object.
+ * @retval true if successful false in case of failure
+ */
+bool Calypso_waitForResponse(CALYPSO *self)
+{
+    if (Calypso_waitForEvent(self))
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
  * @brief  Connect to the access point with parameters in the settings
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_WLANconnect(CALYPSO *self) {
+bool Calypso_WLANconnect(CALYPSO *self)
+{
     bool ret = false;
     pRequestCommand = &requestBuffer[0];
 
@@ -154,10 +177,13 @@ bool Calypso_WLANconnect(CALYPSO *self) {
     ret = ATWLAN_addConnectionArguments(
         pRequestCommand, self->settings.wifiSettings, STRING_TERMINATE);
 
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_appendArgumentString(pRequestCommand, CRLF,
                                            STRING_TERMINATE);
-    } else {
+    }
+    else
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "WiFi connection fail, check parameters\r\n");
@@ -165,8 +191,10 @@ bool Calypso_WLANconnect(CALYPSO *self) {
         return false;
     }
 
-    if (Calypso_SendRequest(self, pRequestCommand)) {
-        if (Calypso_waitForEvent(self)) {
+    if (Calypso_SendRequest(self, pRequestCommand))
+    {
+        if (Calypso_waitForEvent(self))
+        {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "%s\r\n", self->bufferCalypso);
 #endif
@@ -181,7 +209,8 @@ bool Calypso_WLANconnect(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_WLANDisconnect(CALYPSO *self) {
+bool Calypso_WLANDisconnect(CALYPSO *self)
+{
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+wlanDisconnect\r\n");
@@ -193,7 +222,8 @@ bool Calypso_WLANDisconnect(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_StartProvisioning(CALYPSO *self) {
+bool Calypso_StartProvisioning(CALYPSO *self)
+{
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+provisioningStart\r\n");
@@ -205,7 +235,8 @@ bool Calypso_StartProvisioning(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_setUpSNTP(CALYPSO *self) {
+bool Calypso_setUpSNTP(CALYPSO *self)
+{
     /* Enable*/
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
@@ -222,7 +253,8 @@ bool Calypso_setUpSNTP(CALYPSO *self) {
     strcat(pRequestCommand, "time_zone,");
     strcat(pRequestCommand, self->settings.sntpSettings.timezone);
 
-    if (!Calypso_SendRequest(self, pRequestCommand)) {
+    if (!Calypso_SendRequest(self, pRequestCommand))
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "SNTP time_zone set faile\r\n");
 #endif
@@ -235,7 +267,8 @@ bool Calypso_setUpSNTP(CALYPSO *self) {
     strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
     strcat(pRequestCommand, "server_address,0,");
     strcat(pRequestCommand, self->settings.sntpSettings.server);
-    if (!Calypso_SendRequest(self, pRequestCommand)) {
+    if (!Calypso_SendRequest(self, pRequestCommand))
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "SNTP set server failed\r\n");
 #endif
@@ -246,7 +279,8 @@ bool Calypso_setUpSNTP(CALYPSO *self) {
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+netAppUpdateTime");
-    if (!Calypso_SendRequest(self, pRequestCommand)) {
+    if (!Calypso_SendRequest(self, pRequestCommand))
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "SNTP enable failed\r\n");
 #endif
@@ -261,16 +295,20 @@ bool Calypso_setUpSNTP(CALYPSO *self) {
  * @param timeStamp Pointer to timestamp returned by calypso
  * @retval true if successful false in case of failure
  */
-bool Calypso_getTimestamp(CALYPSO *self, Timestamp *timeStamp) {
+bool Calypso_getTimestamp(CALYPSO *self, Timestamp *timeStamp)
+{
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
 
     /* Get Time */
     strcpy(pRequestCommand, "AT+GET=general,time");
-    if (Calypso_SendRequest(self, pRequestCommand)) {
+    if (Calypso_SendRequest(self, pRequestCommand))
+    {
         /* parse timestamp out of response */
-        if (0 < self->bufferCalypso.length) {
-            if (0 == strncmp(self->bufferCalypso.data, "+get:", 5)) {
+        if (0 < self->bufferCalypso.length)
+        {
+            if (0 == strncmp(self->bufferCalypso.data, "+get:", 5))
+            {
                 char currentParameter[5];
                 char *parameters = &(self->bufferCalypso.data[0]);
 
@@ -303,7 +341,9 @@ bool Calypso_getTimestamp(CALYPSO *self, Timestamp *timeStamp) {
                 return true;
             }
         }
-    } else {
+    }
+    else
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "SNTP get time failed \r\n");
 #endif
@@ -316,14 +356,20 @@ bool Calypso_getTimestamp(CALYPSO *self, Timestamp *timeStamp) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_MQTTconnect(CALYPSO *self) {
-    if (self->status == calypso_WLAN_connected) {
-        if (Calypso_MQTTCreate(self)) {
-            if (Calypso_MQTTSet(self)) {
+bool Calypso_MQTTconnect(CALYPSO *self)
+{
+    if (self->status == calypso_WLAN_connected)
+    {
+        if (Calypso_MQTTCreate(self))
+        {
+            if (Calypso_MQTTSet(self))
+            {
                 return (Calypso_MQTTConnToBroker(self));
             }
         }
-    } else {
+    }
+    else
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "MQTT connect fail: Not connected to Wi-Fi\r\n");
@@ -331,6 +377,93 @@ bool Calypso_MQTTconnect(CALYPSO *self) {
     }
     return false;
 }
+
+/**
+ *Sends the AT+MQTTsubscribe=[index],[numOfTopics],[topic1],[QoSn],[reserved]... command
+ *
+ *input:
+ * -index           index of mqttclient to to subscribe.
+ * -numOfTopics     number of topics to which subscribe to
+ * -pTopics         Topics to subscribe to. See ATMQTT_subscribeTopic_t
+ *
+ *return true  if succeeded
+ *       false otherwise
+ */
+bool Calypso_subscribe(CALYPSO *self, uint8_t index, uint8_t numOfTopics, ATMQTT_subscribeTopic_t *pTopics)
+{
+    bool ret = false;
+
+    pRequestCommand = &requestBuffer[0];
+    memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
+    strcpy(pRequestCommand, "AT+mqttSubscribe=");
+
+    ret = ATMQTT_addArgumentsSubscribe(pRequestCommand, index, numOfTopics, pTopics);
+
+    if (ret)
+    {
+        if (Calypso_SendRequest(self, pRequestCommand))
+        {
+            return (Calypso_waitForEvent(self));
+        }
+    }
+
+    return ret;
+}
+
+/**
+ *Waits for MQTT recv event, parses, decodes and response and places it into the data/topic buffer
+ *
+ *input:
+ * -self          Calypso object
+ * -encode        Boolean that indicates if the socket is Base64 encoded
+ *
+ *return true  if succeeded
+ *       false otherwise
+ */
+bool Calypso_MQTTgetMessage(CALYPSO *self, bool encoded)
+{
+    if (!Calypso_waitForResponse(self))
+    {
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "No response \r\n");
+        return false;
+#endif
+    }
+
+    if (self->topicName.length != 0)
+    {
+        // #if SERIAL_DEBUG
+        //         SSerial_printf(self->serialDebug, "topic[%i]:%s\r\n", self->topicName.length, self->topicName.data);
+        // #endif
+    }
+    else
+    {
+        return false;
+    }
+
+    if (self->bufferCalypso.length != 0)
+    {
+        if (encoded)
+        {
+            uint32_t elen = 0;
+            char out[CALYPSO_LINE_MAX_SIZE];
+            Calypso_decodeBase64((uint8_t *)self->bufferCalypso.data, self->bufferCalypso.length, (uint8_t *)out,
+                                 &elen);
+            strcpy(self->bufferCalypso.data, out);
+            self->bufferCalypso.length = (int)elen;
+        }
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "Data[%i]:%s\r\n", self->bufferCalypso.length, self->bufferCalypso.data);
+#endif
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
 /**
  * @brief  Publish data to the MQTT broker
  * @param  self Pointer to the calypso object.
@@ -342,15 +475,18 @@ bool Calypso_MQTTconnect(CALYPSO *self) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_MQTTPublishData(CALYPSO *self, char *topic, uint8_t retain,
-                             char *data, int length, bool encode) {
+                             char *data, int length, bool encode)
+{
     bool ret = false;
     int index = MQTT_SOCKET_INDEX;
     pRequestCommand = &requestBuffer[0];
-    if (self->status == calypso_MQTT_connected) {
+    if (self->status == calypso_MQTT_connected)
+    {
         memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
         strcpy(pRequestCommand, "AT+mqttPublish=");
 
-        if (encode) {
+        if (encode)
+        {
             uint32_t elen = 0;
             char out[CALYPSO_LINE_MAX_SIZE];
             Calypso_encodeBase64((uint8_t *)data, length, (uint8_t *)out,
@@ -358,17 +494,23 @@ bool Calypso_MQTTPublishData(CALYPSO *self, char *topic, uint8_t retain,
             ret =
                 ATMQTT_addArgumentsPublish(pRequestCommand, index, topic,
                                            ATMQTT_QOS_QOS1, retain, elen, out);
-        } else {
+        }
+        else
+        {
             ret = ATMQTT_addArgumentsPublish(pRequestCommand, index, topic,
                                              ATMQTT_QOS_QOS1, retain, length,
                                              data);
         }
-        if (ret) {
-            if (Calypso_SendRequest(self, pRequestCommand)) {
+        if (ret)
+        {
+            if (Calypso_SendRequest(self, pRequestCommand))
+            {
                 return (Calypso_waitForEvent(self));
             }
         }
-    } else {
+    }
+    else
+    {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "Publish failed : Not connected to MQTT broker\r\n");
@@ -382,7 +524,8 @@ bool Calypso_MQTTPublishData(CALYPSO *self, char *topic, uint8_t retain,
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_MQTTSet(CALYPSO *self) {
+bool Calypso_MQTTSet(CALYPSO *self)
+{
     bool ret = false;
     int index = MQTT_SOCKET_INDEX;
 
@@ -394,8 +537,10 @@ bool Calypso_MQTTSet(CALYPSO *self) {
         pRequestCommand, index, ATMQTT_SET_OPTION_user,
         self->settings.mqttSettings.userOptions.userName);
 
-    if (ret) {
-        if (!Calypso_SendRequest(self, pRequestCommand)) {
+    if (ret)
+    {
+        if (!Calypso_SendRequest(self, pRequestCommand))
+        {
             return false;
         }
     }
@@ -407,8 +552,10 @@ bool Calypso_MQTTSet(CALYPSO *self) {
         pRequestCommand, index, ATMQTT_SET_OPTION_password,
         self->settings.mqttSettings.userOptions.passWord);
 
-    if (ret) {
-        if (Calypso_SendRequest(self, pRequestCommand)) {
+    if (ret)
+    {
+        if (Calypso_SendRequest(self, pRequestCommand))
+        {
             return true;
         }
     }
@@ -421,7 +568,8 @@ bool Calypso_MQTTSet(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_MQTTConnToBroker(CALYPSO *self) {
+bool Calypso_MQTTConnToBroker(CALYPSO *self)
+{
     bool ret = false;
     int index = MQTT_SOCKET_INDEX;
     pRequestCommand = &requestBuffer[0];
@@ -431,15 +579,19 @@ bool Calypso_MQTTConnToBroker(CALYPSO *self) {
     ret = Calypso_appendArgumentInt(pRequestCommand, index,
                                     (INTFLAGS_NOTATION_DEC | INTFLAGS_UNSIGNED),
                                     STRING_TERMINATE);
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_appendArgumentString(pRequestCommand, CRLF,
                                            STRING_TERMINATE);
     }
 
-    if (ret) {
-        if (Calypso_SendRequest(self, pRequestCommand)) {
+    if (ret)
+    {
+        if (Calypso_SendRequest(self, pRequestCommand))
+        {
             Calypso_HandleEvents(self);
-            if (self->status == calypso_MQTT_connected) {
+            if (self->status == calypso_MQTT_connected)
+            {
                 return true;
             }
         }
@@ -451,7 +603,8 @@ bool Calypso_MQTTConnToBroker(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_MQTTCreate(CALYPSO *self) {
+bool Calypso_MQTTCreate(CALYPSO *self)
+{
     bool ret = false;
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
@@ -462,7 +615,8 @@ bool Calypso_MQTTCreate(CALYPSO *self) {
                                     self->settings.mqttSettings.serverInfo,
                                     self->settings.mqttSettings.secParams,
                                     self->settings.mqttSettings.connParams);
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_appendArgumentString(pRequestCommand, CRLF,
                                            STRING_TERMINATE);
     }
@@ -475,7 +629,8 @@ bool Calypso_MQTTCreate(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_fileList(CALYPSO *self) {
+bool Calypso_fileList(CALYPSO *self)
+{
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+fileGetFileList");
@@ -487,7 +642,8 @@ bool Calypso_fileList(CALYPSO *self) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_fileExists(CALYPSO *self, const char *fileName) {
+bool Calypso_fileExists(CALYPSO *self, const char *fileName)
+{
     return (ATFile_getInfo(self, fileName, 0));
 }
 
@@ -500,7 +656,8 @@ bool Calypso_fileExists(CALYPSO *self, const char *fileName) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_writeFile(CALYPSO *self, const char *path, const char *data,
-                       uint16_t dataLength) {
+                       uint16_t dataLength)
+{
     bool ret = false;
     uint32_t fileID;
     uint32_t sToken;
@@ -513,11 +670,16 @@ bool Calypso_writeFile(CALYPSO *self, const char *path, const char *data,
 
     ret = ATFile_open(self, path, ATFILE_OPEN_CREATE | ATFILE_OPEN_OVERWRITE,
                       dataLength, &fileID, &sToken);
-    if (ret) {
-        while (bytesRemaining > 0) {
-            if (bytesRemaining > CALYPSO_FILE_WRITE_SIZE_MAX) {
+    if (ret)
+    {
+        while (bytesRemaining > 0)
+        {
+            if (bytesRemaining > CALYPSO_FILE_WRITE_SIZE_MAX)
+            {
                 writeSize = CALYPSO_FILE_WRITE_SIZE_MAX - 1;
-            } else {
+            }
+            else
+            {
                 writeSize = bytesRemaining;
             }
             memcpy(dataToWrite, data + startIdx, writeSize);
@@ -526,16 +688,20 @@ bool Calypso_writeFile(CALYPSO *self, const char *path, const char *data,
             ret =
                 ATFile_write(self, fileID, startIdx, Calypso_DataFormat_Binary,
                              false, writeSize, dataToWrite, &bytesWritten);
-            if (!ret) {
+            if (!ret)
+            {
                 break;
             }
             startIdx = startIdx + bytesWritten;
             bytesRemaining = bytesRemaining - bytesWritten;
         }
     }
-    if (ret) {
+    if (ret)
+    {
         return (ATFile_close(self, fileID, NULL, NULL));
-    } else {
+    }
+    else
+    {
         ret = ATFile_close(self, fileID, NULL, NULL);
         return false;
     }
@@ -552,25 +718,29 @@ bool Calypso_writeFile(CALYPSO *self, const char *path, const char *data,
  * @retval true if successful false in case of failure
  */
 bool ATFile_open(CALYPSO *self, const char *fileName, uint32_t options,
-                 uint16_t fileSize, uint32_t *fileID, uint32_t *secureToken) {
+                 uint16_t fileSize, uint32_t *fileID, uint32_t *secureToken)
+{
     bool ret = false;
 
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+fileOpen=");
 
-    if (fileSize < FILE_MIN_SIZE) {
+    if (fileSize < FILE_MIN_SIZE)
+    {
         fileSize = FILE_MIN_SIZE;
     }
 
     ret = ATFile_AddArgumentsFileOpen(pRequestCommand, fileName, options,
                                       fileSize);
 
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_SendRequest(self, pRequestCommand);
     }
 
-    if (ret) {
+    if (ret)
+    {
         char *temp = self->bufferCalypso.data;
         ret = ATFile_ParseResponseFileOpen(&temp, fileID, secureToken);
     }
@@ -586,7 +756,8 @@ bool ATFile_open(CALYPSO *self, const char *fileName, uint32_t options,
  * @retval true if successful false in case of failure
  */
 bool ATFile_close(CALYPSO *self, uint32_t fileID, char *certFileName,
-                  char *signature) {
+                  char *signature)
+{
     bool ret = false;
 
     pRequestCommand = &requestBuffer[0];
@@ -596,7 +767,8 @@ bool ATFile_close(CALYPSO *self, uint32_t fileID, char *certFileName,
     ret = ATFile_AddArgumentsFileClose(pRequestCommand, fileID, certFileName,
                                        signature);
 
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_SendRequest(self, pRequestCommand);
     }
 
@@ -617,7 +789,8 @@ bool ATFile_close(CALYPSO *self, uint32_t fileID, char *certFileName,
  */
 bool ATFile_write(CALYPSO *self, uint32_t fileID, uint16_t offset,
                   Calypso_DataFormat_t format, bool encodeToBase64,
-                  uint16_t bytestoWrite, char *data, uint16_t *writtenBytes) {
+                  uint16_t bytestoWrite, char *data, uint16_t *writtenBytes)
+{
     bool ret = false;
 
     pRequestCommand = &requestBuffer[0];
@@ -627,11 +800,13 @@ bool ATFile_write(CALYPSO *self, uint32_t fileID, uint16_t offset,
     ret = ATFile_AddArgumentsFileWrite(pRequestCommand, fileID, offset, format,
                                        encodeToBase64, bytestoWrite, data);
 
-    if (ret) {
+    if (ret)
+    {
         Calypso_SendRequest(self, pRequestCommand);
     }
 
-    if (ret) {
+    if (ret)
+    {
         char *temp = self->bufferCalypso.data;
         ret = ATFile_ParseResponseFileWrite(&temp, writtenBytes);
     }
@@ -654,7 +829,8 @@ bool ATFile_write(CALYPSO *self, uint32_t fileID, uint16_t offset,
 bool ATFile_read(CALYPSO *self, uint32_t fileID, uint16_t offset,
                  Calypso_DataFormat_t format, uint16_t bytesToRead,
                  Calypso_DataFormat_t *pOutFormat, uint16_t *byteRead,
-                 char *data) {
+                 char *data)
+{
     bool ret = false;
 
     pRequestCommand = &requestBuffer[0];
@@ -664,11 +840,13 @@ bool ATFile_read(CALYPSO *self, uint32_t fileID, uint16_t offset,
     ret = ATFile_AddArgumentsFileRead(pRequestCommand, fileID, offset, format,
                                       bytesToRead);
 
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_SendRequest(self, pRequestCommand);
     }
 
-    if (ret) {
+    if (ret)
+    {
         char *temp = self->bufferCalypso.data;
         ret = ATFile_ParseResponseFileRead(&temp, pOutFormat, byteRead, data);
     }
@@ -683,7 +861,8 @@ bool ATFile_read(CALYPSO *self, uint32_t fileID, uint16_t offset,
  * @param  secureToken Secure token
  * @retval true if successful false in case of failure
  */
-bool ATFile_del(CALYPSO *self, const char *fileName, uint32_t secureToken) {
+bool ATFile_del(CALYPSO *self, const char *fileName, uint32_t secureToken)
+{
     bool ret = false;
 
     pRequestCommand = &requestBuffer[0];
@@ -692,7 +871,8 @@ bool ATFile_del(CALYPSO *self, const char *fileName, uint32_t secureToken) {
 
     ret = ATFile_AddArgumentsFileDel(pRequestCommand, fileName, secureToken);
 
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_SendRequest(self, pRequestCommand);
     }
 
@@ -706,7 +886,8 @@ bool ATFile_del(CALYPSO *self, const char *fileName, uint32_t secureToken) {
  * @param  secureToken Secure token
  * @retval true if successful false in case of failure
  */
-bool ATFile_getInfo(CALYPSO *self, const char *fileName, uint32_t secureToken) {
+bool ATFile_getInfo(CALYPSO *self, const char *fileName, uint32_t secureToken)
+{
     bool ret = false;
 
     pRequestCommand = &requestBuffer[0];
@@ -715,7 +896,8 @@ bool ATFile_getInfo(CALYPSO *self, const char *fileName, uint32_t secureToken) {
 
     ret = ATFile_AddArgumentsFileDel(pRequestCommand, fileName, secureToken);
 
-    if (ret) {
+    if (ret)
+    {
         ret = Calypso_SendRequest(self, pRequestCommand);
     }
 
@@ -728,14 +910,17 @@ bool ATFile_getInfo(CALYPSO *self, const char *fileName, uint32_t secureToken) {
  * @param  sendCmd Pointer to command
  * @retval true if successful false in case of failure
  */
-bool Calypso_SendRequest(CALYPSO *self, const char *sendCmd) {
+bool Calypso_SendRequest(CALYPSO *self, const char *sendCmd)
+{
     bool ret = false;
     int retries = 0;
-    while (!ret) {
+    while (!ret)
+    {
         Calypso_Sendbytes(self, sendCmd);
         ret = Calypso_waitForReply(self, Calypso_CNFStatus_Success, true);
         retries++;
-        if (retries == MAX_RETRIES) {
+        if (retries == MAX_RETRIES)
+        {
             break;
         }
     }
@@ -748,7 +933,8 @@ bool Calypso_SendRequest(CALYPSO *self, const char *sendCmd) {
  * @param  sendCmd Pointer to the data to send
  * @retval true if successful false in case of failure
  */
-void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd) {
+void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd)
+{
     requestPending = true;
     lengthResponse = 0;
 #if SERIAL_DEBUG
@@ -757,11 +943,14 @@ void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd) {
     SSerial_printf(self->serialDebug, "\r\n");
 #endif
     int written = 1;
-    while (written) {
-        while (HSerial_available(self->serialCalypso)) {
+    while (written)
+    {
+        while (HSerial_available(self->serialCalypso))
+        {
             HSerial_read(self->serialCalypso);
         }
-        if (strlen(sendCmd) <= HSerial_availableForWrite(self->serialCalypso)) {
+        if (strlen(sendCmd) <= HSerial_availableForWrite(self->serialCalypso))
+        {
             HSerial_writeB(self->serialCalypso, sendCmd, strlen(sendCmd));
             HSerial_writeB(self->serialCalypso, "\r\n", 2);
             written = 0;
@@ -774,14 +963,17 @@ void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd) {
  * @param  self Pointer to the calypso object.
  * @retval true if successful false in case of failure
  */
-bool Calypso_waitForEvent(CALYPSO *self) {
+bool Calypso_waitForEvent(CALYPSO *self)
+{
     int count = 0;
     int time_step_ms = 5; /* 5ms */
     int max_count = EVENT_WAIT_TIME / time_step_ms;
     eventPending = true;
-    while (eventPending) {
+    while (eventPending)
+    {
         Calypso_RxBytes(self);
-        if (count >= max_count) {
+        if (count >= max_count)
+        {
             break;
         }
         /* wait */
@@ -799,27 +991,35 @@ bool Calypso_waitForEvent(CALYPSO *self) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_waitForReply(CALYPSO *self, Calypso_CNFStatus_t expectedStatus,
-                          bool reset_confirmstate) {
+                          bool reset_confirmstate)
+{
     int count = 0;
     int time_step_ms = 5; /* 5ms */
     int max_count = RESPONSE_WAIT_TIME / time_step_ms;
 
-    if (reset_confirmstate) {
+    if (reset_confirmstate)
+    {
         cmdConfirmation = Calypso_CNFStatus_Invalid;
     }
 
-    while (1) {
+    while (1)
+    {
         Calypso_RxBytes(self);
-        if (Calypso_CNFStatus_Invalid != cmdConfirmation) {
+        if (Calypso_CNFStatus_Invalid != cmdConfirmation)
+        {
             requestPending = false;
-            if (cmdConfirmation == expectedStatus) {
+            if (cmdConfirmation == expectedStatus)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        if (count >= max_count) {
+        if (count >= max_count)
+        {
             /* received no correct response within timeout */
             requestPending = false;
             return false;
@@ -837,7 +1037,8 @@ bool Calypso_waitForReply(CALYPSO *self, Calypso_CNFStatus_t expectedStatus,
  * @param  self Pointer to the calypso object.
  * @retval none
  */
-void Calypso_HandleEvents(CALYPSO *self) {
+void Calypso_HandleEvents(CALYPSO *self)
+{
     strcpy(eventbuffer, self->bufferCalypso.data);
     pEventBuffer = eventbuffer;
     bool ret = false;
@@ -845,126 +1046,163 @@ void Calypso_HandleEvents(CALYPSO *self) {
 
     ATEvent_parseEventName(&pEventBuffer, &event);
 
-    switch (event) {
-        case ATEvent_Startup: {
-            char value[32];
-            Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
-            Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
-            Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
-            self->status = calypso_started;
-            strcpy(self->MAC_ADDR, value);
-            // SSerial_printf(self->serialDebug, "Calypso MAC address: %s\r\n",
-            // self->MAC_ADDR);
-            eventPending = false;
-            break;
-        }
+    switch (event)
+    {
+    case ATEvent_Startup:
+    {
+        char value[32];
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        self->status = calypso_started;
+        strcpy(self->MAC_ADDR, value);
+        // SSerial_printf(self->serialDebug, "Calypso MAC address: %s\r\n",
+        // self->MAC_ADDR);
+        eventPending = false;
+        break;
+    }
 
-        case ATEvent_NetappIP4Aquired: {
-            // ATEvent_parseEventArgumentValues(&pEventBuffer, event,
-            // &eventArguments[0]);
-            self->status = calypso_WLAN_connected;
-            eventPending = false;
-            // ATEvent_NetappIP4Aquired_t *ip4Acquired =
-            // (ATEvent_NetappIP4Aquired_t *)eventArguments;
-            // SSerial_printf(self->serialDebug, "Calypso connected. IP
-            // acquired: %s\r\n", ip4Acquired->address);
-            break;
-        }
-        case ATEvent_MQTTOperation: {
-            char value[32];
-            int connackCode = 0;
+    case ATEvent_NetappIP4Aquired:
+    {
+        // ATEvent_parseEventArgumentValues(&pEventBuffer, event,
+        // &eventArguments[0]);
+        self->status = calypso_WLAN_connected;
+        eventPending = false;
+        // ATEvent_NetappIP4Aquired_t *ip4Acquired =
+        // (ATEvent_NetappIP4Aquired_t *)eventArguments;
+        // SSerial_printf(self->serialDebug, "Calypso connected. IP
+        // acquired: %s\r\n", ip4Acquired->address);
+        break;
+    }
+    case ATEvent_MQTTOperation:
+    {
+        char value[32];
+        int connackCode = 0;
 
-            ret = Calypso_getNextArgumentString(&pEventBuffer, value,
-                                                ARGUMENT_DELIM);
-            if (ret) {
-                ret = false;
-                if (0 == strcasecmp(value, "connack")) {
-                    ret = Calypso_getNextArgumentInt(
-                        &pEventBuffer, &connackCode, INTFLAGS_SIZE16,
-                        STRING_TERMINATE);
-                    if (ret) {
-                        switch (connackCode) {
-                            case 0:
+        ret = Calypso_getNextArgumentString(&pEventBuffer, value,
+                                            ARGUMENT_DELIM);
+        if (ret)
+        {
+            ret = false;
+            if (0 == strcasecmp(value, "connack"))
+            {
+                ret = Calypso_getNextArgumentInt(
+                    &pEventBuffer, &connackCode, INTFLAGS_SIZE16,
+                    STRING_TERMINATE);
+                if (ret)
+                {
+                    switch (connackCode)
+                    {
+                    case 0:
 #if SERIAL_DEBUG
-                                SSerial_printf(
-                                    self->serialDebug,
-                                    "MQTT connection accepted %i\r\n",
-                                    connackCode);
+                        SSerial_printf(
+                            self->serialDebug,
+                            "MQTT connection accepted %i\r\n",
+                            connackCode);
 #endif
-                                self->status = calypso_MQTT_connected;
-                                break;
-                            case 1:
+                        self->status = calypso_MQTT_connected;
+                        break;
+                    case 1:
 #if SERIAL_DEBUG
-                                SSerial_printf(
-                                    self->serialDebug,
-                                    "MQTT connection refused, Unacceptable "
-                                    "protocol version %i\r\n",
-                                    connackCode);
+                        SSerial_printf(
+                            self->serialDebug,
+                            "MQTT connection refused, Unacceptable "
+                            "protocol version %i\r\n",
+                            connackCode);
 #endif
-                                break;
-                            case 2:
+                        break;
+                    case 2:
 #if SERIAL_DEBUG
-                                SSerial_printf(
-                                    self->serialDebug,
-                                    "MQTT connection refused,Identifier "
-                                    "rejected %i\r\n",
-                                    connackCode);
+                        SSerial_printf(
+                            self->serialDebug,
+                            "MQTT connection refused,Identifier "
+                            "rejected %i\r\n",
+                            connackCode);
 #endif
-                                break;
-                            case 3:
+                        break;
+                    case 3:
 #if SERIAL_DEBUG
-                                SSerial_printf(self->serialDebug,
-                                               "MQTT connection refused, "
-                                               "Server unavailable %i\r\n",
-                                               connackCode);
+                        SSerial_printf(self->serialDebug,
+                                       "MQTT connection refused, "
+                                       "Server unavailable %i\r\n",
+                                       connackCode);
 #endif
-                                break;
-                            case 4:
+                        break;
+                    case 4:
 #if SERIAL_DEBUG
-                                SSerial_printf(self->serialDebug,
-                                               "MQTT connection refused, Bad "
-                                               "user name or password %i\r\n",
-                                               connackCode);
+                        SSerial_printf(self->serialDebug,
+                                       "MQTT connection refused, Bad "
+                                       "user name or password %i\r\n",
+                                       connackCode);
 #endif
-                                break;
-                            case 5:
+                        break;
+                    case 5:
 #if SERIAL_DEBUG
-                                SSerial_printf(self->serialDebug,
-                                               "MQTT connection refused, not "
-                                               "authorized %i\r\n",
-                                               connackCode);
+                        SSerial_printf(self->serialDebug,
+                                       "MQTT connection refused, not "
+                                       "authorized %i\r\n",
+                                       connackCode);
 #endif
-                                break;
-                            case 256:
+                        break;
+                    case 256:
 #if SERIAL_DEBUG
-                                SSerial_printf(
-                                    self->serialDebug,
-                                    "MQTT connection accepted %i\r\n",
-                                    connackCode);
+                        SSerial_printf(
+                            self->serialDebug,
+                            "MQTT connection accepted %i\r\n",
+                            connackCode);
 #endif
-                                self->status = calypso_MQTT_connected;
-                                break;
-                            default:
+                        self->status = calypso_MQTT_connected;
+                        break;
+                    default:
 #if SERIAL_DEBUG
-                                SSerial_printf(self->serialDebug,
-                                               "MQTT connection refused %i\r\n",
-                                               connackCode);
+                        SSerial_printf(self->serialDebug,
+                                       "MQTT connection refused %i\r\n",
+                                       connackCode);
 #endif
-                                break;
-                        }
+                        break;
                     }
-                } else if (0 == strcasecmp(value, "puback")) {
-                    // SSerial_printf(self->serialDebug, "MQTT Puback\r\n");
                 }
             }
-
-            eventPending = false;
-            break;
+            else if (0 == strcasecmp(value, "puback"))
+            {
+                // SSerial_printf(self->serialDebug, "MQTT Puback\r\n");
+            }
+            else if (0 == strcasecmp(value, "suback"))
+            {
+                char value[64];
+                Calypso_getNextArgumentString(&pEventBuffer, value, STRING_TERMINATE);
+                SSerial_printf(self->serialDebug, "MQTT Suback:%s\r\n", value);
+            }
         }
 
-        default: {
-            break;
-        }
+        eventPending = false;
+        break;
+    }
+    case ATEvent_MQTTRecv:
+    {
+        SSerial_printf(self->serialDebug, "MQTT recv\r\n");
+        char value[CALYPSO_LINE_MAX_SIZE];
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        strcpy(self->topicName.data, value);
+        self->topicName.length = strlen(value);
+
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        Calypso_getNextArgumentString(&pEventBuffer, value, ARGUMENT_DELIM);
+        ret = Calypso_getNextArgumentInt(
+            &pEventBuffer, &self->bufferCalypso.length, INTFLAGS_SIZE16,
+            ARGUMENT_DELIM);
+        Calypso_getNextArgumentString(&pEventBuffer, value, STRING_TERMINATE);
+        strcpy(self->bufferCalypso.data, value);
+        eventPending = false;
+        break;
+    }
+
+    default:
+    {
+        break;
+    }
     }
 }
 
@@ -975,37 +1213,52 @@ void Calypso_HandleEvents(CALYPSO *self) {
  * @param  rxLength Length of the line
  * @retval none
  */
-void Calypso_HandleRxLine(CALYPSO *self, char *rxPacket, uint16_t rxLength) {
+void Calypso_HandleRxLine(CALYPSO *self, char *rxPacket, uint16_t rxLength)
+{
     /* AT command was sent to module. Waiting fot response*/
-    if (requestPending) {
+    if (requestPending)
+    {
         /* If starts with 'O', check if response is "OK\r\n" */
-        if (('O' == rxPacket[0]) || ('o' == rxPacket[0])) {
+        if (('O' == rxPacket[0]) || ('o' == rxPacket[0]))
+        {
             if (0 ==
-                strncasecmp(&rxPacket[0], RESPONSE_OK, strlen(RESPONSE_OK))) {
+                strncasecmp(&rxPacket[0], RESPONSE_OK, strlen(RESPONSE_OK)))
+            {
                 cmdConfirmation = Calypso_CNFStatus_Success;
-            } else {
+            }
+            else
+            {
                 cmdConfirmation = Calypso_CNFStatus_Failed;
             }
         }
         /* If starts with 'E', check if response is "Error:[arguments]\r\n" */
-        else if (('E' == rxPacket[0]) || ('e' == rxPacket[0])) {
+        else if (('E' == rxPacket[0]) || ('e' == rxPacket[0]))
+        {
             if (!(0 == strncasecmp(&rxPacket[0], RESPONSE_Error,
-                                   strlen(RESPONSE_Error)))) {
+                                   strlen(RESPONSE_Error))))
+            {
                 cmdConfirmation = Calypso_CNFStatus_Success;
-            } else {
+            }
+            else
+            {
                 cmdConfirmation = Calypso_CNFStatus_Failed;
             }
-        } else {
-            if (rxLength < CALYPSO_LINE_MAX_SIZE) {
+        }
+        else
+        {
+            if (rxLength < CALYPSO_LINE_MAX_SIZE)
+            {
                 memcpy(self->bufferCalypso.data, RxBuffer, rxLength);
                 lengthResponse += rxLength;
                 self->bufferCalypso.length = lengthResponse;
             }
         }
-    } else
+    }
+    else
     /* If no request is pending, an event was received*/
     {
-        if (rxLength != 0) {
+        if (rxLength != 0)
+        {
             memcpy(self->bufferCalypso.data, RxBuffer, rxLength);
             self->bufferCalypso.length = rxLength;
             Calypso_HandleEvents(self);
@@ -1018,7 +1271,8 @@ void Calypso_HandleRxLine(CALYPSO *self, char *rxPacket, uint16_t rxLength) {
  * @param  self Pointer to the calypso object.
  * @retval none
  */
-void Calypso_RxBytes(CALYPSO *self) {
+void Calypso_RxBytes(CALYPSO *self)
+{
     uint16_t RxByteCounter = 0;
     uint8_t readBuffer;
     bool returnFound = false;
@@ -1026,39 +1280,50 @@ void Calypso_RxBytes(CALYPSO *self) {
     while (!HSerial_available(self->serialCalypso) &&
            start <= RESPONSE_WAIT_TIME)
         ;
-    while (HSerial_available(self->serialCalypso)) {
+    while (HSerial_available(self->serialCalypso))
+    {
         readBuffer = HSerial_read(self->serialCalypso);
-        switch (RxByteCounter) {
-            case 0: {
-                /* Possible responses: OK, Error, +[event], +[cmdResponse] */
-                if (('O' == readBuffer) || ('o' == readBuffer) ||
-                    ('E' == readBuffer) || ('e' == readBuffer) ||
-                    ('+' == readBuffer)) {
-                    RxBuffer[RxByteCounter++] = readBuffer;
-                }
-                break;
+        switch (RxByteCounter)
+        {
+        case 0:
+        {
+            /* Possible responses: OK, Error, +[event], +[cmdResponse] */
+            if (('O' == readBuffer) || ('o' == readBuffer) ||
+                ('E' == readBuffer) || ('e' == readBuffer) ||
+                ('+' == readBuffer))
+            {
+                RxBuffer[RxByteCounter++] = readBuffer;
             }
-            default: {
-                if (RxByteCounter >= CALYPSO_LINE_MAX_SIZE) {
-                    RxByteCounter = 0;
-                }
+            break;
+        }
+        default:
+        {
+            if (RxByteCounter >= CALYPSO_LINE_MAX_SIZE)
+            {
+                RxByteCounter = 0;
+            }
 
-                if (readBuffer == '\r') {
-                    returnFound = true;
-                } else if (returnFound && (readBuffer == '\n')) {
-                    /* interpret it now */
-                    RxBuffer[RxByteCounter++] = (uint8_t)'\0';
-#if SERIAL_DEBUG
-                    SSerial_printf(self->serialDebug, "%s\n", RxBuffer);
-#endif
-                    Calypso_HandleRxLine(self, RxBuffer, RxByteCounter);
-                    returnFound = false;
-                    RxByteCounter = 0;
-                } else {
-                    RxBuffer[RxByteCounter++] = readBuffer;
-                }
-                break;
+            if (readBuffer == '\r')
+            {
+                returnFound = true;
             }
+            else if (returnFound && (readBuffer == '\n'))
+            {
+                /* interpret it now */
+                RxBuffer[RxByteCounter++] = (uint8_t)'\0';
+#if SERIAL_DEBUG
+                SSerial_printf(self->serialDebug, "%s\n", RxBuffer);
+#endif
+                Calypso_HandleRxLine(self, RxBuffer, RxByteCounter);
+                returnFound = false;
+                RxByteCounter = 0;
+            }
+            else
+            {
+                RxBuffer[RxByteCounter++] = readBuffer;
+            }
+            break;
+        }
         }
     }
 }

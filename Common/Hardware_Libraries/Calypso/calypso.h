@@ -301,6 +301,7 @@ extern "C"
     bool ATWLAN_addConnectionArguments(char *pOutString, ATWLAN_ConnectionArguments_t connectionArgs, char lastDelim);
     bool Calypso_getNextArgumentString(char **pInArguments, char *pOutargument, char delim);
     bool Calypso_encodeBase64(uint8_t *inputData, uint32_t inputLength, uint8_t *outputData, uint32_t *outputLength);
+    bool Calypso_decodeBase64(uint8_t *inputData, uint32_t inputLength, uint8_t *outputData, uint32_t *outputLength);
     bool Calypso_getCmdName(char **pInAtCmd, char *pCmdName, char delim);
     bool Calypso_getNextArgumentInt(char **pInArguments, void *pOutargument, uint16_t intflags, char delim);
     bool ATSocket_parseSocketFamily(const char *familyString, ATSocket_Family_t *pOutFamily);
@@ -312,6 +313,8 @@ extern "C"
 
     bool ATMQTT_addArgumentsSet(char *pAtCommand, uint8_t index, uint8_t option, void *pValues);
     bool ATMQTT_addArgumentsPublish(char *pAtCommand, uint8_t index, char *topicString, ATMQTT_QoS_t QoS, uint8_t retain, uint16_t messageLength, char *pMessage);
+    bool ATMQTT_addArgumentsSubscribe(char *pAtCommand, uint8_t index, uint8_t numOfTopics, ATMQTT_subscribeTopic_t *pTopics);
+
     bool ATFile_AddArgumentsFileOpen(char *pAtCommand, const char *fileName, uint32_t options, uint16_t fileSize);
     bool ATFile_AddArgumentsFileClose(char *pAtCommand, uint32_t fileID, const char *certName, const char *signature);
     bool ATFile_AddArgumentsFileDel(char *pAtCommand, const char *fileName, uint32_t secureToken);
