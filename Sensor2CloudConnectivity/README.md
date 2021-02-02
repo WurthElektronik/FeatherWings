@@ -46,7 +46,7 @@ The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connect
 * **MQTT_PORT**: **8883**
 * **MQTT_TOPIC**: ```devices/<device name>/messages/events/```
 * **MQTT_USER_NAME**: ``` hostname/device name ```
-* **MQTT_PASSWORD**: Shared Access Signature (**SAS**)
+* **MQTT_PASSWORD**: Shared Access Signature (**SAS**). Creation described in the [Azure](azure/).
 
 For example,
 ```C
