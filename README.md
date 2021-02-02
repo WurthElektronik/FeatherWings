@@ -35,7 +35,7 @@ Hypercharge your prototyping for easy and fast solution testing.
 > **Note**: Wait until PlatformIO is installed.
 > Instalation process can be slow, depending on speed and network connection of your computer.
 
-3. After the PlatformIO extension has been installed follow the on screen instructions and **restart Visual Studio Code**.
+3. After the PlatformIO extension has been installed follow the on screen instructions and **restart Visual Studio Code**.                                                                                               
 ![RestartVSCode](assets/PlatformIO_Install_finished.png)
 
 The PlatformIO extension will then be loaded in Visual Studio Code and its icon will appear in the Visual Studio Code menu bar on the left side.
