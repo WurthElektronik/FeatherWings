@@ -75,24 +75,24 @@ To send data to the IoTHub, the easiest way is to use our example code together 
 
 ## Create device SAS token
 1. Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
-Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. 
+Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code.                                                        
 ![Install Azure IoT-Hub Extension](assets/azure-iot-hub-extension.png)
 
-2. In Explorer of VS Code, click "Azure IoT Hub" in the bottom left corner.
+2. In Explorer of VS Code, click "Azure IoT Hub" in the bottom left corner.                                                
 ![Click Device Explorer](assets/device-explorer-click.png)
 
 Sign in to Azure to select IoT Hub from your Azure Subscription.
 
-3. Click "Select IoT Hub" in context menu.
+3. Click "Select IoT Hub" in context menu.                                                                          
 ![Select IoT Hub](assets/select-iot-hub.png)
 
 4. If you have not signed in to Azure, a pop-up will show to let you sign in to Azure.
 5. After you sign in, your Azure Subscription list will be shown, then select an Azure Subscription.
 6. Your IoT Hub list will be shown, then select an IoT Hub.
-7. The devices and endpoints list will be shown.
+7. The devices and endpoints list will be shown.                                                                 
 ![IoT Hub Explorer](assets/iot-hub-explorer.png)
 
-8. Right click on the device and select **Generate SAS Token for Device**
+8. Right click on the device and select **Generate SAS Token for Device**                                                    
 ![SAS token](assets/create-sas-token.png)
 
 9. Copy generated SAS token to Sensor2Cloud Workspace ``main.c`` file.
