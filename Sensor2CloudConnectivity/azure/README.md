@@ -237,11 +237,10 @@ If not already signed to Azure Cloud, use the extension to sign in to Azure to s
 2. If you have not signed in to Azure, a pop-up will show to let you sign in to Azure.
 3. After you sign in, your Azure Subscription list will be shown, then select an Azure Subscription.
 4. Your IoT Hub list will be shown, then select an IoT Hub.
-5. The devices and endpoints list will be shown.
-
+5. The devices and endpoints list will be shown.                                                           
 ![IoT Hub Explorer](assets/iot-hub-explorer.png)
 
-6. Right click on the device and select **Start Monitoring Built-in Event Endpoint**.
+6. Right click on the device and select **Start Monitoring Built-in Event Endpoint**.                       
 ![Start monitoring Built-in Event Endpoint](assets/monitore-built-in-devices.png)
 
 
