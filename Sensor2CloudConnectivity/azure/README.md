@@ -33,7 +33,7 @@ To use the steps in this tutorial, you need an [Azure subscription](https://azur
 
 * **Pricing and scale tier**: Your selected tier. You can choose from several tiers, depending on how many features you want and how many messages you send through your solution per day. The free tier is intended for testing and evaluation. It allows 500 devices to be connected to the hub and up to 8,000 messages per day. Each Azure subscription can create one IoT hub in the free tier.
 
-If you are working through a Quickstart for IoT Hub device streams, select the free tier.
+If you are working through a Quick start for IoT Hub device streams, select the free tier.
 
 * **IoT Hub units**: The number of messages allowed per unit per day depends on your hub's pricing tier. For example, if you want the hub to support ingress of 700,000 messages, you choose two S1 tier units. For details about the other tier options, see [Choosing the right IoT Hub tier](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-scaling).
 
@@ -71,6 +71,31 @@ In this section, you create a device identity in the identity registry in your I
 ## Send data to the IoTHub
 
 To send data to the IoTHub, the easiest way is to use our example code together with the Calypso WiFi FeatherWing, if you have a M0 microprocessor Feather and WE Sensor FeatherWing.
+
+
+## Create device SAS token
+1. Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
+Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. 
+![Install Azure IoT-Hub Extension](assets/azure-iot-hub-extension.png)
+
+2. In Explorer of VS Code, click "Azure IoT Hub" in the bottom left corner.
+![Click Device Explorer](assets/device-explorer-click.png)
+
+Sign in to Azure to select IoT Hub from your Azure Subscription.
+
+3. Click "Select IoT Hub" in context menu.
+![Select IoT Hub](assets/select-iot-hub.png)
+
+4. If you have not signed in to Azure, a pop-up will show to let you sign in to Azure.
+5. After you sign in, your Azure Subscription list will be shown, then select an Azure Subscription.
+6. Your IoT Hub list will be shown, then select an IoT Hub.
+7. The devices and endpoints list will be shown.
+![IoT Hub Explorer](assets/iot-hub-explorer.png)
+
+8. Right click on the device and select **Generate SAS Token for Device**
+![SAS token](assets/create-sas-token.png)
+
+9. Copy generated SAS token to Sensor2Cloud Workspace ``main.c`` file.
 
 
 ## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
@@ -192,8 +217,7 @@ In the Stream Analytics job, select Overview, then select Start > Now > Start. O
 
 ## Visualize real-time sensor data from Azure IoT Hub in Visual Studio Code
 
-Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
-Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download the Azure IoT Toolkit extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit) from the marketplace, or install it directly from the extension gallery in Visual Studio Code. 
+As already mentioned in previous topics, Visual studio code can connect to the Azure IoT Hub directly using [Azure IoT Hub Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)
 
 
 ### Necessary Steps
@@ -204,7 +228,7 @@ Azure IoTHub Extension is part of Azure IoT Tools extension. You can [download t
 
 ### Sign in to Azure
 
-Sign in to Azure to select IoT Hub from your Azure Subscription.
+If not already signed to Azure Cloud, use the extension to sign in to Azure to select IoT Hub from your Azure Subscription.
 
 1. Click "Select IoT Hub" in context menu.
 
@@ -217,7 +241,9 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 
 ![IoT Hub Explorer](assets/iot-hub-explorer.png)
 
-6. Select Start Monitoring Built-in Event Endpoint
+6. Right click on the device and select **Start Monitoring Built-in Event Endpoint**.
+![Start monitoring Built-in Event Endpoint](assets/monitore-built-in-devices.png)
+
 
 ## Visualize real-time sensor data from Azure IoT Hub using PowerBI
 
