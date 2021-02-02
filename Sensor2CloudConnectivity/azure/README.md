@@ -33,7 +33,7 @@ To use the steps in this tutorial, you need an [Azure subscription](https://azur
 
 * **Pricing and scale tier**: Your selected tier. You can choose from several tiers, depending on how many features you want and how many messages you send through your solution per day. The free tier is intended for testing and evaluation. It allows 500 devices to be connected to the hub and up to 8,000 messages per day. Each Azure subscription can create one IoT hub in the free tier.
 
-If you are working through a Quickstart for IoT Hub device streams, select the free tier.
+If you are working through a Quick start for IoT Hub device streams, select the free tier.
 
 * **IoT Hub units**: The number of messages allowed per unit per day depends on your hub's pricing tier. For example, if you want the hub to support ingress of 700,000 messages, you choose two S1 tier units. For details about the other tier options, see [Choosing the right IoT Hub tier](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-scaling).
 
@@ -95,7 +95,7 @@ Sign in to Azure to select IoT Hub from your Azure Subscription.
 8. Right click on the device and select **Generate SAS Token for Device**
 ![SAS token](assets/create-sas-token.png)
 
-9. Copy genearted SAS token to Sensor2Cloud Workspace ``main.c`` file.
+9. Copy generated SAS token to Sensor2Cloud Workspace ``main.c`` file.
 
 
 ## Visualize real-time sensor data from Azure IoT Hub using Power BI or Excel
@@ -242,7 +242,7 @@ If not already signed to Azure Cloud, use the extension to sign in to Azure to s
 ![IoT Hub Explorer](assets/iot-hub-explorer.png)
 
 6. Right click on the device and select **Start Monitoring Built-in Event Endpoint**.
-![Start monitoring Built-in Event Enpoint](assets/monitore-built-in-devices.png)
+![Start monitoring Built-in Event Endpoint](assets/monitore-built-in-devices.png)
 
 
 ## Visualize real-time sensor data from Azure IoT Hub using PowerBI
