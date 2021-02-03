@@ -24,26 +24,26 @@ Start by checking our [quick start section](#Quick-start-guide).
 
 **Read this documentation!**
 
-This step-by-step description will guide you through the setup process for taking WE Featherwings into operation  and help avoid the most common mistakes.
+This step-by-step description will guide you through the setup process for taking WE FeatherWings into operation  and help avoid the most common mistakes.
 
 ### Hardware requirements
 
 1. Adafruit feather M0 - Featherwings are stackable, add-on boards that bring additional functionality to any Feather board. The current repository contains software developed on the [Adafruit Feather M0 express](https://www.adafruit.com/product/3403).
 
->Note: The WE featherwings can be operated only in combination with a Feather. Please use the Feather M0 express for the quick start examples.
+>**Note**: The WE FeatherWings can be operated only in combination with a Feather. Please use the Feather M0 express for the quick start examples.
 
 2. WE FeatherWing - Please choose the FeatherWing of interest or a combination of FeatherWings and stack it on to the Feather.
 
 3. Stable power supply - Please ensure that the boards are powered using a clean and stable power supply. The following input options are available,
 - **USB** interface on the M0 feather. 
->Note: Please use this option for the quick start examples. The USB interface will also be used to upload the example code to the microcontroller.
+>**Note**: Please use this option for the quick start examples. The USB interface will also be used to upload the example code to the microcontroller.
 
 - **LiPo** - For low power applications, it is also possible to connect a LiPo battery. Please ensure that the battery can deliver sufficient current at the desired voltage for the combination of boards used.
 
-- [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing) - Stack on this WE featherwing to use a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails).
+- [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing) - Stack on this WE FeatherWing to use a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails).
 
 4. Computing device with sufficient memory and an internet connection. 
->Note: The software tools used in the quick start example require up to 2 GB of storage.
+>**Note**: The software tools used in the quick start example require up to 2 GB of data storage.
 
 
 ### Software installation
@@ -64,16 +64,16 @@ In order to enable ease of prototyping, we use the popular cross platform integr
 > Installation process can be slow, depending on speed and network connection of your computer. 
 
 3. After the PlatformIO extension has been installed follow the on screen instructions to **restart** Visual Studio Code.                                                                                               
-![RestartVSCode](assets/PlatformIO_Install_finished.png)
+![Restart VS Code](assets/PlatformIO_Install_finished.png)
 
 The PlatformIO extension will then be loaded in Visual Studio Code and its icon will appear in the Visual Studio Code menu bar on the left side.
 
 ### Running the sample applications
 
-1. **Download documentation and example code** from https://github.com/WurthElektronik/FeatherWings using git clone or a simple zip file.     
-![DownloadGit](assets/DownloadGitCode.png)
-   
-2. This repository contains **4 different** example applications ready to run,
+1. **Download documentation and example code** from https://github.com/WurthElektronik/FeatherWings using [git](https://git-scm.com/) ``clone`` https://github.com/WurthElektronik/FeatherWings.git or a simple [zip file](https://github.com/WurthElektronik/FeatherWings/archive/main.zip).     
+![Download WE Git repository](assets/DownloadGitCode.png)
+
+1. This repository contains **four different**, **ready-to-run** applications:
    - [Sensor FeatherWing example](/SensorFeatherWing/software) showing the functionality of the Sensor FeatherWing
    - [Thyone-I Wireless FeatherWing example](/ThyoneWirelessFeatherWing/software) showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
    - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities
@@ -81,31 +81,27 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 
 > **Note**: For more details on each board and workspace, please click on the links above.
 
-3. **Open workspace file** for the case you want to test.                  
-![OpenWorkspace](assets/OpenWorkspace.png)
-
+3. **Open workspace file** for the case you want to test.                                                    
+![Open Workspace](assets/OpenWorkspace.png)
 Chose the workspace you would like to work with based on your preferences.
-
-![OpeningWorkspace](assets/OpeningWorkspace.png)
-                                                                                                  
-After selecting the workspace, the workspace will appear in your visual studio code and PlatformIO will recognize it as the PlatformIO project. In this quick start guide we will use the simple SensorFeatherWing workspace.   
-
-![OpenedWorkspace](assets/OpenedWorkspace.png)
+![Opening Workspace](assets/OpeningWorkspace.png)
+After selecting the workspace, the workspace will appear in your visual studio code and PlatformIO will recognize it as the PlatformIO project. In this quick start guide we will use the simple SensorFeatherWing workspace.                                           
+![Opened Workspace](assets/OpenedWorkspace.png)
 
 4. After loading the workspace, connect the set of boards you want to test to the USB port for programming.
 For that you will need a combination of at least one WE FeatherWing and one Microcontroller Feather board (for more details see table below).                                                             
 ![FeatherWingMinSet](assets/FeatherWing_min.jpg) 
 ![FeatherWingMinSet](assets/FeatherWing_connect.jpg)
 
-4. Go into the PlatformIO extension and select the **PROJECT TASKS** dropdown list.
+5. Go into the PlatformIO extension and select the **PROJECT TASKS** dropdown list.
 
-5. **Build** the code using the PlatformIO extension and then **Upload** it to the micro controller. The Upload command will also execute Build before it uploads, but doing it in two steps, first Build then Upload, you will be able to check if the code is correctly built and it prevents uploading erroneous code to the micro controller. 
+6. **Build** the code using the PlatformIO extension and then **Upload** it to the micro controller. The Upload command will also execute Build before it uploads, but doing it in two steps, first Build then Upload, you will be able to check if the code is correctly built and it prevents uploading erroneous code to the micro controller.                         
 ![UploadCode](assets/VSCode.png)
 
 > **Note**: Wait until PlatformIO rebuilds its indices.
 > Index rebuild process can be slow, depending on speed and network connection of you computer.
 ![PlatformIO_index_rebuild](assets/PlatformIO_index_rebuild.png)
 
-6. Press **Monitor** and check the Visual Studio Code **TERMINAL** window for results.
+7. Press **Monitor** and check the Visual Studio Code **TERMINAL** window for results.
 ![SensorResults](assets/SensorWorkspaceResults.png)
 
