@@ -24,7 +24,7 @@ Start by checking our [quick start section](#Quick-start-guide).
 
 **Read this documentation!**
 
-This step-by-step description will guide you through the setup process and help avoid the most common mistakes. These steps are relevant for all the WE FeatherWings.
+This step-by-step description will guide you through the setup process for taking WE Featherwings into operation  and help avoid the most common mistakes.
 
 ### Hardware requirements
 
@@ -32,7 +32,9 @@ This step-by-step description will guide you through the setup process and help 
 
 >Note: The WE featherwings can be operated only in combination with a Feather. Please use the Feather M0 express for the quick start examples.
 
-2. Stable power supply - Please ensure that the boards are powered using a clean and stable power supply. The following input options are available,
+2. WE FeatherWing - Please choose the FeatherWing of interest or a combination of FeatherWings and stack it on to the Feather.
+
+3. Stable power supply - Please ensure that the boards are powered using a clean and stable power supply. The following input options are available,
 - **USB** interface on the M0 feather. 
 >Note: Please use this option for the quick start examples. The USB interface will also be used to upload the example code to the microcontroller.
 
@@ -40,7 +42,7 @@ This step-by-step description will guide you through the setup process and help 
 
 - [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing) - Stack on this WE featherwing to use a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails).
 
-3. Computing device with sufficient memory and an internet connection. 
+4. Computing device with sufficient memory and an internet connection. 
 >Note: The software tools used in the quick start example require up to 2 GB of storage.
 
 
@@ -71,13 +73,13 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 1. **Download documentation and example code** from https://github.com/WurthElektronik/FeatherWings using git clone or a simple zip file.     
 ![DownloadGit](assets/DownloadGitCode.png)
    
-2. There are **4 different** example applications
-   - Sensor FeatherWing example showing the functionality of the Sensor FeatherWing
-   - Thyone-I Wireless FeatherWing example showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
-   - Calypso Wi-Fi FeatherWing example showing the Wi-Fi capabilities
-   - Sensor2Cloud connectivity example that sends data measured using the sensors via Wi-Fi to wither Microsoft Azure or Amazon AWS cloud.
+2. This repository contains **4 different** example applications ready to run,
+   - [Sensor FeatherWing example](/SensorFeatherWing/software) showing the functionality of the Sensor FeatherWing
+   - [Thyone-I Wireless FeatherWing example](/ThyoneWirelessFeatherWing/software) showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
+   - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities
+   - [Sensor2Cloud connectivity example](/Sensor2CloudConnectivity) that sends data measured using the sensors via Wi-Fi to wither Microsoft Azure or Amazon AWS cloud.
 
-> **Note**: For more details on each board and workspace, please see above table and check the board you are interested in.
+> **Note**: For more details on each board and workspace, please click on the links above.
 
 3. **Open workspace file** for the case you want to test.                  
 ![OpenWorkspace](assets/OpenWorkspace.png)
