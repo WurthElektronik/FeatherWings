@@ -49,7 +49,8 @@ This step-by-step description will guide you through the setup process for takin
 ### Software installation
 In order to enable ease of prototyping, we use the popular cross platform integrated development environment, [Visual Studio Code](https://code.visualstudio.com/) along with some extensions. The following steps will guide you through the installation process.
 
-1. Download and install **[Visual Studio Code](https://code.visualstudio.com/download)** by following the steps described [here](https://code.visualstudio.com/docs/setup).
+1. Download and install **[Visual Studio Code](https://code.visualstudio.com/download)** by following the steps described [here](https://code.visualstudio.com/docs/setup). 
+>**Note**: If you are in a corporate environment, check with your IT department if you are required to enter proxy settings and creditials inside visual studio code.
 
 ![Install VS Code](assets/InstallVSCode.png)
 
@@ -81,10 +82,12 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 
 > **Note**: For more details on each board and workspace, please click on the links above.
 
-3. **Open workspace file** for the case you want to test.                                                    
+3. **Open workspace file** for the case you want to test.
 ![Open Workspace](assets/OpenWorkspace.png)
+
 Chose the workspace you would like to work with based on your preferences.
 ![Opening Workspace](assets/OpeningWorkspace.png)
+
 After selecting the workspace, the workspace will appear in your visual studio code and PlatformIO will recognize it as the PlatformIO project. In this quick start guide we will use the simple SensorFeatherWing workspace.                                           
 ![Opened Workspace](assets/OpenedWorkspace.png)
 
