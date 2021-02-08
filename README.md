@@ -82,7 +82,7 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 
 > **Note**: For more details on each board and workspace, please click on the links above.
 
-3. **Open workspace file** for the case you want to test.
+3. **Open workspace file** for the case you want to test.                                                      
 ![Open Workspace](assets/OpenWorkspace.png)
 
 Chose the workspace you would like to work with based on your preferences.

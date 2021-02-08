@@ -103,7 +103,7 @@ This jumper enables the user to start Calypso Wi-Fi module in different modes th
 |    4,6	|APP_MODE_1 to LOW |	No |
 
 
-The table below briefly describes the different application modes of Calypso. Please refer to Section 5.2 of the Calypso [user manual](https://www.we-online.com/catalog/manual/2610011025000_Calypso%20261001102500x%20Manual_rev1.pdf) for further details. For normal operation in the standard AT-command mode, these jumpers do not need as the lines are pulled down internally.
+The table below briefly describes the different application modes of Calypso. Please refer to Section 5.2 of the Calypso [user manual](https://www.we-online.com/catalog/manual/2610011025000_Calypso%20261001102500x%20Manual_rev1.pdf) for further details. For normal operation in the standard AT-command mode, these jumpers do not need to be mounted as the lines are pulled down internally.
 
 | APP_MODE_0 | APP_MODE_1  | Mode |
 | ------- | ------- |----------------|
