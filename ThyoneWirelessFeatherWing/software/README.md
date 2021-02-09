@@ -29,7 +29,7 @@ Würth Elektronik eiSos provides a software development kit (SDK) with examples 
 
 ### Quick start example
 
-The quick start example for the Thyone FeatherWing demonstrates the very basic functionality of the Thyone-I radio module, that is to transmit and receive data.
+The quick start example for the Thyone Wireless FeatherWing demonstrates the very basic functionality of the Thyone-I radio module, that is to transmit and receive data.
 
 1. In the quick start application, the Thyone-I can be configured either as a transmitter or a receiver.
 ```C
@@ -147,8 +147,8 @@ void loop() {
 The quick start examples in the SDK are written to be run on Adafruit’s Feather M0 express. The hardware setup is as simple as stacking up the FeatherWing on top of the M0 Feather and powering up the board.
 
 1. Clone or download the code.
-2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below.
+2. Open the workspace of interest with the filename `<FeatherWing>.code-workspace` in Visual Studio Code.
+3. Build and upload the code from the PlatformIO tab as shown in the figure below.
 4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
 
 
