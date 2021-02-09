@@ -27,14 +27,14 @@ This step-by-step description will guide you through the setup process for takin
 
 ### Hardware requirements
 
-1. Adafruit feather M0 - FeatherWings are stackable, add-on boards that bring additional functionality to any Feather board. The current repository contains software developed on the [Adafruit Feather M0 express](https://www.adafruit.com/product/3403).
+1. Adafruit Feather M0 - FeatherWings are stackable, add-on boards that bring additional functionality to any Feather board. The current repository contains software developed on the [Adafruit Feather M0 express](https://www.adafruit.com/product/3403).
 
 >**Note**: The WE FeatherWings can be operated only in combination with a Feather. Please use the Feather M0 express for the quick start examples.
 
 2. WE FeatherWing - Please choose the FeatherWing of interest or a combination of FeatherWings and stack it on to the Feather.
 
 3. Stable power supply - Please ensure that the boards are powered using a clean and stable power supply. The following input options are available,
-- **USB** interface on the M0 feather.
+- **USB** interface on the M0 Feather.
 >**Note**: Please use this option for the quick start examples. The USB interface will also be used to upload the example code to the microcontroller.
 
 - **LiPo** - For low power applications, it is also possible to connect a LiPo battery. Please ensure that the battery can deliver sufficient current at the desired voltage for the combination of boards used.
@@ -48,18 +48,18 @@ This step-by-step description will guide you through the setup process for takin
 In order to enable ease of prototyping, we use the popular cross platform integrated development environment, [Visual Studio Code](https://code.visualstudio.com/) along with some extensions. The following steps will guide you through the installation process.
 
 1. Download and install **[Visual Studio Code](https://code.visualstudio.com/download)** by following the steps described [here](https://code.visualstudio.com/docs/setup).
->**Note**: If you are in a corporate environment, check with your IT department if you are required to enter proxy settings and credentials inside visual studio code.
+>**Note**: If you are in a corporate environment, check with your IT department if you are required to enter proxy settings and credentials inside Visual Studio Code.
 
 ![Install VS Code](assets/InstallVSCode.png)
 
-2. **Install** the [PlatformIO](https://platformio.org/install/ide?install=vscode) extension for Visual Studio Code
+2. **Install** the [PlatformIO](https://platformio.org/install/ide?install=vscode) extension for Visual Studio Code.
   - Select **Extensions** in the lower left
   - **Type** platformio in the *Search window* and
   - when PlatformIO IDE extension appears, **press the blue Install button**
 
 ![Install PlatformIO](assets/InstallPlatformIO.png)
 
-> **Note**: Do not close the VS code window until PlatformIO is completely installed.
+> **Note**: Do not close the Visual Studio Code window until PlatformIO is completely installed.
 > Installation process can be slow, depending on speed and network connection of your computer. 
 
 3. After the PlatformIO extension has been installed follow the on screen instructions to **restart** Visual Studio Code.
@@ -75,10 +75,10 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 ![Download WE Git repository](assets/DownloadGitCode.png)
 
 1. This repository contains **four different**, **ready-to-run** applications:
-   - [Sensor FeatherWing example](/SensorFeatherWing/software) showing the functionality of the Sensor FeatherWing
+   - [Sensor FeatherWing example](/SensorFeatherWing/software) showing the functionality of the Sensor FeatherWing.
    - [Thyone-I Wireless FeatherWing example](/ThyoneWirelessFeatherWing/software) showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
-   - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities
-   - [Sensor2Cloud connectivity example](/Sensor2CloudConnectivity) that sends data measured using the sensors via Wi-Fi to wither Microsoft Azure or Amazon AWS cloud.
+   - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities.
+   - [Sensor2Cloud connectivity example](/Sensor2CloudConnectivity) sends data measured using the sensors via Wi-Fi to the Microsoft Azure or Amazon AWS cloud.
 
 > **Note**: For more details on each board and workspace, please click on the links above.
 
@@ -90,24 +90,24 @@ Chose the workspace you would like to work with based on your preferences.
 
 ![Opening Workspace](assets/OpeningWorkspace.png)
 
-After selecting the workspace, the workspace will appear in your visual studio code and PlatformIO will recognize it as the PlatformIO project. In this quick start guide we will use the simple SensorFeatherWing workspace.
+After selecting the workspace, the workspace will appear in your Visual Studio Code and PlatformIO will recognize it as its project. In this quick start guide we will use the simple SensorFeatherWing workspace.
 
 ![Opened Workspace](assets/OpenedWorkspace.png)
 
 1. After loading the workspace, connect the set of boards you want to test to the USB port for programming.
-For that you will need a combination of at least one WE FeatherWing and one Microcontroller Feather board (for more details see table below)
+For that you will need a combination of at least one WE FeatherWing and one microcontroller Feather board (for more details see table below).
 
 ![FeatherWingMinSet](assets/FeatherWing_min.jpg)
 ![FeatherWingMinSet](assets/FeatherWing_connect.jpg)
 
 5. Go into the PlatformIO extension and select the **PROJECT TASKS** dropdown list.
 
-6. **Build** the code using the PlatformIO extension and then **Upload** it to the micro controller. The Upload command will also execute Build before it uploads, but doing it in two steps, first Build then Upload, you will be able to check if the code is correctly built and it prevents uploading erroneous code to the micro controller.
+6. **Build** the code using the PlatformIO extension and then **Upload** it to the microcontroller. The Upload command will also execute Build before it uploads, but doing it in two steps, first Build then Upload, you will be able to check if the code is correctly built and it prevents uploading erroneous code to the microcontroller.
 
 ![UploadCode](assets/VSCode.png)
 
 > **Note**: Wait until PlatformIO rebuilds its indices.
-> Index rebuild process can be slow, depending on speed and network connection of you computer.
+> Index rebuild processes can be slow, depending on speed and network connection of you computer.
 
 ![PlatformIO_index_rebuild](assets/PlatformIO_index_rebuild.png)
 
