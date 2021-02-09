@@ -20,14 +20,14 @@ A typical IoT application involves sensing the environment through sensors, coll
 
 ### Code configuration
 
-The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connection to the Moquitto MQTT server and data transmission.
+The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connection to the Mosquitto MQTT server and data transmission.
 
 1. Prerequisites for running this example:
     * A Wi-Fi access point with WPA2 personal security and a known password and SSID.
     * For Azure, the IoT-Hub has to be configured as described in the [Azure](azure/) section.
-    * For AWS, the IoT Core has to be configured as described in the [AWS](aws/).
+    * For AWS, the IoT Core has to be configured as described in the [AWS](aws/) section.
 
-2. Select the cloud platform of choice.
+2. Select the cloud platform of your choice.
 ```C
 #define AZURE_CONNECTION 1
 #define AWS_CONNECTION 0
@@ -39,7 +39,7 @@ The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connect
 #define WI_FI_PASSWORD "pw"
 ```
 
-4. For Connection to Azure, the following parameters can be configured
+4. For connection to Azure, the following parameters can be configured
 
 * **MQTT_CLIENT_ID**: Azure IoT Hub **device name**
 * **MQTT_SERVER_ADDRESS**: Azure IoT Hub **hostname**. It can be found in the IoT Hub -> Overview
@@ -61,7 +61,7 @@ For example,
     "example_for_documentation=1111111111"
 ```
 
-5. For Connection to AWS, the following parameters can be configured
+5. For connection to AWS, the following parameters can be configured
 
 * **MQTT_CLIENT_ID**: AWS IoT core **thing name**
 * **MQTT_SERVER_ADDRESS**: AWS IoT core **hostname**. It can be found in the IoT core -> Interact -> HTTPS
@@ -104,11 +104,11 @@ example_for_documentation\n\
 
 ## Running this example
 
-The cloud connectivity example  written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the Sensor FeatherWing and Calypso FeatherWing on top of the M0 Feather and powering up the board.
+The cloud connectivity example is written to be run on Adafruit Feather M0 express. The hardware setup is as simple as stacking up the Sensor FeatherWing and Calypso Wi-Fi FeatherWing on top of the M0 Feather and powering up the board.
 
 1. Clone or download the code.
-2. Open the workspace of interest with the filename `Sensor2CloudConnectivity.code-workspace` in Visual Studio code.
-3. Build and upload the code from the PlatformIO tab as shown in the Figure below
-4. After successful upload, click on **Monitor** in PlatformIO extension tab to view the debug logs in the serial terminal.
+2. Open the workspace of interest with the filename `Sensor2CloudConnectivity.code-workspace` in Visual Studio Code.
+3. Build and upload the code from the PlatformIO tab as shown in the figure below
+4. After successful upload, click on **Monitor** in the PlatformIO extension tab to view the debug logs in the serial terminal.
 
    ![Running quick start example](../assets/VSCode.png)
