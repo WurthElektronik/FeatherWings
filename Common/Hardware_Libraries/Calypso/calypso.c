@@ -72,6 +72,13 @@ static uint8_t Calypso_base64EncTable[64] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 
                                              'w', 'x', 'y', 'z', '0', '1', '2', '3',
                                              '4', '5', '6', '7', '8', '9', '+', '/'};
 
+static uint8_t Calypso_base64DecTable[123] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 63,
+                                              52, 53, 54, 55, 56, 57, 58, 59, 60, 61, /* 0-9 */
+                                              0, 0, 0, 0, 0, 0, 0,
+                                              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, /* A-Z */
+                                              0, 0, 0, 0, 0, 0,
+                                              26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51}; /* a-z */
+
 static const char *ATFile_OpenOptions_Strings[] =
     {
         "CREATE", "READ", "WRITE", "OVERWRITE", "CREATE_FAILSAFE", "CREATE_SECURE", "CREATE_NOSIGNITURE", "CREATE_STATIC_TOKEN", "CREATE_VENDOR_TOKEN", "CREATE_PUBLIC_WRITE", "CREATE_PUBLIC_READ"};
@@ -79,7 +86,91 @@ static const char *ATFile_OpenOptions_Strings[] =
 bool Calypso_appendArgumentInt(char *pOutString, uint32_t pInValue, uint16_t intflags, char delimeter);
 bool Calypso_parseInt(char *pOutString, uint32_t pInInt, uint16_t intFlags);
 uint32_t Calypso_getBase64EncBufSize(uint32_t inputLength);
+uint32_t Calypso_getBase64DecBufSize(uint8_t *inputData, uint32_t inputLength);
 
+/**
+ * Get Base64 decoded buffer size
+ *
+ * This routine calculate the expected raw data buffer size
+ * by given base64 buffer and buffer size
+ *
+ * input:
+ * -   inputData       -  source buffer which hold the base64 data
+ * -   inputLength     -  length of base64 data
+ *
+ * return         function shall return expected size.
+*/
+uint32_t Calypso_getBase64DecBufSize(uint8_t *inputData, uint32_t inputLength)
+{
+    uint32_t outputLength = inputLength / 4 * 3;
+
+    if (outputLength == 0)
+    {
+        return 0;
+    }
+    if (inputData[inputLength - 1] == '=')
+        outputLength--;
+    if (inputData[inputLength - 2] == '=')
+        outputLength--;
+
+    return outputLength;
+}
+
+/**
+ * Decode Base64 data to raw data
+ *
+ * This routine decode a given data in Base64 format to raw data,
+ * and return it into a given buffer - outputData (which should be already allocated).
+ * size of the outputData buffer also be returned
+ *
+ * input;
+ *  - inputData    source buffer which hold the Base64 data
+ *  - inputLength  source buffer size
+ *
+ * output:
+ * - outputData    destination buffer which hold the raw data
+ * - outputLength  destination buffer size
+ *
+ * return         true if successfull, false otherwise
+*/
+bool Calypso_decodeBase64(uint8_t *inputData, uint32_t inputLength, uint8_t *outputData, uint32_t *outputLength)
+{
+    uint32_t decode_value;
+    uint32_t nibble6_1, nibble6_2, nibble6_3, nibble6_4;
+    uint32_t i, j;
+
+    if (inputLength % 4 != 0)
+    {
+        return false;
+    }
+
+    if (outputData == NULL)
+    {
+        return false;
+    }
+
+    *outputLength = Calypso_getBase64DecBufSize(inputData, inputLength);
+
+    for (i = 0, j = 0; i < inputLength;)
+    {
+        nibble6_1 = inputData[i] == '=' ? 0 & i++ : Calypso_base64DecTable[inputData[i++]];
+        nibble6_2 = inputData[i] == '=' ? 0 & i++ : Calypso_base64DecTable[inputData[i++]];
+        nibble6_3 = inputData[i] == '=' ? 0 & i++ : Calypso_base64DecTable[inputData[i++]];
+        nibble6_4 = inputData[i] == '=' ? 0 & i++ : Calypso_base64DecTable[inputData[i++]];
+
+        decode_value = (nibble6_1 << 3 * 6) + (nibble6_2 << 2 * 6) + (nibble6_3 << 1 * 6) + (nibble6_4 << 0 * 6);
+
+        if (j < *outputLength)
+            outputData[j++] = (decode_value >> 2 * 8) & 0xFF;
+        if (j < *outputLength)
+            outputData[j++] = (decode_value >> 1 * 8) & 0xFF;
+        if (j < *outputLength)
+            outputData[j++] = (decode_value >> 0 * 8) & 0xFF;
+    }
+    outputData[j] = 0;
+
+    return true;
+}
 /**
  * @brief  Encode data using base64 encoding
  * @param  inputData Pointer to the input data.
@@ -724,6 +815,63 @@ bool ATMQTT_addArgumentsPublish(char *pAtCommand, uint8_t index, char *topicStri
     if (ret)
     {
         ret = Calypso_appendArgumentString(pAtCommand, CRLF, STRING_TERMINATE);
+    }
+
+    return ret;
+}
+
+/**
+ *Adds the arguments to the request command string
+ *
+ *input:
+ * -pAtCommand  the request command string to add the arguments to
+ * -index           index of mqttclient to to subscribe.
+ * -numOfTopics     number of topics to which subscribe to
+ * -pTopics         Topics to subscribe to. See ATMQTT_subscribeTopic_t
+*/
+bool ATMQTT_addArgumentsSubscribe(char *pAtCommand, uint8_t index, uint8_t numOfTopics, ATMQTT_subscribeTopic_t *pTopics)
+{
+    bool ret = false;
+
+    ret = Calypso_appendArgumentInt(pAtCommand, index, (INTFLAGS_NOTATION_DEC | INTFLAGS_UNSIGNED), ARGUMENT_DELIM);
+
+    if (ret)
+    {
+        ret = Calypso_appendArgumentInt(pAtCommand, numOfTopics, (INTFLAGS_NOTATION_DEC | INTFLAGS_UNSIGNED), ARGUMENT_DELIM);
+    }
+
+    for (int i = 0; i < numOfTopics; i++)
+    {
+        if (ret)
+        {
+            Calypso_appendArgumentString(pAtCommand, pTopics[i].topicString, ARGUMENT_DELIM);
+        }
+
+        if (ret)
+        {
+            Calypso_appendArgumentString(pAtCommand, ATMQTT_QoSStrings[pTopics[i].QoS], ARGUMENT_DELIM);
+        }
+
+        if (ret)
+        {
+            Calypso_appendArgumentString(pAtCommand, STRING_EMPTY, ARGUMENT_DELIM);
+        }
+    }
+
+    /* add empty, unused topics*/
+    for (int i = numOfTopics; i < 5; i++)
+    {
+        if (ret)
+        {
+            Calypso_appendArgumentString(pAtCommand, ",,", ARGUMENT_DELIM);
+        }
+    }
+
+    pAtCommand[strlen(pAtCommand)] = STRING_TERMINATE;
+
+    if (ret)
+    {
+        Calypso_appendArgumentString(pAtCommand, CRLF, STRING_TERMINATE);
     }
 
     return ret;
