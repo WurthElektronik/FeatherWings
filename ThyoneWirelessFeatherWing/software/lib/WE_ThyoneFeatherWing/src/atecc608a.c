@@ -50,19 +50,19 @@ bool atecc608a_init(TypeSerial *SerialDebug)
 #if SERIAL_DEBUG
         uint8_t serialnum[ATCA_SERIAL_NUM_SIZE];
         char displaystr[30];
-        SSerial_printf(SerialDebug, "ATECC608A init done\n\r");
+        SSerial_printf(SerialDebug, "ATECC608A init done\r\n");
 
         if (atecc608a_read_serial_number(serialnum))
         {
             size_t displaylen = sizeof(displaystr);
             atcab_bin2hex(serialnum, ATCA_SERIAL_NUM_SIZE, displaystr, &displaylen);
-            SSerial_printf(SerialDebug, "ATECC608A Serial number \n\r");
+            SSerial_printf(SerialDebug, "ATECC608A Serial number \r\n");
             SSerial_printf(SerialDebug, displaystr);
-            SSerial_printf(SerialDebug, "\n\r");
+            SSerial_printf(SerialDebug, "\r\n");
         }
         else
         {
-            SSerial_printf(SerialDebug, "ATECC608A Read failed 0X%02X\n\r", status);
+            SSerial_printf(SerialDebug, "ATECC608A Read failed 0X%02X\r\n", status);
             return false;
         }
 #endif
@@ -71,7 +71,7 @@ bool atecc608a_init(TypeSerial *SerialDebug)
     else
     {
 #if SERIAL_DEBUG
-        SSerial_printf(SerialDebug, "ATECC608A init 0X%02X\n\r", status);
+        SSerial_printf(SerialDebug, "ATECC608A init 0X%02X\r\n", status);
 #endif
         return false;
     }
@@ -96,7 +96,7 @@ bool atecc608a_test_enc_dec(TypeSerial *SerialDebug)
     {
         if (!atecc608a_generate_random(plaintext + (idx * 32)))
         {
-            SSerial_printf(SerialDebug, "Random data generation fail\n\r");
+            SSerial_printf(SerialDebug, "Random data generation fail\r\n");
             return false;
         }
     }
@@ -110,7 +110,7 @@ bool atecc608a_test_enc_dec(TypeSerial *SerialDebug)
     // Encrypt data
     if (!atecc608a_encrypt_data(ATCA_TEMPKEY_KEYID, plaintext, 128, cipherText, authTag, NULL, iv))
     {
-        SSerial_printf(SerialDebug, "Encryption failed\n\r");
+        SSerial_printf(SerialDebug, "Encryption failed\r\n");
         return false;
     }
 
@@ -137,7 +137,7 @@ bool atecc608a_test_enc_dec(TypeSerial *SerialDebug)
     // Decrypt data
     if (!atecc608a_decrypt_data(ATCA_TEMPKEY_KEYID, cipherText, 128, iv, authTag, decryptedText, &isVerified))
     {
-        SSerial_printf(SerialDebug, "Decryption failed \n\r");
+        SSerial_printf(SerialDebug, "Decryption failed \r\n");
         return false;
     }
 
@@ -150,11 +150,11 @@ bool atecc608a_test_enc_dec(TypeSerial *SerialDebug)
 
     if (isVerified == false)
     {
-        SSerial_printf(SerialDebug, "Decryption authentication failed \n\r");
+        SSerial_printf(SerialDebug, "Decryption authentication failed \r\n");
     }
     else
     {
-        SSerial_printf(SerialDebug, "Decrypted data authenticated\n\r");
+        SSerial_printf(SerialDebug, "Decrypted data authenticated\r\n");
     }
 
     //Check if the plain text and decrypted texts match
@@ -343,6 +343,22 @@ bool atecc608a_generate_random(uint8_t *rand)
 {
     uint8_t status;
     status = atcab_random(rand);
+    if (status == ATCA_SUCCESS)
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief  Load a key to the temp register
+ * @param  key Pointer to an array of 32 bytes
+ * @retval true if successful false in case of failure
+ */
+bool atecc608a_load_temp(uint8_t *key)
+{
+    uint8_t status;
+    status = atcab_nonce(key);
     if (status == ATCA_SUCCESS)
     {
         return true;
@@ -659,6 +675,7 @@ void atecc608a_print_certs(TypeSerial *SerialDebug)
                                          signer_cert, &signer_cert_size);
         if (atca_status != ATCACERT_E_SUCCESS)
         {
+            SSerial_printf(SerialDebug, "Certificates not found %i\r\n", atca_status);
             // Break the do/while loop
             break;
         }
@@ -670,7 +687,7 @@ void atecc608a_print_certs(TypeSerial *SerialDebug)
                                                    signer_cert_size, signer_public_key);
         if (atca_status != ATCACERT_E_SUCCESS)
         {
-            SSerial_printf(SerialDebug, "atcacert_get_subj_public_key failed 0X%02X\n\r", atca_status);
+            SSerial_printf(SerialDebug, "atcacert_get_subj_public_key failed 0X%02X\r\n", atca_status);
             // Break the do/while loop
             break;
         }
@@ -681,7 +698,7 @@ void atecc608a_print_certs(TypeSerial *SerialDebug)
                                          device_cert, &device_cert_size);
         if (atca_status != ATCACERT_E_SUCCESS)
         {
-            SSerial_printf(SerialDebug, "atcacert_read_cert failed 0X%02X\n\r", atca_status);
+            SSerial_printf(SerialDebug, "atcacert_read_cert failed 0X%02X\r\n", atca_status);
             // Break the do/while loop
             break;
         }
@@ -693,7 +710,7 @@ void atecc608a_print_certs(TypeSerial *SerialDebug)
                                                device_cert_size, subject_key_id);
         if (atca_status != ATCACERT_E_SUCCESS)
         {
-            SSerial_printf(SerialDebug, "atcacert_get_subj_key_id failed 0X%02X\n\r", atca_status);
+            SSerial_printf(SerialDebug, "atcacert_get_subj_key_id failed 0X%02X\r\n", atca_status);
             // Break the do/while loop
             break;
         }
@@ -704,7 +721,7 @@ void atecc608a_print_certs(TypeSerial *SerialDebug)
                                            device_cert_size, cert_sn, &cert_sn_size);
         if (atca_status != ATCACERT_E_SUCCESS)
         {
-            SSerial_printf(SerialDebug, "atcacert_get_cert_sn failed 0X%02X\n\r", atca_status);
+            SSerial_printf(SerialDebug, "atcacert_get_cert_sn failed 0X%02X\r\n", atca_status);
             // Break the do/while loop
             break;
         }
@@ -723,7 +740,7 @@ void atecc608a_print_certs(TypeSerial *SerialDebug)
         if (atca_status != ATCACERT_E_SUCCESS)
         {
 
-            SSerial_printf(SerialDebug, "atcacert_get_cert_sn failed 0X%02X\n\r", atca_status);
+            SSerial_printf(SerialDebug, "atcacert_get_cert_sn failed 0X%02X\r\n", atca_status);
             // Break the do/while loop
             break;
         }
@@ -762,4 +779,28 @@ static const char *bin2hex(const void *data, size_t data_size)
     buf[data_size * 2] = 0;
 
     return buf;
+}
+
+/**
+ * @brief  Convert hex string to bin array
+ * @param  hex Pointer to hex string
+ * @param  hex_size Length of hex string
+ * @param  bin Pointer to bin array
+ * @param  bin_size Length of bin data
+ * @retval true if successful false in case of failure
+ */
+bool atecc608a_hex2bin(const char *hex, size_t hex_size, uint8_t *bin, size_t *bin_size)
+{
+    if (hex_size % 2 == 1)
+    {
+        return false;
+    }
+
+    *bin_size = hex_size / 2;
+
+    for (size_t i = 0, j = 0; j < *bin_size; i += 2, j++)
+    {
+        bin[j] = (hex[i] % 32 + 9) % 25 * 16 + (hex[i + 1] % 32 + 9) % 25;
+    }
+    return true;
 }
