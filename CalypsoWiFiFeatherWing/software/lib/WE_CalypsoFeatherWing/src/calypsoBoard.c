@@ -64,6 +64,7 @@ static Calypso_CNFStatus_t cmdConfirmation;
 static char RxBuffer[CALYPSO_LINE_MAX_SIZE]; /* data buffer for RX */
 char requestBuffer[CALYPSO_LINE_MAX_SIZE];
 char *pRequestCommand;
+static uint16_t rxByteCounter = 0;
 
 char eventbuffer[CALYPSO_LINE_MAX_SIZE];
 char eventArguments[CALYPSO_LINE_MAX_SIZE];
@@ -92,6 +93,7 @@ CALYPSO *Calypso_Create(TypeSerial *serialDebug,
     allocateInit->settings.wifiSettings = settings->wifiSettings;
     allocateInit->settings.mqttSettings = settings->mqttSettings;
     allocateInit->settings.sntpSettings = settings->sntpSettings;
+    rxByteCounter = 0;
     return allocateInit;
 }
 
@@ -104,6 +106,7 @@ void Calypso_Destroy(CALYPSO *calypso)
 {
     if (calypso)
     {
+        rxByteCounter = 0;
         free(calypso);
     }
 }
@@ -116,12 +119,11 @@ void Calypso_Destroy(CALYPSO *calypso)
 bool Calypso_simpleInit(CALYPSO *self)
 {
 #if SERIAL_DEBUG
-    SSerial_printf(self->serialDebug, "Starting Calypso...\n\r");
-    SSerial_printf(self->serialDebug, "Sending reboot\n\r");
+    SSerial_printf(self->serialDebug, "Starting Calypso...\r\n");
+    SSerial_printf(self->serialDebug, "Sending reboot\r\n");
 #endif
     if (Calypso_reboot(self))
     {
-        delay(RESPONSE_WAIT_TIME);
         return true;
     }
     return false;
@@ -136,6 +138,7 @@ bool Calypso_reboot(CALYPSO *self)
 {
     if (Calypso_SendRequest(self, "AT+reboot\r\n"))
     {
+        delay(250);
         if (Calypso_waitForEvent(self))
         {
 #if SERIAL_DEBUG
@@ -242,16 +245,17 @@ bool Calypso_setUpSNTP(CALYPSO *self)
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
     strcat(pRequestCommand, "enable, 1");
+    strcat(pRequestCommand, "\r\n");
     Calypso_SendRequest(self, pRequestCommand);
 
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
-
     strcat(pRequestCommand, "AT+netAppSet=sntp_client,");
 
     /* Set time zone */
     strcat(pRequestCommand, "time_zone,");
     strcat(pRequestCommand, self->settings.sntpSettings.timezone);
+    strcat(pRequestCommand, "\r\n");
 
     if (!Calypso_SendRequest(self, pRequestCommand))
     {
@@ -267,6 +271,7 @@ bool Calypso_setUpSNTP(CALYPSO *self)
     strcpy(pRequestCommand, "AT+netAppSet=sntp_client,");
     strcat(pRequestCommand, "server_address,0,");
     strcat(pRequestCommand, self->settings.sntpSettings.server);
+    strcat(pRequestCommand, "\r\n");
     if (!Calypso_SendRequest(self, pRequestCommand))
     {
 #if SERIAL_DEBUG
@@ -279,6 +284,7 @@ bool Calypso_setUpSNTP(CALYPSO *self)
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+netAppUpdateTime");
+    strcat(pRequestCommand, "\r\n");
     if (!Calypso_SendRequest(self, pRequestCommand))
     {
 #if SERIAL_DEBUG
@@ -302,6 +308,7 @@ bool Calypso_getTimestamp(CALYPSO *self, Timestamp *timeStamp)
 
     /* Get Time */
     strcpy(pRequestCommand, "AT+GET=general,time");
+    strcat(pRequestCommand, "\r\n");
     if (Calypso_SendRequest(self, pRequestCommand))
     {
         /* parse timestamp out of response */
@@ -536,7 +543,7 @@ bool Calypso_MQTTSet(CALYPSO *self)
     ret = ATMQTT_addArgumentsSet(
         pRequestCommand, index, ATMQTT_SET_OPTION_user,
         self->settings.mqttSettings.userOptions.userName);
-
+    strcat(pRequestCommand, "\r\n");
     if (ret)
     {
         if (!Calypso_SendRequest(self, pRequestCommand))
@@ -551,7 +558,7 @@ bool Calypso_MQTTSet(CALYPSO *self)
     ret = ATMQTT_addArgumentsSet(
         pRequestCommand, index, ATMQTT_SET_OPTION_password,
         self->settings.mqttSettings.userOptions.passWord);
-
+    strcat(pRequestCommand, "\r\n");
     if (ret)
     {
         if (Calypso_SendRequest(self, pRequestCommand))
@@ -634,6 +641,7 @@ bool Calypso_fileList(CALYPSO *self)
     pRequestCommand = &requestBuffer[0];
     memset(pRequestCommand, 0, CALYPSO_LINE_MAX_SIZE);
     strcpy(pRequestCommand, "AT+fileGetFileList");
+    strcat(pRequestCommand, "\r\n");
     return (Calypso_SendRequest(self, pRequestCommand));
 }
 
@@ -916,6 +924,7 @@ bool Calypso_SendRequest(CALYPSO *self, const char *sendCmd)
     int retries = 0;
     while (!ret)
     {
+        delay(10); /*Guard interval for calypso*/
         Calypso_Sendbytes(self, sendCmd);
         ret = Calypso_waitForReply(self, Calypso_CNFStatus_Success, true);
         retries++;
@@ -943,6 +952,7 @@ void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd)
     SSerial_printf(self->serialDebug, "\r\n");
 #endif
     int written = 1;
+
     while (written)
     {
         while (HSerial_available(self->serialCalypso))
@@ -952,7 +962,6 @@ void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd)
         if (strlen(sendCmd) <= HSerial_availableForWrite(self->serialCalypso))
         {
             HSerial_writeB(self->serialCalypso, sendCmd, strlen(sendCmd));
-            HSerial_writeB(self->serialCalypso, "\r\n", 2);
             written = 0;
         }
     }
@@ -965,20 +974,21 @@ void Calypso_Sendbytes(CALYPSO *self, const char *sendCmd)
  */
 bool Calypso_waitForEvent(CALYPSO *self)
 {
-    int count = 0;
-    int time_step_ms = 5; /* 5ms */
-    int max_count = EVENT_WAIT_TIME / time_step_ms;
+    unsigned long startTime = micros();
+    unsigned long interval = 0;
     eventPending = true;
+    //Reset the RX buffer
+    rxByteCounter = 0;
+
     while (eventPending)
     {
+        interval = micros() - startTime;
         Calypso_RxBytes(self);
-        if (count >= max_count)
+
+        if ((interval) >= (EVENT_WAIT_TIME * 1000)) /*ms to microseconds*/
         {
             break;
         }
-        /* wait */
-        count++;
-        delay(time_step_ms);
     }
     return (!eventPending);
 }
@@ -993,17 +1003,19 @@ bool Calypso_waitForEvent(CALYPSO *self)
 bool Calypso_waitForReply(CALYPSO *self, Calypso_CNFStatus_t expectedStatus,
                           bool reset_confirmstate)
 {
-    int count = 0;
-    int time_step_ms = 5; /* 5ms */
-    int max_count = RESPONSE_WAIT_TIME / time_step_ms;
+    unsigned long startTime = micros();
+    unsigned long interval = 0;
 
     if (reset_confirmstate)
     {
         cmdConfirmation = Calypso_CNFStatus_Invalid;
     }
+    //Reset the RX buffer
+    rxByteCounter = 0;
 
-    while (1)
+    while (requestPending)
     {
+        interval = micros() - startTime;
         Calypso_RxBytes(self);
         if (Calypso_CNFStatus_Invalid != cmdConfirmation)
         {
@@ -1018,16 +1030,10 @@ bool Calypso_waitForReply(CALYPSO *self, Calypso_CNFStatus_t expectedStatus,
             }
         }
 
-        if (count >= max_count)
+        if ((interval) >= (RESPONSE_WAIT_TIME * 1000)) /*ms to microseconds*/
         {
-            /* received no correct response within timeout */
-            requestPending = false;
-            return false;
+            break;
         }
-
-        /* wait */
-        count++;
-        delay(time_step_ms);
     }
     return false;
 }
@@ -1077,7 +1083,7 @@ void Calypso_HandleEvents(CALYPSO *self)
     case ATEvent_MQTTOperation:
     {
         char value[32];
-        int connackCode = 0;
+        int connackCode;
 
         ret = Calypso_getNextArgumentString(&pEventBuffer, value,
                                             ARGUMENT_DELIM);
@@ -1086,9 +1092,10 @@ void Calypso_HandleEvents(CALYPSO *self)
             ret = false;
             if (0 == strcasecmp(value, "connack"))
             {
-                ret = Calypso_getNextArgumentInt(
-                    &pEventBuffer, &connackCode, INTFLAGS_SIZE16,
-                    STRING_TERMINATE);
+                ret = Calypso_getNextArgumentString(
+                    &pEventBuffer, value, STRING_TERMINATE);
+                connackCode = atoi(value);
+
                 if (ret)
                 {
                     switch (connackCode)
@@ -1273,17 +1280,12 @@ void Calypso_HandleRxLine(CALYPSO *self, char *rxPacket, uint16_t rxLength)
  */
 void Calypso_RxBytes(CALYPSO *self)
 {
-    uint16_t RxByteCounter = 0;
     uint8_t readBuffer;
-    bool returnFound = false;
-    unsigned long start = millis();
-    while (!HSerial_available(self->serialCalypso) &&
-           start <= RESPONSE_WAIT_TIME)
-        ;
-    while (HSerial_available(self->serialCalypso))
+
+    while (HSerial_available(self->serialCalypso) >= 1)
     {
         readBuffer = HSerial_read(self->serialCalypso);
-        switch (RxByteCounter)
+        switch (rxByteCounter)
         {
         case 0:
         {
@@ -1292,35 +1294,38 @@ void Calypso_RxBytes(CALYPSO *self)
                 ('E' == readBuffer) || ('e' == readBuffer) ||
                 ('+' == readBuffer))
             {
-                RxBuffer[RxByteCounter++] = readBuffer;
+                RxBuffer[rxByteCounter++] = readBuffer;
             }
             break;
         }
         default:
         {
-            if (RxByteCounter >= CALYPSO_LINE_MAX_SIZE)
+            if (rxByteCounter >= CALYPSO_LINE_MAX_SIZE)
             {
-                RxByteCounter = 0;
+                rxByteCounter = 0;
+#if SERIAL_DEBUG
+                SSerial_printf(self->serialDebug, "Calypso RX buffer overflow \r\n");
+#endif
             }
 
-            if (readBuffer == '\r')
+            if (readBuffer == '\n')
             {
-                returnFound = true;
-            }
-            else if (returnFound && (readBuffer == '\n'))
-            {
-                /* interpret it now */
-                RxBuffer[RxByteCounter++] = (uint8_t)'\0';
+                if (RxBuffer[rxByteCounter - 1] == '\r')
+                {
+                    /* Line (without \r\n) ready for interpretation */
+                    RxBuffer[rxByteCounter - 1] = (uint8_t)'\0';
 #if SERIAL_DEBUG
-                SSerial_printf(self->serialDebug, "%s\n", RxBuffer);
+                    SSerial_printf(self->serialDebug, "%s\r\n", RxBuffer);
 #endif
-                Calypso_HandleRxLine(self, RxBuffer, RxByteCounter);
-                returnFound = false;
-                RxByteCounter = 0;
+                    Calypso_HandleRxLine(self, RxBuffer, rxByteCounter);
+                    //Reset the RX buffer
+                    rxByteCounter = 0;
+                    return;
+                }
             }
             else
             {
-                RxBuffer[RxByteCounter++] = readBuffer;
+                RxBuffer[rxByteCounter++] = readBuffer;
             }
             break;
         }
