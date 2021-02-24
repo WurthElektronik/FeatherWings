@@ -1312,8 +1312,8 @@ void Calypso_RxBytes(CALYPSO *self)
             {
                 if (RxBuffer[rxByteCounter - 1] == '\r')
                 {
-                    /* Line complete interpret it now */
-                    RxBuffer[rxByteCounter++] = (uint8_t)'\0';
+                    /* Line (without \r\n) ready for interpretation */
+                    RxBuffer[rxByteCounter - 1] = (uint8_t)'\0';
 #if SERIAL_DEBUG
                     SSerial_printf(self->serialDebug, "%s\r\n", RxBuffer);
 #endif
