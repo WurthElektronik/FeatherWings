@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.5.0">
+<eagle version="7.7.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -38,7 +38,7 @@
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
-<layer number="31" name="tCream" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
 <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
@@ -58,7 +58,7 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
@@ -624,105 +624,6 @@ Copyright: Würth Elektronik</description>
 <text x="-2.54" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 <rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
 <rectangle x1="1.016" y1="-0.254" x2="1.524" y2="0.254" layer="51"/>
-</package>
-</packages>
-</library>
-<library name="WSen-HIDS">
-<packages>
-<package name="WSEN-HIDS_0202">
-<description>&lt;b&gt;WSEN-HIDS - 2525020210001
-&lt;br&gt;
-&lt;br&gt;
-&lt;/b&gt;Humidity Sensor</description>
-<wire x1="-1" y1="-1" x2="1" y2="-1" width="0.05" layer="51"/>
-<wire x1="1" y1="-1" x2="1" y2="1" width="0.05" layer="51"/>
-<wire x1="1" y1="1" x2="-1" y2="1" width="0.05" layer="51"/>
-<wire x1="-1" y1="1" x2="-1" y2="-1" width="0.05" layer="51"/>
-<circle x="-0.75" y="0.9" radius="0.05" width="0" layer="21"/>
-<text x="1" y="1.35" size="0.254359375" layer="25" rot="R180">&gt;Name</text>
-<text x="1" y="-1.1" size="0.2546625" layer="27" rot="R180">&gt;Value</text>
-<smd name="1" x="-0.75" y="0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
-<smd name="2" x="-0.75" y="-0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
-<smd name="5" x="0.75" y="0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
-<smd name="4" x="0.75" y="-0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
-<smd name="6" x="0" y="0.75" dx="0.4" dy="0.45" layer="1" rot="R90" stop="no" cream="no"/>
-<smd name="3" x="0" y="-0.75" dx="0.4" dy="0.45" layer="1" rot="R90" stop="no" cream="no"/>
-<wire x1="-1" y1="1" x2="-1" y2="-1" width="0.05" layer="21"/>
-<wire x1="-1" y1="-1" x2="1" y2="-1" width="0.05" layer="21"/>
-<wire x1="1" y1="-1" x2="1" y2="1" width="0.05" layer="21"/>
-<wire x1="1" y1="1" x2="-1" y2="1" width="0.05" layer="21"/>
-<rectangle x1="-3" y1="-3" x2="3" y2="3" layer="39"/>
-<wire x1="-3" y1="3" x2="3" y2="3" width="0.1" layer="51"/>
-<wire x1="3" y1="-3" x2="-3" y2="-3" width="0.1" layer="51"/>
-<wire x1="-3" y1="-3" x2="-3" y2="3" width="0.1" layer="51"/>
-<text x="-2.85" y="-2.85" size="0.254" layer="51">recommendation to avoid 
-mechanical stress:
-no vias, drills</text>
-<wire x1="3" y1="3" x2="3" y2="-3" width="0.1" layer="51"/>
-<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" layer="41" rot="R90"/>
-<rectangle x1="0.55" y1="-0.3" x2="0.95" y2="0.3" layer="41" rot="R90"/>
-<rectangle x1="0.125" y1="0.625" x2="0.675" y2="0.825" layer="41" rot="R90"/>
-<rectangle x1="-0.65" y1="0.65" x2="-0.15" y2="0.85" layer="41" rot="R90"/>
-<rectangle x1="-0.65" y1="-0.85" x2="-0.15" y2="-0.65" layer="41" rot="R90"/>
-<rectangle x1="0.15" y1="-0.85" x2="0.65" y2="-0.65" layer="41" rot="R90"/>
-<rectangle x1="-1" y1="0.225" x2="-0.5" y2="0.775" layer="29"/>
-<rectangle x1="-0.275" y1="0.5" x2="0.275" y2="1" layer="29"/>
-<rectangle x1="0.5" y1="0.225" x2="1" y2="0.775" layer="29"/>
-<rectangle x1="0.5" y1="-0.775" x2="1" y2="-0.225" layer="29"/>
-<rectangle x1="-0.275" y1="-1" x2="0.275" y2="-0.5" layer="29"/>
-<rectangle x1="-1" y1="-0.775" x2="-0.5" y2="-0.225" layer="29"/>
-<polygon width="0.1" layer="31">
-<vertex x="-0.875" y="0.65"/>
-<vertex x="-0.625" y="0.65"/>
-<vertex x="-0.625" y="0.35"/>
-<vertex x="-0.875" y="0.35"/>
-</polygon>
-<polygon width="0.1" layer="31">
-<vertex x="-0.15" y="0.625"/>
-<vertex x="-0.15" y="0.875"/>
-<vertex x="0.15" y="0.875"/>
-<vertex x="0.15" y="0.625"/>
-</polygon>
-<polygon width="0.1" layer="31">
-<vertex x="0.875" y="0.35"/>
-<vertex x="0.625" y="0.35"/>
-<vertex x="0.625" y="0.65"/>
-<vertex x="0.875" y="0.65"/>
-</polygon>
-<polygon width="0.1" layer="31">
-<vertex x="0.875" y="-0.65"/>
-<vertex x="0.625" y="-0.65"/>
-<vertex x="0.625" y="-0.35"/>
-<vertex x="0.875" y="-0.35"/>
-</polygon>
-<polygon width="0.1" layer="31">
-<vertex x="0.15" y="-0.625"/>
-<vertex x="0.15" y="-0.875"/>
-<vertex x="-0.15" y="-0.875"/>
-<vertex x="-0.15" y="-0.625"/>
-</polygon>
-<polygon width="0.1" layer="31">
-<vertex x="-0.875" y="-0.35"/>
-<vertex x="-0.625" y="-0.35"/>
-<vertex x="-0.625" y="-0.65"/>
-<vertex x="-0.875" y="-0.65"/>
-</polygon>
-<wire x1="-4.5" y1="3.62" x2="-2.06" y2="6.06" width="0" layer="51"/>
-<wire x1="-3" y1="3" x2="-1" y2="5" width="0" layer="51"/>
-<wire x1="-2.06" y1="6.06" x2="-1" y2="5" width="0" layer="51" curve="-180"/>
-<wire x1="-4.5" y1="-3.62" x2="-2.06" y2="-6.06" width="0" layer="51"/>
-<wire x1="-3" y1="-3" x2="-1" y2="-5" width="0" layer="51"/>
-<wire x1="-2.06" y1="-6.06" x2="-1" y2="-5" width="0" layer="51" curve="180"/>
-<wire x1="-4.5" y1="3.62" x2="-4.5" y2="-3.62" width="0" layer="51"/>
-<wire x1="4.5" y1="-3.62" x2="2.06" y2="-6.06" width="0" layer="51"/>
-<wire x1="3" y1="-3" x2="1" y2="-5" width="0" layer="51"/>
-<wire x1="2.06" y1="-6.06" x2="1" y2="-5" width="0" layer="51" curve="-180"/>
-<wire x1="4.5" y1="3.62" x2="2.06" y2="6.06" width="0" layer="51"/>
-<wire x1="3" y1="3" x2="1" y2="5" width="0" layer="51"/>
-<wire x1="2.06" y1="6.06" x2="1" y2="5" width="0" layer="51" curve="180"/>
-<wire x1="4.5" y1="-3.62" x2="4.5" y2="3.62" width="0" layer="51"/>
-<text x="-3.49" y="-2.68" size="0.6" layer="51" rot="R90">cut out milling</text>
-<text x="4" y="-2.9" size="0.6" layer="51" rot="R90">cut out milling</text>
 </package>
 </packages>
 </library>
@@ -20867,6 +20768,103 @@ no vias, drills</text>
 </package>
 </packages>
 </library>
+<library name="WE_WSEN-Rev4.1">
+<packages>
+<package name="WSEN-HIDS_2525020210001">
+<description>&lt;b&gt;WSEN-HIDS - 2525020210001
+&lt;br&gt;
+&lt;br&gt;
+&lt;/b&gt;Humidity Sensor</description>
+<wire x1="-1" y1="-1" x2="1" y2="-1" width="0.1" layer="51"/>
+<wire x1="1" y1="-1" x2="1" y2="1" width="0.1" layer="51"/>
+<wire x1="1" y1="1" x2="-1" y2="1" width="0.1" layer="51"/>
+<wire x1="-1" y1="1" x2="-1" y2="-1" width="0.1" layer="51"/>
+<circle x="-1.25" y="0.53" radius="0.05" width="0.1" layer="21"/>
+<text x="1.27" y="1.97" size="0.7" layer="25" font="vector" rot="R180">&gt;Name</text>
+<text x="1.27" y="-1.17" size="0.5" layer="27" font="vector" rot="R180">&gt;Value</text>
+<smd name="1" x="-0.75" y="0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
+<smd name="2" x="-0.75" y="-0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
+<smd name="5" x="0.75" y="0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
+<smd name="4" x="0.75" y="-0.5" dx="0.4" dy="0.45" layer="1" stop="no" cream="no"/>
+<smd name="6" x="0" y="0.75" dx="0.4" dy="0.45" layer="1" rot="R90" stop="no" cream="no"/>
+<smd name="3" x="0" y="-0.75" dx="0.4" dy="0.45" layer="1" rot="R90" stop="no" cream="no"/>
+<rectangle x1="-3" y1="-3" x2="3" y2="3" layer="39"/>
+<wire x1="-3" y1="3" x2="3" y2="3" width="0.1" layer="51"/>
+<wire x1="3" y1="-3" x2="-3" y2="-3" width="0.1" layer="51"/>
+<wire x1="-3" y1="-3" x2="-3" y2="3" width="0.1" layer="51"/>
+<text x="-2.85" y="-2.85" size="0.254" layer="51">recommendation to avoid 
+mechanical stress:
+no vias, drills</text>
+<wire x1="3" y1="3" x2="3" y2="-3" width="0.1" layer="51"/>
+<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" layer="41" rot="R90"/>
+<rectangle x1="0.55" y1="-0.3" x2="0.95" y2="0.3" layer="41" rot="R90"/>
+<rectangle x1="0.125" y1="0.625" x2="0.675" y2="0.825" layer="41" rot="R90"/>
+<rectangle x1="-0.65" y1="0.65" x2="-0.15" y2="0.85" layer="41" rot="R90"/>
+<rectangle x1="-0.65" y1="-0.85" x2="-0.15" y2="-0.65" layer="41" rot="R90"/>
+<rectangle x1="0.15" y1="-0.85" x2="0.65" y2="-0.65" layer="41" rot="R90"/>
+<rectangle x1="-1" y1="0.225" x2="-0.5" y2="0.775" layer="29"/>
+<rectangle x1="-0.275" y1="0.5" x2="0.275" y2="1" layer="29"/>
+<rectangle x1="0.5" y1="0.225" x2="1" y2="0.775" layer="29"/>
+<rectangle x1="0.5" y1="-0.775" x2="1" y2="-0.225" layer="29"/>
+<rectangle x1="-0.275" y1="-1" x2="0.275" y2="-0.5" layer="29"/>
+<rectangle x1="-1" y1="-0.775" x2="-0.5" y2="-0.225" layer="29"/>
+<polygon width="0.1" layer="31">
+<vertex x="-0.875" y="0.65"/>
+<vertex x="-0.625" y="0.65"/>
+<vertex x="-0.625" y="0.35"/>
+<vertex x="-0.875" y="0.35"/>
+</polygon>
+<polygon width="0.1" layer="31">
+<vertex x="-0.15" y="0.625"/>
+<vertex x="-0.15" y="0.875"/>
+<vertex x="0.15" y="0.875"/>
+<vertex x="0.15" y="0.625"/>
+</polygon>
+<polygon width="0.1" layer="31">
+<vertex x="0.875" y="0.35"/>
+<vertex x="0.625" y="0.35"/>
+<vertex x="0.625" y="0.65"/>
+<vertex x="0.875" y="0.65"/>
+</polygon>
+<polygon width="0.1" layer="31">
+<vertex x="0.875" y="-0.65"/>
+<vertex x="0.625" y="-0.65"/>
+<vertex x="0.625" y="-0.35"/>
+<vertex x="0.875" y="-0.35"/>
+</polygon>
+<polygon width="0.1" layer="31">
+<vertex x="0.15" y="-0.625"/>
+<vertex x="0.15" y="-0.875"/>
+<vertex x="-0.15" y="-0.875"/>
+<vertex x="-0.15" y="-0.625"/>
+</polygon>
+<polygon width="0.1" layer="31">
+<vertex x="-0.875" y="-0.35"/>
+<vertex x="-0.625" y="-0.35"/>
+<vertex x="-0.625" y="-0.65"/>
+<vertex x="-0.875" y="-0.65"/>
+</polygon>
+<wire x1="-4.5" y1="3.62" x2="-2.06" y2="6.06" width="0" layer="51"/>
+<wire x1="-3" y1="3" x2="-1" y2="5" width="0" layer="51"/>
+<wire x1="-2.06" y1="6.06" x2="-1" y2="5" width="0" layer="51" curve="-180"/>
+<wire x1="-4.5" y1="-3.62" x2="-2.06" y2="-6.06" width="0" layer="51"/>
+<wire x1="-3" y1="-3" x2="-1" y2="-5" width="0" layer="51"/>
+<wire x1="-2.06" y1="-6.06" x2="-1" y2="-5" width="0" layer="51" curve="180"/>
+<wire x1="-4.5" y1="3.62" x2="-4.5" y2="-3.62" width="0" layer="51"/>
+<wire x1="4.5" y1="-3.62" x2="2.06" y2="-6.06" width="0" layer="51"/>
+<wire x1="3" y1="-3" x2="1" y2="-5" width="0" layer="51"/>
+<wire x1="2.06" y1="-6.06" x2="1" y2="-5" width="0" layer="51" curve="-180"/>
+<wire x1="4.5" y1="3.62" x2="2.06" y2="6.06" width="0" layer="51"/>
+<wire x1="3" y1="3" x2="1" y2="5" width="0" layer="51"/>
+<wire x1="2.06" y1="6.06" x2="1" y2="5" width="0" layer="51" curve="180"/>
+<wire x1="4.5" y1="-3.62" x2="4.5" y2="3.62" width="0" layer="51"/>
+<text x="-3.49" y="-2.68" size="0.6" layer="51" rot="R90">cut out milling</text>
+<text x="4" y="-2.9" size="0.6" layer="51" rot="R90">cut out milling</text>
+<wire x1="-1.1" y1="1.2" x2="1.1" y2="1.2" width="0.2" layer="21"/>
+<wire x1="1.1" y1="-1.2" x2="-1.1" y2="-1.2" width="0.2" layer="21"/>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -21327,10 +21325,10 @@ design rules under a new name.</description>
 <attribute name="NAME" x="22.3" y="17.45" size="0.6096" layer="25"/>
 <attribute name="VALUE" x="22.35" y="17" size="0.4064" layer="27"/>
 </element>
-<element name="IC4" library="WSen-HIDS" package="WSEN-HIDS_0202" value="2523020210001" x="36" y="11.5" smashed="yes" rot="R180">
+<element name="IC4" library="WE_WSEN-Rev4.1" package="WSEN-HIDS_2525020210001" value="2525020210001" x="36" y="11.5" smashed="yes" rot="R180">
 <attribute name="HEIGHT" value="1.0mm" x="38.6" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NR" value="2523020210001" x="38.6" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MANUFACTURER" value="Wurth Elektronik" x="38.6" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NR" value="2525020210001" x="38.6" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="38.6" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACK" value="SMD" x="38.6" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="38.55" y="9.55" size="0.8128" layer="25" font="vector" rot="R180"/>
 <attribute name="VALUE" x="35" y="12.6" size="0.2546625" layer="27"/>

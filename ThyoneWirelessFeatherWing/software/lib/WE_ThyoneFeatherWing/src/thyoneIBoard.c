@@ -33,6 +33,11 @@
      LENGTH_CMD_OVERHEAD)
 char CMD_Array[MAX_CMD_LENGTH];
 
+static uint16_t RxByteCounter = 0;
+static bool packetReceived = false;
+static uint16_t BytesToReceive = 0;
+static uint8_t pRxBuffer[MAX_CMD_LENGTH];
+
 void THYONEI_printPacket(THYONEI *self, uint8_t *packet, int length);
 void THYONEI_sendBytes(THYONEI *self, const char *data, int dataLength);
 void HandleRxPacket(THYONEI *self, uint8_t *pRxBuffer);
@@ -72,6 +77,8 @@ THYONEI *THYONEI_Create(TypeSerial *serialDebug,
 
     allocateInit->settings.dataNames[source_id] = "source_id";
     allocateInit->settings.dataNames[dest_id] = "dest_id";
+    packetReceived = false;
+    RxByteCounter = 0;
     return allocateInit;
 }
 
@@ -82,6 +89,8 @@ THYONEI *THYONEI_Create(TypeSerial *serialDebug,
  */
 void THYONEIDestroy(THYONEI *thyone) {
     if (thyone) {
+        packetReceived = false;
+        RxByteCounter = 0;
         free(thyone);
     }
 }
@@ -93,11 +102,32 @@ void THYONEIDestroy(THYONEI *thyone) {
  */
 bool THYONEI_simpleInit(THYONEI *self) {
 #if SERIAL_DEBUG
-    SSerial_printf(self->serialDebug, "Starting Thyone_I...\n\r");
+    SSerial_printf(self->serialDebug, "Starting Thyone_I...\r\n");
 #endif
     if (ThyoneI_Reset(self)) {
+        char sourceID[NAME_LEN];
+        uint8_t src[4] = {0};
+        /*By default, the serial number of the module is the source address*/
+        if (ThyoneI_GetSerialNumber(self, src)) {
+            snprintf(sourceID, NAME_LEN, "%lu",
+                     (((uint32_t)src[3]) << 24 | ((uint32_t)src[2]) << 16 |
+                      ((uint32_t)src[1]) << 8 | ((uint32_t)src[0]) << 0));
+            strncpy(
+                self->settings.data[source_id], sourceID,
+                strlen(
+                    sourceID));  // Write in the settings variable the Source ID
 #if SERIAL_DEBUG
-        SSerial_printf(self->serialDebug, "Init Thyone_I done!\n\r");
+            SSerial_printf(self->serialDebug, "Thyone source id %s\r\n",
+                           sourceID);
+#endif
+        } else {
+#if SERIAL_DEBUG
+            SSerial_printf(self->serialDebug,
+                           "Getting Thyone source id failed\r\n");
+#endif
+        }
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "Init Thyone_I done!\r\n");
 #endif
         return true;
     }
@@ -305,9 +335,19 @@ bool ThyoneI_TransmitUnicastExtended(THYONEI *self, uint32_t address,
  * @retval true if successful false in case of failure
  */
 PacketThyoneI THYONEI_receiveData(THYONEI *self) {
+    unsigned long startTime = micros();
+    unsigned long interval = 0;
     self->bufferThyone.length = 0;
-
-    THYONEI_receiveBytes(self);
+    packetReceived = false;
+    RxByteCounter = 0;
+    while (!packetReceived) {
+        interval = micros() - startTime;
+        THYONEI_receiveBytes(self);
+        if ((interval) >= (TIMEOUT * 1000)) /*ms to microseconds*/
+        {
+            break;
+        }
+    }
     return self->bufferThyone;
 }
 
@@ -398,6 +438,30 @@ bool ThyoneI_SetRFChannel(THYONEI *self, uint8_t channel) {
 }
 
 /**
+ * @brief  Get RF channel
+ * @param  self Pointer to the Thyone object.
+ * @param  channelP Pointer to RF channel
+ * @retval true if successful false in case of failure
+ */
+bool ThyoneI_GetRFChannel(THYONEI *self, uint8_t *channelP) {
+    uint16_t length;
+    return ThyoneI_Get(self, ThyoneI_USERSETTING_INDEX_RF_CHANNEL,
+                       (uint8_t *)channelP, &length);
+}
+
+/**
+ * @brief  Get RF profile
+ * @param  self Pointer to the Thyone object.
+ * @param  channelP Pointer to RF profile
+ * @retval true if successful false in case of failure
+ */
+bool ThyoneI_GetRFProfile(THYONEI *self, uint8_t *profileP) {
+    uint16_t length;
+    return ThyoneI_Get(self, ThyoneI_USERSETTING_INDEX_RF_PROFILE,
+                       (uint8_t *)profileP, &length);
+}
+
+/**
  * @brief  Set RF profile
  * @param  self Pointer to the Thyone object.
  * @param  profile RF profile
@@ -412,30 +476,6 @@ bool ThyoneI_SetRFProfile(THYONEI *self, uint8_t profile) {
         return false;
     }
 }
-
-/**
- * @brief  Get RF profile
- * @param  self Pointer to the Thyone object.
- * @param  channelP Pointer to RF profile
- * @retval true if successful false in case of failure
- */
-bool ThyoneI_GetRFProfile(THYONEI *self, uint8_t *profileP) {
-    uint16_t length;
-    return ThyoneI_Get(self, ThyoneI_USERSETTING_INDEX_RF_PROFILE,
-                       (uint8_t *)profileP, &length);
-}
-/**
- * @brief  Get RF channel
- * @param  self Pointer to the Thyone object.
- * @param  channelP Pointer to RF channel
- * @retval true if successful false in case of failure
- */
-bool ThyoneI_GetRFChannel(THYONEI *self, uint8_t *channelP) {
-    uint16_t length;
-    return ThyoneI_Get(self, ThyoneI_USERSETTING_INDEX_RF_CHANNEL,
-                       (uint8_t *)channelP, &length);
-}
-
 /**
  * @brief  Get Serial number
  * @param  self Pointer to the Thyone object.
@@ -448,6 +488,17 @@ bool ThyoneI_GetSerialNumber(THYONEI *self, uint8_t *serialNumberP) {
                        serialNumberP, &length);
 }
 
+/**
+ * @brief  Get firmware version
+ * @param  self Pointer to the Thyone object.
+ * @param  version  Pointer to serial number
+ * @retval true if successful false in case of failure
+ */
+bool ThyoneI_GetFirmwareVersion(THYONEI *self, uint8_t *versionP) {
+    uint16_t length;
+    return ThyoneI_Get(self, ThyoneI_USERSETTING_INDEX_FW_VERSION, versionP,
+                       &length);
+}
 /**
  * @brief  Factory reset Thyone
  * @param  self Pointer to the Thyone object.
@@ -498,7 +549,7 @@ bool ThyoneI_Set(THYONEI *self, ThyoneI_UserSettings_t userSetting,
 
         /* wait for cnf */
         return THYONEI_waitForReply(self, ThyoneI_CMD_START_IND,
-                                    CMD_Status_NoStatus, true);
+                                    CMD_Status_Success, true);
     }
     return ret;
 }
@@ -549,9 +600,9 @@ bool ThyoneI_Get(THYONEI *self, ThyoneI_UserSettings_t userSetting,
  */
 void THYONEI_sendBytes(THYONEI *self, const char *data, int dataLength) {
 #if SERIAL_DEBUG
-    SSerial_printf(self->serialDebug, "Sending to ThyoneI: ");
-    THYONEI_printPacket(self, (uint8_t *)data, dataLength);
-    SSerial_printf(self->serialDebug, "\n\r");
+    // SSerial_printf(self->serialDebug, "Sending to ThyoneI: ");
+    // THYONEI_printPacket(self, (uint8_t *)data, dataLength);
+    // SSerial_printf(self->serialDebug, "\r\n");
 #endif
 
     int written = 1;
@@ -574,22 +625,14 @@ void THYONEI_sendBytes(THYONEI *self, const char *data, int dataLength) {
  */
 void THYONEI_receiveBytes(THYONEI *self) {
     uint8_t checksum = 0;
-    uint16_t RxByteCounter = 0;
-    uint16_t BytesToReceive = 0;
     uint8_t readBuffer;
-    static uint8_t pRxBuffer[MAX_CMD_LENGTH];
-    unsigned long start = millis();
-    bool packetReceived = false;
-    start = millis();
-    while (!HSerial_available(self->serialThyoneI) &&
-           millis() - start <= TIMEOUT)
-        ;
 
     while (HSerial_available(self->serialThyoneI)) {
         readBuffer = (uint8_t)HSerial_read(self->serialThyoneI);
 
 #if SERIAL_DEBUG
-        SSerial_printf(self->serialDebug, "0x%02X ", readBuffer);
+        // SSerial_printf(self->serialDebug, "rx[%i] %02X \r\n", RxByteCounter,
+        // readBuffer);
 #endif
         /* interpret received byte */
         pRxBuffer[RxByteCounter] = readBuffer;
@@ -637,15 +680,12 @@ void THYONEI_receiveBytes(THYONEI *self) {
                         /* received frame ok, interpret it now */
                         HandleRxPacket(self, pRxBuffer);
                     }
-                    SSerial_printf(self->serialDebug, "\r\n");
+                    RxByteCounter = 0;
                     packetReceived = true;
+                    return;
                 }
                 break;
         }
-        if (packetReceived) {
-            break;
-        }
-        delay(1);
     }
 }
 
@@ -664,7 +704,7 @@ void HandleRxPacket(THYONEI *self, uint8_t *pRxBuffer) {
     // uint16_t cmd_length = (uint16_t)(pRxBuffer[CMD_POSITION_LENGTH_LSB] +
     // (pRxBuffer[CMD_POSITION_LENGTH_MSB] << 8)); THYONEI_printPacket(self,
     // pRxBuffer, cmd_length + LENGTH_CMD_OVERHEAD);
-    // SSerial_printf(self->serialDebug, "\n\r");
+    // SSerial_printf(self->serialDebug, "\r\n");
 #endif
     switch (pRxBuffer[CMD_POSITION_CMD]) {
         case ThyoneI_CMD_RESET_CNF: {
@@ -781,10 +821,9 @@ void HandleRxPacket(THYONEI *self, uint8_t *pRxBuffer) {
             src = (src << 8) + (uint32_t)pRxBuffer[CMD_POSITION_DATA + 1];
             src = (src << 8) + (uint32_t)pRxBuffer[CMD_POSITION_DATA];
             self->bufferThyone.sourceAddress = src;
+            self->bufferThyone.length = payload_length - 5;
             self->bufferThyone.RSSI =
                 (int)(pRxBuffer[CMD_POSITION_DATA + 4] - 255);
-            self->bufferThyone.length = payload_length - 5;
-
             /*Copy payload to the thyone buffer*/
             memcpy(&self->bufferThyone.data[0],
                    pRxBuffer + CMD_POSITION_DATA + 5, payload_length - 5);
@@ -834,34 +873,30 @@ void HandleRxPacket(THYONEI *self, uint8_t *pRxBuffer) {
 bool THYONEI_waitForReply(THYONEI *self, uint8_t expectedCmdConfirmation,
                           CMD_Status_t expectedStatus,
                           bool reset_confirmstate) {
-    int count = 0;
-    int time_step_ms = 250; /* 250ms */
-    int max_count = CMD_WAIT_TIME / time_step_ms;
-#if SERIAL_DEBUG
-    SSerial_printf(self->serialDebug, "Waiting for ThyoneI reply: ");
-#endif
+    unsigned long startTime = micros();
+    unsigned long interval = 0;
+    self->bufferThyone.length = 0;
+    packetReceived = false;
+    RxByteCounter = 0;
     if (reset_confirmstate) {
         for (int i = 0; i < CMDCONFIRMATIONARRAY_LENGTH; i++) {
             cmdConfirmation_array[i].cmd = CNFINVALID;
         }
     }
+
     while (1) {
+        interval = micros() - startTime;
         THYONEI_receiveBytes(self);
+        if ((interval) >= (TIMEOUT * 1000)) /*ms to microseconds*/
+        {
+            break;
+        }
         for (int i = 0; i < CMDCONFIRMATIONARRAY_LENGTH; i++) {
             if (expectedCmdConfirmation == cmdConfirmation_array[i].cmd) {
                 return (cmdConfirmation_array[i].status == expectedStatus);
             }
         }
-        if (count >= max_count) {
-            /* received no correct response within timeout */
-            return false;
-        }
-
-        /* wait */
-        count++;
-        delay(time_step_ms);
     }
-
     return false;
 }
 

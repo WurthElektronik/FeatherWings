@@ -37,7 +37,7 @@ extern "C"
 #endif
 #define LENGTH_OF_NAME 100
 #define RESPONSE_WAIT_TIME 1500
-#define EVENT_WAIT_TIME 3000
+#define EVENT_WAIT_TIME 3000UL
 #define MAX_RETRIES 5
 
     typedef enum
