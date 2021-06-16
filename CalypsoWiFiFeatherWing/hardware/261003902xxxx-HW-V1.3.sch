@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.5.0">
+<eagle version="7.7.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -3024,6 +3024,7 @@ chip</description>
 <technology name="">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="" constant="no"/>
 <attribute name="NR" value="" constant="no"/>
 <attribute name="PACK" value="0402"/>
 <attribute name="SPG" value="" constant="no"/>
@@ -3032,6 +3033,7 @@ chip</description>
 <technology name="100NF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="X7R" constant="no"/>
 <attribute name="NR" value="885012205037     " constant="no"/>
 <attribute name="PACK" value="0402"/>
 <attribute name="SPG" value="16V" constant="no"/>
@@ -3040,22 +3042,34 @@ chip</description>
 <technology name="100PF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="NP0" constant="no"/>
 <attribute name="NR" value="885012005031     " constant="no"/>
 <attribute name="PACK" value="0402"/>
-<attribute name="SPG" value="50V" constant="no"/>
+<attribute name="SPG" value="16V" constant="no"/>
 <attribute name="TOL" value="5%" constant="no"/>
 </technology>
 <technology name="10PF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="NP0" constant="no"/>
 <attribute name="NR" value="885012005055     " constant="no"/>
 <attribute name="PACK" value="0402"/>
 <attribute name="SPG" value="50V" constant="no"/>
 <attribute name="TOL" value="5%" constant="no"/>
 </technology>
+<technology name="10UF">
+<attribute name="HEIGHT" value="0.5mm"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="X5R" constant="no"/>
+<attribute name="NR" value="885012105020" constant="no"/>
+<attribute name="PACK" value="0402"/>
+<attribute name="SPG" value="6.3V" constant="no"/>
+<attribute name="TOL" value="20%" constant="no"/>
+</technology>
 <technology name="1NF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="X7R" constant="no"/>
 <attribute name="NR" value="885012205006 " constant="no"/>
 <attribute name="PACK" value="0402"/>
 <attribute name="SPG" value="10V" constant="no"/>
@@ -3064,26 +3078,47 @@ chip</description>
 <technology name="1UF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="X5R" constant="no"/>
 <attribute name="NR" value="885012105012     " constant="no"/>
 <attribute name="PACK" value="0402"/>
 <attribute name="SPG" value="10V" constant="no"/>
-<attribute name="TOL" value="10%" constant="no"/>
+<attribute name="TOL" value="20%" constant="no"/>
 </technology>
 <technology name="22PF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
-<attribute name="NR" value="885012005027     " constant="no"/>
+<attribute name="MAT" value="NP0" constant="no"/>
+<attribute name="NR" value="885012005057" constant="no"/>
 <attribute name="PACK" value="0402"/>
 <attribute name="SPG" value="50V" constant="no"/>
 <attribute name="TOL" value="5%" constant="no"/>
 </technology>
+<technology name="2P2F">
+<attribute name="HEIGHT" value="0.5mm"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="NP0" constant="no"/>
+<attribute name="NR" value="885012005003" constant="no"/>
+<attribute name="PACK" value="0402"/>
+<attribute name="SPG" value="10V" constant="no"/>
+<attribute name="TOL" value="0.5pF" constant="no"/>
+</technology>
 <technology name="4.7UF">
 <attribute name="HEIGHT" value="0.5mm"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="X5R" constant="no"/>
 <attribute name="NR" value="885012105008     " constant="no"/>
 <attribute name="PACK" value="0402"/>
-<attribute name="SPG" value="10V" constant="no"/>
-<attribute name="TOL" value="10%" constant="no"/>
+<attribute name="SPG" value="6.3V" constant="no"/>
+<attribute name="TOL" value="20%" constant="no"/>
+</technology>
+<technology name="68PF">
+<attribute name="HEIGHT" value="0.5mm"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="MAT" value="NP0" constant="no"/>
+<attribute name="NR" value="885012005030" constant="no"/>
+<attribute name="PACK" value="0402"/>
+<attribute name="SPG" value="16V" constant="no"/>
+<attribute name="TOL" value="5%" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -3109,6 +3144,14 @@ chip</description>
 <attribute name="SPG" value="50V" constant="no"/>
 <attribute name="TOL" value="10%" constant="no"/>
 </technology>
+<technology name="100PF">
+<attribute name="HEIGHT" value="0.8mm" constant="no"/>
+<attribute name="MANUFACTURER" value="Wurth Elektronik" constant="no"/>
+<attribute name="NR" value="885012206028" constant="no"/>
+<attribute name="PACKAGE" value="0603" constant="no"/>
+<attribute name="SPG" value="16V" constant="no"/>
+<attribute name="TOL" value="10%" constant="no"/>
+</technology>
 <technology name="10PF">
 <attribute name="HEIGHT" value="0.8mm" constant="no"/>
 <attribute name="MANUFACTURER" value="Wurth Elektronik" constant="no"/>
@@ -3117,6 +3160,22 @@ chip</description>
 <attribute name="SPG" value="10V" constant="no"/>
 <attribute name="TOL" value="10%" constant="no"/>
 </technology>
+<technology name="15NF">
+<attribute name="HEIGHT" value="0.8mm" constant="no"/>
+<attribute name="MANUFACTURER" value="Wurth Elektronik" constant="no"/>
+<attribute name="NR" value="885012206015" constant="no"/>
+<attribute name="PACKAGE" value="0603" constant="no"/>
+<attribute name="SPG" value="10V" constant="no"/>
+<attribute name="TOL" value="10%" constant="no"/>
+</technology>
+<technology name="1NF">
+<attribute name="HEIGHT" value="0.8mm" constant="no"/>
+<attribute name="MANUFACTURER" value="Wurth Elektronik" constant="no"/>
+<attribute name="NR" value="885012006014" constant="no"/>
+<attribute name="PACKAGE" value="0603" constant="no"/>
+<attribute name="SPG" value="10V" constant="no"/>
+<attribute name="TOL" value="5%" constant="no"/>
+</technology>
 <technology name="1UF">
 <attribute name="HEIGHT" value="0.8mm" constant="no"/>
 <attribute name="MANUFACTURER" value="Wurth Elektronik" constant="no"/>
@@ -3124,6 +3183,22 @@ chip</description>
 <attribute name="PACKAGE" value="0603" constant="no"/>
 <attribute name="SPG" value="25V" constant="no"/>
 <attribute name="TOL" value="10%" constant="no"/>
+</technology>
+<technology name="220N">
+<attribute name="HEIGHT" value="0.8mm" constant="no"/>
+<attribute name="MANUFACTURER" value="Wurth Elektronik" constant="no"/>
+<attribute name="NR" value="885012206022" constant="no"/>
+<attribute name="PACKAGE" value="0603" constant="no"/>
+<attribute name="SPG" value="10V" constant="no"/>
+<attribute name="TOL" value="10%" constant="no"/>
+</technology>
+<technology name="4.7UF">
+<attribute name="HEIGHT" value="0.8 mm" constant="no"/>
+<attribute name="MANUFACTURER" value="Wurth Elektronik"/>
+<attribute name="NR" value="885012106005" constant="no"/>
+<attribute name="PACKAGE" value="0603" constant="no"/>
+<attribute name="SPG" value="6.3V" constant="no"/>
+<attribute name="TOL" value="20%" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -3158,6 +3233,28 @@ chip</description>
 <attribute name="PACK" value="1206" constant="no"/>
 <attribute name="SPG" value="" constant="no"/>
 <attribute name="TOL" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="RF" package="C0402_IPC">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="HEIGHT" value="0.5mm" constant="no"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" constant="no"/>
+<attribute name="NR" value="" constant="no"/>
+<attribute name="PACK" value="0402" constant="no"/>
+<attribute name="TOL" value="" constant="no"/>
+</technology>
+<technology name="22PF">
+<attribute name="HEIGHT" value="" constant="no"/>
+<attribute name="MANUFACTURER" value="" constant="no"/>
+<attribute name="NR" value="885392005114" constant="no"/>
+<attribute name="PACK" value="" constant="no"/>
+<attribute name="TOL" value="5%" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -5083,7 +5180,7 @@ Details see: &lt;a href="https://www.we-online.com/catalog/en/WL-SMSW/"&gt;https
 <part name="C1" library="rcl-amber" deviceset="C" device="0402_IPC" value="n.m."/>
 <part name="C2" library="rcl-amber" deviceset="C" device="0201_IPC" value="n.m."/>
 <part name="C3" library="rcl-amber" deviceset="C" device="0201_IPC" value="n.m."/>
-<part name="C4" library="rcl-amber" deviceset="C" device="0402_IPC" technology="22PF" value="22pF"/>
+<part name="C4" library="rcl-WE" deviceset="C" device="0402_IPC" technology="22PF" value="22pF"/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
@@ -5092,7 +5189,7 @@ Details see: &lt;a href="https://www.we-online.com/catalog/en/WL-SMSW/"&gt;https
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="C5" library="rcl-WE" deviceset="C" device="0402_IPC" technology="4.7UF" value="4u7"/>
-<part name="C6" library="rcl-amber" deviceset="C" device="0402_IPC" technology="100NF" value="100nF"/>
+<part name="C6" library="rcl-WE" deviceset="C" device="0402_IPC" technology="100NF" value="100nF"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="+3V4" library="supply1" deviceset="+3V3" device=""/>
@@ -5134,7 +5231,7 @@ Details see: &lt;a href="https://www.we-online.com/catalog/en/WL-SMSW/"&gt;https
 <part name="+3V9" library="supply1" deviceset="+3V3" device=""/>
 <part name="+3V10" library="supply1" deviceset="+3V3" device=""/>
 <part name="R6" library="rcl-amber" deviceset="R" device="0402_IPC" technology="10KR" value="10kR"/>
-<part name="C7" library="rcl-amber" deviceset="C" device="0402_IPC" technology="1UF" value="1uF"/>
+<part name="C7" library="rcl-WE" deviceset="C" device="0402_IPC" technology="1UF" value="1uF"/>
 <part name="GND15" library="supply1" deviceset="GND" device=""/>
 <part name="TP1" library="testpad" deviceset="TP-DRILL" device="0.6" value="n.m."/>
 <part name="TP2" library="testpad" deviceset="TP-DRILL" device="0.6" value="n.m."/>
@@ -5750,7 +5847,7 @@ Details see: &lt;a href="https://www.we-online.com/catalog/en/WL-SMSW/"&gt;https
 <junction x="190.5" y="60.96"/>
 </segment>
 </net>
-<net name="APP_MODE_1" class="0">
+<net name="APP_MODE_0" class="0">
 <segment>
 <pinref part="MOD1" gate="G$1" pin="10"/>
 <wire x1="88.9" y1="60.96" x2="86.36" y2="60.96" width="0.1524" layer="91"/>
@@ -5767,7 +5864,7 @@ Details see: &lt;a href="https://www.we-online.com/catalog/en/WL-SMSW/"&gt;https
 <pinref part="JP2" gate="A" pin="4"/>
 </segment>
 </net>
-<net name="APP_MODE_0" class="0">
+<net name="APP_MODE_1" class="0">
 <segment>
 <pinref part="MOD1" gate="G$1" pin="11"/>
 <wire x1="88.9" y1="58.42" x2="86.36" y2="58.42" width="0.1524" layer="91"/>
