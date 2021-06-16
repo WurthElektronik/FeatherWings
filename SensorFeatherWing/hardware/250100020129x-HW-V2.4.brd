@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.7.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -53,12 +53,12 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
@@ -182,7 +182,7 @@
 <text x="22.34" y="20.17" size="0.8128" layer="25" font="vector" rot="R45" align="top-right">5V</text>
 <text x="24.88" y="20.17" size="0.8128" layer="25" font="vector" rot="R45" align="top-right">13</text>
 <text x="27.32" y="20.17" size="0.8128" layer="25" font="vector" rot="R45" align="top-right">12</text>
-<text x="30.26" y="20.17" size="0.6096" layer="25" font="vector" rot="R30" align="top-right">URX1</text>
+<text x="30.26" y="20.17" size="0.6096" layer="25" font="vector" rot="R25" align="top-right">URX1</text>
 <text x="32.9" y="20.17" size="0.6096" layer="25" font="vector" rot="R30" align="top-right">UTX1</text>
 <text x="34.84" y="20.17" size="0.8128" layer="25" font="vector" rot="R45" align="top-right">9</text>
 <text x="37.035353125" y="20.2136375" size="0.8128" layer="25" font="vector" rot="R45" align="top-right">6</text>
@@ -273,7 +273,7 @@
 <wire x1="38.65" y1="8.5" x2="38.65" y2="14.5" width="0.1" layer="25"/>
 <wire x1="38.65" y1="14.5" x2="33.35" y2="14.5" width="0.1" layer="25"/>
 <text x="36" y="7.5" size="0.8128" layer="26" font="vector" rot="MR90" align="center-left">JP1:
-GPIOA4 - INT</text>
+GPIOA5 - SPI_CE</text>
 <text x="30.5" y="4.5" size="0.8128" layer="26" font="vector" rot="MR90" align="center-left">JP2:
 1 - 2: Pull Up I2C_SCL
 3 - 4: Pull Up I2C_SDA</text>
@@ -332,6 +332,9 @@ for resale</text>
 <wire x1="45.72" y1="20.32" x2="15.24" y2="20.32" width="0.254" layer="21"/>
 <wire x1="15.24" y1="20.32" x2="15.24" y2="22.86" width="0.254" layer="21"/>
 <text x="6.65" y="16.75" size="0.8128" layer="25" font="vector" align="bottom-center">1</text>
+<text x="-0.6" y="25.5" size="1.778" layer="31">ACHTUNG: IC1, IC2, IC3, IC4 sind empfindliche
+Komponenten. Die Pastendaten dürfen in der 
+absoluten Ausdehnung nicht verändert werden.</text>
 </plain>
 <libraries>
 <library name="adafruit">
@@ -477,18 +480,6 @@ Copyright: Würth Elektronik</description>
 </library>
 <library name="rcl-amber">
 <packages>
-<package name="C0402_IPC">
-<wire x1="0.475" y1="0.225" x2="-0.475" y2="0.225" width="0.1" layer="51"/>
-<wire x1="-0.475" y1="0.225" x2="-0.475" y2="-0.225" width="0.1" layer="51"/>
-<wire x1="-0.475" y1="-0.225" x2="0.475" y2="-0.225" width="0.1" layer="51"/>
-<wire x1="0.475" y1="-0.225" x2="0.475" y2="0.225" width="0.1" layer="51"/>
-<smd name="1" x="-0.45" y="0" dx="0.6" dy="0.6" layer="1"/>
-<smd name="2" x="0.45" y="0" dx="0.6" dy="0.6" layer="1"/>
-<text x="-0.75" y="0.8" size="0.4064" layer="25">&gt;name</text>
-<text x="-0.75" y="0.35" size="0.4064" layer="27">&gt;value</text>
-<rectangle x1="-0.525" y1="-0.275" x2="-0.225" y2="0.275" layer="51"/>
-<rectangle x1="0.225" y1="-0.275" x2="0.525" y2="0.275" layer="51"/>
-</package>
 <package name="R0402_IPC">
 <wire x1="0.475" y1="0.25" x2="-0.475" y2="0.25" width="0.1" layer="51"/>
 <wire x1="-0.475" y1="0.25" x2="-0.475" y2="-0.25" width="0.1" layer="51"/>
@@ -20865,6 +20856,22 @@ no vias, drills</text>
 </package>
 </packages>
 </library>
+<library name="rcl-WE">
+<packages>
+<package name="C0402_IPC">
+<wire x1="0.475" y1="0.225" x2="-0.475" y2="0.225" width="0.1" layer="51"/>
+<wire x1="-0.475" y1="0.225" x2="-0.475" y2="-0.225" width="0.1" layer="51"/>
+<wire x1="-0.475" y1="-0.225" x2="0.475" y2="-0.225" width="0.1" layer="51"/>
+<wire x1="0.475" y1="-0.225" x2="0.475" y2="0.225" width="0.1" layer="51"/>
+<smd name="1" x="-0.45" y="0" dx="0.6" dy="0.6" layer="1"/>
+<smd name="2" x="0.45" y="0" dx="0.6" dy="0.6" layer="1"/>
+<text x="-0.75" y="0.8" size="0.4064" layer="25">&gt;name</text>
+<text x="-0.75" y="0.35" size="0.4064" layer="27">&gt;value</text>
+<rectangle x1="-0.525" y1="-0.275" x2="-0.225" y2="0.275" layer="51"/>
+<rectangle x1="0.225" y1="-0.275" x2="0.525" y2="0.275" layer="51"/>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -21107,38 +21114,38 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER" value="Würth Elektronik" x="1.27" y="11.43" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="COMMENT" value="Stick out of PCB" x="1.27" y="11.43" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
-<element name="C8" library="rcl-amber" package="C0402_IPC" value="10uF" x="21.8" y="7.05" smashed="yes" rot="R180">
+<element name="C8" library="rcl-WE" package="C0402_IPC" value="10uF" x="21.8" y="7.05" smashed="yes" rot="R180">
 <attribute name="HEIGHT" value="0.5mm" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="21.8375" y="6.55" size="0.6096" layer="25" font="vector" rot="R180" align="bottom-center"/>
-<attribute name="NR" value="GRM155R60J106ME15J " x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NR" value="885012105020" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="SPG" value="6.3V" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="TOL" value="20%" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="22.335" y="6.555" size="0.6096" layer="27" rot="R180"/>
-<attribute name="MANUFACTURER" value="Murata" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MAT" value="X5R" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACK" value="0402" x="21.8" y="7.05" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="C9" library="rcl-amber" package="C0402_IPC" value="100nF" x="21.8" y="8" smashed="yes" rot="R180">
+<element name="C9" library="rcl-WE" package="C0402_IPC" value="100nF" x="21.8" y="8" smashed="yes" rot="R180">
 <attribute name="HEIGHT" value="0.5mm" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MAT" value="X7R" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="20.4625" y="8.35" size="0.6096" layer="25" font="vector" rot="R180" align="bottom-center"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NR" value="885012205037     " x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACK" value="0402" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="SPG" value="16V" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="TOL" value="10%" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="22.935" y="9.255" size="0.6096" layer="27" rot="R180"/>
-<attribute name="MANUFACTURER" value="Yageo" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="21.8" y="8" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="C10" library="rcl-amber" package="C0402_IPC" value="100nF" x="23.5" y="8" smashed="yes">
+<element name="C10" library="rcl-WE" package="C0402_IPC" value="100nF" x="23.5" y="8" smashed="yes">
 <attribute name="HEIGHT" value="0.5mm" x="23.5" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="MAT" value="X7R" x="23.5" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="25.75875" y="7.7425" size="0.6096" layer="25" font="vector" align="bottom-center"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="23.5" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="NR" value="885012205037     " x="23.5" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="PACK" value="0402" x="23.5" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="SPG" value="16V" x="23.5" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="TOL" value="10%" x="23.5" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="22.915" y="6.945" size="0.6096" layer="27"/>
-<attribute name="MANUFACTURER" value="Yageo" x="23.5" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="23.5" y="8" size="1.778" layer="27" display="off"/>
 </element>
 <element name="R4" library="rcl-amber" package="R0402_IPC" value="4k7" x="46.7" y="17.2" smashed="yes" rot="R90">
 <attribute name="NAME" x="47.97" y="17.2" size="0.6096" layer="25" font="vector" rot="R90" align="bottom-center"/>
@@ -21160,49 +21167,49 @@ design rules under a new name.</description>
 <attribute name="HEIGHT" value="0.35mm" x="34" y="17.7" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACK" value="0402" x="34" y="17.7" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="C7" library="rcl-amber" package="C0402_IPC" value="100nF" x="15.8" y="14.9" smashed="yes">
+<element name="C7" library="rcl-WE" package="C0402_IPC" value="100nF" x="15.8" y="14.9" smashed="yes">
 <attribute name="HEIGHT" value="0.5mm" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 <attribute name="MAT" value="X7R" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="14.4775" y="14.6725" size="0.6096" layer="25" font="vector" align="bottom-center"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
+<attribute name="NR" value="885012205037     " x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 <attribute name="PACK" value="0402" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 <attribute name="SPG" value="16V" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 <attribute name="TOL" value="10%" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="14.065" y="15.395" size="0.6096" layer="27"/>
-<attribute name="MANUFACTURER" value="Yageo" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="15.8" y="14.9" size="1.778" layer="27" display="off"/>
 </element>
-<element name="C6" library="rcl-amber" package="C0402_IPC" value="100nF" x="18.4" y="11.55" smashed="yes" rot="R270">
+<element name="C6" library="rcl-WE" package="C0402_IPC" value="100nF" x="18.4" y="11.55" smashed="yes" rot="R270">
 <attribute name="HEIGHT" value="0.5mm" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MAT" value="X7R" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="18.1725" y="10.1225" size="0.6096" layer="25" font="vector" rot="R270" align="bottom-center"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NR" value="885012205037     " x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="PACK" value="0402" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="SPG" value="16V" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="TOL" value="10%" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="17.145" y="12.785" size="0.6096" layer="27" rot="R270"/>
-<attribute name="MANUFACTURER" value="Yageo" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="18.4" y="11.55" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
-<element name="C3" library="rcl-amber" package="C0402_IPC" value="4.7uF" x="29.2" y="7.15" smashed="yes" rot="R180">
+<element name="C3" library="rcl-WE" package="C0402_IPC" value="4.7uF" x="29.2" y="7.15" smashed="yes" rot="R180">
 <attribute name="HEIGHT" value="0.5mm" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="30.96" y="7.45" size="0.6096" layer="25" font="vector" rot="R180" align="bottom-center"/>
-<attribute name="NR" value="GRM155R60J475ME87J" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NR" value="885012105008     " x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACK" value="0402" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="SPG" value="6.3V" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="TOL" value="15%" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="TOL" value="20%" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="28.335" y="9.055" size="1.27" layer="27" rot="R180"/>
-<attribute name="MANUFACTURER" value="Murata" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MAT" value="X5R" x="29.2" y="7.15" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="C4" library="rcl-amber" package="C0402_IPC" value="100nF" x="29.2" y="7.95" smashed="yes" rot="R180">
+<element name="C4" library="rcl-WE" package="C0402_IPC" value="100nF" x="29.2" y="7.95" smashed="yes" rot="R180">
 <attribute name="HEIGHT" value="0.5mm" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MAT" value="X7R" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="30.9675" y="8.35" size="0.6096" layer="25" font="vector" rot="R180" align="bottom-center"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NR" value="885012205037     " x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACK" value="0402" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="SPG" value="16V" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="TOL" value="10%" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="29.335" y="9.855" size="0.6096" layer="27" rot="R180"/>
-<attribute name="MANUFACTURER" value="Yageo" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="29.2" y="7.95" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
 <element name="CON5" library="250100020129x-HW-V2.0" package="613006243121" value="2x3" x="49.53" y="11.43" smashed="yes" rot="R90">
 <attribute name="NAME" x="48.25" y="6.8" size="0.6096" layer="25" font="vector" rot="R180" align="bottom-center"/>
@@ -21224,14 +21231,14 @@ design rules under a new name.</description>
 <attribute name="TOL" value="1%" x="27.15" y="5.95" size="1.778" layer="27" display="off"/>
 <attribute name="MANUFACTURER" value="Yageo" x="27.15" y="5.95" size="1.778" layer="27" display="off"/>
 </element>
-<element name="C5" library="rcl-amber" package="C0402_IPC" value="10uF" x="18.4" y="16.05" smashed="yes" rot="R90">
+<element name="C5" library="rcl-WE" package="C0402_IPC" value="10uF" x="18.4" y="16.05" smashed="yes" rot="R90">
 <attribute name="HEIGHT" value="0.5mm" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="17.55" y="16.2" size="0.6096" layer="25" font="vector" rot="R180" align="bottom-center"/>
-<attribute name="NR" value="GRM155R60J106ME15J " x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="NR" value="885012105020" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="SPG" value="6.3V" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="TOL" value="20%" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="19.405" y="15.415" size="0.6096" layer="27" rot="R90"/>
-<attribute name="MANUFACTURER" value="Murata" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MAT" value="X5R" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="PACK" value="0402" x="18.4" y="16.05" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
@@ -21333,24 +21340,24 @@ design rules under a new name.</description>
 <attribute name="NAME" x="38.55" y="9.55" size="0.8128" layer="25" font="vector" rot="R180"/>
 <attribute name="VALUE" x="35" y="12.6" size="0.2546625" layer="27"/>
 </element>
-<element name="C11" library="rcl-amber" package="C0402_IPC" value="10µF" x="36.3" y="7.2" smashed="yes">
+<element name="C11" library="rcl-WE" package="C0402_IPC" value="10µF" x="36.3" y="7.2" smashed="yes">
 <attribute name="SPG" value="6.3V" x="33.7" y="14.55" size="1.778" layer="27" display="off"/>
 <attribute name="HEIGHT" value="0.5mm" x="33.7" y="14.55" size="1.778" layer="27" display="off"/>
-<attribute name="NR" value="GRM155R60J106ME15J " x="33.7" y="14.55" size="1.778" layer="27" display="off"/>
+<attribute name="NR" value="885012105020" x="33.7" y="14.55" size="1.778" layer="27" display="off"/>
 <attribute name="TOL" value="20%" x="33.7" y="14.55" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER" value="Murata" x="36.3" y="7.2" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="36.3" y="7.2" size="1.778" layer="27" display="off"/>
 <attribute name="MAT" value="X5R" x="36.3" y="7.2" size="1.778" layer="27" display="off"/>
 <attribute name="PACK" value="0402" x="36.3" y="7.2" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="37.35" y="5.3" size="0.6096" layer="25"/>
 <attribute name="VALUE" x="35.3" y="6.45" size="0.4064" layer="27"/>
 </element>
-<element name="C12" library="rcl-amber" package="C0402_IPC" value="100nF" x="36.3" y="8" smashed="yes">
+<element name="C12" library="rcl-WE" package="C0402_IPC" value="100nF" x="36.3" y="8" smashed="yes">
 <attribute name="SPG" value="16V" x="31.05" y="6.2" size="1.778" layer="27" display="off"/>
 <attribute name="HEIGHT" value="0.5mm" x="31.05" y="6.2" size="1.778" layer="27" display="off"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="31.05" y="6.2" size="1.778" layer="27" display="off"/>
+<attribute name="NR" value="885012205037     " x="31.05" y="6.2" size="1.778" layer="27" display="off"/>
 <attribute name="TOL" value="10%" x="31.05" y="6.2" size="1.778" layer="27" display="off"/>
 <attribute name="PACK" value="0402" x="31.05" y="6.2" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER" value="Yageo" x="36.3" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="36.3" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="MAT" value="X7R" x="36.3" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="37.35" y="6.05" size="0.6096" layer="25"/>
 <attribute name="VALUE" x="34.85" y="8.65" size="0.4064" layer="27"/>

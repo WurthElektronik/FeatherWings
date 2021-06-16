@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.5.0">
+<eagle version="7.7.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23,18 +23,18 @@
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
 <layer number="15" name="Route15" color="12" fill="4" visible="no" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="0" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="0" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
@@ -197,7 +197,7 @@
 <text x="24.63" y="20.22" size="1.016" layer="25" font="vector" rot="R45" align="top-right">13</text>
 <text x="22.09" y="20.22" size="1.016" layer="25" font="vector" rot="R45" align="top-right">5V</text>
 <text x="19.55" y="20.22" size="1.016" layer="25" font="vector" rot="R45" align="top-right">EN</text>
-<text x="17.01" y="20.22" size="0.8128" layer="25" font="vector" rot="R45" align="top-right">VBAT</text>
+<text x="17.01" y="20.22" size="0.8128" layer="25" font="vector" rot="R30" align="top-right">VBAT</text>
 <rectangle x1="71.7" y1="0.3" x2="73.3" y2="0.65" layer="41"/>
 <rectangle x1="70.15" y1="0.75" x2="70.65" y2="2" layer="41"/>
 <rectangle x1="70.7" y1="1.8" x2="70.9" y2="2.3" layer="41"/>
@@ -224,10 +224,10 @@
 <text x="27.6" y="7.05" size="1.016" layer="25" font="vector">1</text>
 <text x="48.6" y="8.55" size="1.016" layer="25" font="vector">1</text>
 <text x="50.8" y="2.54" size="1.016" layer="26" font="vector" rot="MR90">JP2:
-APP_MODE_0 
+APP_MODE_1 
 high: 1-3
 low:  3-5
-APP_MODE_1
+APP_MODE_0
 high: 2-4
 low:  4-6</text>
 <text x="40.8" y="15.8" size="1.016" layer="26" font="vector" rot="MR0">For evaluation only; 
@@ -235,8 +235,8 @@ For professional use only;
 Not CE / FCC approved for resale;</text>
 <text x="63.5" y="2.54" size="1.016" layer="26" font="vector" rot="MR90">JP3
 S2         - GPIO12
-APP_MODE_0 - GPIOA1
-APP_MODE_1 - GPIOA2
+APP_MODE_1 - GPIOA1
+APP_MODE_0 - GPIOA2
 WAKE_UP    - GPIO6</text>
 <text x="17.85" y="15.7" size="1.4224" layer="25" font="vector">Calypso Wi-Fi FeatherWing</text>
 <wire x1="15.24" y1="22.86" x2="45.72" y2="22.86" width="0.1" layer="21"/>
@@ -6948,48 +6948,49 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_2" value="" x="72.1" y="22" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NR_2" value="" x="72.1" y="22" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
-<element name="C4" library="rcl-amber" package="C0402_IPC" value="22pF" x="71.45" y="21.25" smashed="yes" rot="R270">
+<element name="C4" library="rcl-WE" package="C0402_IPC" value="22pF" x="71.45" y="21.25" smashed="yes" rot="R270">
 <attribute name="NAME" x="73.5" y="21.75" size="0.6096" layer="25" font="vector" rot="R270" align="bottom-center"/>
 <attribute name="VALUE" x="71.605" y="22.965" size="0.6096" layer="27" font="vector" rot="R90"/>
 <attribute name="SPG" value="50V" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="HEIGHT" value="0.5mm" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER" value="Samsung" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MAT" value="COG" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="PACK" value="0402" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NR" value="CL05C220JB5NNNC " x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NR" value="885012005057" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="TOL" value="5%" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MAT" value="NP0" x="71.45" y="21.25" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
 <element name="C5" library="rcl-WE" package="C0402_IPC" value="4u7" x="64.4" y="21.8" smashed="yes" rot="R90">
 <attribute name="NAME" x="61.699996875" y="22.049996875" size="0.8128" layer="25" font="vector" rot="R270" align="bottom-center"/>
 <attribute name="VALUE" x="62.455" y="19.364996875" size="0.6096" layer="27" font="vector" rot="R90"/>
-<attribute name="SPG" value="10V" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="SPG" value="6.3V" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="HEIGHT" value="0.5mm" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MANUFACTURER" value="Würth Elektronik" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="PACK" value="0402" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NR" value="885012105008     " x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="TOL" value="10%" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="TOL" value="20%" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MAT" value="X5R" x="64.4" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
-<element name="C6" library="rcl-amber" package="C0402_IPC" value="100nF" x="65.9" y="21.8" smashed="yes" rot="R90">
+<element name="C6" library="rcl-WE" package="C0402_IPC" value="100nF" x="65.9" y="21.8" smashed="yes" rot="R90">
 <attribute name="NAME" x="62.749996875" y="22.049996875" size="0.8128" layer="25" font="vector" rot="R270" align="bottom-center"/>
 <attribute name="VALUE" x="63.90499375" y="18.265" size="0.6096" layer="27" font="vector" rot="R90"/>
 <attribute name="SPG" value="16V" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="HEIGHT" value="0.5mm" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER" value="Yageo" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MAT" value="X7R" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="PACK" value="0402" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NR" value="CC0402KRX7R7BB104" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="NR" value="885012205037     " x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="TOL" value="10%" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MAT" value="X7R" x="65.9" y="21.8" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
-<element name="C7" library="rcl-amber" package="C0402_IPC" value="1uF" x="10.85" y="17.4" smashed="yes" rot="R270">
+<element name="C7" library="rcl-WE" package="C0402_IPC" value="1uF" x="10.85" y="17.4" smashed="yes" rot="R270">
 <attribute name="NAME" x="11.21" y="15" size="0.8128" layer="25" font="vector" rot="R90" align="bottom-center"/>
 <attribute name="VALUE" x="9.845" y="18.185" size="0.6096" layer="27" font="vector" rot="R270"/>
-<attribute name="MANUFACTURER" value="Samsung" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER" value="Würth Elektronik" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="PACK" value="0402" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="HEIGHT" value="0.5mm" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="TOL" value="10%" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NR" value="CL05A105KP5NNNC " x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MAT" value="X5R" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="TOL" value="20%" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NR" value="885012105012     " x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="SPG" value="10V" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MAT" value="X5R" x="10.85" y="17.4" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
 <element name="D1" library="155124YS73200A_Eagle_WL-SMSW_rev20a" package="WL-SMSW_1204_A" value="RED" x="1.27" y="6.858" smashed="yes" rot="R90">
 <attribute name="NAME" x="2.75" y="6.75" size="0.8128" layer="25" font="vector" rot="R90" align="bottom-center"/>
@@ -7534,7 +7535,7 @@ design rules under a new name.</description>
 <via x="21.05" y="13.75" extent="1-16" drill="0.3" diameter="0.6"/>
 <wire x1="21.05" y1="13.75" x2="18.05" y2="13.75" width="0.2" layer="1"/>
 </signal>
-<signal name="APP_MODE_1">
+<signal name="APP_MODE_0">
 <contactref element="MOD1" pad="10"/>
 <wire x1="59.15" y1="19.55" x2="59.15" y2="20.55" width="0.2" layer="1"/>
 <wire x1="59.15" y1="20.55" x2="58.3" y2="21.4" width="0.2" layer="1"/>
@@ -7551,7 +7552,7 @@ design rules under a new name.</description>
 <wire x1="39.36" y1="10.15" x2="35.55" y2="10.15" width="0.2" layer="1"/>
 <wire x1="35.55" y1="10.15" x2="34.29" y2="8.89" width="0.2" layer="1"/>
 </signal>
-<signal name="APP_MODE_0">
+<signal name="APP_MODE_1">
 <contactref element="MOD1" pad="11"/>
 <wire x1="48.3206" y1="15.37921875" x2="50.470690625" y2="17.529309375" width="0.2" layer="1"/>
 <wire x1="46.99" y1="11.43" x2="47.63" y2="11.43" width="0.2" layer="1"/>
