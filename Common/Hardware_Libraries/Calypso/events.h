@@ -28,21 +28,21 @@
 #define EVENTS_H_INCLUDED
 
 /* ###########################################################################
-* Includes:
-*/
+ * Includes:
+ */
 #include <stdint.h>
 #include "calypso.h"
 /*
-* Includes.
-* ######################################################################### */
+ * Includes.
+ * ######################################################################### */
 
 /* ###########################################################################
-* Macros & Typedefs:
-*/
+ * Macros & Typedefs:
+ */
 
 /* #############################
-* Constant Macros:
-*/
+ * Constant Macros:
+ */
 
 #define ATEVENT_GENERAL_MASK (uint32_t)0x00000100
 #define ATEVENT_WLAN_MASK (uint32_t)0x00001000
@@ -115,20 +115,20 @@
     GENERATOR(ATEventFatalError_, NumberOfValues)
 
 /*
-* Constant Macros.
-* ########################### */
+ * Constant Macros.
+ * ########################### */
 
 /* #############################
-* Function Macros:
-*/
+ * Function Macros:
+ */
 
 /*
-* Function Macros.
-* ########################## */
+ * Function Macros.
+ * ########################## */
 
 /* #############################
-* Typedefs:
-*/
+ * Typedefs:
+ */
 
 typedef enum ATEvent_t
 {
@@ -149,6 +149,7 @@ typedef enum ATEvent_t
     ATEvent_Wlanp2pClientRemoved,
     ATEvent_Wlanp2pDevFound,
     ATEvent_Wlanp2pRequest,
+    ATEvemt_p2p_connectfail,
     ATEvent_WlanProvisioningStatus,
     ATEvent_WlanProvisioningProfileAdded,
 
@@ -174,6 +175,9 @@ typedef enum ATEvent_t
     ATEvent_MQTTOperation,
     ATEvent_MQTTRecv,
     ATEvent_MQTTDisconnect,
+
+    ATEvent_HTTPGet,
+    ATEvent_Custom,
 
     ATEvent_FatalError = ATEVENT_FATALERROR_MASK,
     ATEvent_FatalErrorDeviceAbort,
@@ -258,37 +262,37 @@ typedef struct ATEvent_NetappIP4Aquired_t
 } ATEvent_NetappIP4Aquired_t;
 
 /*
-* Typedefs.
-* ########################## */
+ * Typedefs.
+ * ########################## */
 
 /*
-* Macros & Typedefs.
-* ######################################################################## */
+ * Macros & Typedefs.
+ * ######################################################################## */
 
 /* ##########################################################################
-* Declarations:
-*/
+ * Declarations:
+ */
 
 /* #############################
-* Exported Variables:
-*/
+ * Exported Variables:
+ */
 
 /*
-* Exported Variables.
-* ########################## */
+ * Exported Variables.
+ * ########################## */
 
 /* #############################
-* Exported Functions:
-*/
+ * Exported Functions:
+ */
 extern bool ATEvent_parseEventName(char **pAtCommand, ATEvent_t *pEvent);
 extern bool ATEvent_parseEventArgumentValues(char **pCmdArguments, ATEvent_t event, void *pValues);
 
 /*
-* Exported Functions.
-* ########################## */
+ * Exported Functions.
+ * ########################## */
 
 /*
-* Declarations.
-* ######################################################################### */
+ * Declarations.
+ * ######################################################################### */
 
 #endif // EVENTS_H_INCLUDED

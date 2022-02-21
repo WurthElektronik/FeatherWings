@@ -31,78 +31,88 @@
 #include "ConfigPlatform.h"
 
 /**         Functions definition         */
-
-#define NUMBER_OF_SENSORS 4
-#define LENGTH_OF_NAMES 50
+#define LENGTH_OF_NAMES 16
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-typedef enum {
-    padsTemperature,
-    padsPressure,
-    padsProperties
-} PADS_properties_t;
+    typedef enum
+    {
+        padsTemperature,
+        padsPressure,
+        padsProperties
+    } PADS_properties_t;
 
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[padsProperties];
-    const char *dataNames[padsProperties];
-} PADS;
+    typedef struct
+    {
+        TypeSerial *serialDebug;
+        char nameType[LENGTH_OF_NAMES];
+        float data[padsProperties];
+        const char *dataNames[padsProperties];
+    } PADS;
 
-PADS *PADSCreate(TypeSerial *serialDebug);
-void PADSDestroy(PADS *pads);
-bool PADS_simpleInit(PADS *self);
-bool PADS_readSensorData(PADS *self);
+    PADS *PADSCreate(TypeSerial *serialDebug);
+    void PADSDestroy(PADS *pads);
+    bool PADS_simpleInit(PADS *self);
+    bool PADS_readSensorData(PADS *self);
 
-typedef enum {
-    itdsXAcceleration,
-    itdsYAcceleration,
-    itdsZAcceleration,
-    itdsProperties
-} ITDS_properties_t;
+    typedef enum
+    {
+        itdsXAcceleration,
+        itdsYAcceleration,
+        itdsZAcceleration,
+        itdsProperties
+    } ITDS_properties_t;
 
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[itdsProperties];
-    const char *dataNames[itdsProperties];
-} ITDS;
-ITDS *ITDSCreate(TypeSerial *serialDebug);
-void ITDSDestroy(ITDS *itds);
-bool ITDS_readSensorData(ITDS *self);
-bool ITDS_simpleInit(ITDS *self);
+    typedef struct
+    {
+        TypeSerial *serialDebug;
+        char nameType[LENGTH_OF_NAMES];
+        float data[itdsProperties];
+        const char *dataNames[itdsProperties];
+    } ITDS;
+    ITDS *ITDSCreate(TypeSerial *serialDebug);
+    void ITDSDestroy(ITDS *itds);
+    bool ITDS_readSensorData(ITDS *self);
+    bool ITDS_simpleInit(ITDS *self);
 
-typedef enum { tidsTemperature, tidsProperties } TIDS_properties_t;
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[tidsProperties];
-    const char *dataNames[tidsProperties];
-} TIDS;
+    typedef enum
+    {
+        tidsTemperature,
+        tidsProperties
+    } TIDS_properties_t;
+    typedef struct
+    {
+        TypeSerial *serialDebug;
+        char nameType[LENGTH_OF_NAMES];
+        float data[tidsProperties];
+        const char *dataNames[tidsProperties];
+    } TIDS;
 
-TIDS *TIDSCreate(TypeSerial *serialDebug);
-void TIDSDestroy(TIDS *tids);
-bool TIDS_simpleInit(TIDS *self);
-bool TIDS_readSensorData(TIDS *self);
-typedef enum {
-    hidsTemperature,
-    hidsRelHumidity,
-    hidsProperties
-} HIDS_properties_t;
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[hidsProperties];
-    const char *dataNames[hidsProperties];
-} HIDS;
+    TIDS *TIDSCreate(TypeSerial *serialDebug);
+    void TIDSDestroy(TIDS *tids);
+    bool TIDS_simpleInit(TIDS *self);
+    bool TIDS_readSensorData(TIDS *self);
+    typedef enum
+    {
+        hidsTemperature,
+        hidsRelHumidity,
+        hidsProperties
+    } HIDS_properties_t;
+    typedef struct
+    {
+        TypeSerial *serialDebug;
+        char nameType[LENGTH_OF_NAMES];
+        float data[hidsProperties];
+        const char *dataNames[hidsProperties];
+    } HIDS;
 
-HIDS *HIDSCreate(TypeSerial *serialDebug);
-void HIDSDestroy(HIDS *tids);
-bool HIDS_simpleInit(HIDS *self);
-bool HIDS_readSensorData(HIDS *self);
+    HIDS *HIDSCreate(TypeSerial *serialDebug);
+    void HIDSDestroy(HIDS *tids);
+    bool HIDS_simpleInit(HIDS *self);
+    bool HIDS_readSensorData(HIDS *self);
 
 #ifdef __cplusplus
 }

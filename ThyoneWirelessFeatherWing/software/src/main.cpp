@@ -42,9 +42,6 @@ String msg1;
 // Thyone I object
 THYONEI *thyoneI;
 
-// Thyone-I settings
-ThyoneISettings thysettings;
-
 // Serial communication port for Thyone-I
 TypeHardwareSerial *SerialThyoneI;
 
@@ -65,7 +62,7 @@ void setup() {
     pinPeripheral(10, PIO_SERCOM);
     pinPeripheral(11, PIO_SERCOM);
 
-    thyoneI = THYONEI_Create(SerialDebug, SerialThyoneI, &thysettings);
+    thyoneI = THYONEI_Create(SerialDebug, SerialThyoneI);
 
     if (!THYONEI_simpleInit(thyoneI)) {
         SSerial_printf(SerialDebug, "Thyone init failed \r\n");

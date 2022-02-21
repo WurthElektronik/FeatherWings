@@ -1,42 +1,44 @@
 /**
- ***************************************************************************************************
- * This file is part of WE sensors SDK:
- * https://www.we-online.com/sensors
- *
- * THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
- * EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
- * TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
- * MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
- * WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
- * RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
- * COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
- * WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
- * FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
- * THEREOF
- *
- * THIS SOURCE CODE IS PROTECTED BY A LICENSE.
- * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
- * IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
- *
- * COPYRIGHT (c) 2019 Würth Elektronik eiSos GmbH & Co. KG
- *
- ***************************************************************************************************
- **/
+***************************************************************************************************
+* This file is part of WE sensors SDK:
+* https://www.we-online.com/sensors, https://github.com/WurthElektronik/Sensors-SDK
+*
+* THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
+* EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
+* TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
+* MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
+* WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
+* RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
+* COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
+* WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
+* FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
+* THEREOF
+*
+* THIS SOURCE CODE IS PROTECTED BY A LICENSE.
+* FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
+* IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
+*
+* COPYRIGHT (c) 2019 Würth Elektronik eiSos GmbH & Co. KG
+*
+***************************************************************************************************
+**/
 
 #include "WSEN_PADS_2511020213301.h"
-#include "ConfigPlatform.h"
+#include <stdio.h>
+
 
 /**
- * @brief  Read the device ID
- * @param  Pointer to device ID.
- * @retval Error code
- */
+* @brief  Read the device ID
+* @param  Pointer to device ID.
+* @retval Error code
+*/
 int8_t PADS_getDeviceID(uint8_t *devID)
 {
-	if (ReadReg((uint8_t)PADS_DEVICE_ID_REG, 1, devID))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_DEVICE_ID_REG, 1, devID))
+	return WE_FAIL;
 
 	return WE_SUCCESS; /* expected value is PADS_DEVICE_ID_VALUE */
+
 }
 
 /**
@@ -49,13 +51,13 @@ int8_t PADS_setOutputDataRate(PADS_output_data_rate_t odr)
 
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	ctrl_reg_1.outputDataRate = odr;
 
-	if (WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -65,12 +67,12 @@ int8_t PADS_setOutputDataRate(PADS_output_data_rate_t odr)
 * @param  Pointer to Output Data Rate
 * @retval Error code
 */
-int8_t PADS_getOutputDataRate(PADS_output_data_rate_t *odr)
+int8_t PADS_getOutputDataRate(PADS_output_data_rate_t* odr)
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	*odr = (PADS_output_data_rate_t)ctrl_reg_1.outputDataRate;
 	return WE_SUCCESS;
@@ -85,13 +87,13 @@ int8_t PADS_setLowPassFilter(PADS_state_t filterStatus)
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	ctrl_reg_1.enLowPassFilter = filterStatus;
 
-	if (WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -105,8 +107,8 @@ int8_t PADS_getLowPassFilterStatus(PADS_state_t *filterStatus)
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 	*filterStatus = (PADS_state_t)ctrl_reg_1.enLowPassFilter;
 
 	return WE_SUCCESS;
@@ -121,28 +123,29 @@ int8_t PADS_setLowPassFilterConf(PADS_filter_conf_t conf)
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	ctrl_reg_1.lowPassFilterConfig = conf;
 
-	if (WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Read the low pass filter configuration
 * @param  Pointer to Low pass filter configuration
 * @retval Error code
 */
-int8_t PADS_getLowPassFilterConf(PADS_filter_conf_t *conf)
+int8_t PADS_getLowPassFilterConf(PADS_filter_conf_t *conf )
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 	*conf = (PADS_filter_conf_t)ctrl_reg_1.lowPassFilterConfig;
 
 	return WE_SUCCESS;
@@ -157,13 +160,13 @@ int8_t PADS_setBlockDataUpdate(PADS_state_t bdu)
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	ctrl_reg_1.blockDataUpdate = bdu;
 
-	if (WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -177,8 +180,8 @@ int8_t PADS_getBlockDataUpdateState(PADS_state_t *bdu)
 {
 	PADS_ctrl_1_t ctrl_reg_1;
 
-	if (ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_1_REG, 1, (uint8_t *)&ctrl_reg_1))
+	return WE_FAIL;
 
 	*bdu = (PADS_state_t)ctrl_reg_1.blockDataUpdate;
 	return WE_SUCCESS;
@@ -193,13 +196,13 @@ int8_t PADS_setPowerMode(PADS_pwr_mode_t mode)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.lowNoiseMode = mode;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -213,8 +216,8 @@ int8_t PADS_getPowerMode(PADS_pwr_mode_t *mode)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*mode = (PADS_pwr_mode_t)ctrl_reg_2.lowNoiseMode;
 
 	return WE_SUCCESS;
@@ -229,13 +232,13 @@ int8_t PADS_setAutoIncrement(PADS_state_t autoInc)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.autoAddIncr = autoInc;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -249,8 +252,8 @@ int8_t PADS_getAutoIncrementState(PADS_state_t *inc)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*inc = (PADS_state_t)ctrl_reg_2.autoAddIncr;
 
 	return WE_SUCCESS;
@@ -265,13 +268,13 @@ int8_t PADS_rebootMemory(PADS_state_t reboot)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.boot = reboot;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -285,8 +288,8 @@ int8_t PADS_getRebootMemoryState(PADS_state_t *reboot)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*reboot = (PADS_state_t)ctrl_reg_2.boot;
 
 	return WE_SUCCESS;
@@ -301,8 +304,8 @@ int8_t PADS_getBootStatus(PADS_state_t *boot)
 {
 	PADS_intSource_t int_source_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source_reg))
+	return WE_FAIL;
 	*boot = (PADS_state_t)int_source_reg.bootOn;
 
 	return WE_SUCCESS;
@@ -317,13 +320,13 @@ int8_t PADS_setIntActiveLevel(PADS_interrupt_level_t intLvl)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.intActiveLevel = intLvl;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -337,8 +340,8 @@ int8_t PADS_getIntActiveLevel(PADS_interrupt_level_t *intLvl)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*intLvl = (PADS_interrupt_level_t)ctrl_reg_2.intActiveLevel;
 
 	return WE_SUCCESS;
@@ -353,13 +356,13 @@ int8_t PADS_setIntPinType(PADS_interrupt_pin_t intr)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.openDrainOnINTpin = intr;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -373,8 +376,8 @@ int8_t PADS_getIntPinType(PADS_interrupt_pin_t *intr)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*intr = (PADS_interrupt_pin_t)ctrl_reg_2.openDrainOnINTpin;
 
 	return WE_SUCCESS;
@@ -389,13 +392,13 @@ int8_t PADS_setSingleConvMode(PADS_state_t mode)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.oneShotbit = mode;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -409,8 +412,8 @@ int8_t PADS_getSingleConvModeState(PADS_state_t *mode)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*mode = (PADS_state_t)ctrl_reg_2.oneShotbit;
 
 	return WE_SUCCESS;
@@ -425,13 +428,13 @@ int8_t PADS_setSwreset(PADS_state_t mode)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	ctrl_reg_2.softwareReset = mode;
 
-	if (WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -445,8 +448,8 @@ int8_t PADS_getSwresetState(PADS_state_t *mode)
 {
 	PADS_ctrl_2_t ctrl_reg_2;
 
-	if (ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_2_REG, 1, (uint8_t *)&ctrl_reg_2))
+	return WE_FAIL;
 	*mode = (PADS_state_t)ctrl_reg_2.softwareReset;
 
 	return WE_SUCCESS;
@@ -461,13 +464,13 @@ int8_t PADS_setFifoFullInt(PADS_state_t fullState)
 {
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	ctrl_reg_3.fifoFullInt = fullState;
 
-	if (WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -481,13 +484,14 @@ int8_t PADS_setFifoWtmInt(PADS_state_t WtmState)
 {
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	ctrl_reg_3.fifoThresholdInt = WtmState;
 
-	if (WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -501,13 +505,13 @@ int8_t PADS_setFifoOvrInterrupt(PADS_state_t OvrState)
 {
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	ctrl_reg_3.fifoOverrunInt = OvrState;
 
-	if (WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -521,8 +525,8 @@ int8_t PADS_getFifoFullState(PADS_state_t *fifoFull)
 {
 	PADS_fifo_status2_t fifo_status2;
 
-	if (ReadReg((uint8_t)PADS_FIFO_STATUS2_REG, 1, (uint8_t *)&fifo_status2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_STATUS2_REG, 1, (uint8_t *)&fifo_status2))
+	return WE_FAIL;
 	*fifoFull = (PADS_state_t)fifo_status2.fifoFull;
 
 	return WE_SUCCESS;
@@ -537,8 +541,8 @@ int8_t PADS_getFifoWtmState(PADS_state_t *fifoWtm)
 {
 	PADS_fifo_status2_t fifo_status2;
 
-	if (ReadReg((uint8_t)PADS_FIFO_STATUS2_REG, 1, (uint8_t *)&fifo_status2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_STATUS2_REG, 1, (uint8_t *)&fifo_status2))
+	return WE_FAIL;
 	*fifoWtm = (PADS_state_t)fifo_status2.fifoWtm;
 
 	return WE_SUCCESS;
@@ -553,12 +557,13 @@ int8_t PADS_getFifoOvrState(PADS_state_t *fifoOvr)
 {
 	PADS_fifo_status2_t fifo_status2;
 
-	if (ReadReg((uint8_t)PADS_FIFO_STATUS2_REG, 1, (uint8_t *)&fifo_status2))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_STATUS2_REG, 1, (uint8_t *)&fifo_status2))
+	return WE_FAIL;
 
 	*fifoOvr = (PADS_state_t)fifo_status2.fifoOverrun;
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Set the data ready signal interrupt    [enabled,disabled]
@@ -570,13 +575,14 @@ int8_t PADS_setDrdyInt(PADS_state_t DRDYStatus)
 
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	ctrl_reg_3.dataReadyInt = DRDYStatus;
 
-	if (WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -590,8 +596,8 @@ int8_t PADS_getDrdyIntState(PADS_state_t *drdy)
 {
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 	*drdy = (PADS_state_t)ctrl_reg_3.dataReadyInt;
 
 	return WE_SUCCESS;
@@ -607,13 +613,13 @@ int8_t PADS_setIntEventCtrl(PADS_interrupt_event_t ctr)
 
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	ctrl_reg_3.intEventCtrl = ctr;
 
-	if (WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -627,12 +633,13 @@ int8_t PADS_getIntEventCtrlState(PADS_interrupt_event_t *intEvent)
 {
 	PADS_ctrl_3_t ctrl_reg_3;
 
-	if (ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_CTRL_3_REG, 1, (uint8_t *)&ctrl_reg_3))
+	return WE_FAIL;
 	*intEvent = (PADS_interrupt_event_t)ctrl_reg_3.intEventCtrl;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Check if the temperature data are available
@@ -643,8 +650,8 @@ int8_t PADS_getTempStatus(PADS_state_t *state)
 {
 	PADS_status_t status_reg;
 
-	if (ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
+	return WE_FAIL;
 	*state = (PADS_state_t)status_reg.tempDataAvailable;
 
 	return WE_SUCCESS;
@@ -659,8 +666,8 @@ int8_t PADS_getPresStatus(PADS_state_t *state)
 {
 	PADS_status_t status_reg;
 
-	if (ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
+	return WE_FAIL;
 	*state = (PADS_state_t)status_reg.presDataAvailable;
 
 	return WE_SUCCESS;
@@ -675,8 +682,8 @@ int8_t PADS_getTemperOverrunStatus(PADS_state_t *state)
 {
 	PADS_status_t status_reg;
 
-	if (ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
+	return WE_FAIL;
 	*state = (PADS_state_t)status_reg.tempDataOverrun;
 
 	return WE_SUCCESS;
@@ -691,8 +698,8 @@ int8_t PADS_getPressureOverrunStatus(PADS_state_t *state)
 {
 	PADS_status_t status_reg;
 
-	if (ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_STATUS_REG, 1, (uint8_t *)&status_reg))
+	return WE_FAIL;
 	*state = (PADS_state_t)status_reg.presDataOverrun;
 
 	return WE_SUCCESS;
@@ -707,13 +714,14 @@ int8_t PADS_setAutoRefp(PADS_state_t autorep)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.autoRefp = autorep;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -727,11 +735,12 @@ int8_t PADS_getAutoRefpState(PADS_state_t *autoRefp)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 	*autoRefp = (PADS_state_t)interrupt_Configuration_reg.autoRefp;
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Reset the autorefp function
@@ -742,16 +751,17 @@ int8_t PADS_resetAutoRefp(PADS_state_t autorep)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.resetAutoRefp = autorep;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief Set the autozero function [enabled,disabled]
@@ -762,13 +772,13 @@ int8_t PADS_setAutoZeroFunction(PADS_state_t autozero)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.autoZeroFunc = autozero;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -782,8 +792,8 @@ int8_t PADS_getAutoZeroState(PADS_state_t *autoZero)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 	*autoZero = (PADS_state_t)interrupt_Configuration_reg.autoZeroFunc;
 	return WE_SUCCESS;
 }
@@ -797,13 +807,13 @@ int8_t PADS_resetAutoZeroFunction(PADS_state_t autozeroRst)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.resetAutoZeroFunc = autozeroRst;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -817,15 +827,16 @@ int8_t PADS_setDiffPresInt(PADS_state_t diffEn)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.diffInt = diffEn;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
+
 }
 
 /**
@@ -837,8 +848,8 @@ int8_t PADS_getDiffPresIntState(PADS_state_t *diffIntState)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 	*diffIntState = (PADS_state_t)interrupt_Configuration_reg.diffInt;
 	return WE_SUCCESS;
 }
@@ -852,13 +863,13 @@ int8_t PADS_setLatchInt(PADS_state_t state)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.latchedInt = state;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -872,8 +883,8 @@ int8_t PADS_getLatchIntState(PADS_state_t *latchInt)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 	*latchInt = (PADS_state_t)interrupt_Configuration_reg.latchedInt;
 	return WE_SUCCESS;
 }
@@ -887,13 +898,13 @@ int8_t PADS_setLowPresInt(PADS_state_t state)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.lowPresInt = state;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -907,8 +918,8 @@ int8_t PADS_getLowPresIntState(PADS_state_t *lpint)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 	*lpint = (PADS_state_t)interrupt_Configuration_reg.lowPresInt;
 	return WE_SUCCESS;
 }
@@ -922,13 +933,13 @@ int8_t PADS_setHighPresInt(PADS_state_t state)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	interrupt_Configuration_reg.highPresInt = state;
 
-	if (WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -942,11 +953,12 @@ int8_t PADS_getHighPresIntState(PADS_state_t *hpint)
 {
 	PADS_interrupt_configuration_t interrupt_Configuration_reg;
 
-	if (ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_CFG_REG, 1, (uint8_t *)&interrupt_Configuration_reg))
+	return WE_FAIL;
 	*hpint = (PADS_state_t)interrupt_Configuration_reg.highPresInt;
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Set the LSB pressure threshold value
@@ -958,8 +970,8 @@ int8_t PADS_setPresThrLSB(uint8_t thr)
 {
 	uint8_t thresholdLSB = thr;
 
-	if (WriteReg((uint8_t)PADS_THR_P_L_REG, 1, &thresholdLSB))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_THR_P_L_REG, 1, &thresholdLSB))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -973,8 +985,8 @@ int8_t PADS_setPresThrMSB(uint8_t thr)
 {
 	uint8_t thresholdMSB = thr;
 
-	if (WriteReg((uint8_t)PADS_THR_P_H_REG, 1, &thresholdMSB))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_THR_P_H_REG, 1, &thresholdMSB))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -986,8 +998,8 @@ int8_t PADS_setPresThrMSB(uint8_t thr)
 */
 int8_t PADS_getPresThrLSB(uint8_t *thrLSB)
 {
-	if (ReadReg((uint8_t)PADS_THR_P_L_REG, 1, thrLSB))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_THR_P_L_REG, 1, thrLSB))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -999,8 +1011,8 @@ int8_t PADS_getPresThrLSB(uint8_t *thrLSB)
 */
 int8_t PADS_getPresThrMSB(uint8_t *thrMSB)
 {
-	if (ReadReg((uint8_t)PADS_THR_P_H_REG, 1, thrMSB))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_THR_P_H_REG, 1, thrMSB))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1014,13 +1026,13 @@ int8_t PADS_disI2C(PADS_state_t I2CStatus)
 {
 	PADS_interface_ctrl_t interface_ctrl;
 
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	interface_ctrl.disableI2C = I2CStatus;
 
-	if (WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1034,11 +1046,12 @@ int8_t PADS_getI2CState(PADS_state_t *i2cState)
 {
 	PADS_interface_ctrl_t interface_ctrl;
 
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 	*i2cState = (PADS_state_t)interface_ctrl.disableI2C;
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Disable/enable the internal pull-down on Interrupt pin
@@ -1048,13 +1061,13 @@ int8_t PADS_getI2CState(PADS_state_t *i2cState)
 int8_t PADS_disPullDownIntPin(PADS_state_t pullDownState)
 {
 	PADS_interface_ctrl_t interface_ctrl;
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	interface_ctrl.disPullDownOnIntPin = pullDownState;
 
-	if (WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1068,12 +1081,13 @@ int8_t PADS_getPullDownIntPinState(PADS_state_t *pinState)
 {
 	PADS_interface_ctrl_t interface_ctrl;
 
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 	*pinState = (PADS_state_t)interface_ctrl.disPullDownOnIntPin;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Set internal pull-up on the SAO pin
@@ -1083,13 +1097,13 @@ int8_t PADS_getPullDownIntPinState(PADS_state_t *pinState)
 int8_t PADS_setSAOPullUp(PADS_state_t SaoStatus)
 {
 	PADS_interface_ctrl_t interface_ctrl;
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	interface_ctrl.pullUpOnSAOpin = SaoStatus;
 
-	if (WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1103,11 +1117,12 @@ int8_t PADS_getSAOPullUpState(PADS_state_t *saoPinState)
 {
 	PADS_interface_ctrl_t interface_ctrl;
 
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 	*saoPinState = (PADS_state_t)interface_ctrl.pullUpOnSAOpin;
 
 	return WE_SUCCESS;
+
 }
 /**
 * @brief  Set internal pull-up on the SDA pin
@@ -1117,13 +1132,13 @@ int8_t PADS_getSAOPullUpState(PADS_state_t *saoPinState)
 int8_t PADS_setSDAPullUp(PADS_state_t SdaStatus)
 {
 	PADS_interface_ctrl_t interface_ctrl;
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	interface_ctrl.pullUpOnSDApin = SdaStatus;
 
-	if (WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1137,8 +1152,8 @@ int8_t PADS_getSDAPullUpState(PADS_state_t *sdaPinState)
 {
 	PADS_interface_ctrl_t interface_ctrl;
 
-	if (ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INTERFACE_CTRL_REG, 1, (uint8_t *)&interface_ctrl))
+	return WE_FAIL;
 	*sdaPinState = (PADS_state_t)interface_ctrl.pullUpOnSDApin;
 
 	return WE_SUCCESS;
@@ -1153,13 +1168,13 @@ int8_t PADS_setFifoMode(PADS_fifo_mode_t fifoMode)
 {
 	PADS_fifo_ctrl_t fifo_ctrl_reg;
 
-	if (ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl_reg))
+	return WE_FAIL;
 
 	fifo_ctrl_reg.fifoMode = fifoMode;
 
-	if (WriteReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl_reg))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl_reg))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1173,12 +1188,13 @@ int8_t PADS_getFifoMode(PADS_fifo_mode_t *fifoMode)
 {
 	PADS_fifo_ctrl_t fifo_ctrl_reg;
 
-	if (ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl_reg))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl_reg))
+	return WE_FAIL;
 	*fifoMode = (PADS_fifo_mode_t)fifo_ctrl_reg.fifoMode;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Set stop on user defined fifo threshold level
@@ -1189,32 +1205,33 @@ int8_t PADS_setStopOnThr(PADS_state_t state)
 {
 	PADS_fifo_ctrl_t fifo_ctrl;
 
-	if (ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl))
+	return WE_FAIL;
 
 	fifo_ctrl.stopOnThreshold = state;
 
-	if (WriteReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
 
 /**
-* @brief  Read the state of the StopOnThresholdLevel State
-* @param  Pointer to state of the StopOnThresholdLevel
+* @brief  Read the state of the StopOnThresholLevel State
+* @param  Pointer to state of the StopOnThresholLevel
 * @retval Error code
 */
 int8_t PADS_getStopOnThrStatus(PADS_state_t *state)
 {
 	PADS_fifo_ctrl_t fifo_ctrl;
 
-	if (ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_CTRL_REG, 1, (uint8_t *)&fifo_ctrl))
+	return WE_FAIL;
 	*state = (PADS_state_t)fifo_ctrl.stopOnThreshold;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Set the fifo threshold level
@@ -1225,13 +1242,13 @@ int8_t PADS_setFifoThr(uint8_t fifoThr)
 {
 	PADS_fifo_wtm_t fifo_wtm;
 
-	if (ReadReg((uint8_t)PADS_FIFO_WTM_REG, 1, (uint8_t *)&fifo_wtm))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_WTM_REG, 1, (uint8_t *)&fifo_wtm))
+	return WE_FAIL;
 
 	fifo_wtm.fifoThreshold = fifoThr;
 
-	if (WriteReg((uint8_t)PADS_FIFO_WTM_REG, 1, (uint8_t *)&fifo_wtm))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_FIFO_WTM_REG, 1, (uint8_t *)&fifo_wtm))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1245,8 +1262,8 @@ int8_t PADS_getFifoThr(uint8_t *fifoThr)
 {
 	PADS_fifo_wtm_t fifo_wtm;
 
-	if (ReadReg((uint8_t)PADS_FIFO_WTM_REG, 1, (uint8_t *)&fifo_wtm))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_WTM_REG, 1, (uint8_t *)&fifo_wtm))
+	return WE_FAIL;
 	*fifoThr = (uint8_t)fifo_wtm.fifoThreshold;
 
 	return WE_SUCCESS;
@@ -1261,8 +1278,8 @@ int8_t PADS_getFifoFillLevel(uint8_t *fifoLevel)
 {
 	;
 
-	if (ReadReg((uint8_t)PADS_FIFO_STATUS1_REG, 1, fifoLevel))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_STATUS1_REG, 1, fifoLevel))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1274,8 +1291,8 @@ int8_t PADS_getFifoFillLevel(uint8_t *fifoLevel)
 */
 int8_t PADS_getPresRefLSB(uint8_t *lowReferenceValue)
 {
-	if (ReadReg((uint8_t)PADS_REF_P_H_REG, 1, lowReferenceValue))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_REF_P_H_REG, 1, lowReferenceValue))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1287,11 +1304,12 @@ int8_t PADS_getPresRefLSB(uint8_t *lowReferenceValue)
 */
 int8_t PADS_getPresRefMSB(uint8_t *highReferenceValue)
 {
-	if (ReadReg((uint8_t)PADS_REF_P_H_REG, 1, highReferenceValue))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_REF_P_H_REG, 1, highReferenceValue))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
+
 
 /**
 * @brief  Set LSB part of the pressure offset value
@@ -1302,8 +1320,8 @@ int8_t PADS_setPresOffsetLSB(uint8_t offSet)
 {
 	uint8_t pressureOffsetLsb = offSet;
 
-	if (WriteReg((uint8_t)PADS_OPC_P_L_REG, 1, &pressureOffsetLsb))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_OPC_P_L_REG, 1, &pressureOffsetLsb))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1316,8 +1334,8 @@ int8_t PADS_setPresOffsetLSB(uint8_t offSet)
 int8_t PADS_getPresOffsetLSB(uint8_t *offSet)
 {
 
-	if (ReadReg((uint8_t)PADS_OPC_P_L_REG, 1, offSet))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_OPC_P_L_REG, 1, offSet))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1331,8 +1349,8 @@ int8_t PADS_setPresOffsetMSB(uint8_t highPresureOffsetValue)
 {
 	uint8_t pressureOffsetMsb = highPresureOffsetValue;
 
-	if (WriteReg((uint8_t)PADS_OPC_P_H_REG, 1, &pressureOffsetMsb))
-		return WE_FAIL;
+	if (WE_FAIL == WriteReg((uint8_t)PADS_OPC_P_H_REG, 1, &pressureOffsetMsb))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1344,8 +1362,8 @@ int8_t PADS_setPresOffsetMSB(uint8_t highPresureOffsetValue)
 */
 int8_t PADS_getPresOffsetMSB(uint8_t *offSet)
 {
-	if (ReadReg((uint8_t)PADS_OPC_P_H_REG, 1, offSet))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_OPC_P_H_REG, 1, offSet))
+	return WE_FAIL;
 
 	return WE_SUCCESS;
 }
@@ -1359,8 +1377,8 @@ int8_t PADS_getIntStatus(PADS_state_t *intState)
 {
 	PADS_intSource_t int_source;
 
-	if (ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source))
+	return WE_FAIL;
 	*intState = (PADS_state_t)int_source.intStatus;
 
 	return WE_SUCCESS;
@@ -1375,8 +1393,8 @@ int8_t PADS_getLowPresIntStatus(PADS_state_t *lpState)
 {
 	PADS_intSource_t int_source;
 
-	if (ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source))
+	return WE_FAIL;
 	*lpState = (PADS_state_t)int_source.diffPresLowEvent;
 
 	return WE_SUCCESS;
@@ -1391,8 +1409,8 @@ int8_t PADS_getHighPresIntStatus(PADS_state_t *hpState)
 {
 	PADS_intSource_t int_source;
 
-	if (ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_INT_SOURCE_REG, 1, (uint8_t *)&int_source))
+	return WE_FAIL;
 	*hpState = int_source.diffPresHighEvent;
 
 	return WE_SUCCESS;
@@ -1405,10 +1423,10 @@ int8_t PADS_getHighPresIntStatus(PADS_state_t *hpState)
 */
 int8_t PADS_getRAWPressure(int32_t *rawPres)
 {
-	uint8_t tmp[3] = {0};
+	uint8_t tmp[3] = { 0 };
 
-	if (ReadReg((uint8_t)PADS_DATA_P_XL_REG, 3, tmp))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_DATA_P_XL_REG, 3, tmp))
+	return WE_FAIL;
 
 	*rawPres = (int32_t)(tmp[2] << 16);
 	*rawPres |= (int32_t)(tmp[1] << 8);
@@ -1416,6 +1434,8 @@ int8_t PADS_getRAWPressure(int32_t *rawPres)
 
 	return WE_SUCCESS;
 }
+
+
 
 /**
 * @brief  Read the measured pressure value in kPa
@@ -1425,10 +1445,10 @@ int8_t PADS_getRAWPressure(int32_t *rawPres)
 int8_t PADS_getPressure(float *presskPa)
 {
 	int32_t rawPressure = 0;
-	if (PADS_getRAWPressure(&rawPressure) == WE_SUCCESS)
+	if(PADS_getRAWPressure(&rawPressure) == WE_SUCCESS)
 	{
 		*presskPa = (float)rawPressure;
-		*presskPa = *presskPa / 40960;
+		*presskPa = *presskPa/40960;
 	}
 	else
 	{
@@ -1437,6 +1457,7 @@ int8_t PADS_getPressure(float *presskPa)
 	return WE_SUCCESS;
 }
 
+
 /**
 * @brief  Read the raw measured temperature value
 * @param  pointer to Temperature Measurement
@@ -1444,10 +1465,10 @@ int8_t PADS_getPressure(float *presskPa)
 */
 int8_t PADS_getRAWTemperature(int16_t *rawTemp)
 {
-	uint8_t tmp[2] = {0};
+	uint8_t tmp[2] = { 0 };
 
-	if (ReadReg((uint8_t)PADS_DATA_T_L_REG, 2, tmp))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_DATA_T_L_REG, 2, tmp))
+	return WE_FAIL;
 
 	*rawTemp = (int16_t)(tmp[1] << 8);
 	*rawTemp |= (int16_t)tmp[0];
@@ -1463,7 +1484,7 @@ int8_t PADS_getRAWTemperature(int16_t *rawTemp)
 int8_t PADS_getTemperature(float *tempdegC)
 {
 	int16_t rawTemp = 0;
-	if (PADS_getRAWTemperature(&rawTemp) == WE_SUCCESS)
+	if(PADS_getRAWTemperature(&rawTemp) == WE_SUCCESS)
 	{
 		*tempdegC = (float)rawTemp;
 		*tempdegC = *tempdegC / 100;
@@ -1483,10 +1504,10 @@ int8_t PADS_getTemperature(float *tempdegC)
 */
 int8_t PADS_getFifoRAWPressure(int32_t *rawPres)
 {
-	uint8_t tmp[3] = {0};
+	uint8_t tmp[3] = { 0 };
 
-	if (ReadReg((uint8_t)PADS_FIFO_DATA_P_XL_REG, 3, tmp))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_DATA_P_XL_REG, 3, tmp))
+	return WE_FAIL;
 
 	*rawPres = (int32_t)(tmp[2] << 16);
 	*rawPres |= (int32_t)(tmp[1] << 8);
@@ -1502,10 +1523,10 @@ int8_t PADS_getFifoRAWPressure(int32_t *rawPres)
 int8_t PADS_getFifoPressure(float *presskPa)
 {
 	int32_t rawPressure = 0;
-	if (PADS_getFifoRAWPressure(&rawPressure) == WE_SUCCESS)
+	if(PADS_getFifoRAWPressure(&rawPressure) == WE_SUCCESS)
 	{
 		*presskPa = (float)rawPressure;
-		*presskPa = *presskPa / 40960;
+		*presskPa = *presskPa/40960;
 	}
 	else
 	{
@@ -1514,6 +1535,7 @@ int8_t PADS_getFifoPressure(float *presskPa)
 	return WE_SUCCESS;
 }
 
+
 /**
 * @brief  Read the raw temperature value from fifo
 * @param  Pointer to Fifo Temperature Measurement
@@ -1521,10 +1543,10 @@ int8_t PADS_getFifoPressure(float *presskPa)
 */
 int8_t PADS_getFifoRAWTemperature(int16_t *rawTemp)
 {
-	uint8_t tmp[2] = {0};
+	uint8_t tmp[2] = { 0 };
 
-	if (ReadReg((uint8_t)PADS_FIFO_DATA_T_L_REG, 2, tmp))
-		return WE_FAIL;
+	if (WE_FAIL == ReadReg((uint8_t)PADS_FIFO_DATA_T_L_REG, 2, tmp))
+	return WE_FAIL;
 
 	*rawTemp = (int16_t)(tmp[1] << 8);
 	*rawTemp |= (int16_t)tmp[0];
@@ -1541,7 +1563,7 @@ int8_t PADS_getFifoTemperature(float *tempdegC)
 {
 
 	int16_t rawTemp = 0;
-	if (PADS_getFifoRAWTemperature(&rawTemp) == WE_SUCCESS)
+	if(PADS_getFifoRAWTemperature(&rawTemp) == WE_SUCCESS)
 	{
 		*tempdegC = (float)rawTemp;
 		*tempdegC = *tempdegC / 100;

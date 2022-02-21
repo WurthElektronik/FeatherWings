@@ -48,23 +48,7 @@ bool atecc608a_init(TypeSerial *SerialDebug)
     if (status == ATCA_SUCCESS)
     {
 #if SERIAL_DEBUG
-        uint8_t serialnum[ATCA_SERIAL_NUM_SIZE];
-        char displaystr[30];
         SSerial_printf(SerialDebug, "ATECC608A init done\r\n");
-
-        if (atecc608a_read_serial_number(serialnum))
-        {
-            size_t displaylen = sizeof(displaystr);
-            atcab_bin2hex(serialnum, ATCA_SERIAL_NUM_SIZE, displaystr, &displaylen);
-            SSerial_printf(SerialDebug, "ATECC608A Serial number \r\n");
-            SSerial_printf(SerialDebug, displaystr);
-            SSerial_printf(SerialDebug, "\r\n");
-        }
-        else
-        {
-            SSerial_printf(SerialDebug, "ATECC608A Read failed 0X%02X\r\n", status);
-            return false;
-        }
 #endif
         return true;
     }
@@ -88,7 +72,7 @@ bool atecc608a_test_enc_dec(TypeSerial *SerialDebug)
     uint8_t cipherText[128] = {0};
     uint8_t decryptedText[128] = {0};
     uint8_t authTag[AES_AUTH_TAG_SIZE] = {0};
-    uint8_t iv[AES_IV_RND_SIZE + AES_IV_FIXED_SIZE] = {0};
+    uint8_t iv[AES_IV_LENGTH] = {0};
     bool isVerified = false;
 
     //Generate random 128 byte plain text for encryption
@@ -115,7 +99,7 @@ bool atecc608a_test_enc_dec(TypeSerial *SerialDebug)
     }
 
     SSerial_printf(SerialDebug, "IV : ");
-    for (int i = 0; i < (AES_IV_RND_SIZE + AES_IV_FIXED_SIZE); i++)
+    for (int i = 0; i < (AES_IV_LENGTH); i++)
     {
         SSerial_printf(SerialDebug, "%02X", iv[i]);
     }
@@ -335,6 +319,26 @@ bool atecc608a_read_serial_number(uint8_t *serialNumber)
 }
 
 /**
+ * @brief  Write a 64 byte key to a specific key slot
+ * @param  slot Slot number (8 to 15 are allowed)
+ * @param  pubKey 64 byte key to write
+ * @retval true if successful false in case of failure
+ */
+bool atecc608a_write_Public_Key(uint16_t slot, uint8_t *pubKey)
+{
+    uint8_t status;
+    status = atcab_write_pubkey(slot, pubKey);
+    if (status == ATCA_SUCCESS)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/**
  * @brief  Generate a random number
  * @param  rand Pointer to an array of 32 bytes of random data
  * @retval true if successful false in case of failure
@@ -459,8 +463,11 @@ bool atecc608a_derive_symmetric_key(uint8_t *salt, uint8_t *info, uint8_t *aesKe
     status = atcab_kdf(mode, keyID, details, info, aesKey, NULL);
     if (status == ATCA_SUCCESS)
     {
-        //Load the AES to the Tempkey register
-        atcab_nonce(aesKey);
+        if (showClear)
+        {
+            //Load the AES to the Tempkey register
+            atcab_nonce(aesKey);
+        }
         return true;
     }
     return false;
@@ -490,7 +497,7 @@ bool atecc608a_sign_data(uint8_t *data, uint8_t *signature)
  * @param  digest Pointer to the 32 byte digest
  * @retval true if successful false in case of failure
  */
-bool atecc608a_generate_SHA246_digest(uint8_t *data, int dataLength, uint8_t *digest)
+bool atecc608a_generate_SHA256_digest(uint8_t *data, int dataLength, uint8_t *digest)
 {
     uint8_t status;
     status = atcab_hw_sha2_256(data, dataLength, digest);
@@ -607,7 +614,7 @@ bool atecc608a_decrypt_data(uint32_t keySlot, uint8_t *cipherText, uint16_t data
     }
 
     //Initialize the AES engine with the IV
-    status = atcab_aes_gcm_init(&ctx, keySlot, 0, iv, AES_IV_FIXED_SIZE + AES_IV_RND_SIZE);
+    status = atcab_aes_gcm_init(&ctx, keySlot, 0, iv, AES_IV_LENGTH);
     if (status != ATCA_SUCCESS)
     {
         return false;

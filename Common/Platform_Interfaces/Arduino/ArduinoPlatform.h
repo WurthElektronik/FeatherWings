@@ -39,6 +39,14 @@
 #define I2C_CLOCK_SPEED_FAST 400000
 #define I2C_CLOCK_SPEED_STANDARD 100000
 
+#define NEO_PIXEL_RED ((uint32_t)(50 << 16) + (uint32_t)(0 << 8) + (uint32_t)0)
+#define NEO_PIXEL_BLUE ((uint32_t)(0 << 16) + (uint32_t)(0 << 8) + (uint32_t)50)
+#define NEO_PIXEL_ORANGE ((uint32_t)(50 << 16) + (uint32_t)(15 << 8) + (uint32_t)0)
+#define NEO_PIXEL_GREEN ((uint32_t)(0 << 16) + (uint32_t)(50 << 8) + (uint32_t)0)
+#define NEO_PIXEL_OFF (uint32_t)0
+
+#define BTN_LONG_PRESS_DURATION_MS 2000
+
 /**         Functions definition         */
 
 #ifdef __cplusplus
@@ -51,6 +59,7 @@ extern "C"
         void *obj;
     } TypeSerial;
 
+    void soft_reset();
     void SSerial_destroy(TypeSerial *m);
     TypeSerial *SSerial_create(void *ser);
 
@@ -92,6 +101,9 @@ extern "C"
 
     void neopixelInit();
     void neopixelSet(uint32_t color);
+
+    void buttonInit(uint8_t pin, void (*OnBtnPress)(), void (*OnBtnLongPress)());
+    void buttonUpdate();
 
 #ifdef __cplusplus
 }

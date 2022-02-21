@@ -25,62 +25,62 @@
  */
 
 /* ###########################################################################
-* Includes:
-*/
+ * Includes:
+ */
 
 #include "events.h"
 
 /*
-* Includes.
-* ######################################################################### */
+ * Includes.
+ * ######################################################################### */
 
 /* ###########################################################################
-* Macros & Typedefs:
-*/
+ * Macros & Typedefs:
+ */
 
 /* #############################
-* Constant Macros:
-*/
+ * Constant Macros:
+ */
 
 /*
-* Constant Macros.
-* ########################### */
+ * Constant Macros.
+ * ########################### */
 
 /* #############################
-* Function Macros:
-*/
+ * Function Macros:
+ */
 
 /*
-* Function Macros.
-* ########################## */
+ * Function Macros.
+ * ########################## */
 
 /* #############################
-* Typedefs:
-*/
+ * Typedefs:
+ */
 
 /*
-* Typedefs.
-* ########################## */
+ * Typedefs.
+ * ########################## */
 
 /*
-* Macros & Typedefs.
-* ######################################################################## */
+ * Macros & Typedefs.
+ * ######################################################################## */
 
 /* ##########################################################################
-* Declarations:
-*/
+ * Declarations:
+ */
 
 /* #############################
-* Exported Globals:
-*/
+ * Exported Globals:
+ */
 
 /*
-* Exported Globals.
-* ########################## */
+ * Exported Globals.
+ * ########################## */
 
 /* #############################
-* Static Globals:
-*/
+ * Static Globals:
+ */
 
 static const char *ATEvent_GeneralStrings[] =
     {
@@ -107,12 +107,12 @@ static const char *ATEvent_FatalErrorStrings[] =
         ATEVENT_FATALERROR(GENERATE_STRING)};
 
 /*
-* Static Globals.
-* ########################## */
+ * Static Globals.
+ * ########################## */
 
 /* #############################
-* Static Functions:
-*/
+ * Static Functions:
+ */
 
 static bool ATEvent_parseStartUpArgumentValues(char **pCmdArguments, ATEvent_t event, void *pValues);
 static bool ATEvent_parseSocketArgumentValues(char **pCmdArguments, ATEvent_t event, void *pValues);
@@ -125,20 +125,20 @@ static bool ATEvent_parseEventNetapp(const char *eventNetappString, ATEvent_t *p
 static bool ATEvent_parseEventMQTT(const char *eventMQTTString, ATEvent_t *pOutEvent);
 static bool ATEvent_parseEventFatalError(const char *eventFatalErrorString, ATEvent_t *pOutEvent);
 /*
-* Static Functions.
-* ########################## */
+ * Static Functions.
+ * ########################## */
 
 /*
-* Declarations.
-* ######################################################################## */
+ * Declarations.
+ * ######################################################################## */
 
 /* ###########################################################################
-* Definitions:
-*/
+ * Definitions:
+ */
 
 /* #############################
-* Exported Functions:
-*/
+ * Exported Functions:
+ */
 
 /**@brief Parses the command and returns the respective ATEvent_t
  *
@@ -228,6 +228,14 @@ bool ATEvent_parseEventName(char **pAtCommand, ATEvent_t *pEvent)
         {
             *pEvent = ATEvent_SocketTCPAccept;
         }
+        else if (0 == strcasecmp(cmdName, "+eventcustom"))
+        {
+            *pEvent = ATEvent_Custom;
+        }
+        else if (0 == strcasecmp(cmdName, "+eventhttpget"))
+        {
+            *pEvent = ATEvent_HTTPGet;
+        }
         else
         {
             ret = false;
@@ -276,12 +284,12 @@ extern bool ATEvent_parseEventArgumentValues(char **pCmdArguments, ATEvent_t eve
 }
 
 /*
-* Exported Functions.
-* ########################## */
+ * Exported Functions.
+ * ########################## */
 
 /* #############################
-* Static Functions:
-*/
+ * Static Functions:
+ */
 
 /**@brief Parses the values of the arguments
  *
@@ -327,7 +335,7 @@ static bool ATEvent_parseStartUpArgumentValues(char **pCmdArguments, ATEvent_t e
     return ret;
 }
 /**@brief Parses the values of the arguments
- * 
+ *
  * @param pcmdArguments Pointer to string containing arguments
  * -   event    ATEvent_t representing the event
  * @param[out]  pValues  values of the event
@@ -362,7 +370,7 @@ static bool ATEvent_parseSocketArgumentValues(char **pCmdArguments, ATEvent_t ev
 
         if (ret)
         {
-            ret = Calypso_getNextArgumentString(pCmdArguments, temp, STRING_TERMINATE);
+            ret = Calypso_getNextArgumentString(pCmdArguments, temp, ARGUMENT_DELIM);
             if (ret)
             {
                 ret = ATSocket_parseSocketFamily(temp, &(values->family));
@@ -596,9 +604,9 @@ static bool ATEvent_parseEventFatalError(const char *eventFatalErrorString, ATEv
 }
 
 /*
-* Static Functions.
-* ########################## */
+ * Static Functions.
+ * ########################## */
 
 /*
-* Definitions.
-* ######################################################################### */
+ * Definitions.
+ * ######################################################################### */

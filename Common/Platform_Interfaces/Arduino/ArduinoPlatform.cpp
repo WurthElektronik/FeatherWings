@@ -32,6 +32,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <Wire.h>
 #include "ArduinoPlatform.h"
+#include <EasyButton.h>
 
 #define TIMEOUT 1000
 // When setting up the NeoPixel library, we tell it how many pixels,
@@ -44,6 +45,16 @@ Adafruit_NeoPixel pixels(1 /* LED_COUNT - 1 in case of feather m0 */,
 
 uint32_t NeoPixelColor;
 int deviceAddress = 0; // device Address
+
+/**
+ * @brief  Software reset for the MCU
+ * @retval none
+ */
+void soft_reset()
+{
+  NVIC_SystemReset();
+}
+
 /**
  * @brief  Create a serial port object for handling strings and allocate memory
  * @param  ser Pointer to serial object
@@ -538,7 +549,7 @@ int8_t WriteReg(int RegAdr, int NumByteToWrite, uint8_t *Data)
 
 /**
  * @brief  Initialize neopixel
- * @param  
+ * @param
  * @retval None
  */
 void neopixelInit()
@@ -560,5 +571,45 @@ void neopixelSet(uint32_t color)
   pixels.setPixelColor(0, NeoPixelColor); /* led index (always 0),
                                                     red, green, blue - green */
   pixels.show();
+}
+
+EasyButton *button;
+
+/**
+ * @brief  ISR for button
+ * @param  None
+ * @retval None
+ */
+void buttonISR() { button->read(); }
+
+/**
+ * @brief  Initialise button
+ * @param  Pin number
+ * @param  OnBtnPress callback on button press
+ * @param  OnBtnLongPress callback on button long press
+ * @retval None
+ */
+
+void buttonInit(uint8_t pin, void (*OnBtnPress)(), void (*OnBtnLongPress)())
+{
+
+  button = new EasyButton(pin);
+
+  button->begin();
+  button->onPressedFor(BTN_LONG_PRESS_DURATION_MS, OnBtnLongPress);
+  button->onPressed(OnBtnPress);
+  if (button->supportsInterrupt())
+  {
+    button->enableInterrupt(buttonISR);
+  }
+}
+
+/**
+ * @brief  Update button - should be called in the main loop
+ * @retval None
+ */
+void buttonUpdate()
+{
+  button->update();
 }
 /**         EOF         */

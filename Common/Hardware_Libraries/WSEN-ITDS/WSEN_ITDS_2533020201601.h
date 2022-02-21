@@ -1,32 +1,33 @@
 /**
- ***************************************************************************************************
- * This file is part of Sensors SDK:
- * https://www.we-online.com/sensors
- *
- * THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
- * EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
- * TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
- * MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
- * WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
- * RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
- * COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
- * WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
- * FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
- * THEREOF
- *
- * THIS SOURCE CODE IS PROTECTED BY A LICENSE.
- * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
- * IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
- *
- * COPYRIGHT (c) 2019 Würth Elektronik eiSos GmbH & Co. KG
- *
- ***************************************************************************************************
- **/
+***************************************************************************************************
+* This file is part of Sensors SDK:
+* https://www.we-online.com/sensors, https://github.com/WurthElektronik/Sensors-SDK
+*
+* THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
+* EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
+* TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
+* MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
+* WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
+* RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
+* COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
+* WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
+* FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
+* THEREOF
+*
+* THIS SOURCE CODE IS PROTECTED BY A LICENSE.
+* FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
+* IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
+*
+* COPYRIGHT (c) 2019 Würth Elektronik eiSos GmbH & Co. KG
+*
+***************************************************************************************************
+**/
 
 #ifndef _WSEN_ITDS_H
 #define _WSEN_ITDS_H
 
 #include <stdint.h>
+#include "ConfigPlatform.h"
 
 #define ITDS_DEVICE_ID_VALUE 0x44 /* this is the expected answer when requesting the ITDS_DEVICE_ID_REG */
 #define ITDS_ADDRESS_I2C_0 0x18	  /* when SAO of ITDS is connected to logic HIGH level */
@@ -46,12 +47,12 @@
 #define ITDS_CTRL_6_REG 0x25		/* Control Register 6 */
 #define ITDS_T_OUT_REG 0x26			/* Temperature Output Data in 8 bit resolution Register */
 #define ITDS_STATUS_REG 0x27		/* Status Register */
-#define ITDS_X_OUT_L_REG 0x28		/* X axis acceleration Output LSB value Register */
-#define ITDS_X_OUT_H_REG 0x29		/* X axis acceleration Output MSB value Register */
-#define ITDS_Y_OUT_L_REG 0x2A		/* Y axis acceleration Output LSB value Register */
-#define ITDS_Y_OUT_H_REG 0x2B		/* Y axis acceleration Output MSB value Register */
-#define ITDS_Z_OUT_L_REG 0x2C		/* Z axis acceleration Output LSB value Register */
-#define ITDS_Z_OUT_H_REG 0x2D		/* Z axis acceleration Output MSB value Register */
+#define ITDS_X_OUT_L_REG 0x28		/* X axis accelaration Output LSB value Register */
+#define ITDS_X_OUT_H_REG 0x29		/* X axis accelaration Output MSB value Register */
+#define ITDS_Y_OUT_L_REG 0x2A		/* Y axis accelaration Output LSB value Register */
+#define ITDS_Y_OUT_H_REG 0x2B		/* Y axis accelaration Output MSB value Register */
+#define ITDS_Z_OUT_L_REG 0x2C		/* Z axis accelaration Output LSB value Register */
+#define ITDS_Z_OUT_H_REG 0x2D		/* Z axis accelaration Output MSB value Register */
 #define ITDS_FIFO_CTRL_REG 0x2E		/* FIFO Control Register */
 #define ITDS_FIFO_SAMPLES_REG 0x2F	/* FIFO Samples Register */
 #define ITDS_TAP_X_TH_REG 0x30		/* Tap Recognition Threshold on X diraction Register */
@@ -79,10 +80,10 @@
 * Type  R/W
 * Default value: 0x00
 
-  ODR[3:0]   |    Power down / data rate configuration
- --------------------------------------------------------------------------
+ODR[3:0]   |    Power down / data rate configuration
+--------------------------------------------------------------------------
 	0000    |                Power down
-				 High performance     Normal mode   Low power mode
+				High performance     Normal mode   Low power mode
 	0001    |    12.5 Hz                12.5 Hz        1.6 Hz
 	0010    |    12.5 Hz                12.5 Hz        12.5 Hz
 	0011    |    25 Hz                  25 Hz          25 Hz
@@ -94,8 +95,8 @@
 	1001    |    1600Hz                 1600Hz         200 Hz
 
 
-  MODE[1:0] |             Operating mode and resolution
-  --------------------------------------------------------------------------------
+MODE[1:0] |             Operating mode and resolution
+--------------------------------------------------------------------------------
 	00      |       Normal mode (14-bit resolution) / Low power mode (12-bit resolution)
 	01      |       High performance mode(14-bit resolution)
 	10      |       Single data conversion on demand mode (12/14-bit resolution)
@@ -134,7 +135,7 @@ typedef struct
 
 
 	ST[1:0]    |     Self-test mode
- -------------------------------------------
+-------------------------------------------
 	00         |     Normal mode
 	01         |     Positive sign self-test
 	10         |     Negative sign self-test
@@ -156,7 +157,7 @@ typedef struct
 * Address 0x23
 * Type  R/W
 * Default value: 0x00
- */
+*/
 typedef struct
 {
 	uint8_t dataReadyINT0 : 1;	   /* INT0_DRDY : Data-Ready interrupt signal is routed to INT_0 pin. Default value: 0 (0:disabled, 1: enabled) */
@@ -174,7 +175,7 @@ typedef struct
 * Address 0x24
 * Type  R/W
 * Default value: 0x00
- */
+*/
 typedef struct
 {
 	uint8_t dataReadyINT1 : 1;		/* INT1_DRDY : Data-Ready interrupt signal is routed to INT_1 pin. Default value: 0 (0:disabled, 1: enabled) */
@@ -195,7 +196,7 @@ typedef struct
 
 
 	BW_FILT[1:0]    |          Bandwidth selection
-   -------------------------------------------------------------
+-------------------------------------------------------------
 		00          |    ODR/2 (except for ODR = 1600 Hz, 400 Hz)
 		01          |    ODR/4 (High pass / Low pass filter)
 		10          |    ODR/10 (High pass / Low pass filter)
@@ -204,13 +205,13 @@ typedef struct
 
 
 		FS[1:0]    |   Full scale selection
-	   -------------------------------
+	-------------------------------
 			00     |      ±2g
 			01     |      ±4g
 			10     |      ±8g
 			11     |      ±16g
 
- */
+*/
 typedef struct
 {
 	uint8_t not_used_01 : 1;	 /* This bit must be set to 0 for proper operation of the device */
@@ -284,7 +285,7 @@ typedef struct
 
 
 	6D_THS[1:0]  |   Threshold definition (degrees)
-   -------------------------------------------
+-------------------------------------------
 		00       |           6 (80 degrees)
 		01       |           11(70 degrees)
 		10       |           16(60 degrees)
@@ -305,7 +306,7 @@ typedef struct
 * Default value: 0x00
 
 	TAP_PRIOR[2:0]  |  Max Priority  | Mid Priority  | Min Priority
-	 ------------------------------------------------------
+	------------------------------------------------------
 		000         |    X           |     Y         |    Z
 		001         |    Y           |     X         |    Z
 		010         |    X           |     Z         |    Y
@@ -383,7 +384,7 @@ typedef struct
 * Default value: 0x00
 
 	FF_TH[2:0]  |  Threshold decoding (LSB)
-  -----------------------------------------
+-----------------------------------------
 		000     |        5
 		001     |        7
 		010     |        8
@@ -511,8 +512,8 @@ typedef struct
 
 typedef enum
 {
-	disableITDS = 0,
-	enableITDS = 1
+	ITDS_disable = 0,
+	ITDS_enable = 1
 } ITDS_state_t;
 
 typedef enum
@@ -545,8 +546,8 @@ typedef enum
 
 typedef enum
 {
-	lowPowerITDS,
-	normalModeITDS
+	ITDS_lowPower,
+	ITDS_normalMode
 } ITDS_power_mode;
 
 typedef enum
@@ -558,14 +559,14 @@ typedef enum
 
 typedef enum
 {
-	pushPullITDS = 0,
-	openDrainITDS = 1
+	ITDS_pushPull = 0,
+	ITDS_openDrain = 1
 } ITDS_interrupt_Pin_Config;
 
 typedef enum
 {
-	activeHighITDS = 0,
-	activeLowITDS = 1
+	ITDS_activeHigh = 0,
+	ITDS_activeLow = 1
 } ITDS_interrupt_Active_Level;
 
 typedef enum
@@ -598,11 +599,11 @@ typedef enum
 
 typedef enum
 {
-	bypassModeITDS = 0,
-	fifoModesITDS = 1,
-	continuousToFifoITDS = 3,
-	bypassToContinuousITDS = 4,
-	continuousModeITDS = 6
+	ITDS_bypassMode = 0,
+	ITDS_fifoModes = 1,
+	ITDS_continuousToFifo = 3,
+	ITDS_bypassToContinuous = 4,
+	ITDS_continuousMode = 6
 } ITDS_Fifo_Mode;
 
 typedef enum
@@ -752,6 +753,8 @@ extern "C"
 
 	/* Temperature output */
 	int8_t ITDS_getTemperature8bit(uint8_t *temp8bit);
+	int8_t ITDS_getRawTemp12bit(int16_t *temp12bit);
+	int8_t ITDS_getTemperature12bit(float *tempdegC);
 
 	/* FIFO CTRL */
 	int8_t ITDS_setFifoMode(ITDS_Fifo_Mode FMode);

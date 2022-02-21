@@ -245,7 +245,7 @@ bool Calypso_parseInt(char *pOutString, uint32_t pInInt, uint16_t intFlags)
     }
 
     /* HEX*/
-    if (INTFLAGS_NOTATION == (intFlags & INTFLAGS_NOTATION))
+    if (INTFLAGS_NOTATION_HEX == (intFlags & INTFLAGS_NOTATION))
     {
         sprintf(pOutString, "0x%lx", pInInt);
     }

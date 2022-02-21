@@ -52,7 +52,7 @@ static bool Timer_WaitForSync(HardwareTimer *pTc, TimerInstance instance,
 static bool Timer_enable(HardwareTimer *pTc, TimerInstance instance);
 static bool Timer_disable(HardwareTimer *pTc, TimerInstance instance);
 static bool Timer_isInUse(HardwareTimer *pTC, TimerInstance instance);
-static bool Timer_reset(HardwareTimer *pTc, TimerInstance instance);
+bool Timer_reset(HardwareTimer *pTc, TimerInstance instance);
 static bool Timer_setupClock(TimerInstance instance);
 
 /* Functions to setup hardware */
@@ -456,7 +456,7 @@ static bool Timer_isInUse(HardwareTimer *pTc, TimerInstance instance)
  * @param  instance Timer instace
  * @retval true if successful else false
  */
-static bool Timer_reset(HardwareTimer *pTc, TimerInstance instance)
+bool Timer_reset(HardwareTimer *pTc, TimerInstance instance)
 {
   if (NULL == pTc)
   {

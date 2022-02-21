@@ -1,37 +1,43 @@
 /**
- ***************************************************************************************************
- * This file is part of Sensors SDK:
- * https://www.we-online.com/sensors
- *
- * THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
- * EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
- * TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
- * MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
- * WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
- * RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
- * COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
- * WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
- * FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
- * THEREOF
- *
- * THIS SOURCE CODE IS PROTECTED BY A LICENSE.
- * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
- * IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
- *
- * COPYRIGHT (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
- *
- ***************************************************************************************************
- **/
+***************************************************************************************************
+* This file is part of Sensors SDK:
+* https://www.we-online.com/sensors, https://github.com/WurthElektronik/Sensors-SDK
+*
+* THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
+* EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
+* TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
+* MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
+* WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
+* RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
+* COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
+* WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
+* FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
+* THEREOF
+*
+* THIS SOURCE CODE IS PROTECTED BY A LICENSE.
+* FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
+* IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
+*
+* COPYRIGHT (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
+*
+***************************************************************************************************
+**/
 
 #ifndef _WSEN_TIDS_H
 #define _WSEN_TIDS_H
 
+/* 
+ * #### INFORMATIVE ####
+ * This sensor only has a i2c communication interface.
+ */
+
 /**         Includes         */
 #include <stdint.h> /* for support of uint8_t datatypes etc */
+#include "ConfigPlatform.h"
 
 /**         Available TIDS 2521020222501 I2C Slave addresses         */
-#define TIDS_ADDRESS_I2C_0 (uint8_t)0x3F
-#define TIDS_ADDRESS_I2C_1 (uint8_t)0x38
+#define TIDS_ADDRESS_I2C_0 (uint8_t)0x3F /* when SAO of TIDS is connected to logic LOW level */
+#define TIDS_ADDRESS_I2C_1 (uint8_t)0x38 /* when SAO of TIDS is connected to logic HIGH level */
 
 /**         TIDS 2521020222501 DEVICE_ID         */
 #define TIDS_DEVICE_ID_VALUE (uint8_t)0xA0 /* Device ID of TIDS 2521020222501 Sensor */
@@ -102,24 +108,24 @@ typedef struct
 /**         Functional type definition         */
 typedef enum
 {
-	disableTIDS = 0,
-	enableTIDS = 1
+	TIDS_disable = 0,
+	TIDS_enable = 1
 } TIDS_state_t;
 
 typedef enum
 {
-	outputDataRate25HzTIDS = 0,	 /* 25 Hz */
-	outputDataRate50HzIDS = 1,	 /* 50 Hz */
-	outputDataRate100HzTIDS = 2, /* 100 Hz */
-	outputDataRate200HzTIDS = 3, /* 200 Hz */
+	TIDS_outputDataRate25HZ = 0,  /* 25 Hz */
+	TIDS_outputDataRate50HZ = 1,  /* 50 Hz */
+	TIDS_outputDataRate100HZ = 2, /* 100 Hz */
+	TIDS_outputDataRate200HZ = 3, /* 200 Hz */
 } TIDS_output_data_rate_t;
-
-/**         Functions definition         */
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+	/**         Functions definition         */
 
 	/* Device ID */
 	int8_t TIDS_getDeviceID(uint8_t *devID);
