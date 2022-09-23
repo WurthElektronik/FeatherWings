@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"name": "software",
+			"path": "."
+		},
+		{
+			"name": "Common",
+			"path": "..//..//Common"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cctype": "c",
+			"type_traits": "c",
+			"typeinfo": "cpp",
+			"__hash_table": "cpp",
+			"__string": "cpp",
+			"locale": "cpp",
+			"algorithm": "cpp",
+			"functional": "cpp",
+			"utility": "cpp",
+			"*.tcc": "cpp",
+			"proteusiiiboard.h": "c",
+			"array": "c",
+			"vector": "c",
+			"string": "c",
+			"string_view": "c",
+			"__bit_reference": "cpp",
+			"bitset": "cpp",
+			"chrono": "cpp",
+			"unordered_map": "cpp"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}

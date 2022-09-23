@@ -1,0 +1,47 @@
+{
+	"folders": [
+		{
+			"name": "software",
+			"path": "."
+		},
+		{
+			"name": "Common",
+			"path": "..//Common"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cctype": "c",
+			"type_traits": "c",
+			"typeinfo": "cpp",
+			"unordered_map": "cpp",
+			"istream": "cpp",
+			"*.tcc": "cpp",
+			"ios": "cpp",
+			"__bit_reference": "cpp",
+			"bitset": "cpp",
+			"chrono": "cpp",
+			"deque": "cpp",
+			"__memory": "cpp",
+			"filesystem": "cpp",
+			"limits": "cpp",
+			"random": "cpp",
+			"ratio": "cpp",
+			"tuple": "cpp",
+			"vector": "cpp",
+			"__functional_base": "cpp",
+			"algorithm": "cpp",
+			"functional": "cpp",
+			"iterator": "cpp",
+			"memory": "cpp",
+			"ostream": "cpp",
+			"array": "cpp",
+			"utility": "cpp",
+			"variant": "cpp",
+			"sensorboard.h": "c",
+			"wsen_itds_2533020201601.h": "c"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}
