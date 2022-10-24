@@ -201,6 +201,7 @@ bool Calypso_WLANconnect(CALYPSO *self) {
         return false;
     }
     if (Calypso_SendRequest(self, pRequestCommand)) {
+        delay(2000);
         if (Calypso_waitForEvent(self)) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "%s\r\n", self->bufferCalypso);

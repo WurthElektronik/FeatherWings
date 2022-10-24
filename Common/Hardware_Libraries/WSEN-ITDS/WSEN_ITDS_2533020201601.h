@@ -110,11 +110,11 @@ typedef struct
 } ITDS_ctrl_1_t;
 
 /**
-* CTR_2_REG
-* Address 0x21
-* Type  R/W
-* Default value: 0x00
-*/
+ * CTR_2_REG
+ * Address 0x21
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t not_used_01 : 1;	 /* This bit must be set to 0 for proper operation of the device */
@@ -153,11 +153,11 @@ typedef struct
 } ITDS_ctrl_3_t;
 
 /**
-* CTR_4_REG
-* Address 0x23
-* Type  R/W
-* Default value: 0x00
-*/
+ * CTR_4_REG
+ * Address 0x23
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t dataReadyINT0 : 1;	   /* INT0_DRDY : Data-Ready interrupt signal is routed to INT_0 pin. Default value: 0 (0:disabled, 1: enabled) */
@@ -171,11 +171,11 @@ typedef struct
 } ITDS_ctrl_4_t;
 
 /**
-* CTR_5_REG
-* Address 0x24
-* Type  R/W
-* Default value: 0x00
-*/
+ * CTR_5_REG
+ * Address 0x24
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t dataReadyINT1 : 1;		/* INT1_DRDY : Data-Ready interrupt signal is routed to INT_1 pin. Default value: 0 (0:disabled, 1: enabled) */
@@ -223,11 +223,11 @@ typedef struct
 } ITDS_ctrl_6_t;
 
 /**
-* STATUS_REG
-* Address 0x27
-* Type  R/W
-* Default value: 0x00
-*/
+ * STATUS_REG
+ * Address 0x27
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t dataReady : 1;	   /* DRDY : Data-ready status bit (0: not ready, 1: X-, Y- and Z-axis new data available) */
@@ -265,11 +265,11 @@ typedef struct
 } ITDS_fifo_ctrl_t;
 
 /**
-* FIFO_SAMPLES_REG
-* Address 0x2F
-* Type  R/W
-* Default value: 0x00
-*/
+ * FIFO_SAMPLES_REG
+ * Address 0x2F
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t fifoFillLevel : 6;		/* Diff[5:0] :Defines the number of unread samples stored in FIFO. (’000000’ = FIFO empty, ’100000’ = FIFO full, 32 unread samples) */
@@ -324,11 +324,11 @@ typedef struct
 } ITDS_tap_y_th_t;
 
 /**
-* TAP_Z_TH_REG
-* Address 0x32
-* Type  R/W
-* Default value: 0x00
-*/
+ * TAP_Z_TH_REG
+ * Address 0x32
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t ZAxisTapThreshold : 5; /* TAP_THSZ_[4:0] Threshold for tap recognition at FS: ±2g on Z direction. */
@@ -338,11 +338,11 @@ typedef struct
 } ITDS_tap_z_th_t;
 
 /**
-* INT_DUR_REG
-* Address 0x33
-* Type  R/W
-* Default value: 0x00
-*/
+ * INT_DUR_REG
+ * Address 0x33
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t shock : 2;	 /* SHOCK[1:0]:It defines the maximum duration of over-threshold event*/
@@ -351,11 +351,11 @@ typedef struct
 } ITDS_int_dur_t;
 
 /**
-* WAKE_UP_TH_REG
-* Address 0x34
-* Type  R/W
-* Default value: 0x00
-*/
+ * WAKE_UP_TH_REG
+ * Address 0x34
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t wakeupThreshold : 6;  /* WK_THS[5:0] : Defines Wakeup threshold, 6-bit unsigned 1 LSB = 1/64 of FS. Default value: 000000*/
@@ -364,11 +364,11 @@ typedef struct
 } ITDS_wake_up_th_t;
 
 /**
-* WAKE_UP_DUR_REG
-* Address 0x35
-* Type  R/W
-* Default value: 0x00
-*/
+ * WAKE_UP_DUR_REG
+ * Address 0x35
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t sleepDuration : 4;		 /* SLEEP_DUR[3:0] : Defines the sleep mode duration. Default value is SLEEP_DUR[3:0] = 0000 (which is 16 * 1/ODR) 1 LSB = 512 * 1/ODR */
@@ -401,11 +401,11 @@ typedef struct
 } ITDS_free_fall_t;
 
 /**
-* STATUS_DETECT_REG
-* Address 0x37
-* Type  R/W
-* Default value: 0x00
-*/
+ * STATUS_DETECT_REG
+ * Address 0x37
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t drdy : 1;			  /* DRDY Defines Data-ready status (0: not ready, 1: X-, Y- and Z-axis new data available) */
@@ -419,11 +419,11 @@ typedef struct
 } ITDS_status_detect_t;
 
 /**
-* WAKE_UP_EVENT_REG
-* Address 0x38
-* Type  R/W
-* Default value: 0x00
-*/
+ * WAKE_UP_EVENT_REG
+ * Address 0x38
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t wakeUpZ : 1;	   /* Z_WU Enables Wake-up event detection status on Z-axis (0: Wake-up event on Z not detected, 1: Wakeup event on Z-axis is detected) */
@@ -437,11 +437,11 @@ typedef struct
 } ITDS_wake_up_event_t;
 
 /**
-* TAP_EVENT_REG
-* Address 0x39
-* Type  R/W
-* Default value: 0x00
-*/
+ * TAP_EVENT_REG
+ * Address 0x39
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t tapZAxis : 1;	   /* Z_TAP :Defines the Tap event detection status on Z-axis (0: Tap event on Z not detected, 1: Tap event on Z-axis is detected) */
@@ -455,11 +455,11 @@ typedef struct
 } ITDS_tap_event_t;
 
 /**
-* 6D_EVENT_REG
-* Address 0x3A
-* Type  R/W
-* Default value: 0x00
-*/
+ * 6D_EVENT_REG
+ * Address 0x3A
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t XLOverThreshold : 1; /* XL :Defines the XL over threshold (0: XL does not exceed the threshold, 1:XL is over the threshold) */
@@ -474,11 +474,11 @@ typedef struct
 } ITDS_event_6D_t;
 
 /**
-* ALL_INT_EVENT_REG
-* Address 0x3B
-* Type  R/W
-* Default value: 0x00
-*/
+ * ALL_INT_EVENT_REG
+ * Address 0x3B
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t freeFallState : 1;	/* FF_IA Defines the Free-fall event detection status (0: free-fall event not detected, 1: free-fall event detected) */
@@ -492,11 +492,11 @@ typedef struct
 } ITDS_all_int_event_t;
 
 /**
-* CTRL_7_REG
-* Address 0x3F
-* Type  R/W
-* Default value: 0x00
-*/
+ * CTRL_7_REG
+ * Address 0x3F
+ * Type  R/W
+ * Default value: 0x00
+ */
 typedef struct
 {
 	uint8_t lowPassOn6D : 1;		 /* 0: ODR/2 low pass filtered data sent to 6D interrupt function (default), 1: LPF_1 output data sent to 6D interrupt function) */
@@ -822,6 +822,7 @@ extern "C"
 	int8_t ITDS_getFreeFallDurationLSB(uint8_t *freeFallDuration);
 	int8_t ITDS_setFreeFallThreshold(ITDS_Free_Fall_Thr FF_TH);
 	int8_t ITDS_getFreeFallThreshold(ITDS_Free_Fall_Thr *FF_TH);
+	int8_t ITDS_getFreeFallEventState(ITDS_state_t *freefall);
 
 	/* STATUS_DETECT */
 	int8_t ITDS_getTempDrdy(ITDS_state_t *tempDrdy);

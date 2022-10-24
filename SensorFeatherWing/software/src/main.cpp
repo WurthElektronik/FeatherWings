@@ -77,10 +77,20 @@ void loop() {
     }
     if (ITDS_readSensorData(sensorITDS)) {
         SSerial_printf(SerialDebug,
-                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
+                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: "
+                       "%f °C \r\n",
                        sensorITDS->data[itdsXAcceleration],
                        sensorITDS->data[itdsYAcceleration],
-                       sensorITDS->data[itdsZAcceleration]);
+                       sensorITDS->data[itdsZAcceleration],
+                       sensorITDS->data[itdsTemperature]);
+    }
+    if (ITDS_readdoubletap(sensorITDS)) {
+        SSerial_printf(SerialDebug, "DoubleTap state: %f \r\n",
+                       sensorITDS->data[itdsDoubleTap]);
+    }
+    if (ITDS_readfreefall(sensorITDS)) {
+        SSerial_printf(SerialDebug, "FreeFall state: %f \r\n",
+                       sensorITDS->data[itdsFreeFall]);
     }
     if (TIDS_readSensorData(sensorTIDS)) {
         SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",

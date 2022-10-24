@@ -25,10 +25,10 @@
  */
 
 #include "sensorBoard.h"
-#include "WSEN_HIDS_2523020210001.h" //Humidity Sensor
-#include "WSEN_ITDS_2533020201601.h" //Acelerometer Sensor
-#include "WSEN_PADS_2511020213301.h" //Pressure Sensor
-#include "WSEN_TIDS_2521020222501.h" //Temperature Sensor
+#include "WSEN_HIDS_2523020210001.h"  //Humidity Sensor
+#include "WSEN_ITDS_2533020201601.h"  //Acelerometer Sensor
+#include "WSEN_PADS_2511020213301.h"  //Pressure Sensor
+#include "WSEN_TIDS_2521020222501.h"  //Temperature Sensor
 
 /***************************PADS OBJECT***************************/
 /**
@@ -36,8 +36,7 @@
  * @param  serialDebug Pointer to the serial debug
  * @retval PADS object
  */
-PADS *PADSCreate(TypeSerial *serialDebug)
-{
+PADS *PADSCreate(TypeSerial *serialDebug) {
     PADS *allocateInit = (PADS *)malloc(sizeof(PADS));
     allocateInit->serialDebug = serialDebug;
     strcpy(allocateInit->nameType, "PADS");
@@ -53,10 +52,8 @@ PADS *PADSCreate(TypeSerial *serialDebug)
  * @param  pads Pointer to the object.
  * @retval none
  */
-void PADSDestroy(PADS *pads)
-{
-    if (pads)
-    {
+void PADSDestroy(PADS *pads) {
+    if (pads) {
         free(pads);
     }
 }
@@ -66,8 +63,7 @@ void PADSDestroy(PADS *pads)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool PADS_simpleInit(PADS *self)
-{
+bool PADS_simpleInit(PADS *self) {
     // On the WSEN_PADS evaluation board, the SAO pin is set to high by default
     // Using the I2C address 1 = 0x5D
 
@@ -78,8 +74,7 @@ bool PADS_simpleInit(PADS *self)
     const int addr_wsen_pads = PADS_ADDRESS_I2C_1;
     status = I2CInit(addr_wsen_pads);
 
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Platform I2C Init error\r\n");
 #endif
@@ -89,17 +84,14 @@ bool PADS_simpleInit(PADS *self)
     /* first communication test - WSEN_PADS*/
     status = PADS_getDeviceID(&deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == PADS_DEVICE_ID_VALUE))
-    {
+    if ((status == WE_SUCCESS) && (deviceIdValue == PADS_DEVICE_ID_VALUE)) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "WSEN_PADS Communication success\r\n");
         SSerial_printf(self->serialDebug, "DeviceID 0x%02X \r\n",
                        deviceIdValue);
 #endif
-    }
-    else
-    {
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "WSEN_PADS Communication fail\r\n");
 #endif
@@ -108,8 +100,7 @@ bool PADS_simpleInit(PADS *self)
 
     /*set ODR to Power down*/
     status = PADS_setOutputDataRate(PADS_outputDataRatePowerDown);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Set ODR error\r\n");
 #endif
@@ -118,8 +109,7 @@ bool PADS_simpleInit(PADS *self)
 
     /*set low pass filter to BW=ODR/20*/
     status = PADS_setLowPassFilterConf(lPfilterBW2);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Set LPF config error\r\n");
 #endif
@@ -128,8 +118,7 @@ bool PADS_simpleInit(PADS *self)
 
     /*enable low pass filter */
     status = PADS_setLowPassFilter(PADS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "LPF enable error\r\n");
 #endif
@@ -138,8 +127,7 @@ bool PADS_simpleInit(PADS *self)
 
     /*enable Block Data Update*/
     status = PADS_setBlockDataUpdate(PADS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "BDU set error\r\n");
 #endif
@@ -148,8 +136,7 @@ bool PADS_simpleInit(PADS *self)
 
     /*select Power Mode [0:low Current Mode; 1:low noise Mode]*/
     status = PADS_setPowerMode(PADS_lowNoise);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Set power mode error\r\n");
 #endif
@@ -158,8 +145,7 @@ bool PADS_simpleInit(PADS *self)
 
     /*enable the Auto Increment */
     status = PADS_setAutoIncrement(PADS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Set auto increment error\r\n");
 #endif
@@ -175,14 +161,12 @@ bool PADS_simpleInit(PADS *self)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool PADS_readSensorData(PADS *self)
-{
+bool PADS_readSensorData(PADS *self) {
     int8_t status = WE_FAIL;
     I2CSetAddress(PADS_ADDRESS_I2C_1);
     /*Start a conversion*/
     status = PADS_setSingleConvMode(PADS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Set single conv mode error\r\n");
 #endif
@@ -192,19 +176,18 @@ bool PADS_readSensorData(PADS *self)
     delay(15);
 
     status = PADS_getPressure(&self->data[padsPressure]);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Get pressure failed\r\n");
 #endif
         return false;
     }
     /*Round to 3 decimal places*/
-    self->data[padsPressure] = round(self->data[padsPressure] * 1000) / (float)1000;
+    self->data[padsPressure] =
+        round(self->data[padsPressure] * 1000) / (float)1000;
 
     status = PADS_getTemperature(&self->data[padsTemperature]);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Get temperature failed error\r\n");
 #endif
@@ -212,7 +195,8 @@ bool PADS_readSensorData(PADS *self)
     }
 
     /*Round to 2 decimal places*/
-    self->data[padsTemperature] = round(self->data[padsTemperature] * 100) / (float)100;
+    self->data[padsTemperature] =
+        round(self->data[padsTemperature] * 100) / (float)100;
     return true;
 }
 
@@ -222,17 +206,21 @@ bool PADS_readSensorData(PADS *self)
  * @param  serialDebug Pointer to the serial debug
  * @retval ITDS object
  */
-ITDS *ITDSCreate(TypeSerial *serialDebug)
-{
+ITDS *ITDSCreate(TypeSerial *serialDebug) {
     ITDS *allocateInit = (ITDS *)malloc(sizeof(ITDS));
     allocateInit->serialDebug = serialDebug;
     strcpy(allocateInit->nameType, "ITDS");
     allocateInit->data[itdsXAcceleration] = 0;
     allocateInit->data[itdsYAcceleration] = 0;
     allocateInit->data[itdsZAcceleration] = 0;
+    allocateInit->data[itdsTemperature] = 0;
+    allocateInit->data[itdsDoubleTap] = 0;
+    allocateInit->data[itdsFreeFall] = 0;
     allocateInit->dataNames[itdsXAcceleration] = "ITDS_X";
     allocateInit->dataNames[itdsYAcceleration] = "ITDS_Y";
     allocateInit->dataNames[itdsZAcceleration] = "ITDS_Z";
+    allocateInit->dataNames[itdsTemperature] = "ITDS_T";
+    allocateInit->dataNames[itdsDoubleTap] = "ITDS_Double_Tap";
     return allocateInit;
 }
 
@@ -241,10 +229,8 @@ ITDS *ITDSCreate(TypeSerial *serialDebug)
  * @param  self Pointer to the uninitialize object.
  * @retval none
  */
-void ITDSDestroy(ITDS *itds)
-{
-    if (itds)
-    {
+void ITDSDestroy(ITDS *itds) {
+    if (itds) {
         free(itds);
     }
 }
@@ -254,8 +240,7 @@ void ITDSDestroy(ITDS *itds)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool ITDS_simpleInit(ITDS *self)
-{
+bool ITDS_simpleInit(ITDS *self) {
     int8_t status = 0;
     uint8_t deviceIdValue = 0;
 
@@ -263,8 +248,7 @@ bool ITDS_simpleInit(ITDS *self)
     const int addr_wsen_itds = ITDS_ADDRESS_I2C_1;
     status = I2CInit(addr_wsen_itds);
 
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Platform I2C Init error\r\n", 25);
 #endif
@@ -274,44 +258,39 @@ bool ITDS_simpleInit(ITDS *self)
     /* first communication test - WSEN_ITDS */
     status = ITDS_getDeviceID(&deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == ITDS_DEVICE_ID_VALUE))
-    {
+    if ((status == WE_SUCCESS) && (deviceIdValue == ITDS_DEVICE_ID_VALUE)) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "WSEN_ITDS Communication success\r\n");
         SSerial_printf(self->serialDebug, "DeviceID 0x%02X \r\n",
                        deviceIdValue);
 #endif
-    }
-    else
-    {
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "WSEN_ITDS Communication fail\r\n");
 #endif
         return false;
     }
 
-    /*Sampling rate of 200 Hz*/
-    status = ITDS_setOutputDataRate(odr6);
-    if (status != WE_SUCCESS)
-    {
-#if SERIAL_DEBUG
-        SSerial_printf(self->serialDebug, "set ODR fail\r\n");
-#endif
-        return false;
-    }
-    /*Enable normal mode*/
-    status = ITDS_setOperatingMode(normalOrLowPower);
-    if (status != WE_SUCCESS)
-    {
+    // /*Enable high performance mode*/
+    status = ITDS_setOperatingMode(highPerformance);
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set operating mode fail\r\n");
 #endif
         return false;
     }
+
+    // /*Sampling rate of 400 Hz*/
+    status = ITDS_setOutputDataRate(odr7);
+    if (status != WE_SUCCESS) {
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "set ODR fail\r\n");
+#endif
+        return false;
+    }
     status = ITDS_setpowerMode(ITDS_normalMode);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set power mode fail\r\n");
 #endif
@@ -319,8 +298,7 @@ bool ITDS_simpleInit(ITDS *self)
     }
     /*Enable block data update*/
     status = ITDS_setBlockDataUpdate(ITDS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set BDU fail\r\n");
 #endif
@@ -328,17 +306,15 @@ bool ITDS_simpleInit(ITDS *self)
     }
     /*Enable address auto increment*/
     status = ITDS_setAutoIncrement(ITDS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set auto increment fail\r\n");
 #endif
         return false;
     }
-    /*Full scale 16g*/
-    status = ITDS_setFullScale(sixteenG);
-    if (status != WE_SUCCESS)
-    {
+    // /*2g*/
+    status = ITDS_setFullScale(twoG);
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set set full scale fail\r\n");
 #endif
@@ -346,13 +322,75 @@ bool ITDS_simpleInit(ITDS *self)
     }
     /*Filter bandwidth = ODR/2*/
     status = ITDS_setFilteringCutoff(outputDataRate_2);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set filter cutoff fail\r\n");
 #endif
         return false;
     }
+
+    status = ITDS_enLowNoise(ITDS_enable);
+    if (status != WE_SUCCESS) {
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "set low noise fail\r\n");
+#endif
+        return false;
+    }
+
+    /* Set tap thresholds for x, y and z (5 bits, 1 bit = 1 * full_scale
+    / 32)
+     */
+    /* Corresponds to 9 * 2 / 32 = 0.5625 g */
+    ITDS_setTapThresholdX(9);
+    ITDS_setTapThresholdY(9);
+    ITDS_setTapThresholdZ(9);
+
+    /* Enable tap recognition for x, y and z */
+    ITDS_enTapX(ITDS_enable);
+    ITDS_enTapY(ITDS_enable);
+    ITDS_enTapZ(ITDS_enable);
+
+    /* Set priority z-y-x */
+    ITDS_setTapAxisPriority(Z_Y_X);
+
+    /* Set quiet time (1 bit = 1 * 4 / ODR) */
+    /* Corresponds to 1 * 4 / 400 = 10 ms */
+    ITDS_setQuiet(1);
+
+    /* Set shock time (1 bit = 1 * 8 / ODR) */
+    /* Corresponds to 2 * 8 / 400 = 40 ms */
+    ITDS_setShock(2);
+
+    /* Set latency time (1 bit = 1 * 32 / ODR) */
+    /* Corresponds to 5 * 32 / 400 = 400 ms */
+    ITDS_setLatency(5);
+
+    /* Set minimum fall duration (1 bit = 1 * 1 / ODR) */
+    /* Corresponds to 6 / 200 = 30 ms */
+    ITDS_setFreeFallDurationLSB(6);
+
+    /* Set free-fall threshold (value is encoded - see documentation of
+     * FREE_FALL_REG for details) */
+    /* Corresponds to 10 * 31.25mg = 312.5mg */
+    ITDS_setFreeFallThreshold(ten);
+
+    /* Interrupts are active high */
+    ITDS_setIntActiveLevel(ITDS_activeHigh);
+
+    /* Interrupts are push-pull */
+    ITDS_setIntPinType(ITDS_pushPull);
+
+    /* Latched mode */
+    // ITDS_enLatchInt(ITDS_enable);
+
+    /* Enable interrupts */
+    ITDS_enInterrups(ITDS_enable);
+
+    ITDS_enTapEvent(ITDS_disable);
+
+    ITDS_enSingleTapINT0(ITDS_enable);
+
+    ITDS_enFreeFallINT0(ITDS_enable);
 
     return true;
 }
@@ -362,27 +400,23 @@ bool ITDS_simpleInit(ITDS *self)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool ITDS_readSensorData(ITDS *self)
-{
+bool ITDS_readSensorData(ITDS *self) {
     int8_t status = WE_FAIL;
     I2CSetAddress(ITDS_ADDRESS_I2C_1);
     ITDS_state_t DRDY = ITDS_disable;
     int16_t XRawAcc = 0, YRawAcc = 0, ZRawAcc = 0;
 
     status = ITDS_getdataReadyState(&DRDY);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "read drdy fail\r\n");
 #endif
         return false;
     }
 
-    if (DRDY == ITDS_enable)
-    {
+    if (DRDY == ITDS_enable) {
         status = ITDS_getRawAccelerationX(&XRawAcc);
-        if (status != WE_SUCCESS)
-        {
+        if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "read acceleraion X fail\r\n");
 #endif
@@ -391,13 +425,13 @@ bool ITDS_readSensorData(ITDS *self)
         XRawAcc = XRawAcc >> 2;
         self->data[itdsXAcceleration] = (float)(XRawAcc);
         self->data[itdsXAcceleration] = (self->data[itdsXAcceleration]) / 1000;
-        self->data[itdsXAcceleration] = (self->data[itdsXAcceleration]) * 1.952;
+        self->data[itdsXAcceleration] = (self->data[itdsXAcceleration]) * 0.244;
         /*Round to 3 decimal places*/
-        self->data[itdsXAcceleration] = round(self->data[itdsXAcceleration] * 1000) / (float)1000;
+        self->data[itdsXAcceleration] =
+            round(self->data[itdsXAcceleration] * 1000) / (float)1000;
 
         status = ITDS_getRawAccelerationY(&YRawAcc);
-        if (status != WE_SUCCESS)
-        {
+        if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "read acceleraion Y fail\r\n");
 #endif
@@ -406,13 +440,13 @@ bool ITDS_readSensorData(ITDS *self)
         YRawAcc = YRawAcc >> 2;
         self->data[itdsYAcceleration] = (float)(YRawAcc);
         self->data[itdsYAcceleration] = (self->data[itdsYAcceleration]) / 1000;
-        self->data[itdsYAcceleration] = (self->data[itdsYAcceleration]) * 1.952;
+        self->data[itdsYAcceleration] = (self->data[itdsYAcceleration]) * 0.244;
         /*Round to 3 decimal places*/
-        self->data[itdsYAcceleration] = round(self->data[itdsYAcceleration] * 1000) / (float)1000;
+        self->data[itdsYAcceleration] =
+            round(self->data[itdsYAcceleration] * 1000) / (float)1000;
 
         status = ITDS_getRawAccelerationZ(&ZRawAcc);
-        if (status != WE_SUCCESS)
-        {
+        if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "read acceleraion Z fail\r\n");
 #endif
@@ -421,18 +455,73 @@ bool ITDS_readSensorData(ITDS *self)
         ZRawAcc = ZRawAcc >> 2;
         self->data[itdsZAcceleration] = (float)(ZRawAcc);
         self->data[itdsZAcceleration] = (self->data[itdsZAcceleration]) / 1000;
-        self->data[itdsZAcceleration] = (self->data[itdsZAcceleration]) * 1.952;
+        self->data[itdsZAcceleration] = (self->data[itdsZAcceleration]) * 0.244;
         /*Round to 3 decimal places*/
-        self->data[itdsZAcceleration] = round(self->data[itdsZAcceleration] * 1000) / (float)1000;
-    }
-    else
-    {
+        self->data[itdsZAcceleration] =
+            round(self->data[itdsZAcceleration] * 1000) / (float)1000;
+
+        status = ITDS_getTemperature12bit(&self->data[itdsTemperature]);
+        if (status != WE_SUCCESS) {
+#if SERIAL_DEBUG
+            SSerial_printf(self->serialDebug, "read temperature fail\r\n");
+#endif
+            return false;
+        }
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "ITDS data not ready\r\n");
 #endif
         return false;
     }
 
+    return true;
+}
+
+unsigned long lastsingletapitds = -1 * DOUBLE_TAP_IGNORE_DURATION;
+bool ITDS_readdoubletap(ITDS *self) {
+    I2CSetAddress(ITDS_ADDRESS_I2C_1);
+    int8_t status = WE_FAIL;
+    ITDS_state_t taptest;
+    status = ITDS_getTapEventState(&taptest);
+    if (taptest == ITDS_enable &&
+        ((millis() - lastsingletapitds) > SINGLE_TAP_IGNORE_DURATION)) {
+        if (((millis() - lastsingletapitds) < DOUBLE_TAP_IGNORE_DURATION)) {
+            self->data[itdsDoubleTap] = 1.0f;
+        } else {
+            self->data[itdsDoubleTap] = 0.0f;
+        }
+        lastsingletapitds = millis();
+    } else {
+        self->data[itdsDoubleTap] = 0.0f;
+    }
+    if (status != WE_SUCCESS) {
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "read tap fail\r\n");
+#endif
+        return false;
+    }
+    return true;
+}
+
+unsigned long lastfreefallitds = 0;
+bool ITDS_readfreefall(ITDS *self) {
+    I2CSetAddress(ITDS_ADDRESS_I2C_1);
+    int8_t status = WE_FAIL;
+    ITDS_state_t freefall;
+    status = ITDS_getFreeFallEventState(&freefall);
+    if (freefall == ITDS_enable &&
+        ((millis() - lastfreefallitds) > FREE_FALL_IGNORE_DURATION)) {
+        self->data[itdsFreeFall] = 1.0f;
+        lastfreefallitds = millis();
+    } else {
+        self->data[itdsFreeFall] = 0.0f;
+    }
+    if (status != WE_SUCCESS) {
+#if SERIAL_DEBUG
+        SSerial_printf(self->serialDebug, "read freefall fail\r\n");
+#endif
+        return false;
+    }
     return true;
 }
 
@@ -443,8 +532,7 @@ bool ITDS_readSensorData(ITDS *self)
  * @param  serialDebug Pointer to the serial debug
  * @retval TIDS object
  */
-TIDS *TIDSCreate(TypeSerial *serialDebug)
-{
+TIDS *TIDSCreate(TypeSerial *serialDebug) {
     TIDS *allocateInit = (TIDS *)malloc(sizeof(TIDS));
     allocateInit->serialDebug = serialDebug;
     strcpy(allocateInit->nameType, "TIDS");
@@ -458,10 +546,8 @@ TIDS *TIDSCreate(TypeSerial *serialDebug)
  * @param  self Pointer to the sensor object.
  * @retval none
  */
-void TIDSDestroy(TIDS *tids)
-{
-    if (tids)
-    {
+void TIDSDestroy(TIDS *tids) {
+    if (tids) {
         free(tids);
     }
 }
@@ -471,8 +557,7 @@ void TIDSDestroy(TIDS *tids)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool TIDS_simpleInit(TIDS *self)
-{
+bool TIDS_simpleInit(TIDS *self) {
     int8_t status = WE_FAIL;
     uint8_t deviceIdValue = 0;
 
@@ -480,8 +565,7 @@ bool TIDS_simpleInit(TIDS *self)
     const int addr_wsen_tids = TIDS_ADDRESS_I2C_1;
     status = I2CInit(addr_wsen_tids);
 
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Platform I2C Init error\r\n");
 #endif
@@ -491,17 +575,14 @@ bool TIDS_simpleInit(TIDS *self)
     /* first communication test - WSEN_TIDS */
     status = TIDS_getDeviceID(&deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == TIDS_DEVICE_ID_VALUE))
-    {
+    if ((status == WE_SUCCESS) && (deviceIdValue == TIDS_DEVICE_ID_VALUE)) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "WSEN_TIDS Communication success\r\n");
         SSerial_printf(self->serialDebug, "DeviceID 0x%02X \r\n",
                        deviceIdValue);
 #endif
-    }
-    else
-    {
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "WSEN_TIDS Communication fail\r\n",
                        30);
@@ -516,24 +597,21 @@ bool TIDS_simpleInit(TIDS *self)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool TIDS_readSensorData(TIDS *self)
-{
+bool TIDS_readSensorData(TIDS *self) {
     int8_t status = WE_FAIL;
     I2CSetAddress(TIDS_ADDRESS_I2C_1);
     TIDS_state_t temperatureDataStatus = TIDS_disable;
 
     /*Start a conversion*/
     status = TIDS_setSwReset(TIDS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Sw reset fail\r\n");
 #endif
         return false;
     }
     status = TIDS_setSwReset(TIDS_disable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Sw reset fail\r\n");
 #endif
@@ -541,8 +619,7 @@ bool TIDS_readSensorData(TIDS *self)
     }
 
     status = TIDS_setSingleConvMode(TIDS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "set single conversion fail\r\n");
 #endif
@@ -551,28 +628,24 @@ bool TIDS_readSensorData(TIDS *self)
 
     /*check the temp Data status*/
     status = TIDS_getBusyStatus(&temperatureDataStatus);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "get busy bit failed\r\n");
 #endif
         return false;
     }
-    if (temperatureDataStatus == TIDS_enable)
-    {
+    if (temperatureDataStatus == TIDS_enable) {
         status = TIDS_getTemperature(&self->data[tidsTemperature]);
-        if (status != WE_SUCCESS)
-        {
+        if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "get temperature fail\r\n");
 #endif
             return false;
         }
         /*Round to 2 decimal places*/
-        self->data[tidsTemperature] = round(self->data[tidsTemperature] * 100) / (float)100;
-    }
-    else
-    {
+        self->data[tidsTemperature] =
+            round(self->data[tidsTemperature] * 100) / (float)100;
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Temperature not ready\r\n");
 #endif
@@ -588,8 +661,7 @@ bool TIDS_readSensorData(TIDS *self)
  * @param  serialDebug Pointer to the serial debug
  * @retval TIDS object
  */
-HIDS *HIDSCreate(TypeSerial *serialDebug)
-{
+HIDS *HIDSCreate(TypeSerial *serialDebug) {
     HIDS *allocateInit = (HIDS *)malloc(sizeof(HIDS));
     allocateInit->serialDebug = serialDebug;
     strcpy(allocateInit->nameType, "HIDS");
@@ -605,10 +677,8 @@ HIDS *HIDSCreate(TypeSerial *serialDebug)
  * @param  self Pointer to the sensor object.
  * @retval none
  */
-void HIDSDestroy(HIDS *hids)
-{
-    if (hids)
-    {
+void HIDSDestroy(HIDS *hids) {
+    if (hids) {
         free(hids);
     }
 }
@@ -618,8 +688,7 @@ void HIDSDestroy(HIDS *hids)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool HIDS_simpleInit(HIDS *self)
-{
+bool HIDS_simpleInit(HIDS *self) {
     int8_t status = WE_FAIL;
     uint8_t deviceIdValue = 0;
 
@@ -628,8 +697,7 @@ bool HIDS_simpleInit(HIDS *self)
         HIDS_ADDRESS_I2C_0; /* only one i2c address for hids */
     status = I2CInit(addr_wsen_hids);
 
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "Platform I2C Init error\r\n");
 #endif
@@ -639,17 +707,14 @@ bool HIDS_simpleInit(HIDS *self)
     /* first communication test - WSEN_HIDS */
     status = HIDS_getDeviceID(&deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == HIDS_DEVICE_ID_VALUE))
-    {
+    if ((status == WE_SUCCESS) && (deviceIdValue == HIDS_DEVICE_ID_VALUE)) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug,
                        "WSEN_HIDS Communication success\r\n");
         SSerial_printf(self->serialDebug, "DeviceID 0x%02X \r\n",
                        deviceIdValue);
 #endif
-    }
-    else
-    {
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "WSEN_HIDS Communication fail\r\n");
 #endif
@@ -658,8 +723,7 @@ bool HIDS_simpleInit(HIDS *self)
 
     /*enable Block Data Update*/
     status = HIDS_setBdu(HIDS_enable);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "HIDS BDU set error\r\n");
 #endif
@@ -668,8 +732,7 @@ bool HIDS_simpleInit(HIDS *self)
 
     /*Set ODR to one shot mode*/
     status = HIDS_setOdr(odr1HZ);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "HIDS one shot set error\r\n");
 #endif
@@ -678,8 +741,7 @@ bool HIDS_simpleInit(HIDS *self)
 
     /*Power mode to active*/
     status = HIDS_setPowerMode(activeMode);
-    if (status != WE_SUCCESS)
-    {
+    if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "HIDS power mode set error\r\n");
 #endif
@@ -693,49 +755,44 @@ bool HIDS_simpleInit(HIDS *self)
  * @param  self Pointer to the sensor object.
  * @retval true if successful false in case of failure
  */
-bool HIDS_readSensorData(HIDS *self)
-{
+bool HIDS_readSensorData(HIDS *self) {
     int8_t status = WE_FAIL;
     I2CSetAddress(HIDS_ADDRESS_I2C_0);
     HIDS_state_t humStatus = HIDS_disable, tempStatus = HIDS_disable;
     /*Start a conversion*/
 
-    if (WE_FAIL == HIDS_enOneShot(HIDS_enable))
-    {
+    if (WE_FAIL == HIDS_enOneShot(HIDS_enable)) {
         SSerial_printf(self->serialDebug, "Could not set to one shot \r\n");
     }
 
-    //Get status of data
+    // Get status of data
     HIDS_getHumStatus(&humStatus);
     HIDS_getTempStatus(&tempStatus);
 
     /*check the data status*/
-    if (humStatus == HIDS_enable && tempStatus == HIDS_enable)
-    {
+    if (humStatus == HIDS_enable && tempStatus == HIDS_enable) {
         status = HIDS_getHumidity(&(self->data[hidsRelHumidity]));
-        if (status != WE_SUCCESS)
-        {
+        if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "Get humidity failed\r\n");
 #endif
             return false;
         }
         /*Round to 2 decimal places*/
-        self->data[hidsRelHumidity] = round(self->data[hidsRelHumidity] * 100) / (float)100;
+        self->data[hidsRelHumidity] =
+            round(self->data[hidsRelHumidity] * 100) / (float)100;
 
         status = HIDS_getTemperature(&(self->data[hidsTemperature]));
-        if (status != WE_SUCCESS)
-        {
+        if (status != WE_SUCCESS) {
 #if SERIAL_DEBUG
             SSerial_printf(self->serialDebug, "Get temperature failed\r\n");
 #endif
             return false;
         }
         /*Round to 2 decimal places*/
-        self->data[hidsTemperature] = round(self->data[hidsTemperature] * 100) / (float)100;
-    }
-    else
-    {
+        self->data[hidsTemperature] =
+            round(self->data[hidsTemperature] * 100) / (float)100;
+    } else {
 #if SERIAL_DEBUG
         SSerial_printf(self->serialDebug, "HIDS data not ready\r\n");
 #endif
