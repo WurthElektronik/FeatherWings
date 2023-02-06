@@ -13,10 +13,10 @@ Start by checking our [quick start section](#Quick-start-guide).
 
 | Image    | Description |
 | -------- | ----------- |
-|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](/SensorFeatherWing) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>[Sparkfun QWIIC® Connect System](https://www.sparkfun.com/qwiic) to connect additional peripherals </ul> |
-|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Thyone-I Wireless FeatherWing** (2611059021001)](/ThyoneWirelessFeatherWing)<ul><li>2.4 GHz Proprietary radio Module<li>Robust wireless link up to 500 m<li>Easy build up networks<li>Connect to Thyone modules or USB-Stick</ul> |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](/SensorFeatherWing) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>[Sparkfun QWIIC® Connect System](https://www.sparkfun.com/qwiic) to connect additional peripherals <br/> <br/> Note: this Feather will be updated with new sensors in the future.</ul> |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Thyone-I Wireless FeatherWing** (2611059021001)](/ThyoneWirelessFeatherWing)<ul><li>2.4 GHz Proprietary radio Module<li><li>Easy build up networks<li>Connect to Thyone modules or USB-Stick. <br/> <br/> Note: this Feather will be replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I) in the future.</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Calypso WiFi FeatherWing** (2610039025001)](/CalypsoWiFiFeatherWing)<ul><li>2.4 GHz WiFi-Connectivity <li>Easy and secure connection to Smart Devices<li>Out-of-the-box support to applications like HTTP(S), MQTT(S) <li>AT-style command interface </ul> |
-|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Proteus-III BLE FeatherWing** (2611059020001)](/ProteusFeatherWing)<ul><li>Bluetooth® Low Energy 5.1 module<li>Nano SIM size<li>2 MBit PHY and Coded PHY (long range)<li>Connect to any smart device with and app</ul> |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Proteus-III BLE FeatherWing** (not available as a standalone product)](/ProteusFeatherWing)<ul><li>Bluetooth® Low Energy 5.1 module<li>Nano SIM size<li>2 MBit PHY and Coded PHY (long range)<li>Connect to any smart device with and app. <br/> <br/> Note: this Feather will be replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I) in the future.</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing)<ul><li>5 V and 3.3 V power supply<li>Using a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails)</ul> |
 |![Adafruit Feather](assets/Stacked-FeatherWings-single-board-Mx.png) | Connect any **Adafruit Feather Microcontroller** <br>(e.g. [Adafruit Feather M0 Express](https://www.adafruit.com/product/3403) or [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857))<ul><li>Request sensor data<li>Transfer data to RF-Module<li>Examples available on Github<li>Source code available on Github</ul> |
 
@@ -80,6 +80,8 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
    - [Thyone-I Wireless FeatherWing example](/ThyoneWirelessFeatherWing/software) showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
    - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities.
    - [Sensor2Cloud connectivity example](/Sensor2CloudConnectivity) sends data measured using the sensors via Wi-Fi to the Microsoft Azure or Amazon AWS cloud.
+   - [Sensor2BLE connectivity example](/Sensor2BLE) uses Bluetooth Low Energy in Role Peripheral to share the Sensor measurement values with a Smart Device. The WE-SensorBLE App is required on the smart device. Requires to a Proteus-III compatible radio module, such as available with Setebos-I Feather.
+   
 
 > **Note**: For more details on each board and workspace, please click on the links above.
 
