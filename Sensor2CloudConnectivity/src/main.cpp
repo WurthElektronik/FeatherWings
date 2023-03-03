@@ -36,16 +36,39 @@
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "we-iot-device"
-#define MQTT_SERVER_ADDRESS "we-iothub.azure-devices.net"
+#define MQTT_CLIENT_ID "cust-test-dev-1"
+#define MQTT_SERVER_ADDRESS "cust-test-iot-1.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/we-iot-device/messages/events/"
-#define MQTT_USER_NAME "we-iothub.azure-devices.net/we-iot-device"
-#define MQTT_PASSWORD                                               \
-    "SharedAccessSignature "                                        \
-    "sr=we-iothub.azure-devices.net%2Fdevices%2Fwe-iot-device&sig=" \
-    "DcBBSucFMS15NAN6wLCfMiZtpBb8fgYrUJeq%2BBvbnw%3D&se=1640500745"
+#define MQTT_TOPIC "devices/cust-test-dev-1/messages/events/"
+#define MQTT_USER_NAME "cust-test-iot-1.azure-devices.net/cust-test-dev-1/?api-version=2021-04-12"
+#define MQTT_PASSWORD                                                       \
+    "SharedAccessSignature "                                                \
+    "sr=cust-test-iot-1.azure-devices.net%2Fdevices%2Fcust-test-dev-1&sig=" \
+    "07hjStKVl1mmeiSHscxMCRP8CfUK3qDQymsqV%2FNBc9M%3D&se=1713832997"
 
+#define ROOT_CA_PATH "azrootca"
+
+#define BALTIMORE_CYBERTRUST_ROOT_CERT "-----BEGIN CERTIFICATE-----\n\
+MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ\n\
+RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD\n\
+VQQDExlCYWx0aW1vcmUgQ3liZXJUcnVzdCBSb290MB4XDTAwMDUxMjE4NDYwMFoX\n\
+DTI1MDUxMjIzNTkwMFowWjELMAkGA1UEBhMCSUUxEjAQBgNVBAoTCUJhbHRpbW9y\n\
+ZTETMBEGA1UECxMKQ3liZXJUcnVzdDEiMCAGA1UEAxMZQmFsdGltb3JlIEN5YmVy\n\
+VHJ1c3QgUm9vdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKMEuyKr\n\
+mD1X6CZymrV51Cni4eiVgLGw41uOKymaZN+hXe2wCQVt2yguzmKiYv60iNoS6zjr\n\
+IZ3AQSsBUnuId9Mcj8e6uYi1agnnc+gRQKfRzMpijS3ljwumUNKoUMMo6vWrJYeK\n\
+mpYcqWe4PwzV9/lSEy/CG9VwcPCPwBLKBsua4dnKM3p31vjsufFoREJIE9LAwqSu\n\
+XmD+tqYF/LTdB1kC1FkYmGP1pWPgkAx9XbIGevOF6uvUA65ehD5f/xXtabz5OTZy\n\
+dc93Uk3zyZAsuT3lySNTPx8kmCFcB5kpvcY67Oduhjprl3RjM71oGDHweI12v/ye\n\
+jl0qhqdNkNwnGjkCAwEAAaNFMEMwHQYDVR0OBBYEFOWdWTCCR1jMrPoIVDaGezq1\n\
+BE3wMBIGA1UdEwEB/wQIMAYBAf8CAQMwDgYDVR0PAQH/BAQDAgEGMA0GCSqGSIb3\n\
+DQEBBQUAA4IBAQCFDF2O5G9RaEIFoN27TyclhAO992T9Ldcw46QQF+vaKSm2eT92\n\
+9hkTI7gQCvlYpNRhcL0EYWoSihfVCr3FvDB81ukMJY2GQE/szKN+OMY3EU/t3Wgx\n\
+jkzSswF07r51XgdIGn9w/xZchMB5hbgF/X++ZRGjD8ACtPhSNzkE1akxehi/oCr0\n\
+Epn3o0WC4zxe9Z2etciefC7IpJ5OCBRLbf1wbWsaY71k5h+3zvDyny67G7fyUIhz\n\
+ksLi4xaNmjICq44Y3ekQEe5+NauQrz4wlHrQMz2nZQ/1/I6eYs9HRCwBXbsdtTLS\n\
+R9I4LtD+gdwyah617jzV/OeBHRnDJELqYzmp\n\
+-----END CERTIFICATE-----"
 #endif
 
 #if AWS_CONNECTION
@@ -176,6 +199,8 @@ void setup()
 
     strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_PASSWORD);
 
+    strcpy(calSettings.mqttSettings.secParams.CAFile, ROOT_CA_PATH);
+
 #endif
 
 #if AWS_CONNECTION
@@ -251,6 +276,13 @@ void setup()
     if (!Calypso_fileExists(calypso, MQTT_PRIV_KEY_PATH))
     {
         Calypso_writeFile(calypso, MQTT_PRIV_KEY_PATH, MQTT_PRIV_KEY, strlen(MQTT_PRIV_KEY));
+    }
+#endif
+
+#if AZURE_CONNECTION
+    if (!Calypso_fileExists(calypso, ROOT_CA_PATH))
+    {
+        Calypso_writeFile(calypso, ROOT_CA_PATH, BALTIMORE_CYBERTRUST_ROOT_CERT, strlen(BALTIMORE_CYBERTRUST_ROOT_CERT));
     }
 #endif
     // Connect Calypso WiFi FeatherWing to the Wi-Fi access point
