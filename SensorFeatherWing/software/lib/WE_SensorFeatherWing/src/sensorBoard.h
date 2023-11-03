@@ -2,7 +2,7 @@
  * \file
  * \brief File for the sensor board of the WE IoT design kit.
  *
- * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
+ * \copyright (c) 2023 Würth Elektronik eiSos GmbH & Co. KG
  *
  * \page License
  *
@@ -30,88 +30,29 @@
 /**         Includes         */
 #include "ConfigPlatform.h"
 
-/**         Functions definition         */
-#define LENGTH_OF_NAMES 16
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum {
-    padsTemperature,
-    padsPressure,
-    padsProperties
-} PADS_properties_t;
+extern bool sensorBoard_Init();
 
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[padsProperties];
-    const char *dataNames[padsProperties];
-} PADS;
+extern bool PADS_2511020213301_simpleInit();
+extern bool PADS_2511020213301_readSensorData(float *pressure, float *temp);
 
-PADS *PADSCreate(TypeSerial *serialDebug);
-void PADSDestroy(PADS *pads);
-bool PADS_simpleInit(PADS *self);
-bool PADS_readSensorData(PADS *self);
+extern bool ITDS_2533020201601_simpleInit();
+extern bool ITDS_2533020201601_readSensorData(float *accelX, float *accelY,
+                                              float *accelZ, float *temp);
+extern bool ITDS_2533020201601_readDoubleTapEvent(bool *stateOccured);
+extern bool ITDS_2533020201601_readFreeFallEvent(bool *stateOccured);
 
-typedef enum {
-    itdsXAcceleration,
-    itdsYAcceleration,
-    itdsZAcceleration,
-    itdsTemperature,
-    itdsDoubleTap,
-    itdsFreeFall,
-    itdsProperties
-} ITDS_properties_t;
+extern bool TIDS_2521020222501_simpleInit();
+extern bool TIDS_2521020222501_readSensorData(float *temp);
 
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[itdsProperties];
-    const char *dataNames[itdsProperties];
-} ITDS;
-ITDS *ITDSCreate(TypeSerial *serialDebug);
-void ITDSDestroy(ITDS *itds);
-bool ITDS_readSensorData(ITDS *self);
-bool ITDS_simpleInit(ITDS *self);
-bool ITDS_readdoubletap(ITDS *self);
-bool ITDS_readfreefall(ITDS *self);
-typedef enum { tidsTemperature, tidsProperties } TIDS_properties_t;
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[tidsProperties];
-    const char *dataNames[tidsProperties];
-} TIDS;
+extern bool HIDS_2525020210001_simpleInit();
+extern bool HIDS_2525020210001_readSensorData(float *humidity, float *temp);
 
-TIDS *TIDSCreate(TypeSerial *serialDebug);
-void TIDSDestroy(TIDS *tids);
-bool TIDS_simpleInit(TIDS *self);
-bool TIDS_readSensorData(TIDS *self);
-typedef enum {
-    hidsTemperature,
-    hidsRelHumidity,
-    hidsProperties
-} HIDS_properties_t;
-typedef struct {
-    TypeSerial *serialDebug;
-    char nameType[LENGTH_OF_NAMES];
-    float data[hidsProperties];
-    const char *dataNames[hidsProperties];
-} HIDS;
-
-HIDS *HIDSCreate(TypeSerial *serialDebug);
-void HIDSDestroy(HIDS *tids);
-bool HIDS_simpleInit(HIDS *self);
-bool HIDS_readSensorData(HIDS *self);
-
-#define FREE_FALL_IGNORE_DURATION 200
-
-#define DOUBLE_TAP_IGNORE_DURATION 400
-
-#define SINGLE_TAP_IGNORE_DURATION 20
-
+extern bool HIDS_2525020210002_simpleInit();
+extern bool HIDS_2525020210002_readSensorData(float *humidity, float *temp);
 #ifdef __cplusplus
 }
 #endif

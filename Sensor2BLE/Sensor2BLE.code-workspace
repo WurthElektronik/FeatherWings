@@ -7,7 +7,15 @@
 		{
 			"name": "Common",
 			"path": "..//Common"
-		}
+		},
+		{
+			"name": "ProteusIIIFeatherWing",
+			"path": "..//ProteusIIIFeatherWing"
+		},
+		{
+			"name": "SensorFeatherWing",
+			"path": "..//SensorFeatherWing"
+		},
 	],
 	"settings": {
 		"files.associations": {
@@ -39,7 +47,12 @@
 			"utility": "cpp",
 			"variant": "cpp",
 			"sensorboard.h": "c",
-			"wsen_itds_2533020201601.h": "c"
+			"wsen_itds_2533020201601.h": "c",
+			"string_view": "cpp",
+			"string": "cpp",
+			"wsen_hids_2525020210001.h": "c",
+			"wsen_pads_2511020213301.h": "c",
+			"wsen_hids_2525020210002.h": "c"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

@@ -23,29 +23,36 @@
  * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
-#include "proteusIIIBoard.h"
+#include "ProteusIII.h"
 #include "sensorBoard.h"
 
-// USB-Serial debug Interface
-TypeSerial *SerialDebug;
+ProteusIII_Pins_t ProteusIII_pins;
 
-Uart ProteusIIIUART(&sercom1, 11, 10, SERCOM_RX_PAD_0, UART_TX_PAD_2);
+float PADS_pressure, PADS_temp;
+float ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp;
+bool ITDS_doubleTapEvent, ITDS_freeFallEvent;
+float TIDS_temp;
+float HIDS_humidity, HIDS_temp;
 
-// Proteus object
-PROTEUSIII *proteusIII;
+/* Sensor2BLE State Machine */
+typedef enum
+{
+    Sensor2BLE_SM_Idle = 0x0,
+    Sensor2BLE_SM_Send_Sensor_Interval = 0x1,
+    Sensor2BLE_SM_Send_Sensor_Data = 0x2
+} Sensor2BLE_SM_t;
 
-// Serial communication port for Proteus-III
-TypeHardwareSerial *SerialProteusIII;
+static volatile Sensor2BLE_SM_t currentstate = Sensor2BLE_SM_Idle;
 
-// Sensors
-// WE absolute pressure sensor object
-PADS *sensorPADS;
-// WE 3-axis acceleration sensor object
-ITDS *sensorITDS;
-// WE Temperature sensor object
-TIDS *sensorTIDS;
-// WE humidity sensor object
-HIDS *sensorHIDS;
+#define HIDS_PART_NUMBER 2525020210001
+
+/* Callback functions for various indications sent by the Proteus-III. */
+static void
+RxCallback(uint8_t *payload, uint16_t payloadLength, uint8_t *btMac,
+           int8_t rssi);
+static void ConnectCallback(bool success, uint8_t *btMac);
+static void DisconnectCallback(ProteusIII_DisconnectReason_t reason);
+static void ChannelOpenCallback(uint8_t *btMac, uint16_t maxPayload);
 
 unsigned long eventattrdelay = 3;
 unsigned long eventattrlastupdate = 0;
@@ -56,149 +63,83 @@ uint32_t int8arraytouint32(uint8_t *value);
 
 bool namechanged(uint8_t *newname, uint8_t *oldname);
 
-void SERCOM1_Handler()
-{
-    ProteusIIIUART.IrqHandler();
-}
-
-struct sensorperiod
+typedef struct
 {
     unsigned long sensorperiod;
     unsigned long lastupdate;
-} padssensorperiod, itdssensorperiod, hidssensorperiod, tidssensorperiod;
+} sensorperiod;
 
-static void connected()
-{
-    SSerial_printf(SerialDebug, "device connected \n");
-}
-static void channelopen()
-{
-    SSerial_printf(SerialDebug, "device started notifications \n");
-    uint8_t payload[28] = {0};
-    payload[0] = 7;
-    payload[1] = 1;
-    payload[2] = 0;
-    uint32touint8array(&payload[3], padssensorperiod.sensorperiod);
-    payload[7] = 7;
-    payload[8] = 1;
-    payload[9] = 1;
-    uint32touint8array(&payload[10], itdssensorperiod.sensorperiod);
-    payload[14] = 7;
-    payload[15] = 1;
-    payload[16] = 2;
-    uint32touint8array(&payload[17], tidssensorperiod.sensorperiod);
-    payload[21] = 7;
-    payload[22] = 1;
-    payload[23] = 3;
-    uint32touint8array(&payload[24], hidssensorperiod.sensorperiod);
-    PROTEUSIII_Transmit(proteusIII, payload, 28);
-}
+sensorperiod padssensorperiod, itdssensorperiod, hidssensorperiod, tidssensorperiod;
 
-static void disconnected()
-{
-    SSerial_printf(SerialDebug, "device disconnected \n");
-}
-
-static void datareceived(uint8_t *data, int length)
-{
-    // fisrt 6 bytes mac and 7th byte is RSSI
-    int byteidx = 7;
-    while (byteidx < length)
-    {
-        int packetlength = data[byteidx];
-        int packetfunction = data[byteidx + 1];
-        int packetsensortype = data[byteidx + 2];
-        switch (packetfunction)
-        {
-        case 1:
-            switch (packetsensortype)
-            {
-            case 0:
-                padssensorperiod.sensorperiod = int8arraytouint32(&data[byteidx + 3]);
-                break;
-            case 1:
-                itdssensorperiod.sensorperiod = int8arraytouint32(&data[byteidx + 3]);
-                break;
-            case 2:
-                tidssensorperiod.sensorperiod = int8arraytouint32(&data[byteidx + 3]);
-                break;
-            case 3:
-                hidssensorperiod.sensorperiod = int8arraytouint32(&data[byteidx + 3]);
-                break;
-            }
-            break;
-        }
-        byteidx += packetlength;
-    }
-}
-
-static PROTEUSIII_cb callbacks = {
-    .datareceived = datareceived,
-    .connected = connected,
-    .disconnected = disconnected,
-    .channelopen = channelopen,
-};
+static uint8_t payload[54] = {0};
+static int payloadLength = 0;
 
 void setup()
 {
-    // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
 
-    SerialProteusIII = HSerial_create(&ProteusIIIUART);
+#ifdef WE_DEBUG
+    WE_Debug_Init();
+#endif
 
-    // Create serial port for Proteus FeatherWing with baud 115200 and 8N1
-    HSerial_beginP(SerialProteusIII, 115200, (uint8_t)SERIAL_8N1);
-    pinPeripheral(10, PIO_SERCOM);
-    pinPeripheral(11, PIO_SERCOM);
+    ProteusIII_pins.ProteusIII_Pin_SleepWakeUp.pin = 9;
+    ProteusIII_pins.ProteusIII_Pin_Mode.pin = 17;
 
-    proteusIII = PROTEUSIII_Create(SerialDebug, SerialProteusIII, &callbacks);
+    ProteusIII_CallbackConfig_t callbackConfig = {0};
+    callbackConfig.rxCb = RxCallback;
+    callbackConfig.connectCb = ConnectCallback;
+    callbackConfig.disconnectCb = DisconnectCallback;
+    callbackConfig.channelOpenCb = ChannelOpenCallback;
+
+    ProteusIII_Init(&ProteusIII_pins, PROTEUSIII_DEFAULT_BAUDRATE,
+                    WE_FlowControl_NoFlowControl,
+                    ProteusIII_OperationMode_CommandMode, callbackConfig);
 
     uint8_t fwversion[3] = {};
-    if (PROTEUSIII_GetFWVersion(proteusIII, fwversion))
+    if (ProteusIII_GetFWVersion(fwversion))
     {
-        SSerial_printf(SerialDebug, "read version %d.%d.%d", fwversion[2],
+        WE_DEBUG_PRINT("read version %d.%d.%d \n", fwversion[2],
                        fwversion[1], fwversion[0]);
         if ((fwversion[2] != 1) || (fwversion[1] != 4))
         {
-            SSerial_printf(SerialDebug, "unsupported FW version \n");
+            WE_DEBUG_PRINT("unsupported FW version \n");
             exit(0);
         }
     }
 
-    uint8_t readcfg[2] = {};
-    if (PROTEUSIII_GetCFGFlags(proteusIII, readcfg))
+    uint8_t readcfg[2] = {0};
+    if (ProteusIII_GetCFGFlags((uint16_t *)readcfg))
     {
-        uint8_t writecfg[2] = {0x10, 0x00};
-        if ((readcfg[0] != 0x10) && PROTEUSIII_SetCFGFlags(proteusIII, writecfg))
+        uint16_t writecfg = 0x1000;
+        if ((readcfg[0] != 0x10) && ProteusIII_SetCFGFlags(writecfg))
         {
-            SSerial_printf(SerialDebug, "flags set \n");
+            WE_DEBUG_PRINT("flags set \n");
         }
     }
 
-    uint8_t timing = -1;
-    if (PROTEUSIII_GetConnectionTiming(proteusIII, &timing) && timing != 12)
+    ProteusIII_ConnectionTiming_t timing;
+    if (ProteusIII_GetConnectionTiming(&timing) && timing != ProteusIII_ConnectionTiming_12)
     {
-        if (PROTEUSIII_SetConnectionTiming(proteusIII, 12))
+        if (ProteusIII_SetConnectionTiming(ProteusIII_ConnectionTiming_12))
         {
-            SSerial_printf(SerialDebug, "timing set \n");
+            WE_DEBUG_PRINT("timing set \n");
         }
     }
-    uint8_t oldname[8];
+    uint8_t oldname[10];
+    uint16_t oldnameLength = sizeof(oldname);
     uint8_t btmacaddress[6] = {};
-    if (PROTEUSIII_GetBTMacAddress(proteusIII, btmacaddress))
+    if (ProteusIII_GetBTMAC(btmacaddress))
     {
         char newname[10];
         sprintf(newname, "W-%02x%02x%02x", btmacaddress[2], btmacaddress[1],
                 btmacaddress[0]);
-        if (PROTEUSIII_GetDeviceName(proteusIII, oldname) && namechanged((uint8_t *)newname, oldname))
+        if (ProteusIII_GetDeviceName(oldname, &oldnameLength) && namechanged((uint8_t *)newname, oldname))
         {
-            SSerial_printf(SerialDebug, "need new name\n");
-            if (PROTEUSIII_SetAdvertisingFlags(proteusIII, 1))
+            WE_DEBUG_PRINT("need new name\n");
+            if (ProteusIII_SetAdvertisingFlags(ProteusIII_AdvertisingFlags_DeviceNameAndUuid))
             {
-                if (PROTEUSIII_SetDeviceName(proteusIII, (uint8_t *)newname))
+                if (ProteusIII_SetDeviceName((uint8_t *)newname, 8))
                 {
-                    SSerial_printf(SerialDebug, "new name set\n");
+                    WE_DEBUG_PRINT("new name set\n");
                 }
             }
         }
@@ -206,130 +147,171 @@ void setup()
 
     uint8_t bname[] = {'F', 'W', 'I', 'N', 'G'};
 
-    if (PROTEUSIII_SetBeaconData(proteusIII, bname, 5))
+    if (ProteusIII_SetBeacon(bname, 5))
     {
-        SSerial_printf(SerialDebug, "beacon data set\n");
+        WE_DEBUG_PRINT("beacon data set\n");
     }
-
-    // Create sensor objects
-    sensorPADS = PADSCreate(SerialDebug);
-    sensorITDS = ITDSCreate(SerialDebug);
-    sensorTIDS = TIDSCreate(SerialDebug);
-    sensorHIDS = HIDSCreate(SerialDebug);
 
     padssensorperiod = {5000, 0};
     itdssensorperiod = {30, 0};
     tidssensorperiod = {5000, 0};
     hidssensorperiod = {5000, 0};
 
+    if (!sensorBoard_Init())
+    {
+        WE_DEBUG_PRINT("I2C init failed \r\n");
+    }
     // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS))
+    if (!PADS_2511020213301_simpleInit())
     {
-        SSerial_printf(SerialDebug, "PADS init failed \r\n");
+        WE_DEBUG_PRINT("PADS init failed \r\n");
     }
-    if (!ITDS_simpleInit(sensorITDS))
+
+    if (!ITDS_2533020201601_simpleInit())
     {
-        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
+        WE_DEBUG_PRINT("ITDS init failed \r\n");
     }
-    if (!TIDS_simpleInit(sensorTIDS))
+
+    if (!TIDS_2521020222501_simpleInit())
     {
-        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
+        WE_DEBUG_PRINT("TIDS init failed \r\n");
     }
-    if (!HIDS_simpleInit(sensorHIDS))
+
+#if HIDS_PART_NUMBER == 2525020210001
+    if (!HIDS_2525020210001_simpleInit())
     {
-        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
     }
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (!HIDS_2525020210002_simpleInit())
+    {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+    }
+#endif
 }
 
 void loop()
 {
-    PROTEUSIII_Receive(proteusIII);
-    uint8_t payload[54] = {0};
-    int payloadlength = 0;
-    unsigned long currtime = millis();
-    if (((currtime - padssensorperiod.lastupdate) >= padssensorperiod.sensorperiod) && PADS_readSensorData(sensorPADS))
+    switch (currentstate)
     {
-        SSerial_printf(
-            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
-        payload[0] = 11;
-        payload[1] = 0;
+    default:
+    case Sensor2BLE_SM_Idle:
+        break;
+    case Sensor2BLE_SM_Send_Sensor_Interval:
+    {
+        payload[0] = 7;
+        payload[1] = 1;
         payload[2] = 0;
-        uint32touint8array(&payload[3], sensorPADS->data[padsPressure] * 100);
-        uint32touint8array(&payload[7], sensorPADS->data[padsTemperature] * 100);
-        payloadlength += 11;
-        padssensorperiod.lastupdate = currtime;
+        uint32touint8array(&payload[3], padssensorperiod.sensorperiod);
+        payload[7] = 7;
+        payload[8] = 1;
+        payload[9] = 1;
+        uint32touint8array(&payload[10], itdssensorperiod.sensorperiod);
+        payload[14] = 7;
+        payload[15] = 1;
+        payload[16] = 2;
+        uint32touint8array(&payload[17], tidssensorperiod.sensorperiod);
+        payload[21] = 7;
+        payload[22] = 1;
+        payload[23] = 3;
+        uint32touint8array(&payload[24], hidssensorperiod.sensorperiod);
+        payloadLength = 28;
+        ProteusIII_Transmit(payload, payloadLength);
+        WE_Delay(50);
+        currentstate = Sensor2BLE_SM_Send_Sensor_Data;
+        break;
     }
-    if (((currtime - itdssensorperiod.lastupdate) >= itdssensorperiod.sensorperiod) && ITDS_readSensorData(sensorITDS))
+    case Sensor2BLE_SM_Send_Sensor_Data:
     {
-        // SSerial_printf(SerialDebug,
-        //                "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: %f °C\r\n",
-        //                sensorITDS->data[itdsXAcceleration],
-        //                sensorITDS->data[itdsYAcceleration],
-        //                sensorITDS->data[itdsZAcceleration],
-        //                sensorITDS->data[itdsTemperature]);
-        payload[payloadlength] = 19;
-        payload[payloadlength + 1] = 0;
-        payload[payloadlength + 2] = 1;
-        uint32touint8array(&payload[payloadlength + 3], sensorITDS->data[itdsXAcceleration] * 1000);
-        uint32touint8array(&payload[payloadlength + 7], sensorITDS->data[itdsYAcceleration] * 1000);
-        uint32touint8array(&payload[payloadlength + 11], sensorITDS->data[itdsZAcceleration] * 1000);
-        uint32touint8array(&payload[payloadlength + 15], sensorITDS->data[itdsTemperature] * 100);
-        payloadlength += 19;
-        itdssensorperiod.lastupdate = currtime;
-    }
-    if ((currtime - eventattrlastupdate) >= eventattrdelay)
-    {
-        if (ITDS_readdoubletap(sensorITDS) && sensorITDS->data[itdsDoubleTap])
+        unsigned long currtime = millis();
+        payloadLength = 0;
+        if (((currtime - padssensorperiod.lastupdate) >= padssensorperiod.sensorperiod) && PADS_2511020213301_readSensorData(&PADS_pressure, &PADS_temp))
         {
-            SSerial_printf(SerialDebug, "tap: %f °C\r\n",
-                           sensorITDS->data[itdsDoubleTap]);
-            payload[payloadlength] = 3;
-            payload[payloadlength + 1] = 2;
-            payload[payloadlength + 2] = 1;
-            payloadlength += 3;
-            sensorITDS->data[itdsDoubleTap] = 0;
+            WE_DEBUG_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+                           PADS_pressure, PADS_temp);
+            payload[0] = 11;
+            payload[1] = 0;
+            payload[2] = 0;
+            uint32touint8array(&payload[3], PADS_pressure * 100);
+            uint32touint8array(&payload[7], PADS_temp * 100);
+            payloadLength += 11;
+            padssensorperiod.lastupdate = currtime;
         }
-        if (ITDS_readfreefall(sensorITDS) && sensorITDS->data[itdsFreeFall])
+        if (((currtime - itdssensorperiod.lastupdate) >= itdssensorperiod.sensorperiod) && ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
+                                                                                                                             &ITDS_accelZ, &ITDS_temp))
         {
-            SSerial_printf(SerialDebug, "free fall: %f °C\r\n",
-                           sensorITDS->data[itdsFreeFall]);
-            payload[payloadlength] = 3;
-            payload[payloadlength + 1] = 3;
-            payload[payloadlength + 2] = 1;
-            payloadlength += 3;
-            sensorITDS->data[itdsFreeFall] = 0;
+            // WE_DEBUG_PRINT(SerialDebug,
+            //                "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: %f °C\r\n",
+            //                sensorITDS->data[itdsXAcceleration],
+            //                sensorITDS->data[itdsYAcceleration],
+            //                sensorITDS->data[itdsZAcceleration],
+            //                sensorITDS->data[itdsTemperature]);
+            payload[payloadLength] = 19;
+            payload[payloadLength + 1] = 0;
+            payload[payloadLength + 2] = 1;
+            uint32touint8array(&payload[payloadLength + 3], ITDS_accelX * 1000);
+            uint32touint8array(&payload[payloadLength + 7], ITDS_accelY * 1000);
+            uint32touint8array(&payload[payloadLength + 11], ITDS_accelZ * 1000);
+            uint32touint8array(&payload[payloadLength + 15], ITDS_temp * 100);
+            payloadLength += 19;
+            itdssensorperiod.lastupdate = currtime;
         }
-        // ITDS_readstationary(sensorITDS);
-        eventattrlastupdate = currtime;
+        if ((currtime - eventattrlastupdate) >= eventattrdelay)
+        {
+            if (ITDS_2533020201601_readDoubleTapEvent(&ITDS_doubleTapEvent) && ITDS_doubleTapEvent)
+            {
+                WE_DEBUG_PRINT("Double Tap Detected\r\n");
+                payload[payloadLength] = 3;
+                payload[payloadLength + 1] = 2;
+                payload[payloadLength + 2] = 1;
+                payloadLength += 3;
+            }
+            if (ITDS_2533020201601_readFreeFallEvent(&ITDS_freeFallEvent) && ITDS_freeFallEvent)
+            {
+                WE_DEBUG_PRINT("Free Fall Detected\r\n");
+                payload[payloadLength] = 3;
+                payload[payloadLength + 1] = 3;
+                payload[payloadLength + 2] = 1;
+                payloadLength += 3;
+            }
+            eventattrlastupdate = currtime;
+        }
+        if (((currtime - tidssensorperiod.lastupdate) >= tidssensorperiod.sensorperiod) && TIDS_2521020222501_readSensorData(&TIDS_temp))
+        {
+            WE_DEBUG_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
+            payload[payloadLength] = 7;
+            payload[payloadLength + 1] = 0;
+            payload[payloadLength + 2] = 2;
+            uint32touint8array(&payload[payloadLength + 3], TIDS_temp * 100);
+            payloadLength += 7;
+            tidssensorperiod.lastupdate = currtime;
+        }
+        if (((currtime - hidssensorperiod.lastupdate) >= hidssensorperiod.sensorperiod) &&
+#if HIDS_PART_NUMBER == 2525020210001
+            HIDS_2525020210001_readSensorData(&HIDS_humidity, &HIDS_temp)
+#elif HIDS_PART_NUMBER == 2525020210002
+            HIDS_2525020210002_readSensorData(&HIDS_humidity, &HIDS_temp)
+#else
+            false
+#endif
+        )
+        {
+            WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                           HIDS_temp);
+            payload[payloadLength] = 11;
+            payload[payloadLength + 1] = 0;
+            payload[payloadLength + 2] = 3;
+            uint32touint8array(&payload[payloadLength + 3], HIDS_humidity * 100);
+            uint32touint8array(&payload[payloadLength + 7], HIDS_temp * 100);
+            payloadLength += 11;
+            hidssensorperiod.lastupdate = currtime;
+        }
+        if (payloadLength != 0)
+        {
+            ProteusIII_Transmit(payload, payloadLength);
+        }
+        break;
     }
-    if (((currtime - tidssensorperiod.lastupdate) >= tidssensorperiod.sensorperiod) && TIDS_readSensorData(sensorTIDS))
-    {
-        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-                       sensorTIDS->data[tidsTemperature]);
-        payload[payloadlength] = 7;
-        payload[payloadlength + 1] = 0;
-        payload[payloadlength + 2] = 2;
-        uint32touint8array(&payload[payloadlength + 3], sensorTIDS->data[tidsTemperature] * 100);
-        payloadlength += 7;
-        tidssensorperiod.lastupdate = currtime;
-    }
-    if (((currtime - hidssensorperiod.lastupdate) >= hidssensorperiod.sensorperiod) && HIDS_readSensorData(sensorHIDS))
-    {
-        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-                       sensorHIDS->data[hidsRelHumidity],
-                       sensorHIDS->data[hidsTemperature]);
-        payload[payloadlength] = 11;
-        payload[payloadlength + 1] = 0;
-        payload[payloadlength + 2] = 3;
-        uint32touint8array(&payload[payloadlength + 3], sensorHIDS->data[hidsRelHumidity] * 100);
-        uint32touint8array(&payload[payloadlength + 7], sensorHIDS->data[hidsTemperature] * 100);
-        payloadlength += 11;
-        hidssensorperiod.lastupdate = currtime;
-    }
-    if (payloadlength != 0)
-    {
-        PROTEUSIII_Transmit(proteusIII, payload, payloadlength);
     }
 }
 
@@ -356,4 +338,55 @@ bool namechanged(uint8_t *newname, uint8_t *oldname)
         }
     }
     return false;
+}
+
+static void RxCallback(uint8_t *payload, uint16_t payloadLength, uint8_t *btMac,
+                       int8_t rssi)
+{
+    int byteidx = 7;
+    while (byteidx < payloadLength)
+    {
+        int packetlength = payload[byteidx];
+        int packetfunction = payload[byteidx + 1];
+        int packetsensortype = payload[byteidx + 2];
+        switch (packetfunction)
+        {
+        case 1:
+            switch (packetsensortype)
+            {
+            case 0:
+                padssensorperiod.sensorperiod = int8arraytouint32(&payload[byteidx + 3]);
+                break;
+            case 1:
+                itdssensorperiod.sensorperiod = int8arraytouint32(&payload[byteidx + 3]);
+                break;
+            case 2:
+                tidssensorperiod.sensorperiod = int8arraytouint32(&payload[byteidx + 3]);
+                break;
+            case 3:
+                hidssensorperiod.sensorperiod = int8arraytouint32(&payload[byteidx + 3]);
+                break;
+            }
+            break;
+        }
+        byteidx += packetlength;
+    }
+}
+
+static void ConnectCallback(bool success, uint8_t *btMac)
+{
+    WE_DEBUG_PRINT("device connected \n");
+    currentstate = Sensor2BLE_SM_Idle;
+}
+
+static void DisconnectCallback(ProteusIII_DisconnectReason_t reason)
+{
+    WE_DEBUG_PRINT("device disconnected \n");
+    currentstate = Sensor2BLE_SM_Idle;
+}
+
+static void ChannelOpenCallback(uint8_t *btMac, uint16_t maxPayload)
+{
+    WE_DEBUG_PRINT("device started notifications \n");
+    currentstate = Sensor2BLE_SM_Send_Sensor_Interval;
 }

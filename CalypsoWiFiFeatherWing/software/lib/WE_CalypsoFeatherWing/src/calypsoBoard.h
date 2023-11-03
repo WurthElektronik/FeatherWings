@@ -29,26 +29,25 @@
 /**         Includes         */
 #include "ConfigPlatform.h"
 #include "time.h"
-#include "calypso.h"
-#include "events.h"
-
+#include "Calypso.h"
+#include <ATCommands/ATDevice.h>
+#include <ATCommands/ATMQTT.h>
+#include <ATCommands/ATWLAN.h>
+#include <ATCommands/ATEvent.h>
+#include <ATCommands/ATNetApp.h>
+#include <ATCommands/ATNetCfg.h>
+#include <ATCommands/ATHTTP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 #define LENGTH_OF_NAME 100
-#define RESPONSE_WAIT_TIME 1500
 #define EVENT_WAIT_TIME 3000UL
 #define MAX_RETRIES 5
 
-typedef enum {
-    calypso_unknown,
-    calypso_started,
-    calypso_provisioned,
-    calypso_WLAN_disconnected,
-    calypso_WLAN_connected,
-    calypso_MQTT_connected,
-    calypso_error
-} Calypso_status_t;
+typedef struct ATMQTT_userOptions_t {
+    char userName[256];
+    char passWord[256];
+} ATMQTT_userOptions_t;
 
 typedef struct {
     char timezone[5];
@@ -59,8 +58,8 @@ typedef struct {
     char clientID[23];
     uint32_t flags;
     ATMQTT_ServerInfo_t serverInfo;
-    ATMQTT_securityParams_t secParams;
-    ATMQTT_connectionParams_t connParams;
+    ATMQTT_SecurityParams_t secParams;
+    ATMQTT_ConnectionParams_t connParams;
     ATMQTT_userOptions_t userOptions;
 } CALYPSO_MQTTSettings_t;
 
@@ -70,73 +69,36 @@ typedef struct {
     CALYPSO_SNTPSettings_t sntpSettings;
 } CalypsoSettings;
 
-typedef struct {
-    char data[CALYPSO_LINE_MAX_SIZE];
-    int length;
-} PacketCalypso;
+bool Calypso_simpleInit(CalypsoSettings *settings,
+                        Calypso_EventCallback_t callback);
 
-typedef struct {
-    char data[MQTT_MAX_TOPIC_LENGTH];
-    int length;
-} TopicCalypso;
-/**
- * @brief CALYPSO Object
- *
- */
-typedef struct {
-    TypeSerial *serialDebug;
-    TypeHardwareSerial *serialCalypso;
-    CalypsoSettings settings;
-    PacketCalypso bufferCalypso;
-    TopicCalypso topicName;
-    Calypso_status_t status;
-    ATEvent_t lastEvent;
-    char firmwareVersion[20];
-    char MAC_ADDR[20];
-    char IP_ADDR[20];
-} CALYPSO;
+bool Calypso_WLANconnect();
+bool Calypso_WLANDisconnect();
 
-CALYPSO *Calypso_Create(TypeSerial *serialDebug,
-                        TypeHardwareSerial *serialCalypso,
-                        CalypsoSettings *settings);
+bool Calypso_WLANGetProfile(uint8_t profileID, ATWLAN_Profile_t *wlanProfile);
+bool Calypso_WLANDeleteProfile(uint8_t profileID);
 
-void Calypso_Destroy(CALYPSO *calypso);
-bool Calypso_simpleInit(CALYPSO *self);
+bool Calypso_MQTTconnect();
+bool Calypso_MQTTDisconnect();
+bool Calypso_MQTTPublishData(char *topic, uint8_t retain, char *data,
+                             int length);
+bool Calypso_subscribe(uint8_t index, uint8_t numOfTopics,
+                       ATMQTT_SubscribeTopic_t *pTopics);
+bool Calypso_reboot();
+bool Calypso_StartProvisioning();
+bool Calypso_StopProvisioning();
 
-bool Calypso_reboot(CALYPSO *self);
-bool Calypso_WLANconnect(CALYPSO *self);
-bool Calypso_WLANDisconnect(CALYPSO *self);
+bool Calypso_setUpSNTP();
+bool Calypso_getTimestamp(Timestamp *timeStamp);
 
-bool Calypso_WLANGetProfile(CALYPSO *self, uint8_t profileID);
-bool Calypso_WLANDeleteProfile(CALYPSO *self, uint8_t profileID);
-
-bool Calypso_MQTTconnect(CALYPSO *self);
-bool Calypso_MQTTDisconnect(CALYPSO *self);
-bool Calypso_MQTTPublishData(CALYPSO *self, char *topic, uint8_t retain,
-                             char *data, int length, bool encode);
-bool Calypso_subscribe(CALYPSO *self, uint8_t index, uint8_t numOfTopics,
-                       ATMQTT_subscribeTopic_t *pTopics);
-bool Calypso_MQTTgetMessage(CALYPSO *self, bool encoded);
-
-bool Calypso_StartProvisioning(CALYPSO *self);
-bool Calypso_StopProvisioning(CALYPSO *self);
-
-bool Calypso_setUpSNTP(CALYPSO *self);
-bool Calypso_getTimestamp(CALYPSO *self, Timestamp *timeStamp);
-
-bool Calypso_fileList(CALYPSO *self);
-bool Calypso_fileExists(CALYPSO *self, const char *fileName);
-bool Calypso_writeFile(CALYPSO *self, const char *path, const char *data,
-                       uint16_t dataLength);
-bool Calypso_readFile(CALYPSO *self, const char *path, char *data,
-                      uint16_t dataLength, uint16_t *outputLength);
-bool Calypso_deleteFile(CALYPSO *self, const char *fileName);
-bool Calypso_waitForResponse(CALYPSO *self);
-bool Calypso_waitForEvent(CALYPSO *self);
-bool Calypso_isIPConnected(CALYPSO *self);
-bool Calypso_ProvisioningDone(CALYPSO *self);
-bool Calypso_HTTPCustomResponse(CALYPSO *self, char *data, int length,
-                                bool encode);
+bool Calypso_fileList();
+bool Calypso_fileExists(const char *fileName);
+bool Calypso_writeFile(const char *path, const char *data, uint16_t dataLength);
+bool Calypso_readFile(const char *path, char *data, uint16_t dataLength,
+                      uint16_t *outputLength);
+bool Calypso_deleteFile(const char *fileName);
+bool Calypso_isIPConnected(char *ipAddress);
+bool Calypso_HTTPCustomResponse(char *data, int length, bool encode);
 
 #ifdef __cplusplus
 }

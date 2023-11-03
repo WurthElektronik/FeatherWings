@@ -16,6 +16,7 @@ This example provides a sample implementation for the use of custom APIs. A typi
 - Follow the instructions to install [PlatformIO IDE](https://platformio.org/platformio-ide) extension.
 
 ### Code configuration
+In this example, the Custom RestAPI functionality of the Calypso Wi-Fi module is demonstrated. The Calypso FeatherWing is stacked with the sensor featherWings and the M0 Feather Express. The Calypso Wi-Fi module forwards the GET/POST requests to the M0 Feather MCU and forwards the response to the Wi-Fi client.
 
 1. Prerequisites for running this example:
 

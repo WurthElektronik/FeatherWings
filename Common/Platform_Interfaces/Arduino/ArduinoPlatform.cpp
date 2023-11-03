@@ -154,7 +154,7 @@ void SSerial_begin(TypeSerial *m, uint32_t baud_count)
  * @param  parameter Parameters parity, flowcontrol etc
  * @retval none
  */
-void SSerial_beginP(TypeSerial *m, uint32_t baud_count, uint8_t parameter)
+void SSerial_beginP(TypeSerial *m, uint32_t baud_count, uint16_t parameter)
 {
   Serial_ *obj;
 
@@ -222,6 +222,26 @@ void SSerial_printf(TypeSerial *m, const char format[], ...)
   vsnprintf(buf, sizeof(buf), format, ap);
   obj->write(buf);
   va_end(ap);
+}
+
+/**
+ * @brief  Serial vprintf
+ * @param  m Pointer to serial object
+ * @param  format Formatted string with optional arguments
+ * @retval none
+ */
+void SSerial_vprintf(TypeSerial *m, const char format[], va_list ap)
+{
+  Serial_ *obj;
+  char buf[MAX_PRINT_LEN];
+
+  if (m == NULL)
+    return;
+
+  obj = static_cast<Serial_ *>(m->obj);
+
+  vsnprintf(buf, sizeof(buf), format, ap);
+  obj->write(buf);
 }
 
 /**
@@ -340,7 +360,7 @@ void HSerial_begin(TypeHardwareSerial *m, uint32_t baud_count)
  * @retval none
  */
 void HSerial_beginP(TypeHardwareSerial *m, uint32_t baud_count,
-                    uint8_t parameter)
+                    uint16_t parameter)
 {
   HardwareSerial *obj;
 
@@ -442,9 +462,8 @@ int HSerial_read(TypeHardwareSerial *m)
  * @param  I2C address
  * @retval Error Code
  */
-int8_t I2CInit(int address)
+int8_t I2CInit()
 {
-  deviceAddress = address;
   Wire.begin();
   Wire.setClock(I2C_CLOCK_SPEED_FAST);
   return WE_SUCCESS;
@@ -455,13 +474,19 @@ int8_t I2CInit(int address)
  * @param  clock values accepted Standard - 100000, Fast - 400000
  * @retval Error Code
  */
-void I2CSetClock(uint32_t baudrate) { Wire.setClock(baudrate); }
+void I2CSetClock(uint32_t baudrate)
+{
+  Wire.setClock(baudrate);
+}
 /**
  * @brief  Set I2C bus Address
  * @param  I2C address
  * @retval None
  */
-void I2CSetAddress(int address) { deviceAddress = address; }
+void I2CSetAddress(int address)
+{
+  deviceAddress = address;
+}
 
 /**
  * @brief  Send data over I2C bus
@@ -493,7 +518,7 @@ int8_t I2CReceive(uint8_t *data, int datalen)
 {
   int bytesAvailable =
       Wire.requestFrom(deviceAddress, datalen); // request Bytes
-  if (bytesAvailable == 0)
+  if (bytesAvailable != datalen)
   {
     return WE_FAIL;
   }
@@ -519,6 +544,12 @@ int8_t ReadReg(uint8_t RegAdr, int NumByteToRead, uint8_t *Data)
   while (Wire.endTransmission() && millis() - start <= TIMEOUT)
     ;
   int n = Wire.requestFrom(deviceAddress, NumByteToRead); // request Bytes
+
+  if (n != NumByteToRead)
+  {
+    return WE_FAIL;
+  }
+
   for (int i = 0; i < n; i++)
   {
     Data[i] = Wire.read();
@@ -544,6 +575,24 @@ int8_t WriteReg(int RegAdr, int NumByteToWrite, uint8_t *Data)
     return WE_FAIL;
   }
 
+  return WE_SUCCESS;
+}
+
+int8_t SetPinMode(uint8_t pin, uint8_t mode)
+{
+  pinMode(pin, mode);
+  return WE_SUCCESS;
+}
+
+int8_t WritePin(uint8_t pin, uint8_t pinLevel)
+{
+  digitalWrite(pin, pinLevel);
+  return WE_SUCCESS;
+}
+
+int8_t readPin(uint8_t pin, uint8_t *pinLevelP)
+{
+  *pinLevelP = digitalRead(pin);
   return WE_SUCCESS;
 }
 
@@ -580,7 +629,10 @@ EasyButton *button;
  * @param  None
  * @retval None
  */
-void buttonISR() { button->read(); }
+void buttonISR()
+{
+  button->read();
+}
 
 /**
  * @brief  Initialise button
@@ -592,7 +644,6 @@ void buttonISR() { button->read(); }
 
 void buttonInit(uint8_t pin, void (*OnBtnPress)(), void (*OnBtnLongPress)())
 {
-
   button = new EasyButton(pin);
 
   button->begin();

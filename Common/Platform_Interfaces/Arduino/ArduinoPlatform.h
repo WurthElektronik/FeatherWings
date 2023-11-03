@@ -34,7 +34,7 @@
 #include <wiring_private.h>
 
 #define WE_SUCCESS 0
-#define WE_FAIL 1
+#define WE_FAIL -1
 #define MAX_PRINT_LEN 1280
 #define I2C_CLOCK_SPEED_FAST 400000
 #define I2C_CLOCK_SPEED_STANDARD 100000
@@ -66,10 +66,11 @@ extern "C"
     size_t SSerial_write(TypeSerial *m, uint8_t byte);
     size_t SSerial_writeB(TypeSerial *m, const char *buffer, size_t size);
     void SSerial_begin(TypeSerial *m, uint32_t baud_count);
-    void SSerial_beginP(TypeSerial *m, uint32_t baud_count, uint8_t parameter);
+    void SSerial_beginP(TypeSerial *m, uint32_t baud_count, uint16_t parameter);
     int SSerial_available(TypeSerial *m);
     void SSerial_flush(TypeSerial *m);
     void SSerial_printf(TypeSerial *m, const char format[], ...);
+    void SSerial_vprintf(TypeSerial *m, const char format[], va_list ap);
     int SSerial_read(TypeSerial *m);
 
     typedef struct
@@ -84,7 +85,7 @@ extern "C"
     size_t HSerial_writeB(TypeHardwareSerial *m, const char *buffer, size_t size);
     void HSerial_begin(TypeHardwareSerial *m, uint32_t baud_count);
     void HSerial_beginP(TypeHardwareSerial *m, uint32_t baud_count,
-                        uint8_t parameter);
+                        uint16_t parameter);
     void HSerial_end(TypeHardwareSerial *m);
     int HSerial_available(TypeHardwareSerial *m);
     int HSerial_availableForWrite(TypeHardwareSerial *m);
@@ -92,10 +93,14 @@ extern "C"
     int HSerial_read(TypeHardwareSerial *m);
 
     void I2CSetAddress(int address);
-    int8_t I2CInit(int address);
+    int8_t I2CInit();
     void I2CSetClock(uint32_t baudrate);
     int8_t ReadReg(uint8_t RegAdr, int NumByteToRead, uint8_t *Data);
     int8_t WriteReg(int RegAdr, int NumByteToWrite, uint8_t *Data);
+    int8_t SetPinMode(uint8_t pin, uint8_t mode);
+    int8_t WritePin(uint8_t pin, uint8_t pinLevel);
+    int8_t readPin(uint8_t pin, uint8_t *pinLevelP);
+
     int8_t I2CReceive(uint8_t *data, int datalen);
     int8_t I2CSend(uint8_t *data, int datalen);
 

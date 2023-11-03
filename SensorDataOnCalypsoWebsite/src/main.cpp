@@ -2,7 +2,7 @@
  * \file
  * \brief Main file for the WE-CalypsoWiFiFeatherWing.
  *
- * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
+ * \copyright (c) 2023 Würth Elektronik eiSos GmbH & Co. KG
  *
  * \page License
  *
@@ -45,167 +45,295 @@
 #define POST_NEOPIXEL_ID "led-color"
 
 #define MAX_RESP_LENGTH 255
-// USB-Serial debug Interface
-TypeSerial *SerialDebug;
+
+#define HIDS_PART_NUMBER 2525020210001
+
+static float PADS_pressure;
+static float ITDS_accelX, ITDS_accelY, ITDS_accelZ;
+static float TIDS_temp;
+static float HIDS_humidity;
 
 // Calypso settings
 CalypsoSettings calSettings;
 
-// Calypso object
-CALYPSO *calypso;
-
-// Serial communication port for Calypso
-TypeHardwareSerial *SerialCalypso;
-
-// Sensors
-// WE absolute pressure sensor object
-PADS *sensorPADS;
-// WE 3-axis acceleration sensor object
-ITDS *sensorITDS;
-// WE Temperature sensor object
-TIDS *sensorTIDS;
-// WE humidity sensor object
-HIDS *sensorHIDS;
-
 int msgID;
 
-char *serializeData();
+/* Startup State Machine */
+typedef enum
+{
+    Calypso_SM_ModuleUp,
+    Calypso_SM_WLAN_Connect,
+    Calypso_SM_StartUpFinished,
+    Calypso_SM_CustomHTTPPost4LED,
+    Calypso_SM_HTTPGet4Sensor,
+    Calypso_SM_Idle,
+    Calypso_SM_Error
+} Calypso_SM_t;
+
+static volatile Calypso_SM_t calypsoApplicationCurrentState =
+    Calypso_SM_Idle;
+
+void Calypso_EventCallback(char *eventText);
+
+char CustomHTTPPOSTID[64], CustomHTTPPOSTValue[64];
+
+char HTTPGETID[64];
+
 void setup()
 {
-    delay(7000);
-    // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
+    delay(3000);
 
-    SerialCalypso = HSerial_create(&Serial1);
+#ifdef WE_DEBUG
+    WE_Debug_Init();
+#endif
 
-    // Create serial port for Calypso WiFi FeatherWing baud 921600, 8E1
-    HSerial_beginP(SerialCalypso, 921600, (uint8_t)SERIAL_8E1);
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
     calSettings.wifiSettings.securityParams.securityType =
-        ATWLAN_SECURITY_TYPE_WPA_WPA2;
+        ATWLAN_SecurityType_WPA_WPA2;
 
-    // Create sensor objects
-    sensorPADS = PADSCreate(SerialDebug);
-    sensorITDS = ITDSCreate(SerialDebug);
-    sensorTIDS = TIDSCreate(SerialDebug);
-    sensorHIDS = HIDSCreate(SerialDebug);
-
+    if (!sensorBoard_Init())
+    {
+        WE_DEBUG_PRINT("I2C init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
+    }
     // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS))
+    if (!PADS_2511020213301_simpleInit())
     {
-        SSerial_printf(SerialDebug, "PADS init failed \r\n");
+        WE_DEBUG_PRINT("PADS init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
     }
 
-    if (!ITDS_simpleInit(sensorITDS))
+    if (!ITDS_2533020201601_simpleInit())
     {
-        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
-    }
-    if (!TIDS_simpleInit(sensorTIDS))
-    {
-        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
-    }
-    if (!HIDS_simpleInit(sensorHIDS))
-    {
-        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
+        WE_DEBUG_PRINT("ITDS init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
     }
 
-    calypso = Calypso_Create(SerialDebug, SerialCalypso, &calSettings);
+    if (!TIDS_2521020222501_simpleInit())
+    {
+        WE_DEBUG_PRINT("TIDS init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
+    }
+#if HIDS_PART_NUMBER == 2525020210001
+    if (!HIDS_2525020210001_simpleInit())
+    {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
+    }
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (!HIDS_2525020210002_simpleInit())
+    {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
+    }
+#endif
 
     // Initialize Calypso
-    if (!Calypso_simpleInit(calypso))
+    if (!Calypso_simpleInit(&calSettings, &Calypso_EventCallback))
     {
-        SSerial_printf(SerialDebug, "Calypso init failed \r\n");
+        WE_DEBUG_PRINT("Calypso init failed \r\n");
+        calypsoApplicationCurrentState = Calypso_SM_Error;
     }
-    // Connect Calypso WiFi FeatherWing to the Wi-Fi access point
-    if (!Calypso_WLANconnect(calypso))
+    while (calypsoApplicationCurrentState != Calypso_SM_StartUpFinished)
     {
-        SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
-        return;
+        switch (calypsoApplicationCurrentState)
+        {
+        case Calypso_SM_ModuleUp:
+        {
+            WE_DEBUG_PRINT("module has started\r\n");
+            // check if autoconnect feature will connect fine if not
+            // manually connect to chosen ap
+            WE_Delay(30);
+            if (calypsoApplicationCurrentState == Calypso_SM_ModuleUp)
+            {
+                calypsoApplicationCurrentState =
+                    Calypso_SM_WLAN_Connect;
+            }
+            break;
+        }
+        case Calypso_SM_WLAN_Connect:
+        {
+            if (!Calypso_WLANconnect())
+            {
+                WE_DEBUG_PRINT("WiFi connect fail\r\n");
+                calypsoApplicationCurrentState = Calypso_SM_Error;
+            }
+            else if (calypsoApplicationCurrentState ==
+                     Calypso_SM_WLAN_Connect)
+            {
+                calypsoApplicationCurrentState = Calypso_SM_Idle;
+            }
+            break;
+        }
+        case Calypso_SM_Error:
+        {
+            WE_DEBUG_PRINT("Error state in start up \r\n");
+            return;
+        }
+        default:
+            break;
+        }
     }
+
+    WE_DEBUG_PRINT("Startup finished\r\n");
+    calypsoApplicationCurrentState = Calypso_SM_Idle;
+    // The message ID acts as the packet number
+    msgID = 0;
     neopixelInit();
     delay(3000);
 }
 
 void loop()
 {
-    char responseStr[MAX_RESP_LENGTH];
-    if (Calypso_waitForEvent(calypso) == true)
+    switch (calypsoApplicationCurrentState)
     {
-        if (calypso->lastEvent == ATEvent_Custom)
+    case Calypso_SM_CustomHTTPPost4LED:
+    {
+        if (0 == strcasecmp(CustomHTTPPOSTID, POST_NEOPIXEL_ID))
         {
-            char *ptr;
-            ptr = strtok(calypso->bufferCalypso.data, ",");
-            if (0 == strcasecmp(ptr, POST_NEOPIXEL_ID))
+            if (0 == strcasecmp(CustomHTTPPOSTValue, STR_RED))
             {
-                ptr = strtok(NULL, "\0");
-                if (0 == strcasecmp(ptr, STR_RED))
-                {
-                    neopixelSet(NEO_PIXEL_RED);
-                }
-                else if (0 == strcasecmp(ptr, STR_GREEN))
-                {
-                    neopixelSet(NEO_PIXEL_GREEN);
-                }
-                else if (0 == strcasecmp(ptr, STR_BLUE))
-                {
-                    neopixelSet(NEO_PIXEL_BLUE);
-                }
-                else if (0 == strcasecmp(ptr, STR_OFF))
-                {
-                    neopixelSet(0);
-                }
-                else
-                {
-                    SSerial_printf(SerialDebug, "unknown color\r\n");
-                }
+                neopixelSet(NEO_PIXEL_RED);
             }
-        }
-        else if (calypso->lastEvent == ATEvent_HTTPGet)
-        {
-            if (0 == strcasecmp(calypso->bufferCalypso.data, GET_TEMPERATURE_ID))
+            else if (0 == strcasecmp(CustomHTTPPOSTValue, STR_GREEN))
             {
-                if (TIDS_readSensorData(sensorTIDS))
-                {
-                    sprintf(responseStr, "%.2f °C", sensorTIDS->data[tidsTemperature]);
-                    SSerial_printf(SerialDebug, "%s\r\n", responseStr);
-                    Calypso_HTTPCustomResponse(calypso, responseStr, strlen(responseStr), true);
-                }
+                neopixelSet(NEO_PIXEL_GREEN);
             }
-            else if (0 == strcasecmp(calypso->bufferCalypso.data, GET_HUMIDITY_ID))
+            else if (0 == strcasecmp(CustomHTTPPOSTValue, STR_BLUE))
             {
-                if (HIDS_readSensorData(sensorHIDS))
-                {
-                    sprintf(responseStr, "%.2f %%", sensorHIDS->data[hidsRelHumidity]);
-                    SSerial_printf(SerialDebug, "%s\r\n", responseStr);
-                    Calypso_HTTPCustomResponse(calypso, responseStr, strlen(responseStr), true);
-                }
+                neopixelSet(NEO_PIXEL_BLUE);
             }
-            else if (0 == strcasecmp(calypso->bufferCalypso.data, GET_PRESSURE_ID))
+            else if (0 == strcasecmp(CustomHTTPPOSTValue, STR_OFF))
             {
-                if (PADS_readSensorData(sensorPADS))
-                {
-                    sprintf(responseStr, "%.3f kPa", sensorPADS->data[padsPressure]);
-                    SSerial_printf(SerialDebug, "%s\r\n", responseStr);
-                    Calypso_HTTPCustomResponse(calypso, responseStr, strlen(responseStr), true);
-                }
-            }
-            else if (0 == strcasecmp(calypso->bufferCalypso.data, GET_ACCELERATION_ID))
-            {
-                if (ITDS_readSensorData(sensorITDS))
-                {
-                    sprintf(responseStr, "X:%.3f g Y:%.3f g  Z:%.3f g", sensorITDS->data[itdsXAcceleration],
-                            sensorITDS->data[itdsYAcceleration], sensorITDS->data[itdsZAcceleration]);
-                    SSerial_printf(SerialDebug, "%s\r\n", responseStr);
-                    Calypso_HTTPCustomResponse(calypso, responseStr, strlen(responseStr), true);
-                }
+                neopixelSet(0);
             }
             else
             {
-                SSerial_printf(SerialDebug, "Unknown request\r\n");
+                WE_DEBUG_PRINT("value for custom HTTP POST is not valid\r\n");
             }
         }
+        else
+        {
+            WE_DEBUG_PRINT("Id for custom HTTP POST is not %s\r\n", POST_NEOPIXEL_ID);
+        }
+        calypsoApplicationCurrentState = Calypso_SM_Idle;
+        break;
+    }
+    case Calypso_SM_HTTPGet4Sensor:
+    {
+        char responseStr[MAX_RESP_LENGTH];
+        if (0 == strcasecmp(HTTPGETID, GET_TEMPERATURE_ID))
+        {
+            if (TIDS_2521020222501_readSensorData(&TIDS_temp))
+            {
+                sprintf(responseStr, "%.2f °C", TIDS_temp);
+                WE_DEBUG_PRINT("%s\r\n", responseStr);
+                Calypso_HTTPCustomResponse(responseStr, strlen(responseStr), true);
+            }
+        }
+        else if (0 == strcasecmp(HTTPGETID, GET_HUMIDITY_ID))
+        {
+#if HIDS_PART_NUMBER == 2525020210001
+            if (HIDS_2525020210001_readSensorData(&HIDS_humidity, NULL))
+            {
+                sprintf(responseStr, "%.2f %%", HIDS_humidity);
+                WE_DEBUG_PRINT("%s\r\n", responseStr);
+                Calypso_HTTPCustomResponse(responseStr, strlen(responseStr), true);
+            }
+#elif HIDS_PART_NUMBER == 2525020210002
+            if (HIDS_2525020210002_readSensorData(&HIDS_humidity, NULL))
+            {
+                sprintf(responseStr, "%.2f %%", HIDS_humidity);
+                WE_DEBUG_PRINT("%s\r\n", responseStr);
+                Calypso_HTTPCustomResponse(responseStr, strlen(responseStr), true);
+            }
+#endif
+        }
+        else if (0 == strcasecmp(HTTPGETID, GET_PRESSURE_ID))
+        {
+            if (PADS_2511020213301_readSensorData(&PADS_pressure, NULL))
+            {
+                sprintf(responseStr, "%.3f kPa", PADS_pressure);
+                WE_DEBUG_PRINT("%s\r\n", responseStr);
+                Calypso_HTTPCustomResponse(responseStr, strlen(responseStr), true);
+            }
+        }
+        else if (0 == strcasecmp(HTTPGETID, GET_ACCELERATION_ID))
+        {
+            if (ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
+                                                  &ITDS_accelZ, NULL))
+            {
+                sprintf(responseStr, "X:%.3f g Y:%.3f g  Z:%.3f g", ITDS_accelX,
+                        ITDS_accelY, ITDS_accelZ);
+                WE_DEBUG_PRINT("%s\r\n", responseStr);
+                Calypso_HTTPCustomResponse(responseStr, strlen(responseStr), true);
+            }
+        }
+        else
+        {
+            WE_DEBUG_PRINT("Unknown request\r\n");
+        }
+        calypsoApplicationCurrentState = Calypso_SM_Idle;
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void Calypso_EventCallback(char *eventText)
+{
+    ATEvent_t event;
+    ATEvent_ParseEventType(&eventText, &event);
+
+    if (ATEvent_Invalid == event)
+    {
+        return;
+    }
+
+    switch (event)
+    {
+    case ATEvent_Startup:
+    {
+        ATEvent_Startup_t startUp;
+        if (ATEvent_ParseStartUpEvent(&eventText, &startUp))
+        {
+            calypsoApplicationCurrentState = Calypso_SM_ModuleUp;
+        }
+        else
+        {
+            calypsoApplicationCurrentState = Calypso_SM_Error;
+        }
+        break;
+    }
+    case ATEvent_NetappIP4Acquired:
+    {
+        ATEvent_NetappIP4Acquired_t ipAcquired;
+        calypsoApplicationCurrentState =
+            ATEvent_ParseNetappIP4AcquiredEvent(&eventText, &ipAcquired)
+                ? Calypso_SM_StartUpFinished
+                : Calypso_SM_Error;
+        break;
+    }
+    case ATEvent_CustomHTTPPost:
+    {
+        calypsoApplicationCurrentState =
+            ATEvent_ParseCustomHTTPPostEvent(&eventText, CustomHTTPPOSTID, CustomHTTPPOSTValue, sizeof(CustomHTTPPOSTID), sizeof(CustomHTTPPOSTValue))
+                ? Calypso_SM_CustomHTTPPost4LED
+                : Calypso_SM_Error;
+        break;
+    }
+    case ATEvent_HTTPGet:
+    {
+        calypsoApplicationCurrentState =
+            ATEvent_ParseHttpGetEvent(&eventText, HTTPGETID, sizeof(HTTPGETID))
+                ? Calypso_SM_HTTPGet4Sensor
+                : Calypso_SM_Error;
+        break;
+    }
+    default:
+        break;
     }
 }

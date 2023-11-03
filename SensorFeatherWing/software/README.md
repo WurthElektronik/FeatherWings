@@ -33,67 +33,90 @@ The quick start example for the Sensor FeatherWing demonstrates configuring the 
 
 1. In the quick start application, all the sensors are configured to operate in simplest possible mode, the single conversion mode. In this mode the sensors are triggered to perform a single measurement and the measured value is read out. 
 
-2. Setup - The sensors are initialized after setting up the I<sup>2</sup>C interface. The debug UART interface is initialized. A communication check is performed by reading out the ID of each of the sensors.
+2. Configuration: The following parameters need to be set-up before building the code.
+    * HIDS sensor part number.
+```C
+#define HIDS_PART_NUMBER 2525020210001
+```
+
+3. Setup - The sensors are initialized after setting up the I<sup>2</sup>C interface. The debug UART interface is initialized by calling the init function. A communication check is performed by reading out the ID of each of the sensors.
 
 ```C
 void setup() {
     delay(2000);
+
     // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
+#ifdef WE_DEBUG
+    WE_Debug_Init();
+#endif
 
-    // Create sensor objects
-    sensorPADS = PADSCreate(SerialDebug);
-    sensorITDS = ITDSCreate(SerialDebug);
-    sensorTIDS = TIDSCreate(SerialDebug);
-    sensorHIDS = HIDSCreate(SerialDebug);
-
+    if (!sensorBoard_Init()) {
+        WE_DEBUG_PRINT("I2C init failed \r\n");
+    }
     // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS)) {
-        SSerial_printf(SerialDebug, "PADS init failed \r\n");
+    if (!PADS_2511020213301_simpleInit()) {
+        WE_DEBUG_PRINT("PADS init failed \r\n");
     }
 
-    if (!ITDS_simpleInit(sensorITDS)) {
-        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
+    if (!ITDS_2533020201601_simpleInit()) {
+        WE_DEBUG_PRINT("ITDS init failed \r\n");
     }
-    if (!TIDS_simpleInit(sensorTIDS)) {
-        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
+
+    if (!TIDS_2521020222501_simpleInit()) {
+        WE_DEBUG_PRINT("TIDS init failed \r\n");
     }
-    if (!HIDS_simpleInit(sensorHIDS)) {
-        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
+#if HIDS_PART_NUMBER == 2525020210001
+    if (!HIDS_2525020210001_simpleInit()) {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
     }
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (!HIDS_2525020210002_simpleInit()) {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+    }
+#endif
 }
 ```
-3. In the main application, a single sensor data measurement is triggered, data read, processed and displayed on the debug interface periodically.
+4. In the main application, a single sensor data measurement is triggered, data read, processed and displayed on the debug interface periodically.
 ```C
 void loop() {
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
+    WE_DEBUG_PRINT("----------------------------------------------------\r\n");
     // Read and print sensor values
-    if (PADS_readSensorData(sensorPADS)) {
-        SSerial_printf(
-            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
+    if (PADS_2511020213301_readSensorData(&PADS_pressure, &PADS_temp)) {
+        WE_DEBUG_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+                       PADS_pressure, PADS_temp);
     }
-    if (ITDS_readSensorData(sensorITDS)) {
-        SSerial_printf(SerialDebug,
-                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
-                       sensorITDS->data[itdsXAcceleration],
-                       sensorITDS->data[itdsYAcceleration],
-                       sensorITDS->data[itdsZAcceleration]);
+    if (ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
+                                          &ITDS_accelZ, &ITDS_temp)) {
+        WE_DEBUG_PRINT(
+            "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: "
+            "%f °C \r\n",
+            ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp);
     }
-    if (TIDS_readSensorData(sensorTIDS)) {
-        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-                       sensorTIDS->data[tidsTemperature]);
+    if (ITDS_2533020201601_readDoubleTapEvent(&ITDS_doubleTapEvent)) {
+        WE_DEBUG_PRINT("WSEN_ITDS(DoubleTap): State %s \r\n",
+                       ITDS_doubleTapEvent ? "True" : "False");
     }
-    if (HIDS_readSensorData(sensorHIDS)) {
-        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-                       sensorHIDS->data[hidsRelHumidity],
-                       sensorHIDS->data[hidsTemperature]);
+    if (ITDS_2533020201601_readFreeFallEvent(&ITDS_freeFallEvent)) {
+        WE_DEBUG_PRINT("WSEN_ITDS(FreeFall): State %s \r\n",
+                       ITDS_freeFallEvent ? "True" : "False");
     }
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
-    SSerial_printf(SerialDebug, "\r\n");
+    if (TIDS_2521020222501_readSensorData(&TIDS_temp)) {
+        WE_DEBUG_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
+    }
+#if HIDS_PART_NUMBER == 2525020210001
+    if (HIDS_2525020210001_readSensorData(&HIDS_humidity, &HIDS_temp)) {
+        WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                       HIDS_temp);
+    }
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (HIDS_2525020210002_readSensorData(&HIDS_humidity, &HIDS_temp)) {
+        WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                       HIDS_temp);
+    }
+#endif
+
+    WE_DEBUG_PRINT("----------------------------------------------------\r\n");
+    WE_DEBUG_PRINT("\r\n");
     delay(1000);
 }
 ```

@@ -6,15 +6,32 @@
 		},
 		{
 			"name": "Common",
-			"path": "..\\..\\Common"
+			"path": "..//..//Common"
 		}
 	],
-
 	"settings": {
 		"files.associations": {
 			"cctype": "c",
 			"type_traits": "c",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"wsen_itds_2533020201601.h": "c",
+			"filesystem": "c",
+			"sensorboard.h": "c",
+			"global.h": "c",
+			"global_types.h": "c",
+			"wsen_hids_2525020210002.h": "c",
+			"configplatform.h": "c",
+			"array": "c",
+			"deque": "c",
+			"string": "c",
+			"unordered_map": "c",
+			"vector": "c",
+			"string_view": "c",
+			"initializer_list": "c",
+			"wsen_hids_2525020210001.h": "c",
+			"wsen_pads_2511020213301.h": "c",
+			"wsen_tids_2521020222501.h": "c",
+			"arduinoplatform.h": "c"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

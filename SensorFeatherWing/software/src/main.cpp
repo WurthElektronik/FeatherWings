@@ -2,7 +2,7 @@
  * \file
  * \brief Main file for the WE-SensorFeatherWing.
  *
- * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
+ * \copyright (c) 2023 Würth Elektronik eiSos GmbH & Co. KG
  *
  * \page License
  *
@@ -24,85 +24,88 @@
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
 #include "sensorBoard.h"
+#include "debug.h"
 
-// USB-Serial debug Interface
-TypeSerial *SerialDebug;
+float PADS_pressure, PADS_temp;
+float ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp;
+bool ITDS_doubleTapEvent, ITDS_freeFallEvent;
+float TIDS_temp;
+float HIDS_humidity, HIDS_temp;
 
-// Sensors
-// WE absolute pressure sensor object
-PADS *sensorPADS;
-// WE 3-axis acceleration sensor object
-ITDS *sensorITDS;
-// WE Temperature sensor object
-TIDS *sensorTIDS;
-// WE humidity sensor object
-HIDS *sensorHIDS;
+#define HIDS_PART_NUMBER 2525020210001
 
 void setup() {
     delay(2000);
+
     // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
+#ifdef WE_DEBUG
+    WE_Debug_Init();
+#endif
 
-    // Create sensor objects
-    sensorPADS = PADSCreate(SerialDebug);
-    sensorITDS = ITDSCreate(SerialDebug);
-    sensorTIDS = TIDSCreate(SerialDebug);
-    sensorHIDS = HIDSCreate(SerialDebug);
-
+    if (!sensorBoard_Init()) {
+        WE_DEBUG_PRINT("I2C init failed \r\n");
+    }
     // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS)) {
-        SSerial_printf(SerialDebug, "PADS init failed \r\n");
+    if (!PADS_2511020213301_simpleInit()) {
+        WE_DEBUG_PRINT("PADS init failed \r\n");
     }
 
-    if (!ITDS_simpleInit(sensorITDS)) {
-        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
+    if (!ITDS_2533020201601_simpleInit()) {
+        WE_DEBUG_PRINT("ITDS init failed \r\n");
     }
-    if (!TIDS_simpleInit(sensorTIDS)) {
-        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
+
+    if (!TIDS_2521020222501_simpleInit()) {
+        WE_DEBUG_PRINT("TIDS init failed \r\n");
     }
-    if (!HIDS_simpleInit(sensorHIDS)) {
-        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
+#if HIDS_PART_NUMBER == 2525020210001
+    if (!HIDS_2525020210001_simpleInit()) {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
     }
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (!HIDS_2525020210002_simpleInit()) {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+    }
+#endif
 }
 
 void loop() {
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
+    WE_DEBUG_PRINT("----------------------------------------------------\r\n");
     // Read and print sensor values
-    if (PADS_readSensorData(sensorPADS)) {
-        SSerial_printf(
-            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
+    if (PADS_2511020213301_readSensorData(&PADS_pressure, &PADS_temp)) {
+        WE_DEBUG_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+                       PADS_pressure, PADS_temp);
     }
-    if (ITDS_readSensorData(sensorITDS)) {
-        SSerial_printf(SerialDebug,
-                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: "
-                       "%f °C \r\n",
-                       sensorITDS->data[itdsXAcceleration],
-                       sensorITDS->data[itdsYAcceleration],
-                       sensorITDS->data[itdsZAcceleration],
-                       sensorITDS->data[itdsTemperature]);
+    if (ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
+                                          &ITDS_accelZ, &ITDS_temp)) {
+        WE_DEBUG_PRINT(
+            "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: "
+            "%f °C \r\n",
+            ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp);
     }
-    if (ITDS_readdoubletap(sensorITDS)) {
-        SSerial_printf(SerialDebug, "DoubleTap state: %f \r\n",
-                       sensorITDS->data[itdsDoubleTap]);
+    if (ITDS_2533020201601_readDoubleTapEvent(&ITDS_doubleTapEvent)) {
+        WE_DEBUG_PRINT("WSEN_ITDS(DoubleTap): State %s \r\n",
+                       ITDS_doubleTapEvent ? "True" : "False");
     }
-    if (ITDS_readfreefall(sensorITDS)) {
-        SSerial_printf(SerialDebug, "FreeFall state: %f \r\n",
-                       sensorITDS->data[itdsFreeFall]);
+    if (ITDS_2533020201601_readFreeFallEvent(&ITDS_freeFallEvent)) {
+        WE_DEBUG_PRINT("WSEN_ITDS(FreeFall): State %s \r\n",
+                       ITDS_freeFallEvent ? "True" : "False");
     }
-    if (TIDS_readSensorData(sensorTIDS)) {
-        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-                       sensorTIDS->data[tidsTemperature]);
+    if (TIDS_2521020222501_readSensorData(&TIDS_temp)) {
+        WE_DEBUG_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
     }
-    if (HIDS_readSensorData(sensorHIDS)) {
-        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-                       sensorHIDS->data[hidsRelHumidity],
-                       sensorHIDS->data[hidsTemperature]);
+#if HIDS_PART_NUMBER == 2525020210001
+    if (HIDS_2525020210001_readSensorData(&HIDS_humidity, &HIDS_temp)) {
+        WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                       HIDS_temp);
     }
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
-    SSerial_printf(SerialDebug, "\r\n");
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (HIDS_2525020210002_readSensorData(&HIDS_humidity, &HIDS_temp)) {
+        WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                       HIDS_temp);
+    }
+#endif
+
+    WE_DEBUG_PRINT("----------------------------------------------------\r\n");
+    WE_DEBUG_PRINT("\r\n");
     delay(1000);
 }

@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"name": "software",
+			"path": "."
+		},
+		{
+			"name": "Common",
+			"path": "..\\..\\Common"
+		},
+		{
+			"name": "Thyone",
+			"path": "..\\..\\ThyoneWirelessFeatherWing"
+		},
+		{
+			"name": "Calypso",
+			"path": "..\\..\\CalypsoWiFiFeatherWing"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cctype": "c",
+			"type_traits": "c",
+			"typeinfo": "cpp",
+			"wsen_itds_2533020201601.h": "c",
+			"wsen_hids_2523020210001.h": "c",
+			"wsen_pads_2511020213301.h": "c",
+			"cstdarg": "cpp",
+			"global.h": "c"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}

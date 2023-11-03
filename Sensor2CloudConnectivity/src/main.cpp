@@ -2,7 +2,7 @@
  * \file
  * \brief Main file for the WE-CalypsoWiFiFeatherWing.
  *
- * \copyright (c) 2020 Würth Elektronik eiSos GmbH & Co. KG
+ * \copyright (c) 2023 Würth Elektronik eiSos GmbH & Co. KG
  *
  * \page License
  *
@@ -27,8 +27,10 @@
 #include "json-builder.h"
 #include "sensorBoard.h"
 
-#define AZURE_CONNECTION 1
-#define AWS_CONNECTION 0
+#define AZURE_CONNECTION 0
+#define AWS_CONNECTION 1
+
+#define HIDS_PART_NUMBER 2525020210001
 
 // WiFi access point parameters
 #define WI_FI_SSID "AP"
@@ -36,99 +38,83 @@
 
 #if AZURE_CONNECTION
 /*MQTT settings - Azure server*/
-#define MQTT_CLIENT_ID "cust-test-dev-1"
-#define MQTT_SERVER_ADDRESS "cust-test-iot-1.azure-devices.net"
+#define MQTT_CLIENT_ID "iot-test-dev-1"
+#define MQTT_SERVER_ADDRESS "iot-hub-1.azure-devices.net"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "devices/cust-test-dev-1/messages/events/"
-#define MQTT_USER_NAME "cust-test-iot-1.azure-devices.net/cust-test-dev-1/?api-version=2021-04-12"
-#define MQTT_PASSWORD                                                       \
-    "SharedAccessSignature "                                                \
-    "sr=cust-test-iot-1.azure-devices.net%2Fdevices%2Fcust-test-dev-1&sig=" \
-    "07hjStKVl1mmeiSHscxMCRP8CfUK3qDQymsqV%2FNBc9M%3D&se=1713832997"
+#define MQTT_TOPIC "devices/iot-test-dev-1/messages/events/"
+#define MQTT_USER_NAME "iot-hub-1.azure-devices.net/iot-test-dev-1/?api-version=2021-04-12"
+#define MQTT_PASSWORD                                                \
+    "SharedAccessSignature "                                         \
+    "sr=iot-hub-1.azure-devices.net%2Fdevices%2Fiot-test-dev-1&sig=" \
+    "px4bCMMLj8fV7ioP2pHG*****%2FKvT52uNB8f%2B1hhHLk%3D&se=**********"
 
 #define ROOT_CA_PATH "azrootca"
 
-#define BALTIMORE_CYBERTRUST_ROOT_CERT "-----BEGIN CERTIFICATE-----\n\
-MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ\n\
-RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD\n\
-VQQDExlCYWx0aW1vcmUgQ3liZXJUcnVzdCBSb290MB4XDTAwMDUxMjE4NDYwMFoX\n\
-DTI1MDUxMjIzNTkwMFowWjELMAkGA1UEBhMCSUUxEjAQBgNVBAoTCUJhbHRpbW9y\n\
-ZTETMBEGA1UECxMKQ3liZXJUcnVzdDEiMCAGA1UEAxMZQmFsdGltb3JlIEN5YmVy\n\
-VHJ1c3QgUm9vdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKMEuyKr\n\
-mD1X6CZymrV51Cni4eiVgLGw41uOKymaZN+hXe2wCQVt2yguzmKiYv60iNoS6zjr\n\
-IZ3AQSsBUnuId9Mcj8e6uYi1agnnc+gRQKfRzMpijS3ljwumUNKoUMMo6vWrJYeK\n\
-mpYcqWe4PwzV9/lSEy/CG9VwcPCPwBLKBsua4dnKM3p31vjsufFoREJIE9LAwqSu\n\
-XmD+tqYF/LTdB1kC1FkYmGP1pWPgkAx9XbIGevOF6uvUA65ehD5f/xXtabz5OTZy\n\
-dc93Uk3zyZAsuT3lySNTPx8kmCFcB5kpvcY67Oduhjprl3RjM71oGDHweI12v/ye\n\
-jl0qhqdNkNwnGjkCAwEAAaNFMEMwHQYDVR0OBBYEFOWdWTCCR1jMrPoIVDaGezq1\n\
-BE3wMBIGA1UdEwEB/wQIMAYBAf8CAQMwDgYDVR0PAQH/BAQDAgEGMA0GCSqGSIb3\n\
-DQEBBQUAA4IBAQCFDF2O5G9RaEIFoN27TyclhAO992T9Ldcw46QQF+vaKSm2eT92\n\
-9hkTI7gQCvlYpNRhcL0EYWoSihfVCr3FvDB81ukMJY2GQE/szKN+OMY3EU/t3Wgx\n\
-jkzSswF07r51XgdIGn9w/xZchMB5hbgF/X++ZRGjD8ACtPhSNzkE1akxehi/oCr0\n\
-Epn3o0WC4zxe9Z2etciefC7IpJ5OCBRLbf1wbWsaY71k5h+3zvDyny67G7fyUIhz\n\
-ksLi4xaNmjICq44Y3ekQEe5+NauQrz4wlHrQMz2nZQ/1/I6eYs9HRCwBXbsdtTLS\n\
-R9I4LtD+gdwyah617jzV/OeBHRnDJELqYzmp\n\
+#define DIGICERT_CYBERTRUST_ROOT_CERT "-----BEGIN CERTIFICATE-----\n\
+MIIDjjCCAnagAwIBAgIQAzrx5qcRqaC7KGSxHQn65TANBgkqhkiG9w0BAQsFADBh\n\
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\n\
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBH\n\
+MjAeFw0xMzA4MDExMjAwMDBaFw0zODAxMTUxMjAwMDBaMGExCzAJBgNVBAYTAlVT\n\
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j\n\
+b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IEcyMIIBIjANBgkqhkiG\n\
+9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuzfNNNx7a8myaJCtSnX/RrohCgiN9RlUyfuI\n\
+2/Ou8jqJkTx65qsGGmvPrC3oXgkkRLpimn7Wo6h+4FR1IAWsULecYxpsMNzaHxmx\n\
+1x7e/dfgy5SDN67sH0NO3Xss0r0upS/kqbitOtSZpLYl6ZtrAGCSYP9PIUkY92eQ\n\
+q2EGnI/yuum06ZIya7XzV+hdG82MHauVBJVJ8zUtluNJbd134/tJS7SsVQepj5Wz\n\
+tCO7TG1F8PapspUwtP1MVYwnSlcUfIKdzXOS0xZKBgyMUNGPHgm+F6HmIcr9g+UQ\n\
+vIOlCsRnKPZzFBQ9RnbDhxSJITRNrw9FDKZJobq7nMWxM4MphQIDAQABo0IwQDAP\n\
+BgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIBhjAdBgNVHQ4EFgQUTiJUIBiV\n\
+5uNu5g/6+rkS7QYXjzkwDQYJKoZIhvcNAQELBQADggEBAGBnKJRvDkhj6zHd6mcY\n\
+1Yl9PMWLSn/pvtsrF9+wX3N3KjITOYFnQoQj8kVnNeyIv/iPsGEMNKSuIEyExtv4\n\
+NeF22d+mQrvHRAiGfzZ0JFrabA0UWTW98kndth/Jsw1HKj2ZL7tcu7XUIOGZX1NG\n\
+Fdtom/DzMNU+MeKNhJ7jitralj41E6Vf8PlwUHBHQRFXGU7Aj64GxJUTFy8bJZ91\n\
+8rGOmaFvE7FBcf6IKshPECBV1/MUReXgRPTqh5Uykw7+U0b6LJ3/iyK5S9kJRaTe\n\
+pLiaWN0bfVKfjllDiIGknibVb63dDcY3fe0Dkhvld1927jyNxF1WW6LZZm6zNTfl\n\
+MrY=\n\
 -----END CERTIFICATE-----"
 #endif
 
 #if AWS_CONNECTION
 /*MQTT settings - AWS*/
-#define MQTT_CLIENT_ID "we-iot-device-t1"
-#define MQTT_SERVER_ADDRESS "a18jcdjlx073x-ats.iot.eu-central-1.amazonaws.com"
+#define MQTT_CLIENT_ID "test_dev"
+#define MQTT_SERVER_ADDRESS "************-ats.iot.us-east-1.amazonaws.com"
 #define MQTT_PORT 8883
 #define MQTT_TOPIC "test"
 #define MQTT_CERT_PATH "cert"
 #define MQTT_PRIV_KEY_PATH "key"
 #define MQTT_USER_NAME "calypso"
 #define MQTT_PASSWORD "calypso"
+#define ROOT_CA_PATH "root"
+
+#define STARFIELD_ROOT_CERT "-----BEGIN CERTIFICATE-----\n\
+MIIEDzCCAvegAwIBAgIBADANBgkqhkiG9w0BAQUFADBoMQswCQYDVQQGEwJVUzEl\n\
+MCMGA1UEChMcU3RhcmZpZWxkIFRlY2hub2xvZ2llcywgSW5jLjEyMDAGA1UECxMp\n\
+U3RhcmZpZWxkIENsYXNzIDIgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMDQw\n\
+NjI5MTczOTE2WhcNMzQwNjI5MTczOTE2WjBoMQswCQYDVQQGEwJVUzElMCMGA1UE\n\
+ChMcU3RhcmZpZWxkIFRlY2hub2xvZ2llcywgSW5jLjEyMDAGA1UECxMpU3RhcmZp\n\
+ZWxkIENsYXNzIDIgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwggEgMA0GCSqGSIb3\n\
+DQEBAQUAA4IBDQAwggEIAoIBAQC3Msj+6XGmBIWtDBFk385N78gDGIc/oav7PKaf\n\
+8MOh2tTYbitTkPskpD6E8J7oX+zlJ0T1KKY/e97gKvDIr1MvnsoFAZMej2YcOadN\n\
++lq2cwQlZut3f+dZxkqZJRRU6ybH838Z1TBwj6+wRir/resp7defqgSHo9T5iaU0\n\
+X9tDkYI22WY8sbi5gv2cOj4QyDvvBmVmepsZGD3/cVE8MC5fvj13c7JdBmzDI1aa\n\
+K4UmkhynArPkPw2vCHmCuDY96pzTNbO8acr1zJ3o/WSNF4Azbl5KXZnJHoe0nRrA\n\
+1W4TNSNe35tfPe/W93bC6j67eA0cQmdrBNj41tpvi/JEoAGrAgEDo4HFMIHCMB0G\n\
+A1UdDgQWBBS/X7fRzt0fhvRbVazc1xDCDqmI5zCBkgYDVR0jBIGKMIGHgBS/X7fR\n\
+zt0fhvRbVazc1xDCDqmI56FspGowaDELMAkGA1UEBhMCVVMxJTAjBgNVBAoTHFN0\n\
+YXJmaWVsZCBUZWNobm9sb2dpZXMsIEluYy4xMjAwBgNVBAsTKVN0YXJmaWVsZCBD\n\
+bGFzcyAyIENlcnRpZmljYXRpb24gQXV0aG9yaXR5ggEAMAwGA1UdEwQFMAMBAf8w\n\
+DQYJKoZIhvcNAQEFBQADggEBAAWdP4id0ckaVaGsafPzWdqbAYcaT1epoXkJKtv3\n\
+L7IezMdeatiDh6GX70k1PncGQVhiv45YuApnP+yz3SFmH8lU+nLMPUxA2IGvd56D\n\
+eruix/U0F47ZEUD0/CwqTRV/p2JdLiXTAAsgGh1o+Re49L2L7ShZ3U0WixeDyLJl\n\
+xy16paq8U4Zt3VekyvggQQto8PT7dL5WXXp59fkdheMtlb71cZBDzI0fmgAKhynp\n\
+VSJYACPq4xJDKVtHCN2MQWplBqjlIapBtJUhlbl90TSrE9atvNziPTnNvT51cKEY\n\
+WQPJIrSPnNVeKtelttQKbfi3QBFGmh95DmK/D5fs4C8fF5Q=\n\
+-----END CERTIFICATE-----"
 
 #define MQTT_CERTIFICATE "-----BEGIN CERTIFICATE-----\n\
-MIIDWjCCAkKgAwIBAgIVAKp1kf+CB1VVGFgrJHccil3ucTNIMA0GCSqGSIb3DQEB\n\
-CwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\n\
-IEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0yMDExMjAxNTI2\n\
-NTlaFw00OTEyMzEyMzU5NTlaMB4xHDAaBgNVBAMME0FXUyBJb1QgQ2VydGlmaWNh\n\
-dGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCrTkrKuNBZoJLaPerh\n\
-953ydia751Lve7TYW87+4pfc6WAO00hgCSsJGBukQ5iTMFbeOYZwHqnivjy17nyS\n\
-r+X3UeCiV2OMNgKdhG5saA7gN7hQl154NVNAd08NAD7ViKjy7hT22xuRWM8xsEgT\n\
-h8BrAV1WcspKsqsjZzoc+c3zPkbjRdMmxfGZ90jli/nCerypgQUWSB4bu2jMs/kC\n\
-NycJJwXAxEzBJUY6qXg2mvTPsHNSS272CRLgcg5khmpP9gcoA8ZyTlKuDAicc8t2\n\
-pkYmRvNWU2DVsRY9lFfaABw5Z/SmQVaBf2Y/0FKBaZPbiDOmkvPXvcCdXNyD3wFc\n\
-FBpdAgMBAAGjYDBeMB8GA1UdIwQYMBaAFDEcUkMcHs+IVnn2i7MdFImkNf2fMB0G\n\
-A1UdDgQWBBSl0pMEsvIZoC+hP9Zp9VEFRKJhzDAMBgNVHRMBAf8EAjAAMA4GA1Ud\n\
-DwEB/wQEAwIHgDANBgkqhkiG9w0BAQsFAAOCAQEAL9fsXzHqDHnzqDWBLJf7szxS\n\
-A2me9I3QcsPf40fNNHUaSfFddOQmIjtIethrubNDnRjdTGqQ/M0lWh64KATN5reM\n\
-IaWrZ/Wm/8VEjOki+kH58lzWF2dUniI7HJN7efKYUqNLyYCqdxOWYa9ZZkn8yc8/\n\
-XTYN6nM5kdhDctMj1C7aKC7eDDY9GUbfxRl8CtknJ+evbv9GviW9053J07ALkpRX\n\
-rB3MV2VW+oSZn/Ff12i8g5xMBt3wDPwHdjcLEKW6HUsmjLvWeWUQRgUek9+b+k4u\n\
-Po2wy9Usok9WEzzzOC4eXil0Xu+3Mf5KAU8nHWdyYAC0VEWFe9Z72kV85TvbJA==\n\
 -----END CERTIFICATE-----"
 
 #define MQTT_PRIV_KEY "-----BEGIN RSA PRIVATE KEY-----\n\
-MIIEowIBAAKCAQEAq05KyrjQWaCS2j3q4fed8nYmu+dS73u02FvO/uKX3OlgDtNI\n\
-YAkrCRgbpEOYkzBW3jmGcB6p4r48te58kq/l91HgoldjjDYCnYRubGgO4De4UJde\n\
-eDVTQHdPDQA+1Yio8u4U9tsbkVjPMbBIE4fAawFdVnLKSrKrI2c6HPnN8z5G40XT\n\
-JsXxmfdI5Yv5wnq8qYEFFkgeG7tozLP5AjcnCScFwMRMwSVGOql4Npr0z7BzUktu\n\
-9gkS4HIOZIZqT/YHKAPGck5SrgwInHPLdqZGJkbzVlNg1bEWPZRX2gAcOWf0pkFW\n\
-gX9mP9BSgWmT24gzppLz173AnVzcg98BXBQaXQIDAQABAoIBABPe5woQ2goreB1c\n\
-pUxE3strLR8KvDIPVXDrZV1nh1oWsA/ILlMFfTp2024AcUhRiSIJ5jBHPkmQ65Xm\n\
-7ghN4w0HMFlkbaWr9i2zWOO2RlN34ydmB41GEjweGstVRfSa/43+U+w2ikIX3SDU\n\
-Y+fwDT/cTqlic1iq1PMsXC9UQrF+TSvyWg/xKRCuHNnBXdMvolYUaWf+JQ1U0mpW\n\
-XQV6RoLwFficE0VTLygZJnVBPotTz9djarWQ+UXHcsJT7y9tBGvWqHnmOzIdezUk\n\
-rqLwY51YpTAF+SKniGkICpqq/+nCmsWTxyT9HtL6bb1yMB+xURaYfU/NZjWbmBSX\n\
-Eb1lVgECgYEA3hwTYVU2maSVMxm68feQFDoovoSwBE21Tf/wd7zYExu0uTOAPfPu\n\
-cFnqarVRChNrxPaujacMuK4sEXRtHh/xsn6UcazFK96rZpQKX3vt3x2O9kiuADRJ\n\
-2dFIma7aq8/sZicYWp9cXgxuki1BdiKwNwWQZpOF9292AwzTAPu3AUECgYEAxXG+\n\
-vF2s8ah/D85vlo65K9iFfDvN8jhf9YQQ6ZpBx9kE5BFFiya1PItnEvJhbdkVF5Yq\n\
-YXGdXA6NoYzva/+m/OAFG8YveI/pCnkGoDBdQiKBWV5cQ0/Rrn8BEC2EURGBVLQl\n\
-hlSfxZZpm2y9/GMxRH6+IGr868N+iKNTLheFdh0CgYEA0siML9vBpE/H9CXf/0+0\n\
-4S1Mi3m63WqtvCc/GzMRUBkECppwgtrjFqaOS9Rk4w4JQXPltbKp5P4N/kaiY2tn\n\
-YcC0uah/uiFoQkIOEg23cf1INjxFPRZiW588qfSBu3noXA2QFDiWXP6pVHo0XJuQ\n\
-5baXEnHAOlECCuT5vj4jr8ECgYBLgrzXfVvu7+noOaMjiWH4Cs7CPHz+7eCFHQT6\n\
-0ivmKnFcZ96Y4SzfAtFgxaHNSQBwDNYYfkMYOdiguC24uAU9IM/TV3BAQ4l0n+SQ\n\
-zu5bpKajbxsKAzTF73yQm1fHSVKU+nB/d03DW0r4ThY6uBTXhUFhVIl2AUYbK5tc\n\
-PVKlYQKBgASDG3K2pCzFmBAc0l8f7cLh4K8WIOyqaQTIB12Yh2eLlXIlt0KT1O8n\n\
-KGoEDN5Sy5hRlC4kmufj1+f+FDXu6yuQ9QEqx0HaG9vezcipzZMU5RlQbYS7FxKi\n\
-n1LfYKu6miDABaOP1fB2Qc7eMYcpby6gPilZqale6Htthaz5+J1+\n\
 -----END RSA PRIVATE KEY-----"
 #endif
 
@@ -136,69 +122,76 @@ n1LfYKu6miDABaOP1fB2Qc7eMYcpby6gPilZqale6Htthaz5+J1+\n\
 #define SNTP_TIMEZONE "+60"
 #define SNTP_SERVER "0.de.pool.ntp.org"
 
-// USB-Serial debug Interface
-TypeSerial *SerialDebug;
-
 // Calypso settings
 CalypsoSettings calSettings;
 
-// Calypso object
-CALYPSO *calypso;
-
-// Serial communication port for Calypso
-TypeHardwareSerial *SerialCalypso;
-
-// Sensors
-// WE absolute pressure sensor object
-PADS *sensorPADS;
-// WE 3-axis acceleration sensor object
-ITDS *sensorITDS;
-// WE Temperature sensor object
-TIDS *sensorTIDS;
-// WE humidity sensor object
-HIDS *sensorHIDS;
-
 int msgID;
 
-char *serializeData();
+char *buf;
+
+char macAddress[18];
+
+void Calypso_EventCallback(char *eventText);
+
+static float PADS_pressure, PADS_temp;
+static float ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp;
+static bool ITDS_doubleTapEvent, ITDS_freeFallEvent;
+static float TIDS_temp;
+static float HIDS_humidity, HIDS_temp;
+
+/* Startup State Machine */
+typedef enum
+{
+    Calypso_Sensor2Cloud_SM_ModuleUp,
+    Calypso_Sensor2Cloud_SM_WLAN_Connect,
+    Calypso_Sensor2Cloud_SM_SNTP_Setup,
+    Calypso_Sensor2Cloud_SM_MQTT_Connect,
+    Calypso_Sensor2Cloud_SM_Publish_Data,
+    Calypso_Sensor2Cloud_SM_Publish_Ack,
+    Calypso_Sensor2Cloud_SM_Idle,
+    Calypso_Sensor2Cloud_SM_Error
+} Calypso_Sensor2Cloud_SM_t;
+
+static volatile Calypso_Sensor2Cloud_SM_t calypsoSensor2CloudCurrentState =
+    Calypso_Sensor2Cloud_SM_Idle;
+
+static bool sntpSetupFinished = false;
+
+void serializeData();
+
 void setup()
 {
-    delay(5000);
-    // Using the USB serial port for debug messages
-    SerialDebug = SSerial_create(&Serial);
-    SSerial_begin(SerialDebug, 115200);
+    delay(3000);
 
-    SerialCalypso = HSerial_create(&Serial1);
+#ifdef WE_DEBUG
+    WE_Debug_Init();
+#endif
 
-    // Create serial port for Calypso WiFi FeatherWing baud 921600, 8E1
-    HSerial_beginP(SerialCalypso, 921600, (uint8_t)SERIAL_8E1);
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
     calSettings.wifiSettings.securityParams.securityType =
-        ATWLAN_SECURITY_TYPE_WPA_WPA2;
+        ATWLAN_SecurityType_WPA_WPA2;
 
 #if AZURE_CONNECTION
     // MQTT Settings - AZURE
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags =
-        ATMQTT_CREATE_FLAGS_URL | ATMQTT_CREATE_FLAGS_SEC;
+        ATMQTT_CreateFlags_URL | ATMQTT_CreateFlags_Secure;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
 
     calSettings.mqttSettings.secParams.securityMethod =
-        ATMQTT_SECURITY_METHOD_TLSV1_2;
+        ATMQTT_SecurityMethod_SSLV3_TLSV1_2;
     calSettings.mqttSettings.secParams.cipher =
-        ATMQTT_CIPHER_TLS_RSA_WITH_AES_256_CBC_SHA;
+        ATSocket_Cipher_TLS_RSA_WITH_AES_256_CBC_SHA256;
 
     calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_PROTOCOL_v3_1_1;
+        ATMQTT_ProtocolVersion_v3_1_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
     strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_USER_NAME);
-
     strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_PASSWORD);
-
     strcpy(calSettings.mqttSettings.secParams.CAFile, ROOT_CA_PATH);
 
 #endif
@@ -207,26 +200,23 @@ void setup()
     // MQTT Settings - AWS
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags =
-        ATMQTT_CREATE_FLAGS_URL | ATMQTT_CREATE_FLAGS_SEC;
+        ATMQTT_CreateFlags_URL | ATMQTT_CreateFlags_Secure;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
 
     calSettings.mqttSettings.secParams.securityMethod =
-        ATMQTT_SECURITY_METHOD_TLSV1_2;
+        ATMQTT_SecurityMethod_TLSV1_2;
     calSettings.mqttSettings.secParams.cipher =
-        ATMQTT_CIPHER_TLS_RSA_WITH_AES_128_CBC_SHA256;
+        ATSocket_Cipher_TLS_RSA_WITH_AES_128_CBC_SHA256;
 
     strcpy(calSettings.mqttSettings.secParams.certificateFile, MQTT_CERT_PATH);
-
     strcpy(calSettings.mqttSettings.secParams.privateKeyFile, MQTT_PRIV_KEY_PATH);
+    strcpy(calSettings.mqttSettings.secParams.CAFile, ROOT_CA_PATH);
 
     calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_PROTOCOL_v3_1_1;
+        ATMQTT_ProtocolVersion_v3_1_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
-    strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_USER_NAME);
-
-    strcpy(calSettings.mqttSettings.userOptions.passWord, MQTT_PASSWORD);
 
 #endif
 
@@ -234,155 +224,263 @@ void setup()
     strcpy(calSettings.sntpSettings.timezone, SNTP_TIMEZONE);
     strcpy(calSettings.sntpSettings.server, SNTP_SERVER);
 
-    // Create sensor objects
-    sensorPADS = PADSCreate(SerialDebug);
-    sensorITDS = ITDSCreate(SerialDebug);
-    sensorTIDS = TIDSCreate(SerialDebug);
-    sensorHIDS = HIDSCreate(SerialDebug);
-
+    if (!sensorBoard_Init())
+    {
+        WE_DEBUG_PRINT("I2C init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+    }
     // Initialize the sensors in default mode
-    if (!PADS_simpleInit(sensorPADS))
+    if (!PADS_2511020213301_simpleInit())
     {
-        SSerial_printf(SerialDebug, "PADS init failed \r\n");
+        WE_DEBUG_PRINT("PADS init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 
-    if (!ITDS_simpleInit(sensorITDS))
+    if (!ITDS_2533020201601_simpleInit())
     {
-        SSerial_printf(SerialDebug, "ITDS init failed \r\n");
-    }
-    if (!TIDS_simpleInit(sensorTIDS))
-    {
-        SSerial_printf(SerialDebug, "TIDS init failed \r\n");
-    }
-    if (!HIDS_simpleInit(sensorHIDS))
-    {
-        SSerial_printf(SerialDebug, "HIDS init failed \r\n");
+        WE_DEBUG_PRINT("ITDS init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 
-    calypso = Calypso_Create(SerialDebug, SerialCalypso, &calSettings);
+    if (!TIDS_2521020222501_simpleInit())
+    {
+        WE_DEBUG_PRINT("TIDS init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+    }
+#if HIDS_PART_NUMBER == 2525020210001
+    if (!HIDS_2525020210001_simpleInit())
+    {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+    }
+#elif HIDS_PART_NUMBER == 2525020210002
+    if (!HIDS_2525020210002_simpleInit())
+    {
+        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+    }
+#endif
 
     // Initialize Calypso
-    if (!Calypso_simpleInit(calypso))
+    if (!Calypso_simpleInit(&calSettings, &Calypso_EventCallback))
     {
-        SSerial_printf(SerialDebug, "Calypso init failed \r\n");
+        WE_DEBUG_PRINT("Calypso init failed \r\n");
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 
-#if AWS_CONNECTION
-    if (!Calypso_fileExists(calypso, MQTT_CERT_PATH))
+    while (calypsoSensor2CloudCurrentState != Calypso_Sensor2Cloud_SM_WLAN_Connect && calypsoSensor2CloudCurrentState != Calypso_Sensor2Cloud_SM_SNTP_Setup)
     {
-        Calypso_writeFile(calypso, MQTT_CERT_PATH, MQTT_CERTIFICATE, strlen(MQTT_CERTIFICATE));
-    }
-
-    if (!Calypso_fileExists(calypso, MQTT_PRIV_KEY_PATH))
-    {
-        Calypso_writeFile(calypso, MQTT_PRIV_KEY_PATH, MQTT_PRIV_KEY, strlen(MQTT_PRIV_KEY));
-    }
-#endif
+        switch (calypsoSensor2CloudCurrentState)
+        {
+        case Calypso_Sensor2Cloud_SM_ModuleUp:
+        {
+            WE_DEBUG_PRINT("module has started\r\n");
+            // check if autoconnect feature will connect fine if not
+            // manually connect to chosen ap
+            WE_Delay(30);
+            if (calypsoSensor2CloudCurrentState == Calypso_Sensor2Cloud_SM_ModuleUp)
+            {
+                calypsoSensor2CloudCurrentState =
+                    Calypso_Sensor2Cloud_SM_WLAN_Connect;
+            }
 
 #if AZURE_CONNECTION
-    if (!Calypso_fileExists(calypso, ROOT_CA_PATH))
-    {
-        Calypso_writeFile(calypso, ROOT_CA_PATH, BALTIMORE_CYBERTRUST_ROOT_CERT, strlen(BALTIMORE_CYBERTRUST_ROOT_CERT));
-    }
+            if (!Calypso_fileExists(ROOT_CA_PATH))
+            {
+                if (!Calypso_writeFile(ROOT_CA_PATH, DIGICERT_CYBERTRUST_ROOT_CERT, strlen(DIGICERT_CYBERTRUST_ROOT_CERT)))
+                {
+                    WE_DEBUG_PRINT("write file fail\r\n");
+                    calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+                    break;
+                }
+            }
 #endif
-    // Connect Calypso WiFi FeatherWing to the Wi-Fi access point
-    if (!Calypso_WLANconnect(calypso))
-    {
-        SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
-        return;
+
+#if AWS_CONNECTION
+            if (!Calypso_fileExists(MQTT_CERT_PATH))
+            {
+                if (!Calypso_writeFile(MQTT_CERT_PATH, MQTT_CERTIFICATE, strlen(MQTT_CERTIFICATE)))
+                {
+                    WE_DEBUG_PRINT("write file fail\r\n");
+                    calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+                    break;
+                }
+            }
+
+            if (!Calypso_fileExists(MQTT_PRIV_KEY_PATH))
+            {
+                if (!Calypso_writeFile(MQTT_PRIV_KEY_PATH, MQTT_PRIV_KEY, strlen(MQTT_PRIV_KEY)))
+                {
+                    WE_DEBUG_PRINT("write file fail\r\n");
+                    calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+                    break;
+                }
+            }
+
+            if (!Calypso_fileExists(ROOT_CA_PATH))
+            {
+                if (!Calypso_writeFile(ROOT_CA_PATH, STARFIELD_ROOT_CERT, strlen(STARFIELD_ROOT_CERT)))
+                {
+                    WE_DEBUG_PRINT("write file fail\r\n");
+                    calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+                    break;
+                }
+            }
+#endif
+            break;
+        }
+        case Calypso_Sensor2Cloud_SM_Error:
+        {
+            WE_DEBUG_PRINT("Error state in start up \r\n");
+            return;
+        }
+        default:
+            break;
+        }
     }
 
-    delay(3000);
-
-    // Set up SNTP client on Calypso
-    if (!Calypso_setUpSNTP(calypso))
-    {
-        SSerial_printf(SerialDebug, "SNTP config fail\r\n");
-    }
-
-    // Connect to MQTT server
-    if (!Calypso_MQTTconnect(calypso))
-    {
-        SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
-    }
-
+    WE_DEBUG_PRINT("Startup finished\r\n");
     // The message ID acts as the packet number
     msgID = 0;
 }
 
 void loop()
 {
-    if (PADS_readSensorData(sensorPADS))
+    switch (calypsoSensor2CloudCurrentState)
     {
-        SSerial_printf(
-            SerialDebug, "WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-            sensorPADS->data[padsPressure], sensorPADS->data[padsTemperature]);
-    }
-    if (ITDS_readSensorData(sensorITDS))
+    case Calypso_Sensor2Cloud_SM_Publish_Data:
     {
-        SSerial_printf(SerialDebug,
-                       "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g\r\n",
-                       sensorITDS->data[itdsXAcceleration],
-                       sensorITDS->data[itdsYAcceleration],
-                       sensorITDS->data[itdsZAcceleration]);
-    }
-    if (TIDS_readSensorData(sensorTIDS))
-    {
-        SSerial_printf(SerialDebug, "WSEN_TIDS(Temperature): %f °C\r\n",
-                       sensorTIDS->data[tidsTemperature]);
-    }
-    if (HIDS_readSensorData(sensorHIDS))
-    {
-        SSerial_printf(SerialDebug, "WSEN_HIDS: RH: %f %% Temp: %f °C\r\n",
-                       sensorHIDS->data[hidsRelHumidity],
-                       sensorHIDS->data[hidsTemperature]);
-    }
-    SSerial_printf(SerialDebug,
-                   "----------------------------------------------------\r\n");
-    SSerial_printf(SerialDebug, "\r\n");
-
-    /*In case of internet connection failure- reconnect*/
-    if (calypso->status == calypso_error)
-    {
-        if (Calypso_reboot(calypso))
+        if (PADS_2511020213301_readSensorData(&PADS_pressure, &PADS_temp))
         {
-            delay(RESPONSE_WAIT_TIME);
+            WE_DEBUG_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+                           PADS_pressure, PADS_temp);
         }
-        if (!Calypso_WLANconnect(calypso))
+        if (ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
+                                              &ITDS_accelZ, &ITDS_temp))
         {
-            SSerial_printf(SerialDebug, "WiFi connect fail\r\n");
-            return;
+            WE_DEBUG_PRINT(
+                "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: "
+                "%f °C \r\n",
+                ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp);
         }
-        if (!Calypso_MQTTconnect(calypso))
+        if (ITDS_2533020201601_readDoubleTapEvent(&ITDS_doubleTapEvent))
         {
-            SSerial_printf(SerialDebug, "MQTT connect fail\r\n");
+            WE_DEBUG_PRINT("WSEN_ITDS(DoubleTap): State %s \r\n",
+                           ITDS_doubleTapEvent ? "True" : "False");
         }
+        if (ITDS_2533020201601_readFreeFallEvent(&ITDS_freeFallEvent))
+        {
+            WE_DEBUG_PRINT("WSEN_ITDS(FreeFall): State %s \r\n",
+                           ITDS_freeFallEvent ? "True" : "False");
+        }
+        if (TIDS_2521020222501_readSensorData(&TIDS_temp))
+        {
+            WE_DEBUG_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
+        }
+#if HIDS_PART_NUMBER == 2525020210001
+        if (HIDS_2525020210001_readSensorData(&HIDS_humidity, &HIDS_temp))
+        {
+            WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                           HIDS_temp);
+        }
+#elif HIDS_PART_NUMBER == 2525020210002
+        if (HIDS_2525020210002_readSensorData(&HIDS_humidity, &HIDS_temp))
+        {
+            WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                           HIDS_temp);
+        }
+#endif
+        WE_DEBUG_PRINT(
+            "----------------------------------------------------\r\n");
+        WE_DEBUG_PRINT("\r\n");
+
+        serializeData();
+
+        WE_DEBUG_PRINT(buf);
+        WE_DEBUG_PRINT("\r\n");
+
+        /*Publish to MQTT topic*/
+        if (!Calypso_MQTTPublishData(MQTT_TOPIC, 0, buf, strlen(buf)))
+        {
+            WE_DEBUG_PRINT("Publish failed\n\r");
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+        }
+
+        WE_DEBUG_PRINT("Data published\n\r");
+
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Idle;
+        /*Clean-up*/
+        free(buf);
+        break;
     }
-
-    char *payload = serializeData();
-
-    SSerial_printf(SerialDebug, payload);
-    SSerial_printf(SerialDebug, "\r\n");
-
-    /*Publish to MQTT topic*/
-    if (!Calypso_MQTTPublishData(calypso, MQTT_TOPIC, 0, payload,
-                                 strlen(payload), true))
+    case Calypso_Sensor2Cloud_SM_Publish_Ack:
     {
-        SSerial_printf(SerialDebug, "Publish failed\n\r");
-        calypso->status = calypso_error;
+        WE_DEBUG_PRINT("Publish Data Ack received\n\r");
+        WE_Delay(5000);
+        calypsoSensor2CloudCurrentState =
+            Calypso_Sensor2Cloud_SM_Publish_Data;
+        break;
     }
-
-    /*Clean-up*/
-    free(payload);
-
-    delay(5000);
+    case Calypso_Sensor2Cloud_SM_WLAN_Connect:
+    {
+        if (!Calypso_WLANconnect())
+        {
+            WE_DEBUG_PRINT("WiFi connect fail\r\n");
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+        }
+        else if (calypsoSensor2CloudCurrentState ==
+                 Calypso_Sensor2Cloud_SM_WLAN_Connect)
+        {
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Idle;
+        }
+        break;
+    }
+    case Calypso_Sensor2Cloud_SM_SNTP_Setup:
+    {
+        WE_DEBUG_PRINT("WiFi connected\r\n");
+        if (!Calypso_setUpSNTP())
+        {
+            WE_DEBUG_PRINT("SNTP config fail\r\n");
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+        }
+        else
+        {
+            sntpSetupFinished = true;
+            calypsoSensor2CloudCurrentState =
+                Calypso_Sensor2Cloud_SM_MQTT_Connect;
+        }
+        break;
+    }
+    case Calypso_Sensor2Cloud_SM_MQTT_Connect:
+    {
+        if (!Calypso_MQTTconnect())
+        {
+            WE_DEBUG_PRINT("MQTT connect fail\r\n");
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+        }
+        else if (calypsoSensor2CloudCurrentState ==
+                 Calypso_Sensor2Cloud_SM_MQTT_Connect)
+        {
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Idle;
+        }
+        break;
+    }
+    case Calypso_Sensor2Cloud_SM_Error:
+    {
+        WE_DEBUG_PRINT("Application Error\n\r");
+        calypsoSensor2CloudCurrentState =
+            Calypso_Sensor2Cloud_SM_Idle;
+        return;
+    }
+    default:
+        break;
+    }
 }
 
 /**
  * @brief  Serialize data to send
- * @retval Pointer to serialized data
  */
-char *serializeData()
+void serializeData()
 {
     Timestamp timestamp;
     Timer_initTime(&timestamp);
@@ -394,9 +492,9 @@ char *serializeData()
     }
 
     // Get the current time from calypso
-    if (!Calypso_getTimestamp(calypso, &timestamp))
+    if (!Calypso_getTimestamp(&timestamp))
     {
-        SSerial_printf(SerialDebug, "Get time fail\r\n");
+        WE_DEBUG_PRINT("Get time fail\r\n");
     }
 
     /* convert to unix timestamp */
@@ -404,39 +502,104 @@ char *serializeData()
 
     /*Create a JSON object with the device ID, message ID, and time stamp*/
     json_value *payload = json_object_new(1);
-    json_object_push(payload, "deviceId", json_string_new(calypso->MAC_ADDR));
+    json_object_push(payload, "deviceId", json_string_new(macAddress));
     json_object_push(payload, "messageId", json_integer_new(msgID));
     json_object_push(payload, "ts", json_integer_new(unixTime_ms));
 
     /*Push sensor data into the JSON object*/
-    int i;
-    for (i = 0; i < padsProperties; i++)
-    {
-        json_object_push(payload, sensorPADS->dataNames[i],
-                         json_double_new(sensorPADS->data[i]));
-    }
-    for (i = 0; i < itdsProperties; i++)
-    {
-        json_object_push(payload, sensorITDS->dataNames[i],
-                         json_double_new(sensorITDS->data[i]));
-    }
-    for (i = 0; i < tidsProperties; i++)
-    {
-        json_object_push(payload, sensorTIDS->dataNames[i],
-                         json_double_new(sensorTIDS->data[i]));
-    }
 
-    for (i = 0; i < hidsProperties; i++)
-    {
-        json_object_push(payload, sensorHIDS->dataNames[i],
-                         json_double_new(sensorHIDS->data[i]));
-    }
+    // PADS data
+    json_object_push(payload, "PADS_T",
+                     json_double_new(PADS_temp));
+    json_object_push(payload, "PADS_P",
+                     json_double_new(PADS_pressure));
 
-    char *buf = (char *)malloc(json_measure(payload));
+    // ITDS data
+    json_object_push(payload, "ITDS_X",
+                     json_double_new(ITDS_accelX));
+    json_object_push(payload, "ITDS_Y",
+                     json_double_new(ITDS_accelY));
+    json_object_push(payload, "ITDS_Z",
+                     json_double_new(ITDS_accelZ));
+    json_object_push(payload, "ITDS_T",
+                     json_double_new(ITDS_temp));
+    json_object_push(payload, "ITDS_Double_Tap",
+                     json_double_new((double)ITDS_doubleTapEvent));
+    json_object_push(payload, "ITDS_Free_Fall",
+                     json_double_new((double)ITDS_freeFallEvent));
+
+    // TIDS data
+    json_object_push(payload, "TIDS_T",
+                     json_double_new(TIDS_temp));
+
+    // HIDS data
+    json_object_push(payload, "HIDS_T",
+                     json_double_new(HIDS_temp));
+    json_object_push(payload, "HIDS_RH",
+                     json_double_new(HIDS_humidity));
+
+    buf = (char *)malloc(json_measure(payload));
 
     json_serialize(buf, payload);
 
     json_builder_free(payload);
+}
 
-    return buf;
+void Calypso_EventCallback(char *eventText)
+{
+    ATEvent_t event;
+    ATEvent_ParseEventType(&eventText, &event);
+
+    if (ATEvent_Invalid == event)
+    {
+        return;
+    }
+
+    switch (event)
+    {
+    case ATEvent_Startup:
+    {
+        ATEvent_Startup_t startUp;
+        if (ATEvent_ParseStartUpEvent(&eventText, &startUp))
+        {
+            strcpy(macAddress, startUp.MACAddress);
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_ModuleUp;
+        }
+        else
+        {
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+        }
+        break;
+    }
+    case ATEvent_NetappIP4Acquired:
+    {
+        ATEvent_NetappIP4Acquired_t ipAcquired;
+        calypsoSensor2CloudCurrentState =
+            ATEvent_ParseNetappIP4AcquiredEvent(&eventText, &ipAcquired)
+                ? (sntpSetupFinished ? Calypso_Sensor2Cloud_SM_MQTT_Connect : Calypso_Sensor2Cloud_SM_SNTP_Setup)
+                : Calypso_Sensor2Cloud_SM_Error;
+        break;
+    }
+    case ATEvent_MQTTConnack:
+    {
+        ATEvent_MQTTConnack_t mqttConnack;
+        if (!ATEvent_ParseMQTTConnackEvent(&eventText, &mqttConnack) ||
+            (mqttConnack.returnCode != MQTTConnack_Return_Code_Accepted))
+        {
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+        }
+        else
+        {
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Publish_Data;
+        }
+        break;
+    }
+    case ATEvent_MQTTPuback:
+    {
+        calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Publish_Ack;
+        break;
+    }
+    default:
+        break;
+    }
 }
