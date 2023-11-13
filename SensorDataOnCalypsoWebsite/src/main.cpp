@@ -145,12 +145,35 @@ void setup()
             WE_DEBUG_PRINT("module has started\r\n");
             // check if autoconnect feature will connect fine if not
             // manually connect to chosen ap
-            WE_Delay(30);
-            if (calypsoApplicationCurrentState == Calypso_SM_ModuleUp)
+            WE_Delay(1000);
+            ATWLAN_SetMode_t mode;
+
+            if (!Calypso_getWLANMode(&mode))
             {
-                calypsoApplicationCurrentState =
-                    Calypso_SM_WLAN_Connect;
+                WE_DEBUG_PRINT("get wlan mode failed\r\n");
+                calypsoApplicationCurrentState = Calypso_SM_Error;
+                break;
             }
+            else if (mode == ATWLAN_SetMode_Station)
+            {
+                if (calypsoApplicationCurrentState ==
+                    Calypso_SM_ModuleUp)
+                {
+                    calypsoApplicationCurrentState =
+                        Calypso_SM_WLAN_Connect;
+                    break;
+                }
+                break;
+            }
+
+            if (!Calypso_setWLANMode(ATWLAN_SetMode_Station))
+            {
+                WE_DEBUG_PRINT("set wlan mode failed\r\n");
+                calypsoApplicationCurrentState = Calypso_SM_Error;
+                break;
+            }
+
+            calypsoApplicationCurrentState = Calypso_SM_WLAN_Connect;
             break;
         }
         case Calypso_SM_WLAN_Connect:

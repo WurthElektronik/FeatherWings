@@ -475,3 +475,37 @@ bool ATFile_getInfo(const char *fileName, uint32_t secureToken,
                     ATFile_FileInfo_t *fileInfo) {
     return ATFile_GetInfo(fileName, secureToken, fileInfo);
 }
+
+/**
+ * @brief Switch the WLAN mode of the module
+ * @param  mode mode of WLAN
+ * @retval true if successful false in case of failure
+ */
+bool Calypso_setWLANMode(ATWLAN_SetMode_t mode) {
+    if (!ATWLAN_SetMode(mode)) {
+        return false;
+    }
+
+    return ATDevice_Restart(0);
+}
+
+/**
+ * @brief Switch the WLAN mode of the module
+ * @param  modeP pointer to mode of WLAN
+ * @retval true if successful false in case of failure
+ */
+bool Calypso_getWLANMode(ATWLAN_SetMode_t *modeP) {
+    ATWLAN_Settings_t settings;
+
+    settings.connection.role = ATWLAN_SetMode_NumberOfValues;
+
+    ATWLAN_Get(ATWLAN_SetID_Connection, 0, &settings);
+
+    if (settings.connection.role == ATWLAN_SetMode_NumberOfValues) {
+        return false;
+    }
+
+    *modeP = settings.connection.role;
+
+    return true;
+}

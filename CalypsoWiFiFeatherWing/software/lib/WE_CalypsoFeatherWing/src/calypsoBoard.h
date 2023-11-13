@@ -100,6 +100,9 @@ bool Calypso_deleteFile(const char *fileName);
 bool Calypso_isIPConnected(char *ipAddress);
 bool Calypso_HTTPCustomResponse(char *data, int length, bool encode);
 
+bool Calypso_setWLANMode(ATWLAN_SetMode_t mode);
+bool Calypso_getWLANMode(ATWLAN_SetMode_t *modeP);
+
 #ifdef __cplusplus
 }
 #endif

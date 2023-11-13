@@ -132,11 +132,25 @@ void setup() {
     }
 
     // to wait for calypso auto connect
-    WE_Delay(30);
+    WE_Delay(1000);
+    ATWLAN_SetMode_t mode;
 
-    if (currentState == SerialFeatherWing_SM_Calypso_StartUp) {
-        currentState = SerialFeatherWing_SM_Wlan_Connect;
+    if (!Calypso_getWLANMode(&mode)) {
+        WE_DEBUG_PRINT("get wlan mode failed\r\n");
+        return;
+    } else if (mode == ATWLAN_SetMode_Station) {
+        if (currentState == SerialFeatherWing_SM_Calypso_StartUp) {
+            currentState = SerialFeatherWing_SM_Wlan_Connect;
+            return;
+        }
     }
+
+    if (!Calypso_setWLANMode(ATWLAN_SetMode_Station)) {
+        WE_DEBUG_PRINT("set wlan mode failed\r\n");
+        return;
+    }
+
+    currentState = SerialFeatherWing_SM_Wlan_Connect;
 
 #elif FeatherWing == ThyoneWirelessFeatherWing
     uint8_t serialNrThy[4] = {0};

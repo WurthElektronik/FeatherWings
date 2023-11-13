@@ -277,12 +277,35 @@ void setup()
             WE_DEBUG_PRINT("module has started\r\n");
             // check if autoconnect feature will connect fine if not
             // manually connect to chosen ap
-            WE_Delay(30);
-            if (calypsoSensor2CloudCurrentState == Calypso_Sensor2Cloud_SM_ModuleUp)
+            WE_Delay(1000);
+            ATWLAN_SetMode_t mode;
+
+            if (!Calypso_getWLANMode(&mode))
             {
-                calypsoSensor2CloudCurrentState =
-                    Calypso_Sensor2Cloud_SM_WLAN_Connect;
+                WE_DEBUG_PRINT("get wlan mode failed\r\n");
+                calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+                break;
             }
+            else if (mode == ATWLAN_SetMode_Station)
+            {
+                if (calypsoSensor2CloudCurrentState ==
+                    Calypso_Sensor2Cloud_SM_ModuleUp)
+                {
+                    calypsoSensor2CloudCurrentState =
+                        Calypso_Sensor2Cloud_SM_WLAN_Connect;
+                    break;
+                }
+                break;
+            }
+
+            if (!Calypso_setWLANMode(ATWLAN_SetMode_Station))
+            {
+                WE_DEBUG_PRINT("set wlan mode failed\r\n");
+                calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
+                break;
+            }
+
+            calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_WLAN_Connect;
 
 #if AZURE_CONNECTION
             if (!Calypso_fileExists(ROOT_CA_PATH))
