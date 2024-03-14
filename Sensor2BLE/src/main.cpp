@@ -99,7 +99,9 @@ void setup()
     {
         WE_DEBUG_PRINT("read version %d.%d.%d \n", fwversion[2],
                        fwversion[1], fwversion[0]);
-        if ((fwversion[2] != 1) || (fwversion[1] != 4))
+        // check for minimum firmware version 1.4.0
+        if ((fwversion[2] < 1) ||
+            ((fwversion[2] == 1) && fwversion[1] < 4))
         {
             WE_DEBUG_PRINT("unsupported FW version \n");
             exit(0);

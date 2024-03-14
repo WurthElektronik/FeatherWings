@@ -1128,8 +1128,13 @@ bool ProteusIII_Set(ProteusIII_UserSettings_t userSetting, uint8_t *valueP,
                                  txPacket.Length + LENGTH_CMD_OVERHEAD);
 
         /* wait for cnf */
-        return Wait4CNF(CMD_WAIT_TIME, PROTEUSIII_CMD_SET_CNF,
-                        CMD_Status_Success, true);
+        if(Wait4CNF(CMD_WAIT_TIME, PROTEUSIII_CMD_SET_CNF,
+                        CMD_Status_Success, true))
+        {
+            return Wait4CNF(CMD_WAIT_TIME, PROTEUSIII_CMD_GETSTATE_CNF,
+                        CMD_Status_NoStatus, false);
+        }
+
     }
     return false;
 }
