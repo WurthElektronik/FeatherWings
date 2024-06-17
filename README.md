@@ -4,7 +4,7 @@
 
 [Würth Elektronik eiSos](https://www.we-online.de/web/en/wuerth_elektronik/start.php) presents, a range of FeatherWing development boards that are **open source** and **fully compatible** with the **Feather form factor**. Through these development boards WE brings a range of wireless connectivity modules, sensors and power modules to the Feather ecosystem.
 
-[Adafruit Feather](https://www.adafruit.com/feather) is a complete line of development boards from [Adafruit](https://www.adafruit.com/) and other developers that are both standalone and stackable. They're able to be powered by [LiPo batteries](https://en.wikipedia.org/wiki/Lithium_polymer_battery) for on-the-go use or by their [micro-USB](https://www.we-online.de/katalog/de/em/connectors/input_output_connectors/wr-com) plugs for stationary projects. Feathers are flexible, portable, and as light as their namesake.
+[Adafruit Feather](https://www.adafruit.com/feather) is a complete line of development boards from [Adafruit](https://www.adafruit.com/) and other developers that are both standalone and stackable. They're able to be powered by [LiPo batteries](https://en.wikipedia.org/wiki/Lithium_polymer_battery) for on-the-go use or by their [micro-USB](https://www.we-online.de/katalog/de/em/connectors/input_output_connectors/wr-com) or their [UBS-C](https://www.we-online.com/de/components/products/WR-COM_USB_20_TYPE_C_RECEPTACLE_HORIZONTAL_SMT) plugs for stationary projects. Feathers are flexible, portable, and as light as their namesake.
 
 [FeatherWings](https://learn.adafruit.com/adafruit-feather/featherwings) are stacking boards and add functionality and room for prototyping. At its core, the Adafruit Feather is a complete ecosystem of products - and the best way to get your project flying.
 
@@ -13,6 +13,7 @@ Start by checking our [quick start section](#Quick-start-guide).
 
 | Image    | Description |
 | -------- | ----------- |
+|![WE ICLEDFeatherWing](assets/ICLEDFeatherWing_schematic.png)| [**ICLED FeatherWing** (150015)](/ICLEDFeatherWing) <ul> <li>IC LED: 1312020030000 (WL-ICLED)<li>Power supply via USB-C: 5V @3A<li>Usable with 1.8V logic controllers outside FeatherWing-standard <br/> </ul>|
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Adrastea-I FeatherWing** (2615039336001)](/AdrasteaFeatherWing) <ul> <li>LTE-Cat.M/LTE-Cat.NB-IoT<li>AIntegrated GNSS<li>Integrated User MCU<li>Secure IoT Connectivity using MQTT, LWM2M<br/> Note: This board can be used as a featherWing or as a standalone Feather.</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](/SensorFeatherWing) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>[Sparkfun QWIIC® Connect System](https://www.sparkfun.com/qwiic) to connect additional peripherals <br/> <br/> Note: this Feather will be updated with new sensors in the future.</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Thyone-I Wireless FeatherWing** (2611059021001)](/ThyoneWirelessFeatherWing)<ul><li>2.4 GHz Proprietary radio Module<li>Easy build up networks<li>Connect to Thyone modules or USB-Stick.<br/> Note: this Feather will be replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I) in the future.</ul> |
@@ -20,7 +21,7 @@ Start by checking our [quick start section](#Quick-start-guide).
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Proteus-III BLE FeatherWing** (not available as a standalone product)](/ProteusFeatherWing)<ul><li>Bluetooth® Low Energy 5.1 module<li>Nano SIM size<li>2 MBit PHY and Coded PHY (long range)<li>Connect to any smart device with and app. <br/> <br/> Note: this Feather will be replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I) in the future.</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing)<ul><li>5 V and 3.3 V power supply<li>Using a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails)</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Serial Bridge FeatherWing** (2601167101001)](/SerialFeatherWing)<ul><li>RS232/RS485 to UART bridge<li>Retrofit legacy devices with modern Wireless connectivity</ul> |
-|![Adafruit Feather](assets/Stacked-FeatherWings-single-board-Mx.png) | Connect any **Adafruit Feather Microcontroller** <br>(e.g. [Adafruit Feather M0 Express](https://www.adafruit.com/product/3403) or [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857))<ul><li>Request sensor data<li>Transfer data to RF-Module<li>Examples available on Github<li>Source code available on Github</ul> |
+|![Adafruit Feather](assets/Stacked-FeatherWings-single-board-Mx.png) | Connect any **Adafruit Feather Microcontroller** <br>(e.g. [Adafruit Feather M0 Express](https://www.adafruit.com/product/3403) or [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857))<ul><li>Request sensor data<li>Transfer data to RF-Module<li>Set the IC LED display<li>Examples available on Github<li>Source code available on Github</ul> |
 
 ## Quick start guide
 
@@ -43,6 +44,8 @@ This step-by-step description will guide you through the setup process for takin
 - **LiPo** - For low power applications, it is also possible to connect a LiPo battery. Please ensure that the battery can deliver sufficient current at the desired voltage for the combination of boards used.
 
 - [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing) - Stack on this WE FeatherWing to use a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails).
+
+- [**IC LED FeatherWing** (1500015)](/ICLEDFeatherWing) via the included USB-C interface - By soldering a 0 &Omega; resistor on R8 it is possible to connect VDD nodes of the IC LED FeatherWing and the Feather M0 board.
 
 4. Computing device with sufficient memory and an internet connection.
 >**Note**: The software tools used in the quick start example require up to 2 GB of data storage.
@@ -78,6 +81,7 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 ![Download WE Git repository](assets/DownloadGitCode.png)
 
 1. This repository contains **the following different**, **ready-to-run** applications:
+   - [ICLED FeatherWing examples](/ICLEDFeatherWing/software/src) includes several predefined functions to showcase the capabilities of the IC LED FeatherWing. 
    - [Sensor FeatherWing example](/SensorFeatherWing/software) showing the functionality of the Sensor FeatherWing.
    - [Thyone-I Wireless FeatherWing example](/ThyoneWirelessFeatherWing/software) showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
    - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities.
