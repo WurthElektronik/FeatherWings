@@ -1,15 +1,62 @@
 {
 	"folders": [
 		{
+			"name": "software",
 			"path": "."
-		}
+		},
+		{
+			"name": "Common",
+			"path": "..\\..\\Common"
+		},
+		{
+			"name": "ProteusIIIFeatherWing",
+			"path": "..\\..\\ProteusIIIFeatherWing"
+		},
+		{
+			"name": "SensorFeatherWing",
+			"path": "..\\..\\SensorFeatherWing"
+		},
 	],
 	"settings": {
 		"files.associations": {
 			"cctype": "c",
 			"type_traits": "c",
 			"typeinfo": "cpp",
-			"configplatform.h": "c"
+			"__hash_table": "cpp",
+			"__string": "cpp",
+			"locale": "cpp",
+			"algorithm": "cpp",
+			"functional": "cpp",
+			"utility": "cpp",
+			"*.tcc": "cpp",
+			"proteusiiiboard.h": "c",
+			"array": "c",
+			"vector": "c",
+			"string": "c",
+			"string_view": "c",
+			"__bit_reference": "cpp",
+			"bitset": "cpp",
+			"chrono": "cpp",
+			"unordered_map": "cpp",
+			"proteusiii.h": "c",
+			"wiring_private.h": "c",
+			"global.h": "c",
+			"configplatform.h": "c",
+			"arduinoplatform.h": "c",
+			"arduino.h": "c",
+			"stdint.h": "c",
+			"spi.h": "c",
+			"baseplatform.h": "c",
+			"atomic": "cpp",
+			"deque": "cpp",
+			"fstream": "cpp",
+			"limits": "cpp",
+			"sstream": "cpp",
+			"system_error": "cpp",
+			"ascii_character.h": "c",
+			"random": "cpp",
+			"initializer_list": "cpp",
+			"icled.h": "c"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

@@ -29,100 +29,127 @@ Würth Elektronik eiSos provides a Software Development Kit (SDK) with examples 
 
 ### Quick start example
 
-The quick start example for the ICLED FeatherWing demonstrates configuring the ICLED and showing different annimations.
+The quick start example for the ICLED FeatherWing demonstrates configuring the ICLED and showing different animations.
 
-1. In the quick start application, ICLED are configured to show different Test based Examples. Different example can be implemented by simplily changing the Test number  . 
+1. In the quick start application, the ICLED is configured to show different test based examples. Pressing the S2 button will switch to the next test example. 
 
 2. Configuration : The following parameters need to be set-up before building the code.
 ```C
-#include "ICLED.h"
-#define ADAFRUIT_FEATHER_M0_EXPRESS
+#define PROTEUSIIIFEATHERWING false // Set to true if the ProteusIIIFeatherWing is connected to enable a test example that will show data sent over BLE on the ICLED board.
 
-#define TEST6
+#define SENSORFEATHERWING false // Set to true if the SensorFeatherWing is connected to enable test examples that will show readings from the sensors as well as automatically detecting and adjusting the orientation of the ICLED board.
 
-// initialise instance of ICLED in GRB color system
-WLICLED strip(GRB);
-#ifdef TEST50
-Adafruit_NeoPixel onBoard = Adafruit_NeoPixel(1, 8, NEO_GRB + NEO_KHZ800);
-#endif
-// debouncing interrupt switch
-unsigned long interrupt_cooldown = 0;
-// ISR for GPIO5 falling edge --> sets interrupt =true and clears LEDBuf
-void BtnHandler() {
-    if (millis() - interrupt_cooldown < 300) return;
-    strip.interrupt = true;
-    strip.clearChar();
-    SSerial_printf(strip.SerialDebug, "Interrupt ! \n");
-    interrupt_cooldown = millis();
-}
+static volatile TestMode current_mode = TEST1; // To change starting test example.
 ```
-3. Setup - The ICLED are initialized after setting up the S<sup>P</sup>I interface. 
+3. Setup - The ICLED is initialized after setting up the S<sup>P</sup>I interface. 
 ```C
 void setup() {
-    // setting GPIO5 as input with internal pull-up
-    pinMode(5, INPUT_PULLUP);
-    // a falling edge on gpio5 causes an interrupt
-    attachInterrupt(5, BtnHandler, FALLING);
+    
+    if (!ICLED_Init(RGB, Landscape))
+    {
+        WE_DEBUG_PRINT("ICLED init failed \r\n");
+    }
 
-    strip.begin();
+    pinMode(ICLED_PROG_PIN, INPUT_PULLUP);
+
+    attachInterrupt(digitalPinToInterrupt(ICLED_PROG_PIN), PROG_ISR_handler, FALLING);
+
 }
 ```
-3. In the main application, different application base  example are shown 
+3. In the main application, different test examples are shown 
 ```C
 void loop() {
-#ifdef TEST1  // Initializing sequence
-    strip.init_show();
-#endif
 
-#ifdef TEST2  // Set different pixels at differnt colour
-    strip.set_pixel(0, 0, 0, 50, 128);
-    strip.set_screenPixel(6, 3, 0, 50, 0, 128);
-    strip.set_pixel(104, 50, 0, 0, 255);
-    strip.showLoop(1000);
-#endif
+    ICLED_set_color_system(RGB);
 
-#ifdef TEST3  // Show alphabet
-    strip.send_Alphabet(50, 50, 0);
-#endif
-
-#ifdef TEST4  //  Display "Hello World!"
-    uint16_t x = strip.set_string("Hello World!", 12, 0, 50, 0, 50);
-    strip.showRun(100, x, 20);
-#endif
-
-#ifdef TEST5  // Display rainbow effect
-    strip.showRainbow(30, 5);
-
-#endif
-
-#ifdef TEST6  // Display prices
-    strip.showPrice("42,69", 12, 50, 0, 0, 50);
-#endif
-
-#ifdef TEST7  // show emojis
-    uint16_t x = strip.set_emoji(1, 4, 20, 20, 0, 55);
-    x = strip.set_emoji(2, x, 20, 20, 0, 55);
-    x = strip.set_emoji(3, x, 20, 20, 0, 55);
-    x = strip.set_emoji(4, x, 20, 20, 0, 55);
-    x = strip.set_emoji(5, x, 20, 20, 0, 55);
-    x = strip.set_emoji(6, x, 0, 20, 0, 55);
-    strip.showRunLoop(100, x);
-#endif
-
-#ifdef TEST8  // HSV and RGB color model test
-    // HSV test
-    strip.to_HSV();
-    for (int i = 0; i < LEDCOUNT; i++) {
-        strip.set_pixel(i, 357, 100, 50);
+    switch (current_mode)
+    {
+    case TEST1:
+    {
+        running_loop = true;
+        ICLED_demo_start_show((bool *)&initial_test_run, &running_loop, (uint8_t *)&current_mode);
+        break;
     }
-    strip.showLoop(100);  // shows all pixels in one color for HSV coordinates
-    strip.to_GRB();
-    for (int i = 0; i < LEDCOUNT; i++) {
-        strip.set_pixel(i, 0, 227, 11, 50);
+    case TEST2:
+    {
+        if (!initial_test_run && !orientation_changed)
+        {
+            break;
+        }
+        ICLED_clear(false);
+        initial_test_run = false;
+        ICLED_set_pixel(0, 0, 0, 50, 128);
+        ICLED_set_screen_pixel(3, 6, 0, 50, 0, 128);
+        ICLED_set_pixel(104, 50, 0, 0, 255);
+        break;
     }
-    strip.showLoop(100);  // shows same color in GRB
-#endif
-
+    case TEST3:
+    {
+        ICLED_clear(false);
+        running_loop = true;
+        ICLED_demo_send_alphabet(128, 128, 128, 10, 80, &running_loop);
+        break;
+    }
+    case TEST4:
+    {
+        ICLED_clear(false);
+        running_loop = true;
+        uint16_t place = 12;
+        char string[] = "Hello World!";
+        ICLED_set_string(string, &place, 128, 128, 128, 10, false);
+        static uint16_t hello_world_current_column = place;
+        ICLED_start_conditional_loop(0, place, 100, &hello_world_current_column, &running_loop);
+        break;
+    }
+    case TEST5:
+    {
+        ICLED_clear(false);
+        running_loop = true;
+        ICLED_demo_show_rainbow(8, 35, &running_loop);
+        break;
+    }
+    case TEST6:
+    {
+        char price[] = "42,69";
+        ICLED_clear(false);
+        running_loop = true;
+        ICLED_demo_show_price(price, 0, 128, 0, 10, 80, &running_loop);
+        break;
+    }
+    case TEST7:
+    {
+        uint16_t place = 0;
+        ICLED_clear(false);
+        running_loop = true;
+        ICLED_set_emoji(Emoji_Smile_Face, &place, 128, 128, 128, 10, false);
+        ICLED_set_emoji(Emoji_Neutral_Face, &place, 128, 128, 128, 10, false);
+        ICLED_set_emoji(Emoji_Frown_Face, &place, 128, 128, 128, 10, false);
+        ICLED_set_emoji(Emoji_Heart, &place, 128, 0, 0, 15, false);
+        static uint16_t emojis_current_column = 0;
+        ICLED_start_conditional_loop(0, place, 100, &emojis_current_column, &running_loop);
+        break;
+    }
+    case TEST8:
+    {
+        if (!initial_test_run && !orientation_changed)
+        {
+            break;
+        }
+        ICLED_clear(false);
+        initial_test_run = false;
+        ICLED_set_color_system(RGB);
+        for (uint8_t i = 0; i < ICLED_ROWS; i++)
+        {
+            ICLED_set_screen_pixel(i, 0, 227, 0, 11, 50);
+        }
+        ICLED_set_color_system(HSV);
+        for (uint8_t i = 0; i < ICLED_ROWS; i++)
+        {
+            ICLED_set_screen_pixel(i, ICLED_COLUMNS - 1, 357, 100, 50, 50);
+        }
+        break;
+    }
+    }
 }
 ```
 ### Running the example
