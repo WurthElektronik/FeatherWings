@@ -116,4 +116,4 @@ THE USE OF THE WÜRTH ELEKTRONIK EISOS DESIGN EXAMPLE / REFERENCE DESIGN IS ENTI
 
 ## Software
 
-IC LED FeatherWing software examples can be found in the [**software folder**](https://github.com/WurthElektronik/FeatherWings/tree/ICLEDFeatherWing/ICLEDFeatherWing/software).
+IC LED FeatherWing software examples can be found in the [software folder](software).
