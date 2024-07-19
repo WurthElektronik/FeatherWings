@@ -9,7 +9,7 @@ The [ICLED](https://www.we-online.com/en/components/products/WL-ICLED) was desig
 The ICLEDFeatherWing contains 105 IC LEDs ([**1312020030000**](https://www.we-online.com/en/components/products/WL-ICLED?sq=1312020030000#1312020030000)) in a 7x15 display shape with a pitch of 2.38 mm. It can be controlled by any adafruit feather micro-controller board and
 is powered by USB-C (5 V@3 A) or LiPoly battery. The display is controlled by only 1 pin while a second GPIO-pin is used to trigger an interrupt by pushing the ”Prog”-button on featherwing. Internal Level-shifter makes logic-levels lower than 3.3 V possible and with that usage of other micro-controllers than adafruit feathers.
 
-![ICLEDFeatherWing_WE](documentation/assets/ICLEDFeatherWing_example.png)
+![ICLEDFeatherWing_WE](documentation/assets/ICLEDFeatherWing_example.jpg)
 
 ## Hardware description
 
