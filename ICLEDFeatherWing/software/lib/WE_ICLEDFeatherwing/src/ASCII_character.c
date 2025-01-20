@@ -50,7 +50,7 @@ const LED_Symbol ASCII_CHARACTERS_ARRAY[128] =
         ['S'] = {.pixel_locations = {{0, 6}, {0, 2}, {0, 1}, {1, 0}, {1, 3}, {1, 6}, {2, 0}, {2, 3}, {2, 6}, {3, 0}, {3, 3}, {3, 6}, {4, 5}, {4, 4}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['T'] = {.pixel_locations = {{0, 0}, {1, 0}, {2, 6}, {2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0}, {3, 0}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['U'] = {.pixel_locations = {{0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1}, {0, 0}, {1, 6}, {2, 6}, {3, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
-        ['V'] = {.pixel_locations = {{0, 5}, {0, 4}, {0, 3}, {0, 2}, {1, 0}, {1, 6}, {2, 6}, {3, 6}, {3, 0}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, PIXEL_LOCATION_END}, .symbol_width = 5},
+        ['V'] = {.pixel_locations = {{0, 2}, {0, 1}, {0, 0}, {1, 4}, {1, 3}, {2, 6}, {2, 5}, {3, 4}, {3, 3}, {4, 2}, {4, 1}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['W'] = {.pixel_locations = {{0, 6}, {0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1}, {0, 0}, {1, 5}, {2, 2}, {2, 3}, {2, 4}, {3, 5}, {4, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['X'] = {.pixel_locations = {{0, 6}, {0, 5}, {0, 1}, {0, 0}, {1, 2}, {1, 4}, {2, 3}, {3, 4}, {3, 2}, {4, 6}, {4, 5}, {4, 1}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['Y'] = {.pixel_locations = {{0, 1}, {0, 0}, {1, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {3, 2}, {4, 1}, {4, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
