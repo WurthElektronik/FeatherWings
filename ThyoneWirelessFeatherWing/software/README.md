@@ -29,7 +29,11 @@ Würth Elektronik eiSos provides a software development kit (SDK) with examples 
 
 ### Quick start example
 
-The quick start example for the Thyone Wireless FeatherWing demonstrates the very basic functionality of the Thyone-I radio module, that is to transmit and receive data.
+The quick start example for the Setebos-I Wireless FeatherWing demonstrates the very basic functionality of the Thyone-I radio module, that is to transmit and receive data.
+
+>[!NOTE]
+>For using the Setebos-I FeatherWing in Thyone-I mode, the solder bridge
+jumper SJ4 shall be shorted.
 
 1. In the quick start application, the Thyone-I can be configured either as a transmitter or a receiver.
 ```C
@@ -37,7 +41,7 @@ The quick start example for the Thyone Wireless FeatherWing demonstrates the ver
 #define Transmitter 1
 ```
 
-2. Setup - The debug as well as the Thyone-I UART interfaces are initialized. Additionally, the basic configuration of the Thyone-I (radio channel, radio profile and transmit power) is done.
+2. Setup - First, the Setebos-I FeatherWing is configured to operate in Thyone-I mode by setting the mode pin to high. The debug as well as the Thyone-I UART interfaces are initialized. Additionally, the basic configuration of the Thyone-I (radio channel, radio profile and transmit power) is done.
 
 ```C
 void setup() {
@@ -50,6 +54,10 @@ void setup() {
 
     ThyoneI_pins.ThyoneI_Pin_SleepWakeUp.pin = 9;
     ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
+
+    /*Set the mode pin on Setebos to Thyone-I mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, HIGH);
 
     if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
                       WE_FlowControl_NoFlowControl,

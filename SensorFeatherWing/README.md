@@ -9,13 +9,13 @@ The Würth Elektronik eiSos [Sensor FeatherWing](https://www.we-online.de/katalo
 * [**WSEN-PADS**](https://www.we-online.de/katalog/de/WSEN-PADS) - Absolute pressure sensor [(2511020213301)](https://www.we-online.de/katalog/datasheet/2511020213301.pdf)
 * [**WSEN-ITDS**](https://www.we-online.de/katalog/de/WSEN-ITDS) - 3-axis acceleration sensor [(2533020201601)](https://www.we-online.de/katalog/datasheet/2533020201601_valid_from_2020-12-14.pdf)
 * [**WSEN-TIDS**](https://www.we-online.de/katalog/de/WSEN-TIDS) - Temperature sensor [(2521020222501)](https://www.we-online.de/katalog/datasheet/2521020222501.pdf)
-* [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity sensor [(2525020210001)](https://www.we-online.de/katalog/datasheet/2525020210001.pdf)
+* [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) - Humidity and temperature sensor [(2525020210002)](https://www.we-online.de/katalog/datasheet/2525020210002.pdf)
 
 All four sensors are connected over the shared I<sup>2</sup>C bus and hence can be connected to any of the Feather microcontroller boards. The available [Arduino](https://www.arduino.cc/) (C/C++) drivers and examples (see [software folder](software)) make it easy to build a prototype to kick-start the application development.
 
 The Sensor FeatherWing also has a [4-pin JST QWIIC®](https://www.sparkfun.com/products/16766) connector on-board. This enables easy connection to SparkFun's [QWIIC® ecosystem](https://www.sparkfun.com/qwiic) of development boards. Additionally, a **6 pin connector** enables the extension of the FeatherWing with a host of [**evaluation boards from Würth Elektronik eiSos**](https://www.we-online.de/catalog/de/wco/wireless-connectivity_1/eval_boards).
 
-![Sensor FeatherWing](docs/assets/SensorFeatherWing_s.png)
+![Sensor FeatherWing](docs/assets/SensorFeatherWing.png)
 
 This repository contains the [Eagle](https://www.autodesk.com/products/eagle/overview) design files for the Sensor FeatherWing [PCB](hardware) as well as the [software](software) with quick start example.
 
@@ -75,16 +75,16 @@ The WSEN-TIDS is a high precision silicon-based digital temperature sensor with 
 
 Further details about this sensor can be found under [we-online.de/katalog/en/WSEN-TIDS](https://www.we-online.de/katalog/en/WSEN-TIDS).
 
-### [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) [(2525020210001)](https://www.we-online.de/katalog/datasheet/2525020210001.pdf)
+### [**WSEN-HIDS**](https://www.we-online.de/katalog/de/WSEN-HIDS) [(2525020210002)](https://www.we-online.de/katalog/datasheet/2525020210002.pdf)
 
 The WSEN-HIDS is a 16-bit ultra-low power and high-performance humidity sensor with a digital interface. The pre-calibrated sensor in a compact LGA package is suitable for a variety of applications including HVAC systems, white goods, building automation and air conditioning.
 
 #### Key features
 
 * Humidity range : 0 to 100 %rH
-* Humidity noise : 0.35 %rH RMS
-* Output data rate : 1 Hz, 7 Hz and 12.5 Hz
-* Current consumption : 8.9 μA
+* Current consumption : 2.2 μA (In high repeatability mode)
+* Resolution : 0.01 %rH
+* Response time : 4 s
 * Integrated temperature sensor
   
 Further details about this sensor can be found under [we-online.de/katalog/en/WSEN-HIDS](https://www.we-online.de/katalog/en/WSEN-HIDS).
@@ -128,17 +128,20 @@ This is the standard set of connectors that is used across the Feather ecosystem
 |    27         | EN| Not connected|
 |    28         | VBAT| Not connected|
 
+### Layout
 
-![Connectors Top](docs/assets/connectors_front.png)
+![Sensor FeatherFing top](docs/assets/sensor-layout.png)
 
-![Connectors Top](docs/assets/connectors_back.png)
+
+![Sensor FeatherFing bottom](docs/assets/layout_bottom.png)
+
 
 #### Connector CON1
 Connector CON1 is a 1x5 2.54 mm pin header and provides all the interrupt lines that can be optionally connected to the host. This connector is not mounted.
 
 | Pin number  | Function |
 | ------- | ------- |
-|     1 |  Interrupt of the WSEN-HIDS sensor|
+|     1 |  Not used|
 |     2|  Interrupt 1 of the WSEN-ITDS sensor|
 |     3 | Interrupt 0 of the WSEN-ITDS sensor |
 |     4 | Interrupt of the WSEN-PADS sensor|
@@ -170,7 +173,6 @@ The connector 4 (not mounted) is a 2x3 2.54 mm pitch plug that is compatible wit
 #### Connector CON5
 The connector 5 is a 2x3 2.54 mm pitch plug that is compatible with the [Sensor EV-boards](https://www.we-online.de/katalog/de/wco/sensors/evaluation_boards_wsen) from Würth Elektronik using the **I<sup>2</sup>C** interface.
 
-![Default jumper positions](docs/assets/jumpers_defaults.png)
 #### Jumper JP1
 This jumper has to be mounted and set when CON4 is used to connect to a sensor using the **SPI** interface.
 | Pin connection | Function  | Jumper set (Default) |

@@ -35,8 +35,9 @@ The quick start example for the Sensor FeatherWing demonstrates configuring the 
 
 2. Configuration: The following parameters need to be set-up before building the code.
     * HIDS sensor part number.
+    > **_NOTE:_** This depends on the HW version of the Sensor FeatherWing if its version 3.0 or more then the HIDS_PART_NUMBER is 2525020210002 otherwise its 2525020210001.
 ```C
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 ```
 
 3. Setup - The sensors are initialized after setting up the I<sup>2</sup>C interface. The debug UART interface is initialized by calling the init function. A communication check is performed by reading out the ID of each of the sensors.

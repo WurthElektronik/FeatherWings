@@ -32,7 +32,7 @@ bool ITDS_doubleTapEvent, ITDS_freeFallEvent;
 float TIDS_temp;
 float HIDS_humidity, HIDS_temp;
 
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 
 void setup() {
     delay(2000);

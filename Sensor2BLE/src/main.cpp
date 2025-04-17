@@ -28,6 +28,8 @@
 
 ProteusIII_Pins_t ProteusIII_pins;
 
+#define SETEBOS_MODE_PIN 14
+
 float PADS_pressure, PADS_temp;
 float ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp;
 bool ITDS_doubleTapEvent, ITDS_freeFallEvent;
@@ -44,7 +46,7 @@ typedef enum
 
 static volatile Sensor2BLE_SM_t currentstate = Sensor2BLE_SM_Idle;
 
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 
 /* Callback functions for various indications sent by the Proteus-III. */
 static void
@@ -89,6 +91,10 @@ void setup()
     callbackConfig.connectCb = ConnectCallback;
     callbackConfig.disconnectCb = DisconnectCallback;
     callbackConfig.channelOpenCb = ChannelOpenCallback;
+
+    /*Set the mode pin on Setebos to Proteus-III mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, LOW);
 
     ProteusIII_Init(&ProteusIII_pins, PROTEUSIII_DEFAULT_BAUDRATE,
                     WE_FlowControl_NoFlowControl,

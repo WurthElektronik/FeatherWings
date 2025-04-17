@@ -1,0 +1,59 @@
+{
+	"folders": [
+		{
+			"name": "software",
+			"path": "."
+		},
+		{
+			"name": "Common",
+			"path": "..\\..\\Common"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cctype": "c",
+			"type_traits": "c",
+			"typeinfo": "cpp",
+			"stdio.h": "c",
+			"atcommands.h": "c",
+			"configplatform.h": "c",
+			"arduino.h": "c",
+			"arduinoplatform.h": "c",
+			"wiring_private.h": "c",
+			"wiring.h": "c",
+			"adrastea.h": "c",
+			"global.h": "c",
+			"array": "c",
+			"deque": "c",
+			"string": "c",
+			"unordered_map": "c",
+			"vector": "c",
+			"string_view": "c",
+			"initializer_list": "c",
+			"*.tcc": "cpp",
+			"algorithm": "cpp",
+			"fstream": "cpp",
+			"limits": "cpp",
+			"iosfwd": "cpp",
+			"istream": "cpp",
+			"sstream": "cpp",
+			"streambuf": "cpp",
+			"atomic": "cpp",
+			"memory": "cpp",
+			"optional": "cpp",
+			"ostream": "cpp",
+			"system_error": "cpp",
+			"functional": "cpp",
+			"global_types.h": "c",
+			"string.h": "c",
+			"debug.h": "c",
+			"global_m0express.h": "c",
+			"cstdio": "cpp",
+			"atdevice.h": "c",
+			"atevent.h": "c",
+			"stdlib.h": "c"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}

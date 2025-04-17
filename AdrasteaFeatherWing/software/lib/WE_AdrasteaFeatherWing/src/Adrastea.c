@@ -268,7 +268,8 @@ bool Adrastea_Init(Adrastea_Pins_t *pinoutP, uint32_t baudrate,
                                parity); /* Adrastea default: 115200 Baud 8 */
     WE_Delay(10);
 
-    ATDevice_Test();
+    ATDevice_Reset();
+    WE_Delay(1000);
 
     /* Set response timeouts */
     Adrastea_timeouts[Adrastea_Timeout_General] = 1000;

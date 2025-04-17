@@ -112,6 +112,31 @@ static Pixel LEDBuf[ICLED_LED_COUNT * ICLED_SCREENSTORUN];
 
 bool ICLED_Init(ICLED_Color_System color_system, ICLED_Orientation orientation)
 {
+    SERCOM *sercomP;
+    void *sercom_spi_data_reg_P;
+    SercomSpiTXPad sercom_SPI_TX_PAD;
+    _EPioType pin_type;
+    uint8_t sercom_dmac_id;
+    switch (ICLED_DIN_PIN)
+    {
+    case 6:
+        sercomP = &sercom5;
+        sercom_SPI_TX_PAD = SPI_PAD_2_SCK_3;
+        pin_type = PIO_SERCOM;
+        sercom_dmac_id = SERCOM5_DMAC_ID_TX;
+        sercom_spi_data_reg_P = (void *)(&SERCOM5->SPI.DATA.reg);
+        break;
+    case 12:
+        sercomP = &sercom3;
+        sercom_SPI_TX_PAD = SPI_PAD_3_SCK_1;
+        pin_type = PIO_SERCOM_ALT;
+        sercom_dmac_id = SERCOM3_DMAC_ID_TX;
+        sercom_spi_data_reg_P = (void *)(&SERCOM3->SPI.DATA.reg);
+        break;
+    default:
+        return false;
+    }
+
     // set color System to given Color system
     ColorSystem = color_system;
 
@@ -120,16 +145,17 @@ bool ICLED_Init(ICLED_Color_System color_system, ICLED_Orientation orientation)
     // clear Buffer and set all values to zero
     ICLED_clear();
 
-    spi = new SPIClass(&sercom5, ICLED_DIN_PIN, ICLED_DIN_PIN, ICLED_DIN_PIN, SPI_PAD_2_SCK_3, SERCOM_RX_PAD_1);
+    spi = new SPIClass(sercomP, ICLED_DIN_PIN, ICLED_DIN_PIN, ICLED_DIN_PIN, sercom_SPI_TX_PAD, SERCOM_RX_PAD_1);
     spi->begin();
 
-    if (pinPeripheral(ICLED_DIN_PIN, PIO_SERCOM) < 0)
+    if (pinPeripheral(ICLED_DIN_PIN, pin_type) < 0)
     {
         WE_DEBUG_PRINT("Problem changing pin %d configuration.\r\n", ICLED_DIN_PIN);
         return false;
     }
 
-    dma.setTrigger(SERCOM5_DMAC_ID_TX);
+    dma.setTrigger(sercom_dmac_id);
+
     dma.setAction(DMA_TRIGGER_ACTON_BEAT);
 
     if (dma.allocate() != DMA_STATUS_OK)
@@ -138,7 +164,7 @@ bool ICLED_Init(ICLED_Color_System color_system, ICLED_Orientation orientation)
         return false;
     }
 
-    if (dma.addDescriptor(dmaBuf, (void *)(&SERCOM5->SPI.DATA.reg), ICLED_BYTESTOTAL, DMA_BEAT_SIZE_BYTE, true, false) == NULL)
+    if (dma.addDescriptor(dmaBuf, sercom_spi_data_reg_P, ICLED_BYTESTOTAL, DMA_BEAT_SIZE_BYTE, true, false) == NULL)
     {
         WE_DEBUG_PRINT("Failed to allocate DMA descriptor.\r\n");
         return false;

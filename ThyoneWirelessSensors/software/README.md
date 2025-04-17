@@ -29,14 +29,19 @@ Würth Elektronik eiSos provides a software development kit (SDK) with examples 
 
 ### Quick start example
 
-In this example, the sensor Featherwing is stacked with the Thyone-I Wireless Featherwing and the Feather M0 express. The M0 feather reads the sensor data and transmits it wirelessly over Thyone-I Proprietary radio link.
+In this example, the sensor Featherwing is stacked with the Setebos-I Wireless Featherwing and the Feather M0 express. The M0 feather reads the sensor data and transmits it wirelessly over Thyone-I Proprietary radio link.
+
+>[!NOTE]
+>For using the Setebos-I FeatherWing in Thyone-I mode, the solder bridge
+jumper SJ4 shall be shorted.
 
 1. Configuration: The following parameters need to be set-up before building the code.
     * HIDS sensor part number.
+    > **_NOTE:_** This depends on the HW version of the Sensor FeatherWing if its version 3.0 or more then the HIDS_PART_NUMBER is 2525020210002 otherwise its 2525020210001.
 ```C
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 ```
-2. Setup - The debug as well as the Thyone-I UART interfaces are initialized. The sensors are initialized after setting up the I<sup>2</sup>C interface. A communication check is performed by reading out the ID of each of the sensors.
+2. Setup - First, the Setebos-I FeatherWing is configured to operate in Thyone-I mode by setting the mode pin to high. The debug as well as the Thyone-I UART interfaces are initialized. The sensors are initialized after setting up the I<sup>2</sup>C interface. A communication check is performed by reading out the ID of each of the sensors.
 
 
 ```C
@@ -49,6 +54,10 @@ void setup() {
 
     ThyoneI_pins.ThyoneI_Pin_SleepWakeUp.pin = 9;
     ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
+
+    /*Set the mode pin on Setebos to Thyone-I mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, HIGH);
 
     if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
                       WE_FlowControl_NoFlowControl,

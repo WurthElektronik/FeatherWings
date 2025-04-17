@@ -314,6 +314,7 @@ extern bool ThyoneI_GetCCAMode(uint8_t *ccaModeP);
 extern bool ThyoneI_GetCCAThreshold(uint8_t *ccaThresholdP);
 extern bool ThyoneI_GetGPIOBlockRemoteConfig(uint8_t *remoteConfigP);
 extern bool ThyoneI_GetModuleMode(ThyoneI_ModuleMode_t *moduleModeP);
+extern bool ThyoneI_GetState(ThyoneI_States_t *state);
 
 #endif  // THYONEI_H_INCLUDED
 

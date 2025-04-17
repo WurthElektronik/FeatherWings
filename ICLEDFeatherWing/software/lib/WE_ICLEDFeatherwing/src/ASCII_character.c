@@ -58,7 +58,7 @@ const LED_Symbol ASCII_CHARACTERS_ARRAY[128] =
 
         // Lower case letters
         ['a'] = {.pixel_locations = {{0, 4}, {1, 1}, {1, 3}, {1, 5}, {2, 1}, {2, 3}, {2, 5}, {3, 1}, {3, 3}, {3, 5}, {4, 2}, {4, 3}, {4, 4}, {4, 5}, PIXEL_LOCATION_END}, .symbol_width = 5},
-        ['b'] = {.pixel_locations = {{0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1}, {0, 0}, {1, 2}, {1, 5}, {2, 1}, {2, 5}, {3, 4}, {3, 3}, PIXEL_LOCATION_END}, .symbol_width = 4},
+         ['b'] = {.pixel_locations = {{0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1}, {0, 0}, {1, 2}, {1, 5}, {2, 2}, {2, 5}, {3, 3}, {3, 4}, PIXEL_LOCATION_END}, .symbol_width = 4},
         ['c'] = {.pixel_locations = {{0, 4}, {0, 3}, {0, 2}, {1, 1}, {1, 5}, {2, 1}, {2, 5}, {3, 1}, {3, 5}, PIXEL_LOCATION_END}, .symbol_width = 4},
         ['d'] = {.pixel_locations = {{0, 4}, {0, 3}, {1, 2}, {1, 5}, {2, 2}, {2, 5}, {3, 5}, {3, 4}, {3, 3}, {3, 2}, {3, 1}, {3, 0}, PIXEL_LOCATION_END}, .symbol_width = 4},
         ['e'] = {.pixel_locations = {{0, 4}, {0, 3}, {0, 2}, {1, 1}, {1, 3}, {1, 5}, {2, 1}, {2, 3}, {2, 5}, {3, 1}, {3, 3}, {3, 5}, {4, 2}, {4, 3}, PIXEL_LOCATION_END}, .symbol_width = 5},
@@ -82,11 +82,11 @@ const LED_Symbol ASCII_CHARACTERS_ARRAY[128] =
         ['w'] = {.pixel_locations = {{0, 4}, {0, 3}, {0, 2}, {0, 1}, {1, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {3, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['x'] = {.pixel_locations = {{0, 5}, {0, 1}, {1, 4}, {1, 2}, {2, 3}, {3, 4}, {3, 2}, {4, 5}, {4, 1}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['y'] = {.pixel_locations = {{0, 3}, {0, 2}, {0, 1}, {1, 6}, {1, 4}, {2, 6}, {2, 4}, {3, 6}, {3, 4}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, PIXEL_LOCATION_END}, .symbol_width = 5},
-        ['z'] = {.pixel_locations = {{0, 5}, {0, 1}, {1, 1}, {1, 4}, {1, 5}, {2, 1}, {2, 4}, {2, 5}, {3, 1}, {3, 2}, {3, 5}, {4, 1}, {4, 5}, PIXEL_LOCATION_END}, .symbol_width = 5},
+        ['z'] = {.pixel_locations = {{0, 5}, {0, 1}, {1, 1}, {1, 4}, {1, 5}, {2, 1}, {2, 3}, {2, 5}, {3, 1}, {3, 2}, {3, 5}, {4, 1}, {4, 5}, PIXEL_LOCATION_END}, .symbol_width = 5},
 
         // Digits
         ['0'] = {.pixel_locations = {{0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1}, {1, 0}, {1, 4}, {1, 6}, {2, 0}, {2, 3}, {2, 6}, {3, 0}, {3, 2}, {3, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, PIXEL_LOCATION_END}, .symbol_width = 5},
-        ['1'] = {.pixel_locations = {{0, 2}, {1, 1}, {2, 6}, {2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0}, PIXEL_LOCATION_END}, .symbol_width = 3},
+        ['1'] = {.pixel_locations = {{1, 2}, {2, 1}, {3, 6}, {3, 5}, {3, 4}, {3, 3}, {3, 2}, {3, 1}, {3, 0}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['2'] = {.pixel_locations = {{0, 6}, {0, 1}, {1, 0}, {1, 5}, {1, 6}, {2, 0}, {2, 4}, {2, 6}, {3, 0}, {3, 3}, {3, 6}, {4, 1}, {4, 2}, {4, 6}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['3'] = {.pixel_locations = {{0, 5}, {0, 1}, {1, 6}, {1, 3}, {1, 0}, {2, 6}, {2, 3}, {2, 0}, {3, 6}, {3, 3}, {3, 0}, {4, 1}, {4, 2}, {4, 4}, {4, 5}, PIXEL_LOCATION_END}, .symbol_width = 5},
         ['4'] = {.pixel_locations = {{0, 0}, {0, 1}, {0, 2}, {0, 3}, {1, 3}, {2, 3}, {3, 3}, {4, 0}, {4, 1}, {4, 2}, {4, 3}, {4, 4}, {4, 5}, {4, 6}, PIXEL_LOCATION_END}, .symbol_width = 5},

@@ -28,6 +28,8 @@
 
 ProteusIII_Pins_t ProteusIII_pins;
 
+#define SETEBOS_MODE_PIN 14
+
 /* Is set to true if the channel has been opened */
 bool cmd_channelOpen = false;
 
@@ -69,6 +71,10 @@ void setup() {
     callbackConfig.gpioWriteCb = GpioWriteCallback;
     callbackConfig.gpioRemoteConfigCb = GpioRemoteConfigCallback;
     callbackConfig.errorCb = ErrorCallback;
+
+    /*Set the mode pin on Setebos to Proteus-III mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, LOW);
 
     if (!ProteusIII_Init(&ProteusIII_pins, PROTEUSIII_DEFAULT_BAUDRATE,
                          WE_FlowControl_NoFlowControl,

@@ -29,6 +29,7 @@
 
 /*Configure the FeatherWing either as a transmitter or a receiver*/
 #define Transmitter 1
+#define SETEBOS_MODE_PIN 14
 
 #define THYONE_DEFAULT_RF_CHANNEL 21
 #define THYONE_DEFAULT_RF_PROFILE (ThyoneI_Profile_t) ThyoneI_Profile_125kbit
@@ -56,6 +57,10 @@ void setup() {
     /*Connect the pins 3 and 4 on JP1 to use the mode change feature on Pin
      * GPIOA3/Pin17*/
     ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
+
+    /*Set the mode pin on Setebos to Thyone-I mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, HIGH);
 
     if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
                       WE_FlowControl_NoFlowControl,

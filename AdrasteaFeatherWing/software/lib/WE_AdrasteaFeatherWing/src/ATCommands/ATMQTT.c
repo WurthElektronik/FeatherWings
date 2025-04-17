@@ -60,7 +60,7 @@ static const char *ATMQTT_Event_Strings[ATMQTT_Event_NumberOfValues] = {
  */
 bool ATMQTT_ConfigureNodes(ATMQTT_Conn_ID_t connID, ATMQTT_Client_ID_t clientID, ATCommon_IP_Addr_t addr, ATCommon_Auth_Username_t username, ATCommon_Auth_Password_t password)
 {
-	Adrastea_optionalParamsDelimCount = 1;
+    Adrastea_optionalParamsDelimCount = 1;
 
 	char *pRequestCommand = AT_commandBuffer;
 
@@ -94,6 +94,18 @@ bool ATMQTT_ConfigureNodes(ATMQTT_Conn_ID_t connID, ATMQTT_Client_ID_t clientID,
 			return false;
 		}
 
+		Adrastea_optionalParamsDelimCount = 0;
+
+	}
+
+	if (username != NULL && password == NULL)
+	{
+
+		if (!ATCommand_AppendArgumentStringQuotationMarks(pRequestCommand, username, ATCOMMAND_STRING_TERMINATE))
+		{
+			return false;
+		} 
+ 
 		Adrastea_optionalParamsDelimCount = 0;
 
 	}
@@ -879,12 +891,12 @@ bool ATMQTT_AWSIOTConfigureConnection(ATCommon_IP_Addr_t url, ATCommon_TLS_Profi
 		return false;
 	}
 
-	if (!ATCommand_AppendArgumentInt(pRequestCommand, profileID, (ATCOMMAND_INTFLAGS_UNSIGNED | ATCOMMAND_INTFLAGS_NOTATION_DEC ), ATCOMMAND_STRING_TERMINATE))
+	if (!ATCommand_AppendArgumentInt(pRequestCommand, profileID, (ATCOMMAND_INTFLAGS_UNSIGNED | ATCOMMAND_INTFLAGS_NOTATION_DEC ), ATCOMMAND_ARGUMENT_DELIM))
 	{
 		return false;
 	}
 
-	if (!ATCommand_AppendArgumentStringQuotationMarks(pRequestCommand, clientID, ATCOMMAND_ARGUMENT_DELIM))
+	if (!ATCommand_AppendArgumentStringQuotationMarks(pRequestCommand, clientID, ATCOMMAND_STRING_TERMINATE))
 	{
 		return false;
 	}

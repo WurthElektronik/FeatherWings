@@ -30,7 +30,7 @@
 #define AZURE_CONNECTION 0
 #define AWS_CONNECTION 1
 
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 
 // WiFi access point parameters
 #define WI_FI_SSID "AP"

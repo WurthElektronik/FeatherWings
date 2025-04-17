@@ -29,6 +29,8 @@
 #define THYONE_DEFAULT_RF_CHANNEL 21
 #define THYONE_DEFAULT_RF_PROFILE 0
 
+#define SETEBOS_MODE_PIN 14
+
 char sendBuffer[224];
 char temp[64];
 
@@ -39,7 +41,7 @@ float ITDS_accelX, ITDS_accelY, ITDS_accelZ;
 float TIDS_temp;
 float HIDS_humidity;
 
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 
 void setup() {
     delay(5000);
@@ -50,6 +52,10 @@ void setup() {
 
     ThyoneI_pins.ThyoneI_Pin_SleepWakeUp.pin = 9;
     ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
+
+    /*Set the mode pin on Setebos to Thyone-I mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, HIGH);
 
     if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
                       WE_FlowControl_NoFlowControl,

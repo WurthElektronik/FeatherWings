@@ -37,7 +37,7 @@
 #include "sensorBoard.h"
 static float ITDS_acceleration_y;
 static volatile bool check_orientation = false;
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 static float HIDS_humidity;
 static float TIDS_temp;
 

@@ -517,6 +517,12 @@ bool ThyoneI_Init(ThyoneI_Pins_t *pinoutP, uint32_t baudrate,
         return false;
     }
 
+    ThyoneI_States_t state;
+    if (!ThyoneI_GetState(&state)) {
+        ThyoneI_Deinit();
+        return false;
+    }
+
     WE_Delay(100);
 
     return true;
@@ -816,11 +822,10 @@ bool ThyoneI_Set(ThyoneI_UserSettings_t userSetting, uint8_t *ValueP,
                               txPacket.Length + LENGTH_CMD_OVERHEAD);
 
         /* wait for cnf */
-        if(Wait4CNF(CMD_WAIT_TIME, THYONEI_CMD_SET_CNF,
-                        CMD_Status_Success, true))
-        {
-            return Wait4CNF(CMD_WAIT_TIME, THYONEI_CMD_START_IND, 
-                        CMD_Status_NoStatus, false);
+        if (Wait4CNF(CMD_WAIT_TIME, THYONEI_CMD_SET_CNF, CMD_Status_Success,
+                     true)) {
+            return Wait4CNF(CMD_WAIT_TIME, THYONEI_CMD_START_IND,
+                            CMD_Status_NoStatus, false);
         }
     }
     return ret;

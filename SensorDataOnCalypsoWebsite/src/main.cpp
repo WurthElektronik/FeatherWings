@@ -46,7 +46,7 @@
 
 #define MAX_RESP_LENGTH 255
 
-#define HIDS_PART_NUMBER 2525020210001
+#define HIDS_PART_NUMBER 2525020210002
 
 static float PADS_pressure;
 static float ITDS_accelX, ITDS_accelY, ITDS_accelZ;
