@@ -28,7 +28,8 @@
 #define SENSORBOARD_H
 
 /**         Includes         */
-#include "ConfigPlatform.h"
+
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {

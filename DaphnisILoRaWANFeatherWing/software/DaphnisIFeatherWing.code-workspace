@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "software",
+			"path": "."
+		},
+		{
+			"name": "Common",
+			"path": "..\\..\\Common"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.h": "c",
+			"*.c": "c",
+			"*.cpp": "cpp"
+		},
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
+	}
+}

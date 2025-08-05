@@ -24,17 +24,30 @@
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
 
-#include "Adrastea.h"
+#include <ConfigPlatform.h>
+#include <global/global.h>
+#include <global_platform_types.h>
 
-#include "ATCommands/ATEvent.h"
-#include "ATCommands/ATMQTT.h"
-#include "ATCommands/ATPacketDomain.h"
+#include <AdrasteaI/AdrasteaI.h>
+
+#include <AdrasteaI/ATCommands/ATEvent.h>
+#include <AdrasteaI/ATCommands/ATMQTT.h>
+#include <AdrasteaI/ATCommands/ATPacketDomain.h>
+
+#include <we_print.h>
 
 void Adrastea_EventCallback(char* eventText);
 
-static volatile ATPacketDomain_Network_Registration_Status_t status;
+static volatile AdrasteaI_ATPacketDomain_Network_Registration_Status_t status;
 
-Adrastea_Pins_t Adrastea_pins;
+static const WE_Arduino_Pin_t pin_SleepWakeUp = WE_ARDUINO_PIN(6);
+
+static AdrasteaI_Pins_t AdrasteaI_pins = {
+    .AdrasteaI_Pin_Reset = WE_PIN_UNDEFINED(),
+    .AdrasteaI_Pin_WakeUp = WE_PIN((void*)&pin_SleepWakeUp),
+};
+
+static WE_UART_t AdrasteaI_uart;
 
 /* State Machine */
 typedef enum {
@@ -59,18 +72,24 @@ int payloadIndex = 0;
 void setup() {
     delay(3000);
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
-    Adrastea_pins.Adrastea_Pin_WakeUp.pin = 6;
+    AdrasteaI_uart.baudrate = 115200;
+    AdrasteaI_uart.flowControl = WE_FlowControl_NoFlowControl;
+    AdrasteaI_uart.parity = WE_Parity_None;
+    AdrasteaI_uart.uartInit = WE_UART_RXPin0_TXPin1_Init;
+    AdrasteaI_uart.uartDeinit = WE_UART_RXPin0_TXPin1_DeInit;
+    AdrasteaI_uart.uartTransmit = WE_UART_RXPin0_TXPin1_Transmit;
 
-    if (!Adrastea_Init(&Adrastea_pins, 115200, WE_FlowControl_NoFlowControl,
-                       WE_Parity_None, &Adrastea_EventCallback)) {
-        WE_DEBUG_PRINT("failed to initialize\r\n");
+    if (!AdrasteaI_Init(&AdrasteaI_uart, &AdrasteaI_pins,
+                        Adrastea_EventCallback)) {
+        WE_APP_PRINT("failed to initialize\r\n");
     }
 
-    WE_DEBUG_PRINT("Initialized\r\n");
+    WE_APP_PRINT("Initialized\r\n");
 
     adrasteaApplicationCurrentState =
         Adrastea_Application_SM_Wait4NetworkRegister;
@@ -79,9 +98,9 @@ void setup() {
            Adrastea_Application_SM_MQTT_PublishData) {
         switch (adrasteaApplicationCurrentState) {
             case Adrastea_Application_SM_Wait4NetworkRegister: {
-                if (!ATPacketDomain_SetNetworkRegistrationResultCode(
-                        ATPacketDomain_Network_Registration_Result_Code_Enable)) {
-                    WE_DEBUG_PRINT(
+                if (!AdrasteaI_ATPacketDomain_SetNetworkRegistrationResultCode(
+                        AdrasteaI_ATPacketDomain_Network_Registration_Result_Code_Enable)) {
+                    WE_APP_PRINT(
                         "failed to set network registration result code\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
@@ -89,16 +108,16 @@ void setup() {
                 }
 
                 // read current network to mcheck if already registered
-                if (!ATPacketDomain_ReadNetworkRegistrationStatus((
-                        ATPacketDomain_Network_Registration_Status_t*)&status)) {
-                    WE_DEBUG_PRINT(
+                if (!AdrasteaI_ATPacketDomain_ReadNetworkRegistrationStatus((
+                        AdrasteaI_ATPacketDomain_Network_Registration_Status_t*)&status)) {
+                    WE_APP_PRINT(
                         "failed to read network registration status\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                     break;
                 } else if (
                     status.state ==
-                    ATPacketDomain_Network_Registration_State_Registered_Roaming) {
+                    AdrasteaI_ATPacketDomain_Network_Registration_State_Registered_Roaming) {
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_MQTT_Connect;
                 } else {
@@ -108,32 +127,27 @@ void setup() {
                 break;
             }
             case Adrastea_Application_SM_MQTT_Connect: {
-                WE_DEBUG_PRINT("Network Registered\r\n");
-                if (!ATMQTT_SetMQTTUnsolicitedNotificationEvents(
-                        ATMQTT_Event_All, ATCommon_Event_State_Enable)) {
-                    WE_DEBUG_PRINT("failed to enable mqtt events\r\n");
+                WE_APP_PRINT("Network Registered\r\n");
+                if (!AdrasteaI_ATMQTT_SetMQTTUnsolicitedNotificationEvents(
+                        AdrasteaI_ATMQTT_Event_All,
+                        AdrasteaI_ATCommon_Event_State_Enable)) {
+                    WE_APP_PRINT("failed to enable mqtt events\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 }
 
-                if (!ATMQTT_ConfigureNodes(
-                        ATMQTT_Conn_ID_Single_Connectivity_Mode,
-                        (char*)MQTT_CLIENT_ID, (char*)MQTT_SERVER_ADDRESS, NULL,
-                        NULL)) {
-                    WE_DEBUG_PRINT("failed to configure node\r\n");
+                if (!AdrasteaI_ATMQTT_ConfigureNodes(
+                        AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode,
+                        (char*)MQTT_CLIENT_ID, (char*)MQTT_SERVER_ADDRESS,
+                        (char*)"", (char*)"")) {
+                    WE_APP_PRINT("failed to configure node\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 }
 
-                if (!ATMQTT_Disconnect(
-                        ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
-                    WE_DEBUG_PRINT("failed to disconnect\r\n");
-                    adrasteaApplicationCurrentState =
-                        Adrastea_Application_SM_Error;
-                }
-
-                if (!ATMQTT_Connect(ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
-                    WE_DEBUG_PRINT("failed to connect\r\n");
+                if (!AdrasteaI_ATMQTT_Connect(
+                        AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
+                    WE_APP_PRINT("failed to connect\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 } else if (adrasteaApplicationCurrentState ==
@@ -158,50 +172,51 @@ void loop() {
         char receivedbyte = Serial.read();
         if (receivedbyte != '\r' && receivedbyte != '\n') {
             payload[payloadIndex++] = receivedbyte;
-            WE_DEBUG_PRINT("%c", receivedbyte);
+            WE_APP_PRINT("%c", receivedbyte);
         } else if (receivedbyte == '\r') {
-            WE_DEBUG_PRINT("\r\n");
+            WE_APP_PRINT("\r\n");
             payload[payloadIndex] = '\0';
-            if (!ATMQTT_Publish(ATMQTT_Conn_ID_Single_Connectivity_Mode,
-                                ATMQTT_QoS_At_Least_Once,
-                                ATMQTT_Retain_Not_Retained, (char*)MQTT_TOPIC,
-                                payload, payloadIndex)) {
-                WE_DEBUG_PRINT("failed to publish\r\n");
+            if (!AdrasteaI_ATMQTT_Publish(
+                    AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode,
+                    AdrasteaI_ATMQTT_QoS_At_Least_Once,
+                    AdrasteaI_ATMQTT_Retain_Not_Retained, (char*)MQTT_TOPIC,
+                    payload, payloadIndex)) {
+                WE_APP_PRINT("failed to publish\r\n");
                 adrasteaApplicationCurrentState = Adrastea_Application_SM_Error;
             }
             payloadIndex = 0;
-            WE_DEBUG_PRINT("Enter the data to send: ");
+            WE_APP_PRINT("Enter the data to send: ");
         }
     }
 }
 
 void Adrastea_EventCallback(char* eventText) {
-    ATEvent_t event;
-    ATEvent_ParseEventType(&eventText, &event);
+    AdrasteaI_ATEvent_t event;
+    AdrasteaI_ATEvent_ParseEventType(&eventText, &event);
 
     switch (event) {
-        case ATEvent_PacketDomain_Network_Registration_Status: {
-            if (!ATPacketDomain_ParseNetworkRegistrationStatusEvent(
+        case AdrasteaI_ATEvent_PacketDomain_Network_Registration_Status: {
+            if (!AdrasteaI_ATPacketDomain_ParseNetworkRegistrationStatusEvent(
                     eventText,
-                    (ATPacketDomain_Network_Registration_Status_t*)&status)) {
+                    (AdrasteaI_ATPacketDomain_Network_Registration_Status_t*)&status)) {
                 adrasteaApplicationCurrentState = Adrastea_Application_SM_Error;
             } else if (
                 status.state ==
-                ATPacketDomain_Network_Registration_State_Registered_Roaming) {
+                AdrasteaI_ATPacketDomain_Network_Registration_State_Registered_Roaming) {
                 adrasteaApplicationCurrentState =
                     Adrastea_Application_SM_MQTT_Connect;
             }
             break;
         }
-        case ATEvent_MQTT_Connection_Confirmation: {
-            ATMQTT_Connection_Result_t connResult;
-            if (!ATMQTT_ParseConnectionConfirmationEvent(eventText,
-                                                         &connResult)) {
+        case AdrasteaI_ATEvent_MQTT_Connection_Confirmation: {
+            AdrasteaI_ATMQTT_Connection_Result_t connResult;
+            if (!AdrasteaI_ATMQTT_ParseConnectionConfirmationEvent(
+                    eventText, &connResult)) {
                 adrasteaApplicationCurrentState = Adrastea_Application_SM_Error;
             } else if (connResult.resultCode ==
-                       ATMQTT_Event_Result_Code_Success) {
-                WE_DEBUG_PRINT("MQTT Connected\r\n");
-                WE_DEBUG_PRINT("Enter the data to send: ");
+                       AdrasteaI_ATMQTT_Event_Result_Code_Success) {
+                WE_APP_PRINT("MQTT Connected\r\n");
+                WE_APP_PRINT("Enter the data to send: ");
                 adrasteaApplicationCurrentState =
                     Adrastea_Application_SM_MQTT_PublishData;
             }

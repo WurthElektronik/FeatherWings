@@ -9,50 +9,15 @@
 			"path": "..//Common"
 		},
 		{
-			"name": "ProteusIIIFeatherWing",
-			"path": "..//ProteusIIIFeatherWing"
-		},
-		{
 			"name": "SensorFeatherWing",
 			"path": "..//SensorFeatherWing"
 		},
 	],
 	"settings": {
 		"files.associations": {
-			"cctype": "c",
-			"type_traits": "c",
-			"typeinfo": "cpp",
-			"unordered_map": "cpp",
-			"istream": "cpp",
-			"*.tcc": "cpp",
-			"ios": "cpp",
-			"__bit_reference": "cpp",
-			"bitset": "cpp",
-			"chrono": "cpp",
-			"deque": "cpp",
-			"__memory": "cpp",
-			"filesystem": "cpp",
-			"limits": "cpp",
-			"random": "cpp",
-			"ratio": "cpp",
-			"tuple": "cpp",
-			"vector": "cpp",
-			"__functional_base": "cpp",
-			"algorithm": "cpp",
-			"functional": "cpp",
-			"iterator": "cpp",
-			"memory": "cpp",
-			"ostream": "cpp",
-			"array": "cpp",
-			"utility": "cpp",
-			"variant": "cpp",
-			"sensorboard.h": "c",
-			"wsen_itds_2533020201601.h": "c",
-			"string_view": "cpp",
-			"string": "cpp",
-			"wsen_hids_2525020210001.h": "c",
-			"wsen_pads_2511020213301.h": "c",
-			"wsen_hids_2525020210002.h": "c"
+			"*.h": "c",
+			"*.c": "c",
+			"*.cpp": "cpp"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

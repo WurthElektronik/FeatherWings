@@ -4,7 +4,7 @@
 
 [Würth Elektronik eiSos](https://www.we-online.de/web/en/wuerth_elektronik/start.php) presents, a range of FeatherWing development boards that are **open source** and **fully compatible** with the **Feather form factor**. Through these development boards WE brings a range of wireless connectivity modules, sensors and power modules to the Feather ecosystem.
 
-[Adafruit Feather](https://www.adafruit.com/feather) is a complete line of development boards from [Adafruit](https://www.adafruit.com/) and other developers that are both standalone and stackable. They're able to be powered by [LiPo batteries](https://en.wikipedia.org/wiki/Lithium_polymer_battery) for on-the-go use or by their [micro-USB](https://www.we-online.de/katalog/de/em/connectors/input_output_connectors/wr-com) or their [UBS-C](https://www.we-online.com/de/components/products/WR-COM_USB_20_TYPE_C_RECEPTACLE_HORIZONTAL_SMT) plugs for stationary projects. Feathers are flexible, portable, and as light as their namesake.
+[Adafruit Feather](https://www.adafruit.com/feather) is a complete line of development boards from [Adafruit](https://www.adafruit.com/) and other developers that are both standalone and stackable. They're able to be powered by [LiPo batteries](https://en.wikipedia.org/wiki/Lithium_polymer_battery) for on-the-go use or by their [micro-USB](https://www.we-online.de/katalog/de/em/connectors/input_output_connectors/wr-com) or their [USB-C](https://www.we-online.com/de/components/products/WR-COM_USB_20_TYPE_C_RECEPTACLE_HORIZONTAL_SMT) plugs for line-powered projects. Feathers are flexible, portable, and as light as their namesake.
 
 [FeatherWings](https://learn.adafruit.com/adafruit-feather/featherwings) are stacking boards and add functionality and room for prototyping. At its core, the Adafruit Feather is a complete ecosystem of products - and the best way to get your project flying.
 
@@ -13,12 +13,13 @@ Start by checking our [quick start section](#Quick-start-guide).
 
 | Image    | Description |
 | -------- | ----------- |
-|![WE ICLEDFeatherWing](assets/ICLEDFeatherWing_schematic.png)| [**ICLED FeatherWing** (150015)](/ICLEDFeatherWing) <ul> <li>IC LED: 1312020030000 (WL-ICLED)<li>Power supply via USB-C: 5V @3A<li>Usable with 1.8V logic controllers outside FeatherWing-standard <br/> </ul>|
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Proteus-III BLE FeatherWing** (not available as a standalone product)](/Setebos-I_FeatherWing/)<ul><li>Bluetooth® Low Energy 5.1 module<li>Nano SIM size<li>2 MBit PHY and Coded PHY (long range)<li>Connect to any smart device with an app. <br/> <br/> Note: this Feather is replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I)</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Adrastea-I FeatherWing** (2615039336001)](/AdrasteaFeatherWing) <ul> <li>LTE-Cat.M/LTE-Cat.NB-IoT<li>AIntegrated GNSS<li>Integrated User MCU<li>Secure IoT Connectivity using MQTT, LWM2M<br/> Note: This board can be used as a featherWing or as a standalone Feather.</ul> |
-|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](/SensorFeatherWing) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>[Sparkfun QWIIC® Connect System](https://www.sparkfun.com/qwiic) to connect additional peripherals <br/> <br/> Note: this Feather will be updated with new sensors in the future.</ul> |
-|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Thyone-I Wireless FeatherWing** (2611059021001)](/ThyoneWirelessFeatherWing)<ul><li>2.4 GHz Proprietary radio Module<li>Easy build up networks<li>Connect to Thyone modules or USB-Stick.<br/> Note: this Feather will be replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I) in the future.</ul> |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Sensor FeatherWing** (2501000201291)](/SensorFeatherWing) <ul> <li>Acceleration (WSEN-ITDS)<li>Absolute Pressure (WSEN-PADS)<li>Temperature (WSEN-TIDS)<li>Humidity (WSEN-HIDS)<li>[Sparkfun QWIIC® Connect System](https://www.sparkfun.com/qwiic) to connect additional peripherals <br/> <br/> Note: this FeatherWing will be updated with new sensors in the future.</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Calypso WiFi FeatherWing** (2610039025001)](/CalypsoWiFiFeatherWing)<ul><li>2.4 GHz WiFi-Connectivity <li>Easy and secure connection to Smart Devices<li>Out-of-the-box support to applications like HTTP(S), MQTT(S) <li>AT-style command interface </ul> |
-|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Proteus-III BLE FeatherWing** (not available as a standalone product)](/ProteusFeatherWing)<ul><li>Bluetooth® Low Energy 5.1 module<li>Nano SIM size<li>2 MBit PHY and Coded PHY (long range)<li>Connect to any smart device with and app. <br/> <br/> Note: this Feather will be replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I) in the future.</ul> |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Daphnis-I LoRaWAN® FeatherWing** (2610039025001)](/DaphnisILoRaWANFeatherWing/)<ul><li> LoRaWAN® and P2P Connectivity <li>LoRaWAN® 1.0.4 (Class A/B/C)<li>Out-of-the-box support to The Things Network <li>AT-style command interface </ul> |
+|![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Thyone-I Wireless FeatherWing** (2611059021001)](/Setebos-I_FeatherWing/)<ul><li>2.4 GHz Proprietary radio Module<li>Easy build up networks<li>Connect to Thyone modules or USB-Stick.<br/> Note: this Feather is replaced by Setebos-I Feather with selectable radio protocol (either Proteus-III Bluetooth LE or Thyone-I).</ul> |
+|![WE ICLEDFeatherWing](assets/ICLEDFeatherWing_schematic.png)| [**ICLED FeatherWing** (150015)](/ICLEDFeatherWing) <ul> <li>IC LED: 1312020030000 (WL-ICLED)<li>Power supply via USB-C: 5V @3A<li>Usable with 1.8V logic controllers outside FeatherWing-standard <br/> </ul>|
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**MagI³C Power FeatherWing** (2601157100001)](/MagI3CPowerFeatherWing)<ul><li>5 V and 3.3 V power supply<li>Using a range of input voltages (5 V, 9 V, 12 V, 15 V, 18 V and 24 V industrial rails)</ul> |
 |![WE FeatherWings](assets/Stacked-FeatherWings-single-board.png) | [**Serial Bridge FeatherWing** (2601167101001)](/SerialFeatherWing)<ul><li>RS232/RS485 to UART bridge<li>Retrofit legacy devices with modern Wireless connectivity</ul> |
 |![Adafruit Feather](assets/Stacked-FeatherWings-single-board-Mx.png) | Connect any **Adafruit Feather Microcontroller** <br>(e.g. [Adafruit Feather M0 Express](https://www.adafruit.com/product/3403) or [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857))<ul><li>Request sensor data<li>Transfer data to RF-Module<li>Set the IC LED display<li>Examples available on Github<li>Source code available on Github</ul> |
@@ -33,13 +34,13 @@ This step-by-step description will guide you through the setup process for takin
 
 1. Adafruit Feather M0 - FeatherWings are stackable, add-on boards that bring additional functionality to any Feather board. The current repository contains software developed on the [Adafruit Feather M0 express](https://www.adafruit.com/product/3403).
 
->**Note**: The WE FeatherWings can be operated only in combination with a Feather. Please use the Feather M0 express for the quick start examples.
+>**Note**: The WE FeatherWings can only be operated in combination with a Feather. Please use the Feather M0 express for the quick start examples.
 
 2. WE FeatherWing - Please choose the FeatherWing of interest or a combination of FeatherWings and stack it on to the Feather.
 
 3. Stable power supply - Please ensure that the boards are powered using a clean and stable power supply. The following input options are available,
 - **USB** interface on the M0 Feather.
->**Note**: Please use this option for the quick start examples. The USB interface will also be used to upload the example code to the microcontroller.
+>**Note**: Use this option for the quick start examples. The USB interface will also be used to upload the example code to the microcontroller.
 
 - **LiPo** - For low power applications, it is also possible to connect a LiPo battery. Please ensure that the battery can deliver sufficient current at the desired voltage for the combination of boards used.
 
@@ -66,7 +67,7 @@ In order to enable ease of prototyping, we use the popular cross platform integr
 ![Install PlatformIO](assets/InstallPlatformIO.png)
 
 > **Note**: Do not close the Visual Studio Code window until PlatformIO is completely installed.
-> Installation process can be slow, depending on speed and network connection of your computer. 
+> The installation process may be slow, depending on your computer's speed and network connection. 
 
 3. After the PlatformIO extension has been installed follow the on screen instructions to **restart** Visual Studio Code.
 
@@ -80,13 +81,13 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 
 ![Download WE Git repository](assets/DownloadGitCode.png)
 
-1. This repository contains **the following different**, **ready-to-run** applications:
+1. This repository contains **the following ready-to-run** applications:
    - [ICLED FeatherWing examples](/ICLEDFeatherWing/software/src) includes several predefined functions to showcase the capabilities of the IC LED FeatherWing. 
    - [Sensor FeatherWing example](/SensorFeatherWing/software) showing the functionality of the Sensor FeatherWing.
    - [Thyone-I Wireless FeatherWing example](/ThyoneWirelessFeatherWing/software) showing the transmit and receive functionality over a 2.4 GHz proprietary wireless link. 
    - [Calypso Wi-Fi FeatherWing example](/CalypsoWiFiFeatherWing/software) showing the Wi-Fi capabilities.
    - [Sensor2Cloud connectivity example](/Sensor2CloudConnectivity) sends data measured using the sensors via Wi-Fi to the Microsoft Azure or Amazon AWS cloud.
-   - [Sensor2BLE connectivity example](/Sensor2BLE) uses Bluetooth Low Energy in Role Peripheral to share the Sensor measurement values with a Smart Device. The WE-SensorBLE App is required on the smart device. Requires to a Proteus-III compatible radio module, such as available with Setebos-I Feather.
+   - [Sensor2BLE connectivity example](/Sensor2BLE) uses Bluetooth Low Energy in Role Peripheral to share the Sensor measurement values with a Smart Device. The WE-SensorBLE App is required on the smart device. Requires a Proteus-III compatible radio module, such as available with Setebos-I Feather.
    - [Adrastea Cloud connectivity example](/AdrasteaFeatherWing/software/) showing cloud connectivity via MQTT.
    - [RS232/RS485 to wireless example](/SerialFeatherWing/software/) that shows bridging RS232/RS485 to either Proprietary Wireless link of standard MQTT over Wi-Fi. 
    - [Thyone Wireless Sensors example](/ThyoneWirelessSensors/software/) that shows a sensor node that transmit sensor data over proprietary wireless link.
@@ -99,7 +100,7 @@ The PlatformIO extension will then be loaded in Visual Studio Code and its icon 
 
 ![Open Workspace](assets/OpenWorkspace.png)
 
-Chose the workspace you would like to work with based on your preferences.
+Choose the workspace you would like to work with based on your preferences.
 
 ![Opening Workspace](assets/OpeningWorkspace.png)
 
@@ -119,8 +120,8 @@ For that you will need a combination of at least one WE FeatherWing and one micr
 
 ![UploadCode](assets/VSCode.png)
 
-> **Note**: Wait until PlatformIO rebuilds its indices.
-> Index rebuild processes can be slow, depending on speed and network connection of you computer.
+> **Note**: Wait until PlatformIO rebuilds its indices. This process may be slow, depending on
+> your computer's speed and network connection.
 
 ![PlatformIO_index_rebuild](assets/PlatformIO_index_rebuild.png)
 

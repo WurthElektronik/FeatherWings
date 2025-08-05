@@ -1,0 +1,8 @@
+{
+  "name": "WE_GLOBAL_PLATFORM",
+  "version": "1.0.0",
+  "description": "Würth Elektronik Global SDK Platform Implementation",
+  "build": {
+    "srcDir": "."
+  }
+}

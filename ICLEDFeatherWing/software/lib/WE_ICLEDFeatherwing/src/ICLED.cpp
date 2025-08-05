@@ -27,9 +27,8 @@
 #include <SPI.h>
 #include "ASCII_character.h"
 #include "emoji_symbol.h"
-#include "ConfigPlatform.h"
-#include "debug.h"
-#include "global.h"
+#include <ConfigPlatform.h>
+#include <we_print.h>
 
 /**
  * @brief       Apply the specified brightness to the color coordinate.
@@ -150,7 +149,7 @@ bool ICLED_Init(ICLED_Color_System color_system, ICLED_Orientation orientation)
 
     if (pinPeripheral(ICLED_DIN_PIN, pin_type) < 0)
     {
-        WE_DEBUG_PRINT("Problem changing pin %d configuration.\r\n", ICLED_DIN_PIN);
+        WE_APP_PRINT("Problem changing pin %d configuration.\r\n", ICLED_DIN_PIN);
         return false;
     }
 
@@ -160,13 +159,13 @@ bool ICLED_Init(ICLED_Color_System color_system, ICLED_Orientation orientation)
 
     if (dma.allocate() != DMA_STATUS_OK)
     {
-        WE_DEBUG_PRINT("Failed to allocate DMA channel.\r\n");
+        WE_APP_PRINT("Failed to allocate DMA channel.\r\n");
         return false;
     }
 
     if (dma.addDescriptor(dmaBuf, sercom_spi_data_reg_P, ICLED_BYTESTOTAL, DMA_BEAT_SIZE_BYTE, true, false) == NULL)
     {
-        WE_DEBUG_PRINT("Failed to allocate DMA descriptor.\r\n");
+        WE_APP_PRINT("Failed to allocate DMA descriptor.\r\n");
         return false;
     }
 
@@ -177,7 +176,7 @@ bool ICLED_Init(ICLED_Color_System color_system, ICLED_Orientation orientation)
 
     if (dma.startJob() != DMA_STATUS_OK)
     {
-        WE_DEBUG_PRINT("Failed to start DMA job.\r\n");
+        WE_APP_PRINT("Failed to start DMA job.\r\n");
         return false;
     }
 
@@ -193,7 +192,7 @@ bool ICLED_Deinit()
 
     if (dma.free() != DMA_STATUS_OK)
     {
-        WE_DEBUG_PRINT("Failed to free DMA channel.\r\n");
+        WE_APP_PRINT("Failed to free DMA channel.\r\n");
         return false;
     }
 
@@ -260,7 +259,7 @@ bool ICLED_set_pixel(uint16_t pixel_number, uint16_t R_H, uint16_t G_S, uint16_t
     // Check, if parameters are ok & write LEDBuf
     if (pixel_number >= ICLED_LED_COUNT)
     {
-        WE_DEBUG_PRINT("Pixel index %d is out of the first screen.\r\n", pixel_number);
+        WE_APP_PRINT("Pixel index %d is out of the first screen.\r\n", pixel_number);
         return false;
     }
 
@@ -271,7 +270,7 @@ bool ICLED_set_pixel(uint16_t pixel_number, uint16_t R_H, uint16_t G_S, uint16_t
     {
         if (R_H > 255 || G_S > 255 || B_V > 255)
         {
-            WE_DEBUG_PRINT("RGB values should be between (0-255).\r\n");
+            WE_APP_PRINT("RGB values should be between (0-255).\r\n");
             return false;
         }
         break;
@@ -280,7 +279,7 @@ bool ICLED_set_pixel(uint16_t pixel_number, uint16_t R_H, uint16_t G_S, uint16_t
     {
         if (R_H > 360 || G_S > 100 || B_V > 100)
         {
-            WE_DEBUG_PRINT("H should be between (0-360), S and V between (0-100).\r\n");
+            WE_APP_PRINT("H should be between (0-360), S and V between (0-100).\r\n");
             return false;
         }
 
@@ -293,7 +292,7 @@ bool ICLED_set_pixel(uint16_t pixel_number, uint16_t R_H, uint16_t G_S, uint16_t
         break;
     }
     default:
-        WE_DEBUG_PRINT("Invalid color system.\r\n");
+        WE_APP_PRINT("Invalid color system.\r\n");
         return false;
     }
 
@@ -386,7 +385,7 @@ bool ICLED_set_screen_pixel(uint8_t row, uint8_t column, uint16_t R_H,
 {
     if (column >= ICLED_COLUMNS && row >= ICLED_ROWS)
     {
-        WE_DEBUG_PRINT("the row should be between (0-%d) and the column should be between (0-%d).\r\n", ICLED_ROWS - 1, ICLED_COLUMNS - 1);
+        WE_APP_PRINT("the row should be between (0-%d) and the column should be between (0-%d).\r\n", ICLED_ROWS - 1, ICLED_COLUMNS - 1);
         return false;
     }
 
@@ -400,7 +399,7 @@ bool ICLED_set_expanded_screen_pixel(uint8_t row, uint16_t column, uint16_t R_H,
     // Check, if parameters are ok & write LEDBuf
     if (column >= (ICLED_COLUMNS * ICLED_SCREENSTORUN) || row >= ICLED_ROWS)
     {
-        WE_DEBUG_PRINT("the row should be between (0-%d) and the column should be between (0-%d).\r\n", ICLED_ROWS - 1, (ICLED_COLUMNS * ICLED_SCREENSTORUN) - 1);
+        WE_APP_PRINT("the row should be between (0-%d) and the column should be between (0-%d).\r\n", ICLED_ROWS - 1, (ICLED_COLUMNS * ICLED_SCREENSTORUN) - 1);
         return false;
     }
 
@@ -411,7 +410,7 @@ bool ICLED_set_expanded_screen_pixel(uint8_t row, uint16_t column, uint16_t R_H,
     {
         if (R_H > 255 || G_S > 255 || B_V > 255)
         {
-            WE_DEBUG_PRINT("RGB values should be between (0-255).\r\n");
+            WE_APP_PRINT("RGB values should be between (0-255).\r\n");
             return false;
         }
         break;
@@ -420,7 +419,7 @@ bool ICLED_set_expanded_screen_pixel(uint8_t row, uint16_t column, uint16_t R_H,
     {
         if (R_H > 360 || G_S > 100 || B_V > 100)
         {
-            WE_DEBUG_PRINT("H should be between (0-360), S and V between (0-100).\r\n");
+            WE_APP_PRINT("H should be between (0-360), S and V between (0-100).\r\n");
             return false;
         }
 
@@ -433,7 +432,7 @@ bool ICLED_set_expanded_screen_pixel(uint8_t row, uint16_t column, uint16_t R_H,
         break;
     }
     default:
-        WE_DEBUG_PRINT("Invalid color system.\r\n");
+        WE_APP_PRINT("Invalid color system.\r\n");
         return false;
     }
 
@@ -519,7 +518,7 @@ bool ICLED_set_char(char c, uint16_t *place, uint16_t R_H, uint8_t G_S,
 {
     if (place == NULL)
     {
-        WE_DEBUG_PRINT("place pointer is NULL.\r\n");
+        WE_APP_PRINT("place pointer is NULL.\r\n");
         return false;
     }
 
@@ -527,13 +526,13 @@ bool ICLED_set_char(char c, uint16_t *place, uint16_t R_H, uint8_t G_S,
     // for next collumn
     if (*place > (ICLED_SCREENSTORUN * ICLED_COLUMNS) - MAX_CHARACTER_WIDTH)
     {
-        WE_DEBUG_PRINT("The character will not fit in the LED buffer.\r\n");
+        WE_APP_PRINT("The character will not fit in the LED buffer.\r\n");
         return false; // be sure it's not out of bounds
     }
 
     if (c > 127)
     {
-        WE_DEBUG_PRINT("The character is not ASCII 7 bit.\r\n");
+        WE_APP_PRINT("The character is not ASCII 7 bit.\r\n");
         return false;
     }
 
@@ -542,7 +541,7 @@ bool ICLED_set_char(char c, uint16_t *place, uint16_t R_H, uint8_t G_S,
     if (ASCII_CHARACTERS_ARRAY[index].symbol_width == 0)
     {
         // character does not exist in table
-        WE_DEBUG_PRINT("The character %x doesn't have pixel representation in table.\r\n", c);
+        WE_APP_PRINT("The character %x doesn't have pixel representation in table.\r\n", c);
         return false;
     }
 
@@ -574,19 +573,19 @@ bool ICLED_set_emoji(Emoji emoji, uint16_t *place, uint16_t R_H, uint8_t G_S,
 {
     if (place == NULL)
     {
-        WE_DEBUG_PRINT("place pointer is NULL.\r\n");
+        WE_APP_PRINT("place pointer is NULL.\r\n");
         return false;
     }
 
     if (*place > (ICLED_SCREENSTORUN * ICLED_COLUMNS) - MAX_EMOJI_WIDTH)
     {
-        WE_DEBUG_PRINT("The emoji will not fit in the LED buffer.\r\n");
+        WE_APP_PRINT("The emoji will not fit in the LED buffer.\r\n");
         return false; // be sure it's not out of bounds
     }
 
     if (emoji >= Emoji_Total_Count)
     {
-        WE_DEBUG_PRINT("The emoji is not valid.\r\n");
+        WE_APP_PRINT("The emoji is not valid.\r\n");
         return false;
     }
 
@@ -620,7 +619,7 @@ bool ICLED_set_euro(uint16_t *place, uint16_t R_H, uint8_t G_S,
 {
     if (place == NULL)
     {
-        WE_DEBUG_PRINT("place pointer is NULL.\r\n");
+        WE_APP_PRINT("place pointer is NULL.\r\n");
         return false;
     }
 
@@ -628,7 +627,7 @@ bool ICLED_set_euro(uint16_t *place, uint16_t R_H, uint8_t G_S,
     // for next collumn
     if (*place > (ICLED_SCREENSTORUN * ICLED_COLUMNS) - MAX_CHARACTER_WIDTH)
     {
-        WE_DEBUG_PRINT("The euro sign will not fit in the LED buffer.\r\n");
+        WE_APP_PRINT("The euro sign will not fit in the LED buffer.\r\n");
         return false; // be sure it's not out of bounds
     }
 
@@ -659,7 +658,7 @@ bool ICLED_set_string(char c[], uint16_t *place, uint16_t R_H,
 {
     if ((c == NULL) || (place == NULL))
     {
-        WE_DEBUG_PRINT("c or place pointer is NULL.\r\n");
+        WE_APP_PRINT("c or place pointer is NULL.\r\n");
         return false;
     }
 
@@ -684,7 +683,7 @@ bool ICLED_set_start_column(uint16_t column, bool write_buffer)
 {
     if (column > ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))))
     {
-        WE_DEBUG_PRINT("The column should be between (0-%d).\r\n", ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))));
+        WE_APP_PRINT("The column should be between (0-%d).\r\n", ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))));
         return false;
     }
 
@@ -696,6 +695,8 @@ bool ICLED_set_start_column(uint16_t column, bool write_buffer)
     return true;
 }
 
+static void (*delayFunc)(uint32_t) = delay;
+
 bool ICLED_start_conditional_loop(uint16_t start_column, uint16_t end_column, uint32_t delay, uint16_t *current_columnP, bool *running)
 {
     uint16_t current_column = 0;
@@ -705,7 +706,7 @@ bool ICLED_start_conditional_loop(uint16_t start_column, uint16_t end_column, ui
 
         if ((*current_columnP < start_column) || (*current_columnP > end_column))
         {
-            WE_DEBUG_PRINT("The column should be between (%d-%d).\r\n", start_column, end_column);
+            WE_APP_PRINT("The column should be between (%d-%d).\r\n", start_column, end_column);
             return false;
         }
         else
@@ -716,13 +717,13 @@ bool ICLED_start_conditional_loop(uint16_t start_column, uint16_t end_column, ui
 
     if (start_column >= end_column)
     {
-        WE_DEBUG_PRINT("The start column is larger than or equal to the end column.\r\n");
+        WE_APP_PRINT("The start column is larger than or equal to the end column.\r\n");
         return false;
     }
 
     if (end_column > ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))))
     {
-        WE_DEBUG_PRINT("The end column is can't be more than %d.\r\n", ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))));
+        WE_APP_PRINT("The end column is can't be more than %d.\r\n", ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))));
         return false;
     }
 
@@ -738,7 +739,7 @@ bool ICLED_start_conditional_loop(uint16_t start_column, uint16_t end_column, ui
             return false;
         }
         current_column = ((current_column + 1) % (end_column - start_column + 1));
-        WE_Delay(delay);
+        delayFunc(delay);
     }
 
     if (current_columnP)
@@ -755,25 +756,25 @@ bool ICLED_start_timed_loop(uint16_t start_column, uint16_t end_column, uint32_t
 
     if (start_column >= end_column)
     {
-        WE_DEBUG_PRINT("The start column is larger than or equal to the end column.\r\n");
+        WE_APP_PRINT("The start column is larger than or equal to the end column.\r\n");
         return false;
     }
 
     if (end_column > ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))))
     {
-        WE_DEBUG_PRINT("The end column is can't be more than %d.\r\n", ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))));
+        WE_APP_PRINT("The end column is can't be more than %d.\r\n", ((ICLED_COLUMNS * (ICLED_SCREENSTORUN - 1))));
         return false;
     }
 
     if (delay < MIN_LOOP_DELAY_MS)
     {
-        WE_DEBUG_PRINT("The delay is less than the minimum delay %d.\r\n", MIN_LOOP_DELAY_MS);
+        WE_APP_PRINT("The delay is less than the minimum delay %d.\r\n", MIN_LOOP_DELAY_MS);
         return false;
     }
 
     if (delay >= duration)
     {
-        WE_DEBUG_PRINT("The delay %d is larger than the duration %d.\r\n", delay, duration);
+        WE_APP_PRINT("The delay %d is larger than the duration %d.\r\n", delay, duration);
         return false;
     }
 
@@ -784,7 +785,7 @@ bool ICLED_start_timed_loop(uint16_t start_column, uint16_t end_column, uint32_t
             return false;
         }
         current_column = ((current_column + 1) % (end_column - start_column + 1));
-        WE_Delay(delay);
+        delayFunc(delay);
         duration -= delay;
     }
 

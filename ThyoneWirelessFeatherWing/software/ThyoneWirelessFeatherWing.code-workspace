@@ -11,11 +11,9 @@
 	],
 	"settings": {
 		"files.associations": {
-			"cctype": "c",
-			"type_traits": "c",
-			"typeinfo": "cpp",
-			"string": "cpp",
-			"global.h": "c"
+			"*.h": "c",
+			"*.c": "c",
+			"*.cpp": "cpp"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

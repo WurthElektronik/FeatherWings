@@ -15,14 +15,9 @@
 	],
 	"settings": {
 		"files.associations": {
-			"cctype": "c",
-			"type_traits": "c",
-			"typeinfo": "cpp",
-			"unordered_map": "cpp",
-			"wsen_hids_2525020210001.h": "c",
-			"sensorboard.h": "c",
-			"cstddef": "c",
-			"calypsoboard.h": "c"
+			"*.h": "c",
+			"*.c": "c",
+			"*.cpp": "cpp"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

@@ -23,9 +23,14 @@
  * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
-#include "calypsoBoard.h"
-#include "json-builder.h"
-#include "sensorBoard.h"
+#include <ConfigPlatform.h>
+#include <global/global.h>
+#include <utils/json-builder.h>
+
+#include <calypsoBoard.h>
+#include <sensorBoard.h>
+
+#include <we_print.h>
 
 #define AZURE_CONNECTION 0
 #define AWS_CONNECTION 1
@@ -163,31 +168,32 @@ void setup()
 {
     delay(3000);
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
     calSettings.wifiSettings.securityParams.securityType =
-        ATWLAN_SecurityType_WPA_WPA2;
+        Calypso_ATWLAN_SecurityType_WPA_WPA2;
 
 #if AZURE_CONNECTION
     // MQTT Settings - AZURE
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags =
-        ATMQTT_CreateFlags_URL | ATMQTT_CreateFlags_Secure;
+        Calypso_ATMQTT_CreateFlags_URL | Calypso_ATMQTT_CreateFlags_Secure;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
 
     calSettings.mqttSettings.secParams.securityMethod =
-        ATMQTT_SecurityMethod_SSLV3_TLSV1_2;
+        Calypso_ATMQTT_SecurityMethod_SSLV3_TLSV1_2;
     calSettings.mqttSettings.secParams.cipher =
-        ATSocket_Cipher_TLS_RSA_WITH_AES_256_CBC_SHA256;
+        Calypso_ATSocket_Cipher_TLS_RSA_WITH_AES_256_CBC_SHA256;
 
     calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_ProtocolVersion_v3_1_1;
+        Calypso_ATMQTT_ProtocolVersion_v3_1_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
     strcpy(calSettings.mqttSettings.userOptions.userName, MQTT_USER_NAME);
@@ -200,21 +206,21 @@ void setup()
     // MQTT Settings - AWS
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
     calSettings.mqttSettings.flags =
-        ATMQTT_CreateFlags_URL | ATMQTT_CreateFlags_Secure;
+        Calypso_ATMQTT_CreateFlags_URL | Calypso_ATMQTT_CreateFlags_Secure;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
 
     calSettings.mqttSettings.secParams.securityMethod =
-        ATMQTT_SecurityMethod_TLSV1_2;
+        Calypso_ATMQTT_SecurityMethod_TLSV1_2;
     calSettings.mqttSettings.secParams.cipher =
-        ATSocket_Cipher_TLS_RSA_WITH_AES_128_CBC_SHA256;
+        Calypso_ATSocket_Cipher_TLS_RSA_WITH_AES_128_CBC_SHA256;
 
     strcpy(calSettings.mqttSettings.secParams.certificateFile, MQTT_CERT_PATH);
     strcpy(calSettings.mqttSettings.secParams.privateKeyFile, MQTT_PRIV_KEY_PATH);
     strcpy(calSettings.mqttSettings.secParams.CAFile, ROOT_CA_PATH);
 
     calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_ProtocolVersion_v3_1_1;
+        Calypso_ATMQTT_ProtocolVersion_v3_1_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
 
@@ -226,37 +232,37 @@ void setup()
 
     if (!sensorBoard_Init())
     {
-        WE_DEBUG_PRINT("I2C init failed \r\n");
+        WE_APP_PRINT("I2C init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
     // Initialize the sensors in default mode
     if (!PADS_2511020213301_simpleInit())
     {
-        WE_DEBUG_PRINT("PADS init failed \r\n");
+        WE_APP_PRINT("PADS init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 
     if (!ITDS_2533020201601_simpleInit())
     {
-        WE_DEBUG_PRINT("ITDS init failed \r\n");
+        WE_APP_PRINT("ITDS init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 
     if (!TIDS_2521020222501_simpleInit())
     {
-        WE_DEBUG_PRINT("TIDS init failed \r\n");
+        WE_APP_PRINT("TIDS init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 #if HIDS_PART_NUMBER == 2525020210001
     if (!HIDS_2525020210001_simpleInit())
     {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 #elif HIDS_PART_NUMBER == 2525020210002
     if (!HIDS_2525020210002_simpleInit())
     {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 #endif
@@ -264,7 +270,7 @@ void setup()
     // Initialize Calypso
     if (!Calypso_simpleInit(&calSettings, &Calypso_EventCallback))
     {
-        WE_DEBUG_PRINT("Calypso init failed \r\n");
+        WE_APP_PRINT("Calypso init failed \r\n");
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
     }
 
@@ -274,19 +280,19 @@ void setup()
         {
         case Calypso_Sensor2Cloud_SM_ModuleUp:
         {
-            WE_DEBUG_PRINT("module has started\r\n");
+            WE_APP_PRINT("module has started\r\n");
             // check if autoconnect feature will connect fine if not
             // manually connect to chosen ap
             WE_Delay(1000);
-            ATWLAN_SetMode_t mode;
+            Calypso_ATWLAN_SetMode_t mode;
 
             if (!Calypso_getWLANMode(&mode))
             {
-                WE_DEBUG_PRINT("get wlan mode failed\r\n");
+                WE_APP_PRINT("get wlan mode failed\r\n");
                 calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
                 break;
             }
-            else if (mode == ATWLAN_SetMode_Station)
+            else if (mode == Calypso_ATWLAN_SetMode_Station)
             {
                 if (calypsoSensor2CloudCurrentState ==
                     Calypso_Sensor2Cloud_SM_ModuleUp)
@@ -298,9 +304,9 @@ void setup()
                 break;
             }
 
-            if (!Calypso_setWLANMode(ATWLAN_SetMode_Station))
+            if (!Calypso_setWLANMode(Calypso_ATWLAN_SetMode_Station))
             {
-                WE_DEBUG_PRINT("set wlan mode failed\r\n");
+                WE_APP_PRINT("set wlan mode failed\r\n");
                 calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
                 break;
             }
@@ -312,7 +318,7 @@ void setup()
             {
                 if (!Calypso_writeFile(ROOT_CA_PATH, DIGICERT_CYBERTRUST_ROOT_CERT, strlen(DIGICERT_CYBERTRUST_ROOT_CERT)))
                 {
-                    WE_DEBUG_PRINT("write file fail\r\n");
+                    WE_APP_PRINT("write file fail\r\n");
                     calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
                     break;
                 }
@@ -324,7 +330,7 @@ void setup()
             {
                 if (!Calypso_writeFile(MQTT_CERT_PATH, MQTT_CERTIFICATE, strlen(MQTT_CERTIFICATE)))
                 {
-                    WE_DEBUG_PRINT("write file fail\r\n");
+                    WE_APP_PRINT("write file fail\r\n");
                     calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
                     break;
                 }
@@ -334,7 +340,7 @@ void setup()
             {
                 if (!Calypso_writeFile(MQTT_PRIV_KEY_PATH, MQTT_PRIV_KEY, strlen(MQTT_PRIV_KEY)))
                 {
-                    WE_DEBUG_PRINT("write file fail\r\n");
+                    WE_APP_PRINT("write file fail\r\n");
                     calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
                     break;
                 }
@@ -344,7 +350,7 @@ void setup()
             {
                 if (!Calypso_writeFile(ROOT_CA_PATH, STARFIELD_ROOT_CERT, strlen(STARFIELD_ROOT_CERT)))
                 {
-                    WE_DEBUG_PRINT("write file fail\r\n");
+                    WE_APP_PRINT("write file fail\r\n");
                     calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
                     break;
                 }
@@ -354,7 +360,7 @@ void setup()
         }
         case Calypso_Sensor2Cloud_SM_Error:
         {
-            WE_DEBUG_PRINT("Error state in start up \r\n");
+            WE_APP_PRINT("Error state in start up \r\n");
             return;
         }
         default:
@@ -362,7 +368,7 @@ void setup()
         }
     }
 
-    WE_DEBUG_PRINT("Startup finished\r\n");
+    WE_APP_PRINT("Startup finished\r\n");
     // The message ID acts as the packet number
     msgID = 0;
 }
@@ -375,61 +381,61 @@ void loop()
     {
         if (PADS_2511020213301_readSensorData(&PADS_pressure, &PADS_temp))
         {
-            WE_DEBUG_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-                           PADS_pressure, PADS_temp);
+            WE_APP_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+                         PADS_pressure, PADS_temp);
         }
         if (ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
                                               &ITDS_accelZ, &ITDS_temp))
         {
-            WE_DEBUG_PRINT(
+            WE_APP_PRINT(
                 "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: "
                 "%f °C \r\n",
                 ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp);
         }
         if (ITDS_2533020201601_readDoubleTapEvent(&ITDS_doubleTapEvent))
         {
-            WE_DEBUG_PRINT("WSEN_ITDS(DoubleTap): State %s \r\n",
-                           ITDS_doubleTapEvent ? "True" : "False");
+            WE_APP_PRINT("WSEN_ITDS(DoubleTap): State %s \r\n",
+                         ITDS_doubleTapEvent ? "True" : "False");
         }
         if (ITDS_2533020201601_readFreeFallEvent(&ITDS_freeFallEvent))
         {
-            WE_DEBUG_PRINT("WSEN_ITDS(FreeFall): State %s \r\n",
-                           ITDS_freeFallEvent ? "True" : "False");
+            WE_APP_PRINT("WSEN_ITDS(FreeFall): State %s \r\n",
+                         ITDS_freeFallEvent ? "True" : "False");
         }
         if (TIDS_2521020222501_readSensorData(&TIDS_temp))
         {
-            WE_DEBUG_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
+            WE_APP_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
         }
 #if HIDS_PART_NUMBER == 2525020210001
         if (HIDS_2525020210001_readSensorData(&HIDS_humidity, &HIDS_temp))
         {
-            WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
-                           HIDS_temp);
+            WE_APP_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                         HIDS_temp);
         }
 #elif HIDS_PART_NUMBER == 2525020210002
         if (HIDS_2525020210002_readSensorData(&HIDS_humidity, &HIDS_temp))
         {
-            WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
-                           HIDS_temp);
+            WE_APP_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                         HIDS_temp);
         }
 #endif
-        WE_DEBUG_PRINT(
+        WE_APP_PRINT(
             "----------------------------------------------------\r\n");
-        WE_DEBUG_PRINT("\r\n");
+        WE_APP_PRINT("\r\n");
 
         serializeData();
 
-        WE_DEBUG_PRINT(buf);
-        WE_DEBUG_PRINT("\r\n");
+        WE_APP_PRINT(buf);
+        WE_APP_PRINT("\r\n");
 
         /*Publish to MQTT topic*/
         if (!Calypso_MQTTPublishData(MQTT_TOPIC, 0, buf, strlen(buf)))
         {
-            WE_DEBUG_PRINT("Publish failed\n\r");
+            WE_APP_PRINT("Publish failed\n\r");
             calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
         }
 
-        WE_DEBUG_PRINT("Data published\n\r");
+        WE_APP_PRINT("Data published\n\r");
 
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Idle;
         /*Clean-up*/
@@ -438,7 +444,7 @@ void loop()
     }
     case Calypso_Sensor2Cloud_SM_Publish_Ack:
     {
-        WE_DEBUG_PRINT("Publish Data Ack received\n\r");
+        WE_APP_PRINT("Publish Data Ack received\n\r");
         WE_Delay(5000);
         calypsoSensor2CloudCurrentState =
             Calypso_Sensor2Cloud_SM_Publish_Data;
@@ -448,7 +454,7 @@ void loop()
     {
         if (!Calypso_WLANconnect())
         {
-            WE_DEBUG_PRINT("WiFi connect fail\r\n");
+            WE_APP_PRINT("WiFi connect fail\r\n");
             calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
         }
         else if (calypsoSensor2CloudCurrentState ==
@@ -460,10 +466,10 @@ void loop()
     }
     case Calypso_Sensor2Cloud_SM_SNTP_Setup:
     {
-        WE_DEBUG_PRINT("WiFi connected\r\n");
+        WE_APP_PRINT("WiFi connected\r\n");
         if (!Calypso_setUpSNTP())
         {
-            WE_DEBUG_PRINT("SNTP config fail\r\n");
+            WE_APP_PRINT("SNTP config fail\r\n");
             calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
         }
         else
@@ -478,7 +484,7 @@ void loop()
     {
         if (!Calypso_MQTTconnect())
         {
-            WE_DEBUG_PRINT("MQTT connect fail\r\n");
+            WE_APP_PRINT("MQTT connect fail\r\n");
             calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
         }
         else if (calypsoSensor2CloudCurrentState ==
@@ -490,7 +496,7 @@ void loop()
     }
     case Calypso_Sensor2Cloud_SM_Error:
     {
-        WE_DEBUG_PRINT("Application Error\n\r");
+        WE_APP_PRINT("Application Error\n\r");
         calypsoSensor2CloudCurrentState =
             Calypso_Sensor2Cloud_SM_Idle;
         return;
@@ -517,7 +523,7 @@ void serializeData()
     // Get the current time from calypso
     if (!Calypso_getTimestamp(&timestamp))
     {
-        WE_DEBUG_PRINT("Get time fail\r\n");
+        WE_APP_PRINT("Get time fail\r\n");
     }
 
     /* convert to unix timestamp */
@@ -570,20 +576,20 @@ void serializeData()
 
 void Calypso_EventCallback(char *eventText)
 {
-    ATEvent_t event;
-    ATEvent_ParseEventType(&eventText, &event);
+    Calypso_ATEvent_t event;
+    Calypso_ATEvent_ParseEventType(&eventText, &event);
 
-    if (ATEvent_Invalid == event)
+    if (Calypso_ATEvent_Invalid == event)
     {
         return;
     }
 
     switch (event)
     {
-    case ATEvent_Startup:
+    case Calypso_ATEvent_Startup:
     {
-        ATEvent_Startup_t startUp;
-        if (ATEvent_ParseStartUpEvent(&eventText, &startUp))
+        Calypso_ATEvent_Startup_t startUp;
+        if (Calypso_ATEvent_ParseStartUpEvent(&eventText, &startUp))
         {
             strcpy(macAddress, startUp.MACAddress);
             calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_ModuleUp;
@@ -594,19 +600,19 @@ void Calypso_EventCallback(char *eventText)
         }
         break;
     }
-    case ATEvent_NetappIP4Acquired:
+    case Calypso_ATEvent_NetappIP4Acquired:
     {
-        ATEvent_NetappIP4Acquired_t ipAcquired;
+        Calypso_ATEvent_NetappIP4Acquired_t ipAcquired;
         calypsoSensor2CloudCurrentState =
-            ATEvent_ParseNetappIP4AcquiredEvent(&eventText, &ipAcquired)
+            Calypso_ATEvent_ParseNetappIP4AcquiredEvent(&eventText, &ipAcquired)
                 ? (sntpSetupFinished ? Calypso_Sensor2Cloud_SM_MQTT_Connect : Calypso_Sensor2Cloud_SM_SNTP_Setup)
                 : Calypso_Sensor2Cloud_SM_Error;
         break;
     }
-    case ATEvent_MQTTConnack:
+    case Calypso_ATEvent_MQTTConnack:
     {
-        ATEvent_MQTTConnack_t mqttConnack;
-        if (!ATEvent_ParseMQTTConnackEvent(&eventText, &mqttConnack) ||
+        Calypso_ATEvent_MQTTConnack_t mqttConnack;
+        if (!Calypso_ATEvent_ParseMQTTConnackEvent(&eventText, &mqttConnack) ||
             (mqttConnack.returnCode != MQTTConnack_Return_Code_Accepted))
         {
             calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Error;
@@ -617,7 +623,7 @@ void Calypso_EventCallback(char *eventText)
         }
         break;
     }
-    case ATEvent_MQTTPuback:
+    case Calypso_ATEvent_MQTTPuback:
     {
         calypsoSensor2CloudCurrentState = Calypso_Sensor2Cloud_SM_Publish_Ack;
         break;

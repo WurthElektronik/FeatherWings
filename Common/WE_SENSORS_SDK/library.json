@@ -1,0 +1,12 @@
+{
+  "name": "WE_SENSORS_SDK",
+  "version": "2.6.0",
+  "description": "Würth Elektronik Sensors SDK Core",
+  "build": {
+    "srcDir": "SensorsSDK",
+    "srcFilter": [
+      "+<**/*.c>"    
+    ],
+    "includeDir": "SensorsSDK"
+  }
+}

@@ -47,7 +47,7 @@ void setup() {
     
     if (!ICLED_Init(RGB, Landscape))
     {
-        WE_DEBUG_PRINT("ICLED init failed \r\n");
+        WE_APP_PRINT("ICLED init failed \r\n");
     }
 
     pinMode(ICLED_PROG_PIN, INPUT_PULLUP);

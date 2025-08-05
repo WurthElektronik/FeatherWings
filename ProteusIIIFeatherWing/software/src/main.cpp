@@ -23,12 +23,30 @@
  * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
-#include "debug.h"
-#include "ProteusIII.h"
+#include <ConfigPlatform.h>
+#include <global/global.h>
+#include <global_platform_types.h>
+#include <ProteusIII/ProteusIII.h>
+#include <we_print.h>
 
-ProteusIII_Pins_t ProteusIII_pins;
+/*Connect the pins 1 and 2 on JP1 to use the Wake-up feature on Pin GPIO9*/
+static const WE_Arduino_Pin_t pin_SleepWakeUp = WE_ARDUINO_PIN(9);
+
+/*Connect the pins 3 and 4 on JP1 to use the mode change feature on Pin
+ * GPIOA3/Pin17*/
+static const WE_Arduino_Pin_t pin_Mode = WE_ARDUINO_PIN(17);
+
+static ProteusIII_Pins_t ProteusIII_pins = {
+    .ProteusIII_Pin_Reset = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_SleepWakeUp = WE_PIN((void *)&pin_SleepWakeUp),
+    .ProteusIII_Pin_Boot = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_Mode = WE_PIN((void *)&pin_Mode),
+    .ProteusIII_Pin_Busy = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_StatusLed2 = WE_PIN_UNDEFINED()};
 
 #define SETEBOS_MODE_PIN 14
+
+static WE_UART_t ProteusIII_uart;
 
 /* Is set to true if the channel has been opened */
 bool cmd_channelOpen = false;
@@ -52,12 +70,10 @@ static void ErrorCallback(uint8_t errorCode);
 void setup() {
     delay(3000);
     // Using the USB serial port for debug messages
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
-
-    ProteusIII_pins.ProteusIII_Pin_SleepWakeUp.pin = 9;
-    ProteusIII_pins.ProteusIII_Pin_Mode.pin = 17;
 
     ProteusIII_CallbackConfig_t callbackConfig = {0};
     callbackConfig.rxCb = RxCallback;
@@ -76,11 +92,17 @@ void setup() {
     SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
     WritePin(SETEBOS_MODE_PIN, LOW);
 
-    if (!ProteusIII_Init(&ProteusIII_pins, PROTEUSIII_DEFAULT_BAUDRATE,
-                         WE_FlowControl_NoFlowControl,
+    ProteusIII_uart.baudrate = PROTEUSIII_DEFAULT_BAUDRATE;
+    ProteusIII_uart.flowControl = WE_FlowControl_NoFlowControl;
+    ProteusIII_uart.parity = WE_Parity_None;
+    ProteusIII_uart.uartInit = WE_UART_RXPin11_TXPin10_Init;
+    ProteusIII_uart.uartDeinit = WE_UART_RXPin11_TXPin10_DeInit;
+    ProteusIII_uart.uartTransmit = WE_UART_RXPin11_TXPin10_Transmit;
+
+    if (!ProteusIII_Init(&ProteusIII_uart, &ProteusIII_pins,
                          ProteusIII_OperationMode_CommandMode,
                          callbackConfig)) {
-        WE_DEBUG_PRINT("Proteus init failed \r\n");
+        WE_APP_PRINT("Proteus init failed \r\n");
     }
 }
 
@@ -89,45 +111,45 @@ void loop() {}
 static void RxCallback(uint8_t *payload, uint16_t payloadLength, uint8_t *btMac,
                        int8_t rssi) {
     int i = 0;
-    WE_DEBUG_PRINT(
+    WE_APP_PRINT(
         "Received data from device with BTMAC (0x%02x%02x%02x%02x%02x%02x) "
         "with RSSI = %d dBm:\r\n-> ",
         btMac[0], btMac[1], btMac[2], btMac[3], btMac[4], btMac[5], rssi);
-    WE_DEBUG_PRINT("0x ");
+    WE_APP_PRINT("0x ");
     for (i = 0; i < payloadLength; i++) {
-        WE_DEBUG_PRINT("%02x ", *(payload + i));
+        WE_APP_PRINT("%02x ", *(payload + i));
     }
-    WE_DEBUG_PRINT("\n-> ");
+    WE_APP_PRINT("\n-> ");
     for (i = 0; i < payloadLength; i++) {
-        WE_DEBUG_PRINT("%c", *(payload + i))
+        WE_APP_PRINT("%c", *(payload + i));
     }
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("\r\n");
 }
 
 static void BeaconRxCallback(uint8_t *payload, uint16_t payloadLength,
                              uint8_t *btMac, int8_t rssi) {
     int i = 0;
-    WE_DEBUG_PRINT(
+    WE_APP_PRINT(
         "Received beacon data from device with BTMAC "
         "(0x%02x%02x%02x%02x%02x%02x) with RSSI = %d dBm:\r\n-> ",
         btMac[0], btMac[1], btMac[2], btMac[3], btMac[4], btMac[5], rssi);
-    WE_DEBUG_PRINT("0x ");
+    WE_APP_PRINT("0x ");
     for (i = 0; i < payloadLength; i++) {
-        WE_DEBUG_PRINT("%02x ", *(payload + i));
+        WE_APP_PRINT("%02x ", *(payload + i));
     }
-    WE_DEBUG_PRINT("\n-> ");
+    WE_APP_PRINT("\n-> ");
     for (i = 0; i < payloadLength; i++) {
-        WE_DEBUG_PRINT("%c", *(payload + i));
+        WE_APP_PRINT("%c", *(payload + i));
     }
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("\r\n");
 }
 
 static void ConnectCallback(bool success, uint8_t *btMac) {
     cmd_channelOpen = false;
-    WE_DEBUG_PRINT("%s to device with BTMAC (0x%02x%02x%02x%02x%02x%02x) ",
-                   success ? "Connected" : "Failed to connect", btMac[0],
-                   btMac[1], btMac[2], btMac[3], btMac[4], btMac[5]);
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("%s to device with BTMAC (0x%02x%02x%02x%02x%02x%02x) ",
+                 success ? "Connected" : "Failed to connect", btMac[0],
+                 btMac[1], btMac[2], btMac[3], btMac[4], btMac[5]);
+    WE_APP_PRINT("\r\n");
 }
 
 static void DisconnectCallback(ProteusIII_DisconnectReason_t reason) {
@@ -141,39 +163,40 @@ static void DisconnectCallback(ProteusIII_DisconnectReason_t reason) {
                                           "MIC failure",
                                           "connection setup failed"};
 
-    WE_DEBUG_PRINT("Disconnected (reason: %s)\n", reasonStrings[reason]);
+    WE_APP_PRINT("Disconnected (reason: %s)\n", reasonStrings[reason]);
 }
 
 static void ChannelOpenCallback(uint8_t *btMac, uint16_t maxPayload) {
     cmd_channelOpen = true;
 
-    WE_DEBUG_PRINT(
+    WE_APP_PRINT(
         "Channel opened to BTMAC (0x%02x%02x%02x%02x%02x%02x) with maximum "
         "payload = %d",
         btMac[0], btMac[1], btMac[2], btMac[3], btMac[4], btMac[5], maxPayload);
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("\r\n");
 }
 
 static void PhyUpdateCallback(bool success, uint8_t *btMac, uint8_t phyRx,
                               uint8_t phyTx) {
     if (success) {
-        WE_DEBUG_PRINT(
+        WE_APP_PRINT(
+
             "Phy of connection to BTMAC (0x%02x%02x%02x%02x%02x%02x) updated "
             "(RX: %dMBit, TX: %dMBit)",
             btMac[0], btMac[1], btMac[2], btMac[3], btMac[4], btMac[5], phyRx,
             phyTx);
     } else {
-        WE_DEBUG_PRINT("Failed to update Phy connection");
+        WE_APP_PRINT("Failed to update Phy connection");
     }
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("\r\n");
 }
 
 static void SleepCallback() {
-    WE_DEBUG_PRINT("Advertising timeout detected, will go to sleep now\n");
+    WE_APP_PRINT("Advertising timeout detected, will go to sleep now\n");
 }
 
 static void RssiCallback(uint8_t *btMac, int8_t rssi, int8_t txPower) {
-    WE_DEBUG_PRINT(
+    WE_APP_PRINT(
         "Received RSSI indication from device with BTMAC "
         "(0x%02x%02x%02x%02x%02x%02x) with RSSI = %d dBm and TX power = %d "
         "dBm.\n",
@@ -182,7 +205,7 @@ static void RssiCallback(uint8_t *btMac, int8_t rssi, int8_t txPower) {
 }
 
 static void GpioWriteCallback(bool remote, uint8_t gpioId, uint8_t value) {
-    WE_DEBUG_PRINT(
+    WE_APP_PRINT(
         "GPIO write indication received (remote: %s, GPIO: %u, value: %u)\n",
         remote ? "true" : "false", gpioId, value);
 }
@@ -193,7 +216,7 @@ static void GpioRemoteConfigCallback(ProteusIII_GPIOConfigBlock_t *gpioConfig) {
 
     static const char *pullStrings[] = {"no pull", "pull down", "pull up"};
 
-    WE_DEBUG_PRINT(
+    WE_APP_PRINT(
         "GPIO remote config indication received (GPIO: %u, function: %s",
         gpioConfig->gpioId, functionStrings[gpioConfig->function]);
 
@@ -202,27 +225,26 @@ static void GpioRemoteConfigCallback(ProteusIII_GPIOConfigBlock_t *gpioConfig) {
             break;
 
         case ProteusIII_GPIO_IO_Input:
-            WE_DEBUG_PRINT(", input type: %s",
-                           pullStrings[gpioConfig->value.input]);
+            WE_APP_PRINT(", input type: %s",
+                         pullStrings[gpioConfig->value.input]);
             break;
 
         case ProteusIII_GPIO_IO_Output:
-            WE_DEBUG_PRINT(
-                ", output level: %s",
-                gpioConfig->value.output == ProteusIII_GPIO_Output_High
-                    ? "HIGH"
-                    : "LOW");
+            WE_APP_PRINT(", output level: %s",
+                         gpioConfig->value.output == ProteusIII_GPIO_Output_High
+                             ? "HIGH"
+                             : "LOW");
             break;
 
         case ProteusIII_GPIO_IO_PWM:
-            WE_DEBUG_PRINT(", PWM period: %u ms, ratio: %u%%",
-                           gpioConfig->value.pwm.period,
-                           gpioConfig->value.pwm.ratio);
+            WE_APP_PRINT(", PWM period: %u ms, ratio: %u%%",
+                         gpioConfig->value.pwm.period,
+                         gpioConfig->value.pwm.ratio);
             break;
     }
-    WE_DEBUG_PRINT(")\n");
+    WE_APP_PRINT(")\n");
 }
 
 static void ErrorCallback(uint8_t errorCode) {
-    WE_DEBUG_PRINT("Error %u\n", errorCode);
+    WE_APP_PRINT("Error %u\n", errorCode);
 }

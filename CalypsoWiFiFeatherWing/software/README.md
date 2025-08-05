@@ -63,23 +63,24 @@ The quick start example for the Calypso Wi-Fi FeatherWing demonstrates a connect
 void setup() {
     delay(3000);
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
     calSettings.wifiSettings.securityParams.securityType =
-        ATWLAN_SecurityType_WPA_WPA2;
+        Calypso_ATWLAN_SecurityType_WPA_WPA2;
 
     // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
-    calSettings.mqttSettings.flags = ATMQTT_CreateFlags_URL;
+    calSettings.mqttSettings.flags = Calypso_ATMQTT_CreateFlags_URL;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
     calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_ProtocolVersion_v3_1;
+        Calypso_ATMQTT_ProtocolVersion_v3_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
 
@@ -89,26 +90,45 @@ void setup() {
 
     // Initialize Calypso
     if (!Calypso_simpleInit(&calSettings, &Calypso_EventCallback)) {
-        WE_DEBUG_PRINT("Calypso init failed \r\n");
+        WE_APP_PRINT("Calypso init failed \r\n");
         calypsoStartUpCurrentState = Calypso_StartUp_SM_Error;
     }
 
     while (calypsoStartUpCurrentState != Calypso_StartUp_SM_Finished) {
         switch (calypsoStartUpCurrentState) {
             case Calypso_StartUp_SM_ModuleUp: {
-                WE_DEBUG_PRINT("module has started\r\n");
+                WE_APP_PRINT("module has started\r\n");
                 // check if autoconnect feature will connect fine if not
                 // manually connect to chosen ap
-                WE_Delay(30);
-                if (calypsoStartUpCurrentState == Calypso_StartUp_SM_ModuleUp) {
-                    calypsoStartUpCurrentState =
-                        Calypso_StartUp_SM_WLAN_Connect;
+                WE_Delay(1000);
+                Calypso_ATWLAN_SetMode_t mode;
+
+                if (!Calypso_getWLANMode(&mode)) {
+                    WE_APP_PRINT("get wlan mode failed\r\n");
+                    calypsoStartUpCurrentState = Calypso_StartUp_SM_Error;
+                    break;
+                } else if (mode == Calypso_ATWLAN_SetMode_Station) {
+                    if (calypsoStartUpCurrentState ==
+                        Calypso_StartUp_SM_ModuleUp) {
+                        calypsoStartUpCurrentState =
+                            Calypso_StartUp_SM_WLAN_Connect;
+                        break;
+                    }
+                    break;
                 }
+
+                if (!Calypso_setWLANMode(Calypso_ATWLAN_SetMode_Station)) {
+                    WE_APP_PRINT("set wlan mode failed\r\n");
+                    calypsoStartUpCurrentState = Calypso_StartUp_SM_Error;
+                    break;
+                }
+
+                calypsoStartUpCurrentState = Calypso_StartUp_SM_WLAN_Connect;
                 break;
             }
             case Calypso_StartUp_SM_WLAN_Connect: {
                 if (!Calypso_WLANconnect()) {
-                    WE_DEBUG_PRINT("WiFi connect fail\r\n");
+                    WE_APP_PRINT("WiFi connect fail\r\n");
                     calypsoStartUpCurrentState = Calypso_StartUp_SM_Error;
                 } else if (calypsoStartUpCurrentState ==
                            Calypso_StartUp_SM_WLAN_Connect) {
@@ -117,9 +137,9 @@ void setup() {
                 break;
             }
             case Calypso_StartUp_SM_SNTP_Setup: {
-                WE_DEBUG_PRINT("WiFi connected\r\n");
+                WE_APP_PRINT("WiFi connected\r\n");
                 if (!Calypso_setUpSNTP()) {
-                    WE_DEBUG_PRINT("SNTP config fail\r\n");
+                    WE_APP_PRINT("SNTP config fail\r\n");
                     calypsoStartUpCurrentState = Calypso_StartUp_SM_Error;
                 } else {
                     calypsoStartUpCurrentState =
@@ -129,7 +149,7 @@ void setup() {
             }
             case Calypso_StartUp_SM_MQTT_Connect: {
                 if (!Calypso_MQTTconnect()) {
-                    WE_DEBUG_PRINT("MQTT connect fail\r\n");
+                    WE_APP_PRINT("MQTT connect fail\r\n");
                     calypsoStartUpCurrentState = Calypso_StartUp_SM_Error;
                 } else if (calypsoStartUpCurrentState ==
                            Calypso_StartUp_SM_MQTT_Connect) {
@@ -138,7 +158,7 @@ void setup() {
                 break;
             }
             case Calypso_StartUp_SM_Error: {
-                WE_DEBUG_PRINT("Error state in start up \r\n");
+                WE_APP_PRINT("Error state in start up \r\n");
                 return;
             }
             default:
@@ -146,7 +166,7 @@ void setup() {
         }
     }
 
-    WE_DEBUG_PRINT("Startup State machine finished\r\n");
+    WE_APP_PRINT("Startup State machine finished\r\n");
     calypsoApplicationCurrentState = Calypso_Application_SM_Publish_Data;
     msgID = 0;
 }
@@ -166,7 +186,7 @@ void loop() {
 
             // Get the current time from calypso
             if (!Calypso_getTimestamp(&timestamp)) {
-                WE_DEBUG_PRINT("Get time fail\r\n");
+                WE_APP_PRINT("Get time fail\r\n");
                 calypsoApplicationCurrentState = Calypso_Application_SM_Error;
             }
 
@@ -187,11 +207,11 @@ void loop() {
             /*Publish to MQTT topic*/
             if (!Calypso_MQTTPublishData((char *)MQTT_TOPIC, 0, buf,
                                          strlen(buf))) {
-                WE_DEBUG_PRINT("Publish failed\n\r");
+                WE_APP_PRINT("Publish failed\n\r");
                 calypsoApplicationCurrentState = Calypso_Application_SM_Error;
             }
 
-            WE_DEBUG_PRINT("Data published\n\r");
+            WE_APP_PRINT("Data published\n\r");
 
             calypsoApplicationCurrentState = Calypso_Application_SM_Idle;
             /*Clean-up*/
@@ -199,14 +219,14 @@ void loop() {
             break;
         }
         case Calypso_Application_SM_Publish_Ack: {
-            WE_DEBUG_PRINT("Publish Data Ack received\n\r");
+            WE_APP_PRINT("Publish Data Ack received\n\r");
             WE_Delay(5000);
             calypsoApplicationCurrentState =
                 Calypso_Application_SM_Publish_Data;
             break;
         }
         case Calypso_Application_SM_Error: {
-            WE_DEBUG_PRINT("Application Error\n\r");
+            WE_APP_PRINT("Application Error\n\r");
             return;
         }
         default:

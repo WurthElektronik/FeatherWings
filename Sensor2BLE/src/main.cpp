@@ -23,12 +23,31 @@
  * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
-#include "ProteusIII.h"
-#include "sensorBoard.h"
+#include <ConfigPlatform.h>
+#include <global/global.h>
+#include <global_platform_types.h>
+#include <ProteusIII/ProteusIII.h>
+#include <we_print.h>
+#include <sensorBoard.h>
 
-ProteusIII_Pins_t ProteusIII_pins;
+/*Connect the pins 1 and 2 on JP1 to use the Wake-up feature on Pin GPIO9*/
+static const WE_Arduino_Pin_t pin_SleepWakeUp = WE_ARDUINO_PIN(9);
+
+/*Connect the pins 3 and 4 on JP1 to use the mode change feature on Pin
+ * GPIOA3/Pin17*/
+static const WE_Arduino_Pin_t pin_Mode = WE_ARDUINO_PIN(17);
+
+static ProteusIII_Pins_t ProteusIII_pins = {
+    .ProteusIII_Pin_Reset = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_SleepWakeUp = WE_PIN((void *)&pin_SleepWakeUp),
+    .ProteusIII_Pin_Boot = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_Mode = WE_PIN((void *)&pin_Mode),
+    .ProteusIII_Pin_Busy = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_StatusLed2 = WE_PIN_UNDEFINED()};
 
 #define SETEBOS_MODE_PIN 14
+
+static WE_UART_t ProteusIII_uart;
 
 float PADS_pressure, PADS_temp;
 float ITDS_accelX, ITDS_accelY, ITDS_accelZ, ITDS_temp;
@@ -79,12 +98,10 @@ static int payloadLength = 0;
 void setup()
 {
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
-
-    ProteusIII_pins.ProteusIII_Pin_SleepWakeUp.pin = 9;
-    ProteusIII_pins.ProteusIII_Pin_Mode.pin = 17;
 
     ProteusIII_CallbackConfig_t callbackConfig = {0};
     callbackConfig.rxCb = RxCallback;
@@ -96,20 +113,30 @@ void setup()
     SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
     WritePin(SETEBOS_MODE_PIN, LOW);
 
-    ProteusIII_Init(&ProteusIII_pins, PROTEUSIII_DEFAULT_BAUDRATE,
-                    WE_FlowControl_NoFlowControl,
-                    ProteusIII_OperationMode_CommandMode, callbackConfig);
+    ProteusIII_uart.baudrate = PROTEUSIII_DEFAULT_BAUDRATE;
+    ProteusIII_uart.flowControl = WE_FlowControl_NoFlowControl;
+    ProteusIII_uart.parity = WE_Parity_None;
+    ProteusIII_uart.uartInit = WE_UART_RXPin11_TXPin10_Init;
+    ProteusIII_uart.uartDeinit = WE_UART_RXPin11_TXPin10_DeInit;
+    ProteusIII_uart.uartTransmit = WE_UART_RXPin11_TXPin10_Transmit;
+
+    if (!ProteusIII_Init(&ProteusIII_uart, &ProteusIII_pins,
+                         ProteusIII_OperationMode_CommandMode,
+                         callbackConfig))
+    {
+        WE_APP_PRINT("Proteus init failed \r\n");
+    }
 
     uint8_t fwversion[3] = {};
     if (ProteusIII_GetFWVersion(fwversion))
     {
-        WE_DEBUG_PRINT("read version %d.%d.%d \n", fwversion[2],
-                       fwversion[1], fwversion[0]);
+        WE_APP_PRINT("read version %d.%d.%d \n", fwversion[2],
+                     fwversion[1], fwversion[0]);
         // check for minimum firmware version 1.4.0
         if ((fwversion[2] < 1) ||
             ((fwversion[2] == 1) && fwversion[1] < 4))
         {
-            WE_DEBUG_PRINT("unsupported FW version \n");
+            WE_APP_PRINT("unsupported FW version \n");
             exit(0);
         }
     }
@@ -120,7 +147,7 @@ void setup()
         uint16_t writecfg = 0x1000;
         if ((readcfg[0] != 0x10) && ProteusIII_SetCFGFlags(writecfg))
         {
-            WE_DEBUG_PRINT("flags set \n");
+            WE_APP_PRINT("flags set \n");
         }
     }
 
@@ -129,7 +156,7 @@ void setup()
     {
         if (ProteusIII_SetConnectionTiming(ProteusIII_ConnectionTiming_12))
         {
-            WE_DEBUG_PRINT("timing set \n");
+            WE_APP_PRINT("timing set \n");
         }
     }
     uint8_t oldname[10];
@@ -142,12 +169,12 @@ void setup()
                 btmacaddress[0]);
         if (ProteusIII_GetDeviceName(oldname, &oldnameLength) && namechanged((uint8_t *)newname, oldname))
         {
-            WE_DEBUG_PRINT("need new name\n");
+            WE_APP_PRINT("need new name\n");
             if (ProteusIII_SetAdvertisingFlags(ProteusIII_AdvertisingFlags_DeviceNameAndUuid))
             {
                 if (ProteusIII_SetDeviceName((uint8_t *)newname, 8))
                 {
-                    WE_DEBUG_PRINT("new name set\n");
+                    WE_APP_PRINT("new name set\n");
                 }
             }
         }
@@ -157,7 +184,7 @@ void setup()
 
     if (ProteusIII_SetBeacon(bname, 5))
     {
-        WE_DEBUG_PRINT("beacon data set\n");
+        WE_APP_PRINT("beacon data set\n");
     }
 
     padssensorperiod = {5000, 0};
@@ -167,33 +194,33 @@ void setup()
 
     if (!sensorBoard_Init())
     {
-        WE_DEBUG_PRINT("I2C init failed \r\n");
+        WE_APP_PRINT("I2C init failed \r\n");
     }
     // Initialize the sensors in default mode
     if (!PADS_2511020213301_simpleInit())
     {
-        WE_DEBUG_PRINT("PADS init failed \r\n");
+        WE_APP_PRINT("PADS init failed \r\n");
     }
 
     if (!ITDS_2533020201601_simpleInit())
     {
-        WE_DEBUG_PRINT("ITDS init failed \r\n");
+        WE_APP_PRINT("ITDS init failed \r\n");
     }
 
     if (!TIDS_2521020222501_simpleInit())
     {
-        WE_DEBUG_PRINT("TIDS init failed \r\n");
+        WE_APP_PRINT("TIDS init failed \r\n");
     }
 
 #if HIDS_PART_NUMBER == 2525020210001
     if (!HIDS_2525020210001_simpleInit())
     {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
     }
 #elif HIDS_PART_NUMBER == 2525020210002
     if (!HIDS_2525020210002_simpleInit())
     {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
     }
 #endif
 }
@@ -235,8 +262,8 @@ void loop()
         payloadLength = 0;
         if (((currtime - padssensorperiod.lastupdate) >= padssensorperiod.sensorperiod) && PADS_2511020213301_readSensorData(&PADS_pressure, &PADS_temp))
         {
-            WE_DEBUG_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
-                           PADS_pressure, PADS_temp);
+            WE_APP_PRINT("WSEN_PADS: Atm. Pres: %f kPa Temp: %f °C\r\n",
+                         PADS_pressure, PADS_temp);
             payload[0] = 11;
             payload[1] = 0;
             payload[2] = 0;
@@ -248,7 +275,7 @@ void loop()
         if (((currtime - itdssensorperiod.lastupdate) >= itdssensorperiod.sensorperiod) && ITDS_2533020201601_readSensorData(&ITDS_accelX, &ITDS_accelY,
                                                                                                                              &ITDS_accelZ, &ITDS_temp))
         {
-            // WE_DEBUG_PRINT(SerialDebug,
+            // WE_APP_PRINT(SerialDebug,
             //                "WSEN_ITDS(Acceleration): X:%f g Y:%f g  Z:%f g Temp: %f °C\r\n",
             //                sensorITDS->data[itdsXAcceleration],
             //                sensorITDS->data[itdsYAcceleration],
@@ -268,7 +295,7 @@ void loop()
         {
             if (ITDS_2533020201601_readDoubleTapEvent(&ITDS_doubleTapEvent) && ITDS_doubleTapEvent)
             {
-                WE_DEBUG_PRINT("Double Tap Detected\r\n");
+                WE_APP_PRINT("Double Tap Detected\r\n");
                 payload[payloadLength] = 3;
                 payload[payloadLength + 1] = 2;
                 payload[payloadLength + 2] = 1;
@@ -276,7 +303,7 @@ void loop()
             }
             if (ITDS_2533020201601_readFreeFallEvent(&ITDS_freeFallEvent) && ITDS_freeFallEvent)
             {
-                WE_DEBUG_PRINT("Free Fall Detected\r\n");
+                WE_APP_PRINT("Free Fall Detected\r\n");
                 payload[payloadLength] = 3;
                 payload[payloadLength + 1] = 3;
                 payload[payloadLength + 2] = 1;
@@ -286,7 +313,7 @@ void loop()
         }
         if (((currtime - tidssensorperiod.lastupdate) >= tidssensorperiod.sensorperiod) && TIDS_2521020222501_readSensorData(&TIDS_temp))
         {
-            WE_DEBUG_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
+            WE_APP_PRINT("WSEN_TIDS(Temperature): %f °C\r\n", TIDS_temp);
             payload[payloadLength] = 7;
             payload[payloadLength + 1] = 0;
             payload[payloadLength + 2] = 2;
@@ -304,8 +331,8 @@ void loop()
 #endif
         )
         {
-            WE_DEBUG_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
-                           HIDS_temp);
+            WE_APP_PRINT("WSEN_HIDS: RH: %f %% Temp: %f °C\r\n", HIDS_humidity,
+                         HIDS_temp);
             payload[payloadLength] = 11;
             payload[payloadLength + 1] = 0;
             payload[payloadLength + 2] = 3;
@@ -383,18 +410,18 @@ static void RxCallback(uint8_t *payload, uint16_t payloadLength, uint8_t *btMac,
 
 static void ConnectCallback(bool success, uint8_t *btMac)
 {
-    WE_DEBUG_PRINT("device connected \n");
+    WE_APP_PRINT("device connected \n");
     currentstate = Sensor2BLE_SM_Idle;
 }
 
 static void DisconnectCallback(ProteusIII_DisconnectReason_t reason)
 {
-    WE_DEBUG_PRINT("device disconnected \n");
+    WE_APP_PRINT("device disconnected \n");
     currentstate = Sensor2BLE_SM_Idle;
 }
 
 static void ChannelOpenCallback(uint8_t *btMac, uint16_t maxPayload)
 {
-    WE_DEBUG_PRINT("device started notifications \n");
+    WE_APP_PRINT("device started notifications \n");
     currentstate = Sensor2BLE_SM_Send_Sensor_Interval;
 }

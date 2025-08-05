@@ -27,16 +27,15 @@
 #define CALYPSOBOARD_H
 
 /**         Includes         */
-#include "ConfigPlatform.h"
 #include "time.h"
-#include "Calypso.h"
-#include <ATCommands/ATDevice.h>
-#include <ATCommands/ATMQTT.h>
-#include <ATCommands/ATWLAN.h>
-#include <ATCommands/ATEvent.h>
-#include <ATCommands/ATNetApp.h>
-#include <ATCommands/ATNetCfg.h>
-#include <ATCommands/ATHTTP.h>
+#include <Calypso/Calypso.h>
+#include <Calypso/ATCommands/ATDevice.h>
+#include <Calypso/ATCommands/ATMQTT.h>
+#include <Calypso/ATCommands/ATWLAN.h>
+#include <Calypso/ATCommands/ATEvent.h>
+#include <Calypso/ATCommands/ATNetApp.h>
+#include <Calypso/ATCommands/ATNetCfg.h>
+#include <Calypso/ATCommands/ATHTTP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,14 +56,14 @@ typedef struct {
 typedef struct {
     char clientID[23];
     uint32_t flags;
-    ATMQTT_ServerInfo_t serverInfo;
-    ATMQTT_SecurityParams_t secParams;
-    ATMQTT_ConnectionParams_t connParams;
+    Calypso_ATMQTT_ServerInfo_t serverInfo;
+    Calypso_ATMQTT_SecurityParams_t secParams;
+    Calypso_ATMQTT_ConnectionParams_t connParams;
     ATMQTT_userOptions_t userOptions;
 } CALYPSO_MQTTSettings_t;
 
 typedef struct {
-    ATWLAN_ConnectionArguments_t wifiSettings;
+    Calypso_ATWLAN_ConnectionArguments_t wifiSettings;
     CALYPSO_MQTTSettings_t mqttSettings;
     CALYPSO_SNTPSettings_t sntpSettings;
 } CalypsoSettings;
@@ -75,7 +74,8 @@ bool Calypso_simpleInit(CalypsoSettings *settings,
 bool Calypso_WLANconnect();
 bool Calypso_WLANDisconnect();
 
-bool Calypso_WLANGetProfile(uint8_t profileID, ATWLAN_Profile_t *wlanProfile);
+bool Calypso_WLANGetProfile(uint8_t profileID,
+                            Calypso_ATWLAN_Profile_t *wlanProfile);
 bool Calypso_WLANDeleteProfile(uint8_t profileID);
 
 bool Calypso_MQTTconnect();
@@ -83,7 +83,7 @@ bool Calypso_MQTTDisconnect();
 bool Calypso_MQTTPublishData(char *topic, uint8_t retain, char *data,
                              int length);
 bool Calypso_subscribe(uint8_t index, uint8_t numOfTopics,
-                       ATMQTT_SubscribeTopic_t *pTopics);
+                       Calypso_ATMQTT_SubscribeTopic_t *pTopics);
 bool Calypso_reboot();
 bool Calypso_StartProvisioning();
 bool Calypso_StopProvisioning();
@@ -100,8 +100,8 @@ bool Calypso_deleteFile(const char *fileName);
 bool Calypso_isIPConnected(char *ipAddress);
 bool Calypso_HTTPCustomResponse(char *data, int length, bool encode);
 
-bool Calypso_setWLANMode(ATWLAN_SetMode_t mode);
-bool Calypso_getWLANMode(ATWLAN_SetMode_t *modeP);
+bool Calypso_setWLANMode(Calypso_ATWLAN_SetMode_t mode);
+bool Calypso_getWLANMode(Calypso_ATWLAN_SetMode_t *modeP);
 
 #ifdef __cplusplus
 }

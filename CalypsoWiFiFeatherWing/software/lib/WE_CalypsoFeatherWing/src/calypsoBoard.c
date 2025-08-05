@@ -24,9 +24,25 @@
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
 #include "calypsoBoard.h"
-#include "global.h"
+#include <ConfigPlatform.h>
+#include <global/global.h>
+#include <utils/base64.h>
+#include <global_platform_types.h>
 
-CalypsoSettings *Calypso_settings;
+static CalypsoSettings *Calypso_settings;
+
+static Calypso_Pins_t Calypso_pins = {
+    .Calypso_Pin_Reset = WE_PIN_UNDEFINED(),
+    .Calypso_Pin_WakeUp = WE_PIN_UNDEFINED(),
+    .Calypso_Pin_Boot = WE_PIN_UNDEFINED(),
+    .Calypso_Pin_AppMode0 = WE_PIN_UNDEFINED(),
+    .Calypso_Pin_AppMode1 = WE_PIN_UNDEFINED(),
+    .Calypso_Pin_StatusInd0 = WE_PIN_UNDEFINED(),
+    .Calypso_Pin_StatusInd1 = WE_PIN_UNDEFINED(),
+};
+
+static WE_UART_t Calypso_uart;
+
 #define CALYPSO_DEFAULT_BAUDRATE 921600
 
 bool Calypso_MQTTCreate();
@@ -42,7 +58,7 @@ bool ATFile_read(uint32_t fileID, uint16_t offset, Calypso_DataFormat_t format,
                  uint16_t bytesToRead, uint16_t *byteRead, char *data);
 bool ATFile_del(const char *fileName, uint32_t secureToken);
 bool ATFile_getInfo(const char *fileName, uint32_t secureToken,
-                    ATFile_FileInfo_t *fileInfo);
+                    Calypso_ATFile_FileInfo_t *fileInfo);
 
 /**
  * @brief  Reboot calypso and check comms
@@ -56,10 +72,22 @@ bool Calypso_simpleInit(CalypsoSettings *settings,
 
     Calypso_settings = settings;
 
-    WE_DEBUG_PRINT("Starting Calypso...\r\n");
+    WE_DEBUG_PRINT_INFO("Starting Calypso...\r\n");
 
-    if (!Calypso_Init(CALYPSO_DEFAULT_BAUDRATE, WE_FlowControl_NoFlowControl,
-                      WE_Parity_Even, callback)) {
+    Calypso_uart.baudrate = CALYPSO_DEFAULT_BAUDRATE;
+    Calypso_uart.flowControl = WE_FlowControl_NoFlowControl;
+    Calypso_uart.parity = WE_Parity_Even;
+    Calypso_uart.uartInit = WE_UART_RXPin0_TXPin1_Init;
+    Calypso_uart.uartDeinit = WE_UART_RXPin0_TXPin1_DeInit;
+    Calypso_uart.uartTransmit = WE_UART_RXPin0_TXPin1_Transmit;
+
+    if (!Calypso_Init(&Calypso_uart, &Calypso_pins, callback)) {
+        return false;
+    }
+
+    (void)Calypso_ATDevice_Test();
+
+    if (!Calypso_ATDevice_Reboot()) {
         return false;
     }
 
@@ -71,15 +99,15 @@ bool Calypso_simpleInit(CalypsoSettings *settings,
  * @brief  Reboot calypso
  * @retval true if successful false in case of failure
  */
-bool Calypso_reboot() { return ATDevice_Reboot(); }
+bool Calypso_reboot() { return Calypso_ATDevice_Reboot(); }
 /**
  * @brief  Check if Calypso has an IP address
  * @retval true if successful false in case of failure
  */
 bool Calypso_isIPConnected(char *ipAddress) {
     /* Get IP address */
-    ATNetCfg_IPv4Config_t ipConfig;
-    if (!ATNetCfg_GetIPv4AddressStation(&ipConfig)) {
+    Calypso_ATNetCfg_IPv4Config_t ipConfig;
+    if (!Calypso_ATNetCfg_GetIPv4AddressStation(&ipConfig)) {
         return false;
     }
 
@@ -99,24 +127,27 @@ bool Calypso_isIPConnected(char *ipAddress) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_WLANconnect() {
-    return ATWLAN_Connect(Calypso_settings->wifiSettings);
+    return Calypso_ATWLAN_Connect(Calypso_settings->wifiSettings);
 }
 /**
  * @brief  Disconnect from access point
  * @retval true if successful false in case of failure
  */
-bool Calypso_WLANDisconnect() { return ATWLAN_Disconnect(); }
+bool Calypso_WLANDisconnect() { return Calypso_ATWLAN_Disconnect(); }
 bool Calypso_WLANDeleteProfile(uint8_t profileID) {
-    return ATWLAN_DeleteProfile(profileID);
+    return Calypso_ATWLAN_DeleteProfile(profileID);
 }
-bool Calypso_WLANGetProfile(uint8_t profileID, ATWLAN_Profile_t *wlanProfile) {
-    return ATWLAN_GetProfile(profileID, wlanProfile);
+bool Calypso_WLANGetProfile(uint8_t profileID,
+                            Calypso_ATWLAN_Profile_t *wlanProfile) {
+    return Calypso_ATWLAN_GetProfile(profileID, wlanProfile);
 }
 /**
  * @brief  Start provisioning
  * @retval true if successful false in case of failure
  */
-bool Calypso_StartProvisioning() { return ATDevice_StartProvisioning(); }
+bool Calypso_StartProvisioning() {
+    return Calypso_ATDevice_StartProvisioning();
+}
 /**
  * @brief  Stop provisioning
  * @retval true if successful false in case of failure
@@ -134,31 +165,32 @@ bool Calypso_StopProvisioning() {
  */
 bool Calypso_setUpSNTP() {
     /* Enable*/
-    if (!ATNetApp_StartApplications(ATNetApp_Application_SntpClient)) {
+    if (!Calypso_ATNetApp_StartApplications(
+            Calypso_ATNetApp_Application_SntpClient)) {
         return false;
     }
 
-    ATNetApp_OptionValue_t value;
+    Calypso_ATNetApp_OptionValue_t value;
     memset(&value, 0, sizeof(value));
     value.sntp.timeZone = atoi(Calypso_settings->sntpSettings.timezone);
-    if (!ATNetApp_Set(ATNetApp_Application_SntpClient,
-                      ATNetApp_SntpOption_TimeZone, &value)) {
-        WE_DEBUG_PRINT("SNTP time_zone set failed\r\n");
+    if (!Calypso_ATNetApp_Set(Calypso_ATNetApp_Application_SntpClient,
+                              Calypso_ATNetApp_SntpOption_TimeZone, &value)) {
+        WE_DEBUG_PRINT_INFO("SNTP time_zone set failed\r\n");
         return false;
     }
 
     /* Set Server*/
     memset(&value, 0, sizeof(value));
     strcpy(value.sntp.servers[0], Calypso_settings->sntpSettings.server);
-    if (!ATNetApp_Set(ATNetApp_Application_SntpClient,
-                      ATNetApp_SntpOption_Servers, &value)) {
-        WE_DEBUG_PRINT("SNTP set server failed\r\n");
+    if (!Calypso_ATNetApp_Set(Calypso_ATNetApp_Application_SntpClient,
+                              Calypso_ATNetApp_SntpOption_Servers, &value)) {
+        WE_DEBUG_PRINT_INFO("SNTP set server failed\r\n");
         return false;
     }
 
     /* Synchronize calypso time with sntp server */
-    if (!ATNetApp_UpdateTime()) {
-        WE_DEBUG_PRINT("SNTP enable failed\r\n");
+    if (!Calypso_ATNetApp_UpdateTime()) {
+        WE_DEBUG_PRINT_INFO("SNTP enable failed\r\n");
         return false;
     }
 
@@ -174,10 +206,10 @@ bool Calypso_getTimestamp(Timestamp *timeStamp) {
         return false;
     }
 
-    ATDevice_Value_t value;
-    if (!ATDevice_Get(ATDevice_GetId_General, ATDevice_GetGeneral_Time,
-                      &value)) {
-        WE_DEBUG_PRINT("SNTP get time failed \r\n");
+    Calypso_ATDevice_Value_t value;
+    if (!Calypso_ATDevice_Get(Calypso_ATDevice_GetId_General,
+                              Calypso_ATDevice_GetGeneral_Time, &value)) {
+        WE_DEBUG_PRINT_INFO("SNTP get time failed \r\n");
         return false;
     }
 
@@ -192,7 +224,7 @@ bool Calypso_getTimestamp(Timestamp *timeStamp) {
 }
 
 bool Calypso_HTTPCustomResponse(char *data, int length, bool encode) {
-    return ATHTTP_SendCustomResponse(
+    return Calypso_ATHTTP_SendCustomResponse(
         encode ? Calypso_DataFormat_Base64 : Calypso_DataFormat_Binary, encode,
         length, data);
 }
@@ -221,8 +253,8 @@ bool Calypso_MQTTconnect() {
  *       false otherwise
  */
 bool Calypso_subscribe(uint8_t index, uint8_t numOfTopics,
-                       ATMQTT_SubscribeTopic_t *pTopics) {
-    return ATMQTT_Subscribe(index, numOfTopics, pTopics);
+                       Calypso_ATMQTT_SubscribeTopic_t *pTopics) {
+    return Calypso_ATMQTT_Subscribe(index, numOfTopics, pTopics);
 }
 
 /**
@@ -238,18 +270,18 @@ bool Calypso_MQTTPublishData(char *topic, uint8_t retain, char *data,
                              int length) {
     switch (Calypso_settings->mqttSettings.connParams.format) {
         case Calypso_DataFormat_Binary: {
-            return ATMQTT_Publish(0, topic, ATMQTT_QoS_QoS1, retain, length,
-                                  data);
+            return Calypso_ATMQTT_Publish(0, topic, Calypso_ATMQTT_QoS_QoS1,
+                                          retain, length, data);
         }
         case Calypso_DataFormat_Base64: {
-            uint32_t elen = 0;
+            uint32_t elen = CALYPSO_LINE_MAX_SIZE;
             char out[CALYPSO_LINE_MAX_SIZE];
-            if (!Calypso_EncodeBase64((uint8_t *)data, length, (uint8_t *)out,
-                                      &elen)) {
+            if (!Base64_Encode((uint8_t *)data, length, (uint8_t *)out,
+                               &elen)) {
                 return false;
             }
-            return ATMQTT_Publish(0, topic, ATMQTT_QoS_QoS1, retain, elen - 1,
-                                  out);
+            return Calypso_ATMQTT_Publish(0, topic, Calypso_ATMQTT_QoS_QoS1,
+                                          retain, elen, out);
         }
         default:
             return false;
@@ -262,7 +294,7 @@ bool Calypso_MQTTPublishData(char *topic, uint8_t retain, char *data,
  * @retval true if successful false in case of failure
  */
 bool Calypso_MQTTSet() {
-    ATMQTT_SetValues_t value;
+    Calypso_ATMQTT_SetValues_t value;
     memset(&value, 0, sizeof(value));
 
     if (strlen(Calypso_settings->mqttSettings.userOptions.userName) == 0) {
@@ -270,7 +302,7 @@ bool Calypso_MQTTSet() {
     }
 
     strcpy(value.username, Calypso_settings->mqttSettings.userOptions.userName);
-    if (!ATMQTT_Set(0, ATMQTT_SetOption_User, &value)) {
+    if (!Calypso_ATMQTT_Set(0, Calypso_ATMQTT_SetOption_User, &value)) {
         return false;
     }
 
@@ -280,7 +312,7 @@ bool Calypso_MQTTSet() {
 
     memset(&value, 0, sizeof(value));
     strcpy(value.password, Calypso_settings->mqttSettings.userOptions.passWord);
-    if (!ATMQTT_Set(0, ATMQTT_SetOption_Password, &value)) {
+    if (!Calypso_ATMQTT_Set(0, Calypso_ATMQTT_SetOption_Password, &value)) {
         return false;
     }
 
@@ -290,29 +322,30 @@ bool Calypso_MQTTSet() {
  * @brief  Connect to the MQTT broker with parameters in the settings
  * @retval true if successful false in case of failure
  */
-bool Calypso_MQTTConnToBroker() { return ATMQTT_Connect(0); }
+bool Calypso_MQTTConnToBroker() { return Calypso_ATMQTT_Connect(0); }
 /**
  * @brief  Create a MQTT socket with parameters in the settings
  * @retval true if successful false in case of failure
  */
 bool Calypso_MQTTCreate() {
     uint8_t index;
-    return ATMQTT_Create(Calypso_settings->mqttSettings.clientID,
-                         Calypso_settings->mqttSettings.flags,
-                         Calypso_settings->mqttSettings.serverInfo,
-                         Calypso_settings->mqttSettings.secParams,
-                         Calypso_settings->mqttSettings.connParams, &index);
+    return Calypso_ATMQTT_Create(Calypso_settings->mqttSettings.clientID,
+                                 Calypso_settings->mqttSettings.flags,
+                                 Calypso_settings->mqttSettings.serverInfo,
+                                 Calypso_settings->mqttSettings.secParams,
+                                 Calypso_settings->mqttSettings.connParams,
+                                 &index);
 }
 /**
  * @brief  Disconnect from MQTT connection
  * @retval true if successful false in case of failure
  */
 bool Calypso_MQTTDisconnect() {
-    if (!ATMQTT_Disconnect(0)) {
+    if (!Calypso_ATMQTT_Disconnect(0)) {
         return false;
     }
 
-    if (!ATMQTT_Delete(0)) {
+    if (!Calypso_ATMQTT_Delete(0)) {
         return false;
     }
 
@@ -322,13 +355,13 @@ bool Calypso_MQTTDisconnect() {
  * @brief  Get the list of files in the file system
  * @retval true if successful false in case of failure
  */
-bool Calypso_fileList() { return ATFile_GetFileList(); }
+bool Calypso_fileList() { return Calypso_ATFile_GetFileList(); }
 /**
  * @brief  Get the list of files in the file system
  * @retval true if successful false in case of failure
  */
 bool Calypso_fileExists(const char *fileName) {
-    ATFile_FileInfo_t fileInfo;
+    Calypso_ATFile_FileInfo_t fileInfo;
     return ATFile_getInfo(fileName, 0, &fileInfo);
 }
 /**
@@ -336,7 +369,7 @@ bool Calypso_fileExists(const char *fileName) {
  * @retval true if successful false in case of failure
  */
 bool Calypso_deleteFile(const char *fileName) {
-    return ATFile_Delete(fileName, 0);
+    return Calypso_ATFile_Delete(fileName, 0);
 }
 /**
  * @brief  Open and read data frpm a file
@@ -352,7 +385,8 @@ bool Calypso_readFile(const char *path, char *data, uint16_t dataLength,
     uint32_t sToken;
     uint16_t bytesRead;
 
-    if (!ATFile_open(path, ATFile_OpenFlags_Read, 0, &fileID, &sToken)) {
+    if (!ATFile_open(path, Calypso_ATFile_OpenFlags_Read, 0, &fileID,
+                     &sToken)) {
         return false;
     }
 
@@ -378,7 +412,9 @@ bool Calypso_writeFile(const char *path, const char *data,
     uint32_t fileID;
     uint32_t sToken;
 
-    if (!ATFile_open(path, ATFile_OpenFlags_Create | ATFile_OpenFlags_Overwrite,
+    if (!ATFile_open(path,
+                     Calypso_ATFile_OpenFlags_Create |
+                         Calypso_ATFile_OpenFlags_Overwrite,
                      ATFILE_FILE_MIN_SIZE > dataLength ? ATFILE_FILE_MIN_SIZE
                                                        : dataLength,
                      &fileID, &sToken)) {
@@ -409,7 +445,8 @@ bool ATFile_open(const char *fileName, uint32_t options, uint16_t fileSize,
         fileSize = ATFILE_FILE_MIN_SIZE;
     }
 
-    return ATFile_Open(fileName, options, fileSize, fileID, secureToken);
+    return Calypso_ATFile_Open(fileName, options, fileSize, fileID,
+                               secureToken);
 }
 /**
  * @brief  Close a file
@@ -419,7 +456,7 @@ bool ATFile_open(const char *fileName, uint32_t options, uint16_t fileSize,
  * @retval true if successful false in case of failure
  */
 bool ATFile_close(uint32_t fileID, char *certFileName, char *signature) {
-    return ATFile_Close(fileID, certFileName, signature);
+    return Calypso_ATFile_Close(fileID, certFileName, signature);
 }
 /**
  * @brief  Write to a file
@@ -435,8 +472,8 @@ bool ATFile_close(uint32_t fileID, char *certFileName, char *signature) {
 bool ATFile_write(uint32_t fileID, uint16_t offset, Calypso_DataFormat_t format,
                   bool encodeToBase64, uint16_t bytestoWrite, char *data,
                   uint16_t *writtenBytes) {
-    return ATFile_Write(fileID, offset, format, encodeToBase64, bytestoWrite,
-                        data, writtenBytes);
+    return Calypso_ATFile_Write(fileID, offset, format, encodeToBase64,
+                                bytestoWrite, data, writtenBytes);
 }
 
 /**
@@ -452,9 +489,9 @@ bool ATFile_write(uint32_t fileID, uint16_t offset, Calypso_DataFormat_t format,
  */
 bool ATFile_read(uint32_t fileID, uint16_t offset, Calypso_DataFormat_t format,
                  uint16_t bytesToRead, uint16_t *byteRead, char *data) {
-    return ATFile_Read(fileID, offset, format,
-                       Calypso_DataFormat_Binary != format, bytesToRead, data,
-                       byteRead);
+    return Calypso_ATFile_Read(fileID, offset, format,
+                               Calypso_DataFormat_Binary != format, bytesToRead,
+                               data, byteRead);
 }
 /**
  * @brief  Delete a file
@@ -463,7 +500,7 @@ bool ATFile_read(uint32_t fileID, uint16_t offset, Calypso_DataFormat_t format,
  * @retval true if successful false in case of failure
  */
 bool ATFile_del(const char *fileName, uint32_t secureToken) {
-    return ATFile_Delete(fileName, secureToken);
+    return Calypso_ATFile_Delete(fileName, secureToken);
 }
 /**
  * @brief  Get file info
@@ -472,8 +509,8 @@ bool ATFile_del(const char *fileName, uint32_t secureToken) {
  * @retval true if successful false in case of failure
  */
 bool ATFile_getInfo(const char *fileName, uint32_t secureToken,
-                    ATFile_FileInfo_t *fileInfo) {
-    return ATFile_GetInfo(fileName, secureToken, fileInfo);
+                    Calypso_ATFile_FileInfo_t *fileInfo) {
+    return Calypso_ATFile_GetInfo(fileName, secureToken, fileInfo);
 }
 
 /**
@@ -481,12 +518,12 @@ bool ATFile_getInfo(const char *fileName, uint32_t secureToken,
  * @param  mode mode of WLAN
  * @retval true if successful false in case of failure
  */
-bool Calypso_setWLANMode(ATWLAN_SetMode_t mode) {
-    if (!ATWLAN_SetMode(mode)) {
+bool Calypso_setWLANMode(Calypso_ATWLAN_SetMode_t mode) {
+    if (!Calypso_ATWLAN_SetMode(mode)) {
         return false;
     }
 
-    return ATDevice_Restart(0);
+    return Calypso_ATDevice_Restart(0);
 }
 
 /**
@@ -494,14 +531,14 @@ bool Calypso_setWLANMode(ATWLAN_SetMode_t mode) {
  * @param  modeP pointer to mode of WLAN
  * @retval true if successful false in case of failure
  */
-bool Calypso_getWLANMode(ATWLAN_SetMode_t *modeP) {
-    ATWLAN_Settings_t settings;
+bool Calypso_getWLANMode(Calypso_ATWLAN_SetMode_t *modeP) {
+    Calypso_ATWLAN_Settings_t settings;
 
-    settings.connection.role = ATWLAN_SetMode_NumberOfValues;
+    settings.connection.role = Calypso_ATWLAN_SetMode_NumberOfValues;
 
-    ATWLAN_Get(ATWLAN_SetID_Connection, 0, &settings);
+    Calypso_ATWLAN_Get(Calypso_ATWLAN_SetID_Connection, 0, &settings);
 
-    if (settings.connection.role == ATWLAN_SetMode_NumberOfValues) {
+    if (settings.connection.role == Calypso_ATWLAN_SetMode_NumberOfValues) {
         return false;
     }
 

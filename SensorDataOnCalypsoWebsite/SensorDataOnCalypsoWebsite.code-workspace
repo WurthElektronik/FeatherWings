@@ -11,12 +11,9 @@
 	],
 	"settings": {
 		"files.associations": {
-			"cctype": "c",
-			"type_traits": "c",
-			"typeinfo": "cpp",
-			"unordered_map": "cpp",
-			"xiosbase": "c",
-			"events.h": "c"
+			"*.h": "c",
+			"*.c": "c",
+			"*.cpp": "cpp"
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true

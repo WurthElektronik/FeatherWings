@@ -24,7 +24,8 @@
 **/
 #include "ICLED_demos.h"
 #include "ICLED.h"
-#include "global.h"
+#include <stdio.h>
+#include <ConfigPlatform.h>
 
 static uint16_t alphabet_current_column = 0;
 static uint16_t rainbow_current_column = 0;
@@ -392,7 +393,7 @@ bool ICLED_demo_start_show(bool *initial_test_run, bool *running, uint8_t *mode)
                 {
                     return true;
                 }
-                WE_Delay(80);
+                delay(80);
             }
         }
 
@@ -405,7 +406,7 @@ bool ICLED_demo_start_show(bool *initial_test_run, bool *running, uint8_t *mode)
             {
                 return true;
             }
-            WE_Delay(40);
+            delay(40);
         }
 
         ICLED_set_expanded_screen_all_pixels(60, 0, 0, 55);
@@ -417,7 +418,7 @@ bool ICLED_demo_start_show(bool *initial_test_run, bool *running, uint8_t *mode)
             return true;
         }
 
-        WE_Delay(250);
+        delay(250);
 
         if (*mode != 0)
         {

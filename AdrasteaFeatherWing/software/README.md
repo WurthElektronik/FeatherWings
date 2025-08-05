@@ -48,18 +48,24 @@ The quick start example for the Adrastea FeatherWing demonstrates a connection t
 void setup() {
     delay(3000);
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
-    Adrastea_pins.Adrastea_Pin_WakeUp.pin = 6;
+    AdrasteaI_uart.baudrate = 115200;
+    AdrasteaI_uart.flowControl = WE_FlowControl_NoFlowControl;
+    AdrasteaI_uart.parity = WE_Parity_None;
+    AdrasteaI_uart.uartInit = WE_UART_RXPin0_TXPin1_Init;
+    AdrasteaI_uart.uartDeinit = WE_UART_RXPin0_TXPin1_DeInit;
+    AdrasteaI_uart.uartTransmit = WE_UART_RXPin0_TXPin1_Transmit;
 
-    if (!Adrastea_Init(&Adrastea_pins, 115200, WE_FlowControl_NoFlowControl,
-                       WE_Parity_None, &Adrastea_EventCallback)) {
-        WE_DEBUG_PRINT("failed to initialize\r\n");
+    if (!AdrasteaI_Init(&AdrasteaI_uart, &AdrasteaI_pins,
+                        Adrastea_EventCallback)) {
+        WE_APP_PRINT("failed to initialize\r\n");
     }
 
-    WE_DEBUG_PRINT("Initialized\r\n");
+    WE_APP_PRINT("Initialized\r\n");
 
     adrasteaApplicationCurrentState =
         Adrastea_Application_SM_Wait4NetworkRegister;
@@ -68,9 +74,9 @@ void setup() {
            Adrastea_Application_SM_MQTT_PublishData) {
         switch (adrasteaApplicationCurrentState) {
             case Adrastea_Application_SM_Wait4NetworkRegister: {
-                if (!ATPacketDomain_SetNetworkRegistrationResultCode(
-                        ATPacketDomain_Network_Registration_Result_Code_Enable)) {
-                    WE_DEBUG_PRINT(
+                if (!AdrasteaI_ATPacketDomain_SetNetworkRegistrationResultCode(
+                        AdrasteaI_ATPacketDomain_Network_Registration_Result_Code_Enable)) {
+                    WE_APP_PRINT(
                         "failed to set network registration result code\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
@@ -78,16 +84,16 @@ void setup() {
                 }
 
                 // read current network to mcheck if already registered
-                if (!ATPacketDomain_ReadNetworkRegistrationStatus((
-                        ATPacketDomain_Network_Registration_Status_t*)&status)) {
-                    WE_DEBUG_PRINT(
+                if (!AdrasteaI_ATPacketDomain_ReadNetworkRegistrationStatus((
+                        AdrasteaI_ATPacketDomain_Network_Registration_Status_t*)&status)) {
+                    WE_APP_PRINT(
                         "failed to read network registration status\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                     break;
                 } else if (
                     status.state ==
-                    ATPacketDomain_Network_Registration_State_Registered_Roaming) {
+                    AdrasteaI_ATPacketDomain_Network_Registration_State_Registered_Roaming) {
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_MQTT_Connect;
                 } else {
@@ -97,32 +103,27 @@ void setup() {
                 break;
             }
             case Adrastea_Application_SM_MQTT_Connect: {
-                WE_DEBUG_PRINT("Network Registered\r\n");
-                if (!ATMQTT_SetMQTTUnsolicitedNotificationEvents(
-                        ATMQTT_Event_All, ATCommon_Event_State_Enable)) {
-                    WE_DEBUG_PRINT("failed to enable mqtt events\r\n");
+                WE_APP_PRINT("Network Registered\r\n");
+                if (!AdrasteaI_ATMQTT_SetMQTTUnsolicitedNotificationEvents(
+                        AdrasteaI_ATMQTT_Event_All,
+                        AdrasteaI_ATCommon_Event_State_Enable)) {
+                    WE_APP_PRINT("failed to enable mqtt events\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 }
 
-                if (!ATMQTT_ConfigureNodes(
-                        ATMQTT_Conn_ID_Single_Connectivity_Mode,
-                        (char*)MQTT_CLIENT_ID, (char*)MQTT_SERVER_ADDRESS, NULL,
-                        NULL)) {
-                    WE_DEBUG_PRINT("failed to configure node\r\n");
+                if (!AdrasteaI_ATMQTT_ConfigureNodes(
+                        AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode,
+                        (char*)MQTT_CLIENT_ID, (char*)MQTT_SERVER_ADDRESS,
+                        (char*)"", (char*)"")) {
+                    WE_APP_PRINT("failed to configure node\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 }
 
-                if (!ATMQTT_Disconnect(
-                        ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
-                    WE_DEBUG_PRINT("failed to disconnect\r\n");
-                    adrasteaApplicationCurrentState =
-                        Adrastea_Application_SM_Error;
-                }
-
-                if (!ATMQTT_Connect(ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
-                    WE_DEBUG_PRINT("failed to connect\r\n");
+                if (!AdrasteaI_ATMQTT_Connect(
+                        AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
+                    WE_APP_PRINT("failed to connect\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 } else if (adrasteaApplicationCurrentState ==
@@ -149,19 +150,20 @@ void loop() {
         char receivedbyte = Serial.read();
         if (receivedbyte != '\r' && receivedbyte != '\n') {
             payload[payloadIndex++] = receivedbyte;
-            WE_DEBUG_PRINT("%c", receivedbyte);
+            WE_APP_PRINT("%c", receivedbyte);
         } else if (receivedbyte == '\r') {
-            WE_DEBUG_PRINT("\r\n");
+            WE_APP_PRINT("\r\n");
             payload[payloadIndex] = '\0';
-            if (!ATMQTT_Publish(ATMQTT_Conn_ID_Single_Connectivity_Mode,
-                                ATMQTT_QoS_At_Least_Once,
-                                ATMQTT_Retain_Not_Retained, (char*)MQTT_TOPIC,
-                                payload, payloadIndex)) {
-                WE_DEBUG_PRINT("failed to publish\r\n");
+            if (!AdrasteaI_ATMQTT_Publish(
+                    AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode,
+                    AdrasteaI_ATMQTT_QoS_At_Least_Once,
+                    AdrasteaI_ATMQTT_Retain_Not_Retained, (char*)MQTT_TOPIC,
+                    payload, payloadIndex)) {
+                WE_APP_PRINT("failed to publish\r\n");
                 adrasteaApplicationCurrentState = Adrastea_Application_SM_Error;
             }
             payloadIndex = 0;
-            WE_DEBUG_PRINT("Data to send: ");
+            WE_APP_PRINT("Enter the data to send: ");
         }
     }
 }

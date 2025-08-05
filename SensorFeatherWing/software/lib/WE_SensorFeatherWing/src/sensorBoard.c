@@ -25,12 +25,14 @@
  */
 
 #include "sensorBoard.h"
-#include "WSEN_HIDS_2525020210001.h"  //Humidity Sensor
-#include "WSEN_HIDS_2525020210002.h"  //Humidity Sensor
-#include "WSEN_ITDS_2533020201601.h"  //Acelerometer Sensor
-#include "WSEN_PADS_2511020213301.h"  //Pressure Sensor
-#include "WSEN_TIDS_2521020222501.h"  //Temperature Sensor
-#include "global.h"
+#include <ConfigPlatform.h>
+#include <platform.h>
+#include <math.h>
+#include <WSEN_HIDS_2525020210001/WSEN_HIDS_2525020210001.h>  //Humidity Sensor
+#include <WSEN_HIDS_2525020210002/WSEN_HIDS_2525020210002.h>  //Humidity Sensor
+#include <WSEN_ITDS_2533020201601/WSEN_ITDS_2533020201601.h>  //Accelerometer Sensor
+#include <WSEN_PADS_2511020213301/WSEN_PADS_2511020213301.h>  //Pressure Sensor
+#include <WSEN_TIDS_2521020222501/WSEN_TIDS_2521020222501.h>  //Temperature Sensor
 
 static WE_sensorInterface_t hids_2525020210001, hids_2525020210002,
     tids_2521020222501, itds_2533020201601, pads_2511020213301;
@@ -41,7 +43,6 @@ bool sensorBoard_Init() {
     status = I2CInit();
 
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Platform I2C Init error\r\n");
         return false;
     }
 
@@ -65,11 +66,7 @@ bool PADS_2511020213301_simpleInit() {
     /* first communication test - WSEN_PADS*/
     status = PADS_getDeviceID(&pads_2511020213301, &deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == PADS_DEVICE_ID_VALUE)) {
-        WE_DEBUG_PRINT("WSEN_PADS Communication success\r\n");
-        WE_DEBUG_PRINT("DeviceID 0x%02X \r\n", deviceIdValue);
-    } else {
-        WE_DEBUG_PRINT("WSEN_PADS Communication fail\r\n");
+    if ((status != WE_SUCCESS) || (deviceIdValue != PADS_DEVICE_ID_VALUE)) {
         return false;
     }
 
@@ -77,42 +74,36 @@ bool PADS_2511020213301_simpleInit() {
     status = PADS_setOutputDataRate(&pads_2511020213301,
                                     PADS_outputDataRatePowerDown);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Set ODR error\r\n");
         return false;
     }
 
     /*set low pass filter to BW=ODR/20*/
     status = PADS_setLowPassFilterConfig(&pads_2511020213301, PADS_lpFilterBW2);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Set LPF config error\r\n");
         return false;
     }
 
     /*enable low pass filter */
     status = PADS_enableLowPassFilter(&pads_2511020213301, PADS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("LPF enable error\r\n");
         return false;
     }
 
     /*enable Block Data Update*/
     status = PADS_enableBlockDataUpdate(&pads_2511020213301, PADS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("BDU set error\r\n");
         return false;
     }
 
     /*select Power Mode [0:low Current Mode; 1:low noise Mode]*/
     status = PADS_setPowerMode(&pads_2511020213301, PADS_lowNoise);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Set power mode error\r\n");
         return false;
     }
 
     /*enable the Auto Increment */
     status = PADS_enableAutoIncrement(&pads_2511020213301, PADS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Set auto increment error\r\n");
         return false;
     }
 
@@ -132,7 +123,6 @@ bool PADS_2511020213301_readSensorData(float *pressure, float *temp) {
     /*Start a conversion*/
     status = PADS_enableOneShot(&pads_2511020213301, PADS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Set single conv mode error\r\n");
         return false;
     }
 
@@ -141,7 +131,6 @@ bool PADS_2511020213301_readSensorData(float *pressure, float *temp) {
     if (pressure) {
         status = PADS_getPressure_float(&pads_2511020213301, pressure);
         if (status != WE_SUCCESS) {
-            WE_DEBUG_PRINT("Get pressure failed\r\n");
             return false;
         }
         /*Round to 3 decimal places*/
@@ -151,7 +140,6 @@ bool PADS_2511020213301_readSensorData(float *pressure, float *temp) {
     if (temp) {
         status = PADS_getTemperature_float(&pads_2511020213301, temp);
         if (status != WE_SUCCESS) {
-            WE_DEBUG_PRINT("Get temperature failed error\r\n");
             return false;
         }
 
@@ -175,61 +163,49 @@ bool ITDS_2533020201601_simpleInit() {
     /* first communication test - WSEN_ITDS */
     status = ITDS_getDeviceID(&itds_2533020201601, &deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == ITDS_DEVICE_ID_VALUE)) {
-        WE_DEBUG_PRINT("WSEN_ITDS Communication success\r\n");
-        WE_DEBUG_PRINT("DeviceID 0x%02X \r\n", deviceIdValue);
-    } else {
-        WE_DEBUG_PRINT("WSEN_ITDS Communication fail\r\n");
+    if ((status != WE_SUCCESS) || (deviceIdValue != ITDS_DEVICE_ID_VALUE)) {
         return false;
     }
 
     // /*Enable high performance mode*/
     status = ITDS_setOperatingMode(&itds_2533020201601, ITDS_highPerformance);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set operating mode fail\r\n");
         return false;
     }
 
     // /*Sampling rate of 400 Hz*/
     status = ITDS_setOutputDataRate(&itds_2533020201601, ITDS_odr7);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set ODR fail\r\n");
         return false;
     }
     status = ITDS_setPowerMode(&itds_2533020201601, ITDS_normalMode);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set power mode fail\r\n");
         return false;
     }
     /*Enable block data update*/
     status = ITDS_enableBlockDataUpdate(&itds_2533020201601, ITDS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set BDU fail\r\n");
         return false;
     }
     /*Enable address auto increment*/
     status = ITDS_enableAutoIncrement(&itds_2533020201601, ITDS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set auto increment fail\r\n");
         return false;
     }
     // /*2g*/
     status = ITDS_setFullScale(&itds_2533020201601, ITDS_twoG);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set set full scale fail\r\n");
         return false;
     }
     /*Filter bandwidth = ODR/2*/
     status =
         ITDS_setFilteringCutoff(&itds_2533020201601, ITDS_outputDataRate_2);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set filter cutoff fail\r\n");
         return false;
     }
 
     status = ITDS_enableLowNoise(&itds_2533020201601, ITDS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set low noise fail\r\n");
         return false;
     }
 
@@ -307,7 +283,6 @@ bool ITDS_2533020201601_readSensorData(float *accelX, float *accelY,
 
     status = ITDS_isAccelerationDataReady(&itds_2533020201601, &DRDY);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("read drdy fail\r\n");
         return false;
     }
 
@@ -315,7 +290,6 @@ bool ITDS_2533020201601_readSensorData(float *accelX, float *accelY,
         if (accelX) {
             status = ITDS_getRawAccelerationX(&itds_2533020201601, &XRawAcc);
             if (status != WE_SUCCESS) {
-                WE_DEBUG_PRINT("read acceleraion X fail\r\n");
                 return false;
             }
             XRawAcc = XRawAcc >> 2;
@@ -329,7 +303,6 @@ bool ITDS_2533020201601_readSensorData(float *accelX, float *accelY,
         if (accelY) {
             status = ITDS_getRawAccelerationY(&itds_2533020201601, &YRawAcc);
             if (status != WE_SUCCESS) {
-                WE_DEBUG_PRINT("read acceleraion Y fail\r\n");
                 return false;
             }
             YRawAcc = YRawAcc >> 2;
@@ -343,7 +316,6 @@ bool ITDS_2533020201601_readSensorData(float *accelX, float *accelY,
         if (accelZ) {
             status = ITDS_getRawAccelerationZ(&itds_2533020201601, &ZRawAcc);
             if (status != WE_SUCCESS) {
-                WE_DEBUG_PRINT("read acceleraion Z fail\r\n");
                 return false;
             }
             ZRawAcc = ZRawAcc >> 2;
@@ -357,12 +329,10 @@ bool ITDS_2533020201601_readSensorData(float *accelX, float *accelY,
         if (temp) {
             status = ITDS_getTemperature12bit(&itds_2533020201601, temp);
             if (status != WE_SUCCESS) {
-                WE_DEBUG_PRINT("read temperature fail\r\n");
                 return false;
             }
         }
     } else {
-        WE_DEBUG_PRINT("ITDS data not ready\r\n");
         return false;
     }
 
@@ -379,14 +349,12 @@ bool ITDS_2533020201601_readDoubleTapEvent(bool *stateOccured) {
     ITDS_state_t tap;
     status = ITDS_getDoubleTapState(&itds_2533020201601, &tap);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("read tap fail\r\n");
         return false;
     }
     if (tap == ITDS_enable) {
         // This is needed to reset the bit to 0
         status = ITDS_isTapEvent(&itds_2533020201601, &tap);
         if (status != WE_SUCCESS) {
-            WE_DEBUG_PRINT("read tap fail\r\n");
             return false;
         }
     }
@@ -404,7 +372,6 @@ bool ITDS_2533020201601_readFreeFallEvent(bool *stateOccured) {
     ITDS_state_t freefall;
     status = ITDS_isFreeFallEvent(&itds_2533020201601, &freefall);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("read freefall fail\r\n");
         return false;
     }
     *stateOccured = (bool)freefall;
@@ -424,11 +391,7 @@ bool TIDS_2521020222501_simpleInit() {
     /* first communication test - WSEN_TIDS */
     status = TIDS_getDeviceID(&tids_2521020222501, &deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == TIDS_DEVICE_ID_VALUE)) {
-        WE_DEBUG_PRINT("WSEN_TIDS Communication success\r\n");
-        WE_DEBUG_PRINT("DeviceID 0x%02X \r\n", deviceIdValue);
-    } else {
-        WE_DEBUG_PRINT("WSEN_TIDS Communication fail\r\n", 30);
+    if ((status != WE_SUCCESS) && (deviceIdValue != TIDS_DEVICE_ID_VALUE)) {
         return false;
     }
     return true;
@@ -446,18 +409,15 @@ bool TIDS_2521020222501_readSensorData(float *temp) {
     /*Start a conversion*/
     status = TIDS_softReset(&tids_2521020222501, TIDS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Sw reset fail\r\n");
         return false;
     }
     status = TIDS_softReset(&tids_2521020222501, TIDS_disable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Sw reset fail\r\n");
         return false;
     }
 
     status = TIDS_enableOneShot(&tids_2521020222501, TIDS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("set single conversion fail\r\n");
         return false;
     }
 
@@ -471,14 +431,12 @@ bool TIDS_2521020222501_readSensorData(float *temp) {
     } while (temperatureDataStatus == TIDS_enable);
 
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("get busy bit failed\r\n");
         return false;
     }
 
     if (temp) {
         status = TIDS_getTemperature(&tids_2521020222501, temp);
         if (status != WE_SUCCESS) {
-            WE_DEBUG_PRINT("get temperature fail\r\n");
             return false;
         }
         /*Round to 2 decimal places*/
@@ -501,33 +459,25 @@ bool HIDS_2525020210001_simpleInit() {
     /* first communication test - WSEN_HIDS */
     status = HIDS_getDeviceID(&hids_2525020210001, &deviceIdValue);
 
-    if ((status == WE_SUCCESS) && (deviceIdValue == HIDS_DEVICE_ID_VALUE)) {
-        WE_DEBUG_PRINT("WSEN_HIDS Communication success\r\n");
-        WE_DEBUG_PRINT("DeviceID 0x%02X \r\n", deviceIdValue);
-    } else {
-        WE_DEBUG_PRINT("WSEN_HIDS Communication fail\r\n");
+    if ((status != WE_SUCCESS) || (deviceIdValue != HIDS_DEVICE_ID_VALUE)) {
         return false;
     }
 
     /*enable Block Data Update*/
     status = HIDS_enableBlockDataUpdate(&hids_2525020210001, HIDS_enable);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("HIDS BDU set error\r\n");
-
         return false;
     }
 
     /*Set ODR to one shot mode*/
     status = HIDS_setOutputDataRate(&hids_2525020210001, HIDS_oneShot);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("HIDS one shot set error\r\n");
         return false;
     }
 
     /*Power mode to active*/
     status = HIDS_setPowerMode(&hids_2525020210001, HIDS_activeMode);
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("HIDS power mode set error\r\n");
         return false;
     }
     return true;
@@ -545,7 +495,7 @@ bool HIDS_2525020210001_readSensorData(float *humidity, float *temp) {
     /*Start a conversion*/
 
     if (WE_FAIL == HIDS_enableOneShot(&hids_2525020210001, HIDS_enable)) {
-        WE_DEBUG_PRINT("Could not set to one shot \r\n");
+        return false;
     }
 
     // Get status of data
@@ -557,7 +507,6 @@ bool HIDS_2525020210001_readSensorData(float *humidity, float *temp) {
         if (humidity) {
             status = HIDS_getHumidity_float(&hids_2525020210001, humidity);
             if (status != WE_SUCCESS) {
-                WE_DEBUG_PRINT("Get humidity failed\r\n");
                 return false;
             }
             /*Round to 2 decimal places*/
@@ -567,7 +516,6 @@ bool HIDS_2525020210001_readSensorData(float *humidity, float *temp) {
         if (temp) {
             status = HIDS_getTemperature_float(&hids_2525020210001, temp);
             if (status != WE_SUCCESS) {
-                WE_DEBUG_PRINT("Get temperature failed\r\n");
                 return false;
             }
             /*Round to 2 decimal places*/
@@ -575,7 +523,6 @@ bool HIDS_2525020210001_readSensorData(float *humidity, float *temp) {
         }
 
     } else {
-        WE_DEBUG_PRINT("HIDS data not ready\r\n");
         return false;
     }
 
@@ -594,11 +541,7 @@ bool HIDS_2525020210002_simpleInit() {
     /* first communication test - WSEN_HIDS */
     status = HIDS_Sensor_Init(&hids_2525020210002);
 
-    if (status == WE_SUCCESS) {
-        WE_DEBUG_PRINT("WSEN_HIDS Communication success\r\n");
-
-    } else {
-        WE_DEBUG_PRINT("WSEN_HIDS Communication fail\r\n");
+    if (status != WE_SUCCESS) {
         return false;
     }
 
@@ -618,7 +561,6 @@ bool HIDS_2525020210002_readSensorData(float *humidity, float *temp) {
                                      &temperature_temp, &humidity_temp);
 
     if (status != WE_SUCCESS) {
-        WE_DEBUG_PRINT("Could not make measurement\r\n");
         return false;
     }
 

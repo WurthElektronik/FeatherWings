@@ -24,19 +24,26 @@ This example implements the functionality of a bridge between the proprietary ne
 void setup() {
     delay(3000);
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
-    WE_DEBUG_PRINT("Starting initialization of Adrastea...\r\n");
-    Adrastea_pins.Adrastea_Pin_WakeUp.pin = 6;
+    WE_APP_PRINT("Starting initialization of Adrastea...\r\n");
 
-    if (!Adrastea_Init(&Adrastea_pins, 115200, WE_FlowControl_NoFlowControl,
-                       WE_Parity_None, &Adrastea_EventCallback)) {
-        WE_DEBUG_PRINT("failed to initialize\r\n");
+    AdrasteaI_uart.baudrate = 115200;
+    AdrasteaI_uart.flowControl = WE_FlowControl_NoFlowControl;
+    AdrasteaI_uart.parity = WE_Parity_None;
+    AdrasteaI_uart.uartInit = WE_UART_RXPin0_TXPin1_Init;
+    AdrasteaI_uart.uartDeinit = WE_UART_RXPin0_TXPin1_DeInit;
+    AdrasteaI_uart.uartTransmit = WE_UART_RXPin0_TXPin1_Transmit;
+
+    if (!AdrasteaI_Init(&AdrasteaI_uart, &AdrasteaI_pins,
+                        Adrastea_EventCallback)) {
+        WE_APP_PRINT("failed to initialize\r\n");
     }
 
-    WE_DEBUG_PRINT("Initialized\r\n");
+    WE_APP_PRINT("Initialized\r\n");
 
     adrasteaApplicationCurrentState =
         Adrastea_Application_SM_Wait4NetworkRegister;
@@ -45,9 +52,9 @@ void setup() {
            Adrastea_Application_SM_MQTT_PublishData) {
         switch (adrasteaApplicationCurrentState) {
             case Adrastea_Application_SM_Wait4NetworkRegister: {
-                if (!ATPacketDomain_SetNetworkRegistrationResultCode(
-                        ATPacketDomain_Network_Registration_Result_Code_Enable)) {
-                    WE_DEBUG_PRINT(
+                if (!AdrasteaI_ATPacketDomain_SetNetworkRegistrationResultCode(
+                        AdrasteaI_ATPacketDomain_Network_Registration_Result_Code_Enable)) {
+                    WE_APP_PRINT(
                         "failed to set network registration result code\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
@@ -55,16 +62,16 @@ void setup() {
                 }
 
                 // read current network to mcheck if already registered
-                if (!ATPacketDomain_ReadNetworkRegistrationStatus((
-                        ATPacketDomain_Network_Registration_Status_t*)&status)) {
-                    WE_DEBUG_PRINT(
+                if (!AdrasteaI_ATPacketDomain_ReadNetworkRegistrationStatus((
+                        AdrasteaI_ATPacketDomain_Network_Registration_Status_t*)&status)) {
+                    WE_APP_PRINT(
                         "failed to read network registration status\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                     break;
                 } else if (
                     status.state ==
-                    ATPacketDomain_Network_Registration_State_Registered_Roaming) {
+                    AdrasteaI_ATPacketDomain_Network_Registration_State_Registered_Roaming) {
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_MQTT_Connect;
                 } else {
@@ -74,25 +81,27 @@ void setup() {
                 break;
             }
             case Adrastea_Application_SM_MQTT_Connect: {
-                WE_DEBUG_PRINT("Network Registered\r\n");
-                if (!ATMQTT_SetMQTTUnsolicitedNotificationEvents(
-                        ATMQTT_Event_All, ATCommon_Event_State_Enable)) {
-                    WE_DEBUG_PRINT("failed to enable mqtt events\r\n");
+                WE_APP_PRINT("Network Registered\r\n");
+                if (!AdrasteaI_ATMQTT_SetMQTTUnsolicitedNotificationEvents(
+                        AdrasteaI_ATMQTT_Event_All,
+                        AdrasteaI_ATCommon_Event_State_Enable)) {
+                    WE_APP_PRINT("failed to enable mqtt events\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 }
 
-                if (!ATMQTT_ConfigureNodes(
-                        ATMQTT_Conn_ID_Single_Connectivity_Mode,
+                if (!AdrasteaI_ATMQTT_ConfigureNodes(
+                        AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode,
                         (char*)MQTT_CLIENT_ID, (char*)MQTT_SERVER_ADDRESS, NULL,
                         NULL)) {
-                    WE_DEBUG_PRINT("failed to configure node\r\n");
+                    WE_APP_PRINT("failed to configure node\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 }
 
-                if (!ATMQTT_Connect(ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
-                    WE_DEBUG_PRINT("failed to connect\r\n");
+                if (!AdrasteaI_ATMQTT_Connect(
+                        AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode)) {
+                    WE_APP_PRINT("failed to connect\r\n");
                     adrasteaApplicationCurrentState =
                         Adrastea_Application_SM_Error;
                 } else if (adrasteaApplicationCurrentState ==
@@ -110,20 +119,23 @@ void setup() {
         }
     }
 
+    /*Set the mode pin on Setebos to Thyone-I mode*/
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, HIGH);
+
     /*Initialize the Thyone-I FeatherWing*/
-    WE_DEBUG_PRINT("Starting initialization of Thyone...\r\n");
+    WE_APP_PRINT("Starting initialization of Thyone...\r\n");
 
-    /*Connect the pins 1 and 2 on JP1 to use the Wake-up feature on Pin GPIO9*/
-    ThyoneI_pins.ThyoneI_Pin_SleepWakeUp.pin = 9;
+    ThyoneI_uart.baudrate = THYONEI_DEFAULT_BAUDRATE;
+    ThyoneI_uart.flowControl = WE_FlowControl_NoFlowControl;
+    ThyoneI_uart.parity = WE_Parity_None;
+    ThyoneI_uart.uartInit = WE_UART_RXPin11_TXPin10_Init;
+    ThyoneI_uart.uartDeinit = WE_UART_RXPin11_TXPin10_DeInit;
+    ThyoneI_uart.uartTransmit = WE_UART_RXPin11_TXPin10_Transmit;
 
-    /*Connect the pins 3 and 4 on JP1 to use the mode change feature on Pin
-     * GPIOA3/Pin17*/
-    ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
-
-    if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
-                      WE_FlowControl_NoFlowControl,
+    if (!ThyoneI_Init(&ThyoneI_uart, &ThyoneI_pins,
                       ThyoneI_OperationMode_CommandMode, RxCallback)) {
-        WE_DEBUG_PRINT("Thyone init failed \r\n");
+        WE_APP_PRINT("Thyone init failed \r\n");
     }
 }
 ```
@@ -134,17 +146,19 @@ static void RxCallback(uint8_t* payload, uint16_t payload_length,
                        uint32_t sourceAddress, int8_t rssi) {
     int i = 0;
 
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("\r\n");
     for (i = 0; i < payload_length; i++) {
-        WE_DEBUG_PRINT("%c", *(payload + i));
+        WE_APP_PRINT("%c", *(payload + i));
     }
-    WE_DEBUG_PRINT("\r\n");
+    WE_APP_PRINT("\r\n");
     /*Publish the packet received via Adrastea-I FeatherWing*/
     payload[payload_length] = '\0';
-    if (!ATMQTT_Publish(ATMQTT_Conn_ID_Single_Connectivity_Mode,
-                        ATMQTT_QoS_At_Least_Once, ATMQTT_Retain_Not_Retained,
-                        (char*)MQTT_TOPIC, (char*)payload, payload_length)) {
-        WE_DEBUG_PRINT("failed to publish\r\n");
+    if (!AdrasteaI_ATMQTT_Publish(
+            AdrasteaI_ATMQTT_Conn_ID_Single_Connectivity_Mode,
+            AdrasteaI_ATMQTT_QoS_At_Least_Once,
+            AdrasteaI_ATMQTT_Retain_Not_Retained, (char*)MQTT_TOPIC,
+            (char*)payload, payload_length)) {
+        WE_APP_PRINT("failed to publish\r\n");
         adrasteaApplicationCurrentState = Adrastea_Application_SM_Error;
     }
 }

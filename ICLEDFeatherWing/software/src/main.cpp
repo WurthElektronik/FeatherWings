@@ -28,13 +28,13 @@
 #define SENSORFEATHERWING false
 
 /**         Includes         */
-#include "global.h"
-#include "debug.h"
+#include <ConfigPlatform.h>
+#include <we_print.h>
 #include "ICLED.h"
 #include "ICLED_demos.h"
 
 #if SENSORFEATHERWING == true
-#include "sensorBoard.h"
+#include <sensorBoard.h>
 static float ITDS_acceleration_y;
 static volatile bool check_orientation = false;
 #define HIDS_PART_NUMBER 2525020210002
@@ -46,12 +46,29 @@ void TC3_Handler();
 #endif
 
 #if PROTEUSIIIFEATHERWING == true
-#include "ProteusIII.h"
+#include <global/global.h>
+#include <global_platform_types.h>
+#include <ProteusIII/ProteusIII.h>
 #define PAYLOAD_BUFFER_SIZE 64
 
 static uint8_t payload_buffer[PAYLOAD_BUFFER_SIZE];
 
-static ProteusIII_Pins_t ProteusIII_pins;
+/*Connect the pins 1 and 2 on JP1 to use the Wake-up feature on Pin GPIO9*/
+static const WE_Arduino_Pin_t pin_SleepWakeUp = WE_ARDUINO_PIN(9);
+
+/*Connect the pins 3 and 4 on JP1 to use the mode change feature on Pin
+ * GPIOA3/Pin17*/
+static const WE_Arduino_Pin_t pin_Mode = WE_ARDUINO_PIN(17);
+
+static ProteusIII_Pins_t ProteusIII_pins = {
+    .ProteusIII_Pin_Reset = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_SleepWakeUp = WE_PIN((void *)&pin_SleepWakeUp),
+    .ProteusIII_Pin_Boot = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_Mode = WE_PIN((void *)&pin_Mode),
+    .ProteusIII_Pin_Busy = WE_PIN_UNDEFINED(),
+    .ProteusIII_Pin_StatusLed2 = WE_PIN_UNDEFINED()};
+
+static WE_UART_t ProteusIII_uart;
 
 /* Callback functions for various indications sent by the Proteus-III. */
 static void RxCallback(uint8_t *payload, uint16_t payloadLength, uint8_t *btMac,
@@ -96,24 +113,28 @@ void setup()
 {
 
     // Using the USB serial port for debug messages
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
 #if PROTEUSIIIFEATHERWING == true
 
-    ProteusIII_pins.ProteusIII_Pin_SleepWakeUp.pin = 9;
-    ProteusIII_pins.ProteusIII_Pin_Mode.pin = 17;
-
     ProteusIII_CallbackConfig_t callbackConfig = {0};
     callbackConfig.rxCb = RxCallback;
 
-    if (!ProteusIII_Init(&ProteusIII_pins, PROTEUSIII_DEFAULT_BAUDRATE,
-                         WE_FlowControl_NoFlowControl,
+    ProteusIII_uart.baudrate = PROTEUSIII_DEFAULT_BAUDRATE;
+    ProteusIII_uart.flowControl = WE_FlowControl_NoFlowControl;
+    ProteusIII_uart.parity = WE_Parity_None;
+    ProteusIII_uart.uartInit = WE_UART_RXPin11_TXPin10_Init;
+    ProteusIII_uart.uartDeinit = WE_UART_RXPin11_TXPin10_DeInit;
+    ProteusIII_uart.uartTransmit = WE_UART_RXPin11_TXPin10_Transmit;
+
+    if (!ProteusIII_Init(&ProteusIII_uart, &ProteusIII_pins,
                          ProteusIII_OperationMode_CommandMode,
                          callbackConfig))
     {
-        WE_DEBUG_PRINT("Proteus init failed \r\n");
+        WE_APP_PRINT("Proteus init failed \r\n");
     }
 
     uint8_t oldName[32];
@@ -121,7 +142,7 @@ void setup()
 
     if (!ProteusIII_GetDeviceName(oldName, &oldnameLength))
     {
-        WE_DEBUG_PRINT("Proteus failed to get name \r\n");
+        WE_APP_PRINT("Proteus failed to get name \r\n");
         exit(0);
     }
 
@@ -132,7 +153,7 @@ void setup()
         // Set name to ICLED
         if (!ProteusIII_SetDeviceName((uint8_t *)newName, strlen(newName)))
         {
-            WE_DEBUG_PRINT("Proteus failed to set name \r\n");
+            WE_APP_PRINT("Proteus failed to set name \r\n");
         }
     }
 
@@ -141,28 +162,28 @@ void setup()
 #if SENSORFEATHERWING == true
     if (!sensorBoard_Init())
     {
-        WE_DEBUG_PRINT("I2C init failed \r\n");
+        WE_APP_PRINT("I2C init failed \r\n");
     }
 
     if (!ITDS_2533020201601_simpleInit())
     {
-        WE_DEBUG_PRINT("ITDS init failed \r\n");
+        WE_APP_PRINT("ITDS init failed \r\n");
     }
 
     if (!TIDS_2521020222501_simpleInit())
     {
-        WE_DEBUG_PRINT("TIDS init failed \r\n");
+        WE_APP_PRINT("TIDS init failed \r\n");
     }
 
 #if HIDS_PART_NUMBER == 2525020210001
     if (!HIDS_2525020210001_simpleInit())
     {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
     }
 #elif HIDS_PART_NUMBER == 2525020210002
     if (!HIDS_2525020210002_simpleInit())
     {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
     }
 #endif
 
@@ -172,7 +193,7 @@ void setup()
 
     if (!ICLED_Init(RGB, Landscape))
     {
-        WE_DEBUG_PRINT("ICLED init failed \r\n");
+        WE_APP_PRINT("ICLED init failed \r\n");
     }
 
     pinMode(ICLED_PROG_PIN, INPUT_PULLUP);
@@ -188,17 +209,17 @@ void loop()
     {
         if (!TIDS_2521020222501_readSensorData(&TIDS_temp))
         {
-            WE_DEBUG_PRINT("error reading TIDS data \r\n");
+            WE_APP_PRINT("error reading TIDS data \r\n");
         }
 #if HIDS_PART_NUMBER == 2525020210001
         if (!HIDS_2525020210001_readSensorData(&HIDS_humidity, NULL))
         {
-            WE_DEBUG_PRINT("error reading TIDS data \r\n");
+            WE_APP_PRINT("error reading TIDS data \r\n");
         }
 #elif HIDS_PART_NUMBER == 2525020210002
         if (!HIDS_2525020210002_readSensorData(&HIDS_humidity, NULL))
         {
-            WE_DEBUG_PRINT("error reading TIDS data \r\n");
+            WE_APP_PRINT("error reading TIDS data \r\n");
         }
 #endif
         if (ITDS_2533020201601_readSensorData(NULL, &ITDS_acceleration_y, NULL, NULL))
@@ -331,7 +352,7 @@ void loop()
 #endif
     case TEST_Total_Count:
     {
-        WE_DEBUG_PRINT("Invalid Test \r\n");
+        WE_APP_PRINT("Invalid Test \r\n");
         exit(0);
     }
     }

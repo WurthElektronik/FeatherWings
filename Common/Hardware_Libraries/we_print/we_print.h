@@ -1,0 +1,56 @@
+/*
+ ***************************************************************************************************
+ * This file is part of WIRELESS CONNECTIVITY SDK:
+ *
+ *
+ * THE SOFTWARE INCLUDING THE SOURCE CODE IS PROVIDED “AS IS”. YOU ACKNOWLEDGE THAT WÜRTH ELEKTRONIK
+ * EISOS MAKES NO REPRESENTATIONS AND WARRANTIES OF ANY KIND RELATED TO, BUT NOT LIMITED
+ * TO THE NON-INFRINGEMENT OF THIRD PARTIES’ INTELLECTUAL PROPERTY RIGHTS OR THE
+ * MERCHANTABILITY OR FITNESS FOR YOUR INTENDED PURPOSE OR USAGE. WÜRTH ELEKTRONIK EISOS DOES NOT
+ * WARRANT OR REPRESENT THAT ANY LICENSE, EITHER EXPRESS OR IMPLIED, IS GRANTED UNDER ANY PATENT
+ * RIGHT, COPYRIGHT, MASK WORK RIGHT, OR OTHER INTELLECTUAL PROPERTY RIGHT RELATING TO ANY
+ * COMBINATION, MACHINE, OR PROCESS IN WHICH THE PRODUCT IS USED. INFORMATION PUBLISHED BY
+ * WÜRTH ELEKTRONIK EISOS REGARDING THIRD-PARTY PRODUCTS OR SERVICES DOES NOT CONSTITUTE A LICENSE
+ * FROM WÜRTH ELEKTRONIK EISOS TO USE SUCH PRODUCTS OR SERVICES OR A WARRANTY OR ENDORSEMENT
+ * THEREOF
+ *
+ * THIS SOURCE CODE IS PROTECTED BY A LICENSE.
+ * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
+ * IN THE ROOT DIRECTORY OF THIS DRIVER PACKAGE.
+ *
+ * COPYRIGHT (c) 2025 Würth Elektronik eiSos GmbH & Co. KG
+ *
+ ***************************************************************************************************
+ */
+
+/**
+ * @file
+ * @brief This is the print header file of the WE Wireless Connectivity SDK.
+ */
+
+#ifndef WE_PRINT_H_INCLUDED
+#define WE_PRINT_H_INCLUDED
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#ifdef WE_APP_PRINT_ENABLED
+#define WE_APP_PRINT(...) WE_Print(__VA_ARGS__)
+#define WE_APP_PRINT_V(format, args) WE_Print_V(format, args)
+#else
+#define WE_APP_PRINT(...)
+#define WE_APP_PRINT_V(format, args)
+#endif
+
+    void WE_Print_Init();
+    void WE_Print(const char format[], ...);
+    void WE_Print_V(const char *format, va_list args);
+    void WE_Print_Flush();
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* WE_PRINT_H_INCLUDED */

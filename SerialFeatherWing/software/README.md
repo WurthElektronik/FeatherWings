@@ -38,8 +38,9 @@ This example requires the Serial Bridge FeatherWing connected to the M0 Feather 
 
 ```C
 void setup() {
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
 
 #if SerialCommunicationStandard == RS485
@@ -50,22 +51,23 @@ void setup() {
 
 #if FeatherWing == CalypsoWiFiFeatherWing
 
-    WE_UART_RXPin11_TXPin10_Init(115200, WE_FlowControl_NoFlowControl,
-                                 WE_Parity_None);
+    WE_UART_RXPin11_TXPin10_Init(
+        115200, WE_FlowControl_NoFlowControl, WE_Parity_None,
+        (WE_UART_HandleRxByte_t *)&WE_UART_RXPin11_TXPin10_HandleRxByte);
 
     // Wi-Fi settings
     strcpy(calSettings.wifiSettings.SSID, WI_FI_SSID);
     strcpy(calSettings.wifiSettings.securityParams.securityKey, WI_FI_PASSWORD);
     calSettings.wifiSettings.securityParams.securityType =
-        ATWLAN_SecurityType_WPA_WPA2;
+        Calypso_ATWLAN_SecurityType_WPA_WPA2;
 
     // MQTT Settings - Mosquitto broker(non-secure for demo purposes only)
     strcpy(calSettings.mqttSettings.clientID, MQTT_CLIENT_ID);
-    calSettings.mqttSettings.flags = ATMQTT_CreateFlags_URL;
+    calSettings.mqttSettings.flags = Calypso_ATMQTT_CreateFlags_URL;
     strcpy(calSettings.mqttSettings.serverInfo.address, MQTT_SERVER_ADDRESS);
     calSettings.mqttSettings.serverInfo.port = MQTT_PORT;
     calSettings.mqttSettings.connParams.protocolVersion =
-        ATMQTT_ProtocolVersion_v3_1;
+        Calypso_ATMQTT_ProtocolVersion_v3_1;
     calSettings.mqttSettings.connParams.blockingSend = 0;
     calSettings.mqttSettings.connParams.format = Calypso_DataFormat_Base64;
     strcpy(calSettings.mqttSettings.userOptions.userName, "\0");
@@ -73,38 +75,52 @@ void setup() {
 
     // Initialize Calypso
     if (!Calypso_simpleInit(&calSettings, &Calypso_EventCallback)) {
-        WE_DEBUG_PRINT("Calypso init failed \r\n");
+        WE_APP_PRINT("Calypso init failed \r\n");
     }
 
     while (currentState != SerialFeatherWing_SM_Calypso_StartUp) {
     }
 
     // to wait for calypso auto connect
-    WE_Delay(30);
+    WE_Delay(1000);
+    Calypso_ATWLAN_SetMode_t mode;
 
-    if (currentState == SerialFeatherWing_SM_Calypso_StartUp) {
-        currentState = SerialFeatherWing_SM_Wlan_Connect;
+    if (!Calypso_getWLANMode(&mode)) {
+        WE_APP_PRINT("get wlan mode failed\r\n");
+        return;
+    } else if (mode == Calypso_ATWLAN_SetMode_Station) {
+        if (currentState == SerialFeatherWing_SM_Calypso_StartUp) {
+            currentState = SerialFeatherWing_SM_Wlan_Connect;
+            return;
+        }
     }
+
+    if (!Calypso_setWLANMode(Calypso_ATWLAN_SetMode_Station)) {
+        WE_APP_PRINT("set wlan mode failed\r\n");
+        return;
+    }
+
+    currentState = SerialFeatherWing_SM_Wlan_Connect;
 
 #elif FeatherWing == ThyoneWirelessFeatherWing
     uint8_t serialNrThy[4] = {0};
 
-    WE_UART_RXPin0_TXPin1_Init(115200, WE_FlowControl_NoFlowControl,
-                               WE_Parity_None);
+    WE_UART_RXPin0_TXPin1_Init(
+        115200, WE_FlowControl_NoFlowControl, WE_Parity_None,
+        (WE_UART_HandleRxByte_t *)&WE_UART_RXPin0_TXPin1_HandleRxByte);
 
-    ThyoneI_pins.ThyoneI_Pin_SleepWakeUp.pin = 9;
-    ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
+    SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
+    WritePin(SETEBOS_MODE_PIN, HIGH);
 
-    if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
-                      WE_FlowControl_NoFlowControl,
+    if (!ThyoneI_Init(&ThyoneI_uart, &ThyoneI_pins,
                       ThyoneI_OperationMode_CommandMode, ThyoneRxCallback)) {
-        WE_DEBUG_PRINT("Thyone init failed \r\n");
+        WE_APP_PRINT("Thyone init failed \r\n");
     }
 
     if (ThyoneI_GetSerialNumber(serialNrThy)) {
-        WE_DEBUG_PRINT("Thyone-I default source address %02X%02X%02X%02X \r\n",
-                       serialNrThy[3], serialNrThy[2], serialNrThy[1],
-                       serialNrThy[0]);
+        WE_APP_PRINT("Thyone-I default source address %02X%02X%02X%02X \r\n",
+                     serialNrThy[3], serialNrThy[2], serialNrThy[1],
+                     serialNrThy[0]);
     }
 #endif
 }
@@ -116,7 +132,7 @@ void loop() {
 #if FeatherWing == CalypsoWiFiFeatherWing
         case SerialFeatherWing_SM_Wlan_Connect: {
             if (!Calypso_WLANconnect()) {
-                WE_DEBUG_PRINT("WiFi connect fail\r\n");
+                WE_APP_PRINT("WiFi connect fail\r\n");
                 currentState = SerialFeatherWing_SM_Idle;
             } else if (currentState == SerialFeatherWing_SM_Wlan_Connect) {
                 currentState = SerialFeatherWing_SM_Idle;
@@ -125,7 +141,7 @@ void loop() {
         }
         case SerialFeatherWing_SM_MQTT_Connect: {
             if (!Calypso_MQTTconnect()) {
-                WE_DEBUG_PRINT("MQTT connect fail\r\n");
+                WE_APP_PRINT("MQTT connect fail\r\n");
                 currentState = SerialFeatherWing_SM_Idle;
             } else if (currentState == SerialFeatherWing_SM_MQTT_Connect) {
                 currentState = SerialFeatherWing_SM_Idle;
@@ -133,12 +149,13 @@ void loop() {
             break;
         }
         case SerialFeatherWing_SM_MQTT_Subscribe: {
-            ATMQTT_SubscribeTopic_t nodeCommand = {.QoS = ATMQTT_QoS_QoS1};
+            Calypso_ATMQTT_SubscribeTopic_t nodeCommand = {
+                .QoS = Calypso_ATMQTT_QoS_QoS1};
 
             strcpy(nodeCommand.topic, MQTT_Subscribe_Topic);
 
             if (!Calypso_subscribe(0, 1, &nodeCommand)) {
-                WE_DEBUG_PRINT("MQTT subscription fail\r\n");
+                WE_APP_PRINT("MQTT subscription fail\r\n");
                 currentState = SerialFeatherWing_SM_Idle;
             } else if (currentState == SerialFeatherWing_SM_MQTT_Subscribe) {
                 currentState = SerialFeatherWing_SM_Idle;
@@ -150,12 +167,12 @@ void loop() {
 #if FeatherWing == CalypsoWiFiFeatherWing
             if (!Calypso_MQTTPublishData((char *)MQTT_Publish_Topic, 0,
                                          RXRSbuffer, strlen(RXRSbuffer))) {
-                WE_DEBUG_PRINT("Not able to send broadcast\r\n");
+                WE_APP_PRINT("Not able to send broadcast\r\n");
             }
 #elif FeatherWing == ThyoneWirelessFeatherWing
             if (ThyoneI_TransmitBroadcast((uint8_t *)RXRSbuffer,
                                           strlen(RXRSbuffer))) {
-                WE_DEBUG_PRINT("Broadcast sent! \r\n");
+                WE_APP_PRINT("Broadcast sent! \r\n");
             }
 #endif
             currentState = SerialFeatherWing_SM_Idle;
@@ -164,7 +181,7 @@ void loop() {
         case SerialFeatherWing_SM_RS_Send: {
 #if FeatherWing == CalypsoWiFiFeatherWing
 #if SerialCommunicationStandard == RS232
-            WE_UART_RXPin11_TXPin10_Transmit(RXModulebuffer,
+            WE_UART_RXPin11_TXPin10_Transmit((const uint8_t *)RXModulebuffer,
                                              strlen(RXModulebuffer));
 #elif SerialCommunicationStandard == RS485
             digitalWrite(12, HIGH);
@@ -174,7 +191,7 @@ void loop() {
 #endif
 #elif FeatherWing == ThyoneWirelessFeatherWing
 #if SerialCommunicationStandard == RS232
-            WE_UART_RXPin0_TXPin1_Transmit(RXModulebuffer,
+            WE_UART_RXPin0_TXPin1_Transmit((const uint8_t *)RXModulebuffer,
                                            strlen(RXModulebuffer));
 #elif SerialCommunicationStandard == RS485
             digitalWrite(12, HIGH);
@@ -183,7 +200,7 @@ void loop() {
             digitalWrite(12, LOW);
 #endif
 #endif
-            WE_DEBUG_PRINT("Data sent! \r\n");
+            WE_APP_PRINT("Data sent! \r\n");
             currentState = SerialFeatherWing_SM_Idle;
             break;
         }

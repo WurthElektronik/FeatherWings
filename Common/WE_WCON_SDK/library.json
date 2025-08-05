@@ -1,0 +1,18 @@
+{
+  "name": "WE_WCON_SDK",
+  "version": "2.4.0",
+  "description": "Würth Elektronik Wireless Connectivity SDK Core",
+  "build": {
+    "srcDir": "WCON_Drivers",
+    "srcFilter": [
+      "+<AdrasteaI/**/*.c>",
+      "+<Calypso/**/*.c>",
+      "+<DaphnisI/**/*.c>",
+      "+<ProteusIII/**/*.c>",
+      "+<ThyoneI/**/*.c>",
+      "+<global/**/*.c>",
+      "+<utils/**/*.c>"
+    ],
+    "includeDir": "WCON_Drivers"
+  }
+}

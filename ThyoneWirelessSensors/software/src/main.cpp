@@ -23,8 +23,12 @@
  * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE LOCATED
  * IN THE ROOT DIRECTORY OF THIS PACKAGE
  */
-#include "ThyoneI.h"
-#include "sensorBoard.h"
+#include <ConfigPlatform.h>
+#include <global/global.h>
+#include <global_platform_types.h>
+#include <ThyoneI/ThyoneI.h>
+#include <we_print.h>
+#include <sensorBoard.h>
 
 #define THYONE_DEFAULT_RF_CHANNEL 21
 #define THYONE_DEFAULT_RF_PROFILE 0
@@ -34,7 +38,22 @@
 char sendBuffer[224];
 char temp[64];
 
-ThyoneI_Pins_t ThyoneI_pins;
+/*Connect the pins 1 and 2 on JP1 to use the Wake-up feature on Pin GPIO9*/
+static const WE_Arduino_Pin_t pin_SleepWakeUp = WE_ARDUINO_PIN(9);
+
+/*Connect the pins 3 and 4 on JP1 to use the mode change feature on Pin
+ * GPIOA3/Pin17*/
+static const WE_Arduino_Pin_t pin_Mode = WE_ARDUINO_PIN(17);
+
+static ThyoneI_Pins_t ThyoneI_pins = {
+    .ThyoneI_Pin_Reset = WE_PIN_UNDEFINED(),
+    .ThyoneI_Pin_SleepWakeUp = WE_PIN((void *)&pin_SleepWakeUp),
+    .ThyoneI_Pin_Boot = WE_PIN_UNDEFINED(),
+    .ThyoneI_Pin_Mode = WE_PIN((void *)&pin_Mode),
+    .ThyoneI_Pin_Busy = WE_PIN_UNDEFINED(),
+};
+
+static WE_UART_t ThyoneI_uart;
 
 float PADS_pressure;
 float ITDS_accelX, ITDS_accelY, ITDS_accelZ;
@@ -46,54 +65,57 @@ float HIDS_humidity;
 void setup() {
     delay(5000);
 
-#ifdef WE_DEBUG
-    WE_Debug_Init();
+#if ((WE_DEBUG_PRINT_LEVEL > WE_Debug_Print_Level_Off) || \
+     defined(WE_APP_PRINT_ENABLED))
+    WE_Print_Init();
 #endif
-
-    ThyoneI_pins.ThyoneI_Pin_SleepWakeUp.pin = 9;
-    ThyoneI_pins.ThyoneI_Pin_Mode.pin = 17;
-
     /*Set the mode pin on Setebos to Thyone-I mode*/
     SetPinMode(SETEBOS_MODE_PIN, OUTPUT);
     WritePin(SETEBOS_MODE_PIN, HIGH);
 
-    if (!ThyoneI_Init(&ThyoneI_pins, THYONEI_DEFAULT_BAUDRATE,
-                      WE_FlowControl_NoFlowControl,
+    ThyoneI_uart.baudrate = THYONEI_DEFAULT_BAUDRATE;
+    ThyoneI_uart.flowControl = WE_FlowControl_NoFlowControl;
+    ThyoneI_uart.parity = WE_Parity_None;
+    ThyoneI_uart.uartInit = WE_UART_RXPin11_TXPin10_Init;
+    ThyoneI_uart.uartDeinit = WE_UART_RXPin11_TXPin10_DeInit;
+    ThyoneI_uart.uartTransmit = WE_UART_RXPin11_TXPin10_Transmit;
+
+    if (!ThyoneI_Init(&ThyoneI_uart, &ThyoneI_pins,
                       ThyoneI_OperationMode_CommandMode, NULL)) {
-        WE_DEBUG_PRINT("Thyone init failed \r\n");
+        WE_APP_PRINT("Thyone init failed \r\n");
     }
 
     uint8_t serialNrThy[4] = {0};
 
     if (ThyoneI_GetSerialNumber(serialNrThy)) {
-        WE_DEBUG_PRINT("Thyone-I default source address %02X%02X%02X%02X \r\n",
-                       serialNrThy[3], serialNrThy[2], serialNrThy[1],
-                       serialNrThy[0]);
+        WE_APP_PRINT("Thyone-I default source address %02X%02X%02X%02X \r\n",
+                     serialNrThy[3], serialNrThy[2], serialNrThy[1],
+                     serialNrThy[0]);
     }
 
     if (!sensorBoard_Init()) {
-        WE_DEBUG_PRINT("I2C init failed \r\n");
+        WE_APP_PRINT("I2C init failed \r\n");
     }
     // Initialize the sensors in default mode
     if (!PADS_2511020213301_simpleInit()) {
-        WE_DEBUG_PRINT("PADS init failed \r\n");
+        WE_APP_PRINT("PADS init failed \r\n");
     }
 
     if (!ITDS_2533020201601_simpleInit()) {
-        WE_DEBUG_PRINT("ITDS init failed \r\n");
+        WE_APP_PRINT("ITDS init failed \r\n");
     }
 
     if (!TIDS_2521020222501_simpleInit()) {
-        WE_DEBUG_PRINT("TIDS init failed \r\n");
+        WE_APP_PRINT("TIDS init failed \r\n");
     }
 
 #if HIDS_PART_NUMBER == 2525020210001
     if (!HIDS_2525020210001_simpleInit()) {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
     }
 #elif HIDS_PART_NUMBER == 2525020210002
     if (!HIDS_2525020210002_simpleInit()) {
-        WE_DEBUG_PRINT("HIDS init failed \r\n");
+        WE_APP_PRINT("HIDS init failed \r\n");
     }
 #endif
 }
@@ -126,13 +148,13 @@ void loop() {
         sprintf(temp, "RH: %f %%\r\n", HIDS_humidity);
         strcat(sendBuffer, temp);
     }
-    WE_DEBUG_PRINT(sendBuffer);
+    WE_APP_PRINT(sendBuffer);
 
     /*Broadcast Hello message to all the peers in the network*/
     if (ThyoneI_TransmitBroadcast((unsigned char *)sendBuffer,
                                   strlen(sendBuffer))) {
     } else {
-        WE_DEBUG_PRINT("Broadcast send failed \r\n");
+        WE_APP_PRINT("Broadcast send failed \r\n");
     }
     delay(5000);
 }

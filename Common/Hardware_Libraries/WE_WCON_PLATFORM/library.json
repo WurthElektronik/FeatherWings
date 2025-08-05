@@ -1,0 +1,8 @@
+{
+  "name": "WE_WCON_PLATFORM",
+  "version": "1.0.0",
+  "description": "Würth Elektronik Sensors SDK Platform Implementation",
+  "build": {
+    "srcDir": "."
+  }
+}
